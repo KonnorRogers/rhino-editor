@@ -1,0 +1,27 @@
+{
+  "name": "tip-tap-element",
+  "version": "1.0.0",
+  "description": "A predefined TipTap Rich Text Editor",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tiptap",
+    "richtext",
+    "editor",
+    "wysiwg",
+    "webcomponents"
+  ],
+  "author": "paramagicdev",
+  "license": "MIT",
+  "dependencies": {
+    "@tiptap/core": "^2.0.0-beta.174",
+    "@tiptap/extension-dropcursor": "^2.0.0-beta.25",
+    "@tiptap/extension-image": "^2.0.0-beta.27",
+    "@tiptap/extension-link": "^2.0.0-beta.36",
+    "@tiptap/extension-strike": "^2.0.0-beta.27",
+    "@tiptap/starter-kit": "^2.0.0-beta.183",
+    "lit": "^2.2.2"
+  }
+}
