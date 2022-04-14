@@ -1,3 +1,4 @@
+import { tipTapCoreStyles } from "./tip-tap-core-styles"
 import { Editor } from '@tiptap/core'
 
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
@@ -11,18 +12,31 @@ import { ref } from 'lit/directives/ref.js';
 import * as icons from './icons'
 import { normalize } from '../normalize'
 
+// class DelegatesFocus extends LitElement {
+//   static shadowRootOptions = {...LitElement.shadowRootOptions, delegatesFocus: true};
+// }
+
 export class TipTapElement extends LitElement {
   static get properties () {
     return {
       editor: {attribute: false},
+      input: {}
     }
   }
 
   static get styles () {
     return css`
       ${normalize}
+      ${tipTapCoreStyles}
       :host {
         --border-color: #d4d4d8;
+      }
+      .ProseMirror .placeholder::before {
+        position: absolute;
+        pointer-events: none;
+        color: #cecece;
+        cursor: text;
+        content: attr(data-placeholder);
       }
 
       .ProseMirror {
@@ -37,6 +51,7 @@ export class TipTapElement extends LitElement {
       .ProseMirror p {
         padding: 0;
         margin: 0;
+        min-width: 1px;
       }
 
       .toolbar {
@@ -50,10 +65,10 @@ export class TipTapElement extends LitElement {
         display: block;
       }
 
-      button {
+      ::part(button) {
         height: 2rem;
         width: 2.5rem;
-        object-contain: strict;
+        contain: strict;
         background-color: white;
         border: none;
         padding: 0 0.5rem;
@@ -62,13 +77,15 @@ export class TipTapElement extends LitElement {
         border: 1px solid var(--border-color);
       }
 
-      button:is(:focus, :hover) {
-        outline: none;
-        background-color: cornsilk;
+      ::part(button--active),
+      ::part(button--active):is(:hover, :focus) {
+        background-color: hsl(200.6 94.4% 86.1%);
       }
 
-      ::part(button--active) {
-        background-color: hsl(200.6 94.4% 86.1%);
+
+      ::part(button):where(:focus, :hover) {
+        outline: none;
+        background-color: cornsilk;
       }
 
       ::part(button__link),
@@ -98,7 +115,6 @@ export class TipTapElement extends LitElement {
 
   editorElementChanged (element) {
     this.editor = this.setupEditor(element)
-    this.editorElement = element
   }
 
   activeButton (action) {
@@ -113,11 +129,45 @@ export class TipTapElement extends LitElement {
         Link,
         Image,
       ],
-      content: '<p>Hello World</p>',
-      onTransaction: () => {
+      content: this.inputElement?.value,
+      // onBeforeCreate: ({ editor }) => {
+      //   // Before the view is created.
+      // },
+      onCreate: ({ editor }) => {
+        // The editor is ready.
+        // element.outerHTML = element.innerHTML
         this.requestUpdate()
-      }
+      },
+      onUpdate: ({ editor }) => {
+        // The content has changed.
+        this.inputElement.value = this.editor.getHTML()
+        this.requestUpdate()
+      },
+      onSelectionUpdate: ({ editor }) => {
+        // The selection has changed.
+        // this.requestUpdate()
+      },
+      onTransaction: ({ editor, transaction }) => {
+        // The editor state has changed.
+        this.requestUpdate()
+      },
+      onFocus: ({ editor, event }) => {
+        // The editor is focused.
+        this.requestUpdate()
+      },
+      onBlur: ({ editor, event }) => {
+        // The editor isn’t focused anymore.
+        this.inputElement.value = this.editor.getHTML()
+        // this.requestUpdate()
+      },
+      // onDestroy: () => {
+      //   // The editor is being destroyed.
+      // },
     })
+  }
+
+  get inputElement () {
+    return document.getElementById(this.input)
   }
 
   activeElement (action) {
@@ -185,7 +235,17 @@ export class TipTapElement extends LitElement {
           ${this.icons.strikeThrough}
         </button>
 
-        <button part=${this.buttonParts("link")} @click=${async () => this.run("toggleLink", { href: await this.getLink() })} title="Link">
+        <button
+          part=${this.buttonParts("link")}  title="Link"
+          @click=${async () => {
+            const href = await this.getLink()
+            console.log(href)
+            if (href) {
+              this.editor.chain().focus().toggleLink({ href: href }).run()
+            } else {
+              this.editor.chain().focus().run()
+            }
+          }}>
           ${this.icons.link}
         </button>
 
