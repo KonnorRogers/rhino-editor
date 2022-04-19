@@ -12,10 +12,6 @@ import { ref } from 'lit/directives/ref.js';
 import * as icons from './icons'
 import { normalize } from '../normalize'
 
-// class DelegatesFocus extends LitElement {
-//   static shadowRootOptions = {...LitElement.shadowRootOptions, delegatesFocus: true};
-// }
-
 export class TipTapElement extends LitElement {
   static get properties () {
     return {
@@ -28,18 +24,21 @@ export class TipTapElement extends LitElement {
     return css`
       ${normalize}
       ${tipTapCoreStyles}
+
       :host {
-        --border-color: #d4d4d8;
+        --border-color: #cecece;
+        color: #374151;
       }
-      .ProseMirror .placeholder::before {
+
+      :where(.ProseMirror .placeholder::before) {
         position: absolute;
         pointer-events: none;
         color: #cecece;
         cursor: text;
-        content: attr(data-placeholder);
+        content: "";
       }
 
-      .ProseMirror {
+      :where(.ProseMirror) {
         border: 1px solid var(--border-color);
         border-radius: 3px;
         margin: 0;
@@ -48,59 +47,61 @@ export class TipTapElement extends LitElement {
         outline: none;
       }
 
-      .ProseMirror p {
-        padding: 0;
-        margin: 0;
-        min-width: 1px;
-      }
-
-      .toolbar {
-        padding: 0.75em 0;
+      :where(.toolbar) {
+        padding-inline: 3px;
+        padding-block: 1rem;
         display: flex;
+        overflow-x: auto;
+        align-items: center;
+        color: hsl(219, 6%, 43%)
       }
 
-      img {
+      svg, img, figure {
         width: 100%;
         height: auto;
         display: block;
       }
 
-      ::part(button) {
+      p {
+        margin: 0;
+        padding: 0;
+      }
+
+      button {
         height: 2rem;
-        width: 2.5rem;
+        min-width: 2.5rem;
         contain: strict;
         background-color: white;
         border: none;
-        padding: 0 0.5rem;
+        padding: 0 0.4rem;
         position: relative;
         margin: -1px;
         border: 1px solid var(--border-color);
+        color: inherit;
       }
 
-      ::part(button--active),
-      ::part(button--active):is(:hover, :focus) {
-        background-color: hsl(200.6 94.4% 86.1%);
+      button:where([aria-disabled="true"]:not([part*="button--active"])) {
+        pointer-events: none;
+        color: hsl(219, 6%, 80%);
+        border-color: hsl(219, 6%, 88%);
       }
 
+      button:where([part*="button--active"]),
+      button:where([part*="button--active"]):is(:hover, :focus) {
+        color: hsl(200, 100%, 46%);
+      }
 
-      ::part(button):where(:focus, :hover) {
+      button:where(:focus, :hover):not([aria-disabled="true"]) {
         outline: none;
-        background-color: cornsilk;
+        background-color: rgb(240, 240, 240);
       }
 
-      ::part(button__link),
-      ::part(button__numbers) {
+      button:where([part*="button__link"], [part*="button__orderedList"]) {
         margin-right: 1rem;
       }
 
-      ::part(button__files) {
+      button:where([part*="button__files"]) {
         margin-right: auto;
-      }
-
-      svg {
-        height: 100%;
-        width: 100%;
-        display: block;
       }
     `
   }
@@ -114,7 +115,10 @@ export class TipTapElement extends LitElement {
   }
 
   editorElementChanged (element) {
+    // const div = document.createElement("div")
+    // this.insertAdjacentElement("afterend", div)
     this.editor = this.setupEditor(element)
+    this.editorElement = element
   }
 
   activeButton (action) {
@@ -123,13 +127,15 @@ export class TipTapElement extends LitElement {
 
   setupEditor (element) {
     return new Editor({
-      element: element,
+      element,
       extensions: [
         StarterKit,
         Link,
         Image,
       ],
       content: this.inputElement?.value,
+      autofocus: true,
+      editable: true,
       // onBeforeCreate: ({ editor }) => {
       //   // Before the view is created.
       // },
@@ -145,7 +151,7 @@ export class TipTapElement extends LitElement {
       },
       onSelectionUpdate: ({ editor }) => {
         // The selection has changed.
-        // this.requestUpdate()
+        this.requestUpdate()
       },
       onTransaction: ({ editor, transaction }) => {
         // The editor state has changed.
@@ -153,15 +159,16 @@ export class TipTapElement extends LitElement {
       },
       onFocus: ({ editor, event }) => {
         // The editor is focused.
+        this.shadowRoot.querySelector(".ProseMirror").click()
         this.requestUpdate()
       },
       onBlur: ({ editor, event }) => {
         // The editor isn’t focused anymore.
         this.inputElement.value = this.editor.getHTML()
-        // this.requestUpdate()
+        this.requestUpdate()
       },
       // onDestroy: () => {
-      //   // The editor is being destroyed.
+      //   // The editor is being destro?yed.
       // },
     })
   }
@@ -170,16 +177,23 @@ export class TipTapElement extends LitElement {
     return document.getElementById(this.input)
   }
 
-  activeElement (action) {
+  activeButton (action) {
     return this.editor?.isActive(action) ? "button--active" : ""
   }
 
-  run (action, ...args) {
-    this.editor.chain().focus()[action](...args).run() // && this.requestUpdate()
+  disabledButton (action, ...args) {
+    return this.can(action, ...args) ? "" : "button--disabled"
   }
 
-  buttonParts (partName, actionName) {
-    return `button button__${partName} ${this.activeElement(actionName ?? partName)}`
+
+  run (action, ...args) {
+    if (this.ariaDisabled === "true") return
+
+    this.editor.chain().focus()[action](...args).run() && this.requestUpdate()
+  }
+
+  buttonParts (actionName) {
+    return `button button__${actionName} ${this.activeButton(actionName)}`
   }
 
   getLink () {
@@ -207,8 +221,8 @@ export class TipTapElement extends LitElement {
           // const onload = () => URL.revokeObjectURL(src);
           console.log(file.name + ": " + file.size + " bytes");
         }
-        const chain = this.editor.chain().focus()
 
+        const chain = this.editor.chain().focus()
         imgUrls.forEach((src) => chain.setImage({ src }))
         chain.run()
         input.remove()
@@ -220,24 +234,50 @@ export class TipTapElement extends LitElement {
     })
   }
 
+  can (action, ...args) {
+    return this.editor && this.editor.can()[action](...args)
+  }
+
   render () {
     return html`
-      <div class="toolbar" part="toolbar">
-        <button part=${this.buttonParts("bold")} @click=${() => this.run("toggleBold")} title="Bold">
+      <div class="toolbar" part="toolbar" role="tablist">
+        <button
+          part=${`${this.buttonParts("bold")} ${this.disabledButton("toggleBold")}`}
+          title="Bold"
+          aria-disabled=${!this.can("toggleBold")}
+          @click=${() => this.run("toggleBold")}
+        >
           ${this.icons.bold}
         </button>
 
-        <button part=${this.buttonParts("italics", "italic")} @click=${() => this.run("toggleItalic")} title="Italics">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("italic")}
+          title="Italics"
+          aria-disabled=${!this.can("toggleItalic")}
+          @click=${() => this.run("toggleItalic")}
+        >
           ${this.icons.italics}
         </button>
 
-        <button part=${this.buttonParts("strike-through", "strike")} @click=${() => this.run("toggleStrike")} title="Strikethrough">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("strike")}
+          title="Strikethrough"
+          aria-disabled=${!this.can("toggleStrike")}
+          @click=${() => this.run("toggleStrike")}
+        >
           ${this.icons.strikeThrough}
         </button>
 
         <button
-          part=${this.buttonParts("link")}  title="Link"
+          tabindex="-1"
+          title="Link"
+          part=${this.buttonParts("link")}
+          aria-disabled=${!this.can("toggleLink")}
           @click=${async () => {
+            if (this.ariaDisabled === "true") return
+
             const href = await this.getLink()
             console.log(href)
             if (href) {
@@ -245,39 +285,87 @@ export class TipTapElement extends LitElement {
             } else {
               this.editor.chain().focus().run()
             }
-          }}>
+          }}
+        >
           ${this.icons.link}
         </button>
 
-        <button part=${this.buttonParts("heading")} @click=${() => this.run("toggleHeading", { level: 1 })} title="Heading">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("heading", { level: 1 })}
+          title="Heading"
+          aria-disabled=${!this.can("toggleHeading", { level: 1 })}
+          @click=${() => this.run("toggleHeading", { level: 1 })}
+        >
           ${this.icons.heading}
         </button>
 
-        <button part=${this.buttonParts("quote", "blockquote")} @click=${() => this.run("toggleBlockquote")} title="Quote">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("blockquote")}
+          title="Quote"
+          aria-disabled=${!this.can("toggleBlockquote")}
+          @click=${() => this.run("toggleBlockquote")}
+        >
           ${this.icons.quote}
         </button>
 
-        <button part=${this.buttonParts("code")} @click=${() => this.run("toggleCode")} title="Code">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("code")}
+          title="Code"
+          aria-disabled=${!this.can("toggleBlockquote")}
+          @click=${() => this.run("toggleCode")}
+        >
           ${this.icons.code}
         </button>
 
-        <button part=${this.buttonParts("bullets", "bulletList")} @click=${() => this.run("toggleBulletList")} title="Bullets">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("bulletList")}
+          title="Bullets"
+          aria-disabled=${!this.can("toggleBulletList")}
+          @click=${() => this.run("toggleBulletList")}
+        >
           ${this.icons.bullets}
         </button>
 
-        <button part=${this.buttonParts("numbers", "orderedList")} @click=${() => this.run("toggleOrderedList")} title="Numbers">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("orderedList")}
+          title="Numbers"
+          aria-disabled=${!this.can("toggleOrderedList")}
+          @click=${() => this.run("toggleOrderedList")}>
           ${this.icons.numbers}
         </button>
 
-        <button part=${this.buttonParts("files")} @click=${async () => await this.attachFiles()} title="Attach Files">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("files")}
+          title="Attach Files"
+          aria-disabled=${this.editor == null}
+          @click=${async () => await this.attachFiles()}
+        >
           ${this.icons.files}
         </button>
 
-        <button part=${this.buttonParts("undo")} @click=${() => this.run("undo")} aria-disabled=${!this.editor?.can().undo()} title="Undo">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("undo")}
+          title="Undo"
+          aria-disabled=${!this.can("undo")}
+          @click=${() => this.run("undo")}
+        >
           ${this.icons.undo}
         </button>
 
-        <button part=${this.buttonParts("redo")} @click=${() => this.run("redo")} aria-disabled=${!this.editor?.can().redo()} title="Redo">
+        <button
+          tabindex="-1"
+          part=${this.buttonParts("redo")}
+          title="Redo"
+          aria-disabled=${!this.can("redo")}
+          @click=${() => this.run("redo")}
+        >
           ${this.icons.redo}
         </button>
       </div>

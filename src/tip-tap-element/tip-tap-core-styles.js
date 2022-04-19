@@ -34,6 +34,7 @@ export const tipTapCoreStyles = css`
     pointer-events: none;
     position: absolute;
     margin: 0;
+    min-width: 1px;
   }
   .ProseMirror-gapcursor:after {
     content: "";
@@ -65,3 +66,4 @@ export const tipTapCoreStyles = css`
     opacity: 0
   }
 `
+
