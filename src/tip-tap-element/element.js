@@ -43,7 +43,7 @@ export class TipTapElement extends LitElement {
         border-radius: 3px;
         margin: 0;
         padding: 0.4em 0.6em;
-        min-height: 5em;
+        min-height: 200px;
         outline: none;
       }
 
@@ -68,40 +68,78 @@ export class TipTapElement extends LitElement {
       }
 
       button {
-        height: 2rem;
-        min-width: 2.5rem;
-        contain: strict;
         background-color: white;
         border: none;
+        color: inherit;
+        min-width: 2.5rem;
+      }
+
+      button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
+        outline: none;
+        background-color: rgb(240, 240, 240);
+      }
+
+      .toolbar button {
+        height: 2rem;
+        contain: strict;
         padding: 0 0.4rem;
         position: relative;
         margin: -1px;
         border: 1px solid var(--border-color);
-        color: inherit;
       }
 
-      button:where([aria-disabled="true"]:not([part*="button--active"])) {
+      .toolbar button:is([aria-disabled="true"]:not([part*="button--active"])) {
         pointer-events: none;
         color: hsl(219, 6%, 80%);
         border-color: hsl(219, 6%, 88%);
       }
 
-      button:where([part*="button--active"]),
-      button:where([part*="button--active"]):is(:hover, :focus) {
+      .toolbar button:is([part*="button--active"]),
+      .toolbar button:is([part*="button--active"]):is(:hover, :focus) {
         color: hsl(200, 100%, 46%);
       }
 
-      button:where(:focus, :hover):not([aria-disabled="true"]) {
-        outline: none;
-        background-color: rgb(240, 240, 240);
-      }
-
-      button:where([part*="button__link"], [part*="button__orderedList"]) {
+      .toolbar button:is([part*="button__link"], [part*="button__orderedList"]) {
         margin-right: 1rem;
       }
 
-      button:where([part*="button__files"]) {
+      .toolbar button[part*="button__files"] {
         margin-right: auto;
+      }
+
+      .dialog {
+        position: absolute;
+        z-index: 1;
+        height: 100%;
+        width: 100%;
+        padding: 1px;
+      }
+
+      .dialog__container {
+        display: flex;
+        align-items: center;
+        background: white;
+        box-shadow: 0 0.3em 1em #ccc;
+        max-width: 600px;
+        padding: 0.75rem 0.4rem;
+        border-radius: 8px;
+        border-top: 2px solid #ccc;
+      }
+
+      .dialog__button {
+        padding: 0.35em 0.5em;
+        border: 1px solid gray;
+        border-radius: 4px;
+      }
+
+      .dialog__buttons {
+        margin-inline-start: 1em;
+        margin-inline-end: 0.5em;
+      }
+
+      .dialog__input {
+        padding: 0.25em 0.4em;
+        flex: 1 1 auto;
       }
     `
   }
@@ -196,15 +234,8 @@ export class TipTapElement extends LitElement {
     return `button button__${actionName} ${this.activeButton(actionName)}`
   }
 
-  getLink () {
-    return new Promise((resolve, reject) => {
-      try {
-        const url = window.prompt("URL:")
-        resolve(url)
-      } catch(e) {
-        reject(e)
-      }
-    })
+  showLinkDialog () {
+    this.shadowRoot.querySelector(".dialog").removeAttribute("hidden")
   }
 
   attachFiles () {
@@ -275,16 +306,9 @@ export class TipTapElement extends LitElement {
           title="Link"
           part=${this.buttonParts("link")}
           aria-disabled=${!this.can("toggleLink")}
-          @click=${async () => {
+          @click=${() => {
             if (this.ariaDisabled === "true") return
-
-            const href = await this.getLink()
-            console.log(href)
-            if (href) {
-              this.editor.chain().focus().toggleLink({ href: href }).run()
-            } else {
-              this.editor.chain().focus().run()
-            }
+            this.showLinkDialog()
           }}
         >
           ${this.icons.link}
@@ -370,7 +394,24 @@ export class TipTapElement extends LitElement {
         </button>
       </div>
 
-      <div ${ref(this.editorElementChanged)}></div>
+
+      <div ${ref(this.editorElementChanged)} style="position: relative;">
+        <div class="dialog" hidden @click=${() => this.shadowRoot.querySelector(".dialog").setAttribute("hidden", "")}>
+          <div class="dialog__container">
+            <input class="dialog__input" type="text" placeholder="Enter a URL..." aria-label="Enter a URL">
+            <div class="dialog__buttons">
+              <button class="dialog__button" @click=${() => {
+                const href = this.shadowRoot.querySelector(".dialog__input").value
+                if (href) {
+                  this.shadowRoot.querySelector(".dialog").setAttribute("hidden", "")
+                  this.editor.chain().focus().toggleLink({ href }).run()
+                }
+              }}>Link</button>
+              <button class="dialog__button">Unlink</button>
+            </div>
+          </div>
+        </div>
+      </div>
     `
   }
 }

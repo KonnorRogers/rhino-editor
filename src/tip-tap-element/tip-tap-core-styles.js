@@ -4,8 +4,6 @@ import { css } from "lit";
 export const tipTapCoreStyles = css`
   .ProseMirror {
     position: relative;
-  }
-  .ProseMirror {
     word-wrap: break-word;
     white-space: pre-wrap;
     white-space: break-spaces;
