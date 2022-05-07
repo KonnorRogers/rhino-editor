@@ -1,13 +1,16 @@
 import { tipTapCoreStyles } from "./tip-tap-core-styles"
 import { Editor } from '@tiptap/core'
 
+
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from '@tiptap/starter-kit'
 import Link from "@tiptap/extension-link"
-import Image from '@tiptap/extension-image'
+import Image from "@tiptap/extension-image"
+import Attachment from './attachment'
+import { makeElement } from './make-element'
 
 import { css, html, LitElement } from 'lit'
-import { ref } from 'lit/directives/ref.js';
+import { ref, createRef } from 'lit/directives/ref.js';
 
 import * as icons from './icons'
 import { normalize } from '../normalize'
@@ -16,6 +19,7 @@ export class TipTapElement extends LitElement {
   static get properties () {
     return {
       editor: {attribute: false},
+      linkDialogExpanded: {},
       input: {}
     }
   }
@@ -27,10 +31,11 @@ export class TipTapElement extends LitElement {
 
       :host {
         --border-color: #cecece;
+        --focus-ring: 0 0 2px 1px hsl(200 80% 50%);
         color: #374151;
       }
 
-      :where(.ProseMirror .placeholder::before) {
+      .ProseMirror .placeholder {
         position: absolute;
         pointer-events: none;
         color: #cecece;
@@ -38,7 +43,7 @@ export class TipTapElement extends LitElement {
         content: "";
       }
 
-      :where(.ProseMirror) {
+      .ProseMirror {
         border: 1px solid var(--border-color);
         border-radius: 3px;
         margin: 0;
@@ -47,22 +52,25 @@ export class TipTapElement extends LitElement {
         outline: none;
       }
 
-      :where(.toolbar) {
-        padding-inline: 3px;
-        padding-block: 1rem;
+      .toolbar {
+        padding: 1rem 3px;
         display: flex;
         overflow-x: auto;
         align-items: center;
-        color: hsl(219, 6%, 43%)
+        color: hsl(219, 6%, 43%);
       }
 
-      svg, img, figure {
+      img, svg {
         width: 100%;
+      }
+
+      img, svg, figure {
+        max-width: 100%;
         height: auto;
         display: block;
       }
 
-      p {
+      figure, p {
         margin: 0;
         padding: 0;
       }
@@ -71,7 +79,6 @@ export class TipTapElement extends LitElement {
         background-color: white;
         border: none;
         color: inherit;
-        min-width: 2.5rem;
       }
 
       button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
@@ -79,35 +86,35 @@ export class TipTapElement extends LitElement {
         background-color: rgb(240, 240, 240);
       }
 
-      .toolbar button {
+      .toolbar__button {
         height: 2rem;
+        min-width: 2.5rem;
         contain: strict;
-        padding: 0 0.4rem;
         position: relative;
         margin: -1px;
         border: 1px solid var(--border-color);
       }
 
-      .toolbar button:is([aria-disabled="true"]:not([part*="button--active"])) {
+      .toolbar__button:is([aria-disabled="true"]:not([part*="button--active"])) {
         pointer-events: none;
         color: hsl(219, 6%, 80%);
         border-color: hsl(219, 6%, 88%);
       }
 
-      .toolbar button:is([part*="button--active"]),
-      .toolbar button:is([part*="button--active"]):is(:hover, :focus) {
+      .toolbar__button:is([part*="button--active"]),
+      .toolbar__button:is([part*="button--active"]):is(:hover, :focus) {
         color: hsl(200, 100%, 46%);
       }
 
-      .toolbar button:is([part*="button__link"], [part*="button__orderedList"]) {
+      .toolbar__button:is([part*="button__link"], [part*="button__orderedList"]) {
         margin-right: 1rem;
       }
 
-      .toolbar button[part*="button__files"] {
+      .toolbar__button[part*="button__files"] {
         margin-right: auto;
       }
 
-      .dialog {
+      .link-dialog {
         position: absolute;
         z-index: 1;
         height: 100%;
@@ -115,7 +122,7 @@ export class TipTapElement extends LitElement {
         padding: 1px;
       }
 
-      .dialog__container {
+      .link-dialog__container {
         display: flex;
         align-items: center;
         background: white;
@@ -126,20 +133,98 @@ export class TipTapElement extends LitElement {
         border-top: 2px solid #ccc;
       }
 
-      .dialog__button {
-        padding: 0.35em 0.5em;
+      .link-validate:invalid {
+        background-color: #ffdddd;
+      }
+
+      .link-dialog__input {
+        border: 1px solid #374151;
+        border-radius: 4px;
+        padding: 0.4em 0.6em;
+        flex: 1 1 auto;
+      }
+
+      .link-dialog__input:is(:focus) {
+        border: 1px solid blue;
+        box-shadow: var(--focus-ring);
+        outline: none;
+      }
+
+      .link-dialog__button {
+        padding: 0.4em 0.6em;
         border: 1px solid gray;
         border-radius: 4px;
       }
 
-      .dialog__buttons {
-        margin-inline-start: 1em;
-        margin-inline-end: 0.5em;
+      .link-dialog__buttons {
+        margin-right: 0.5em;
+        margin-left: 0.5em;
       }
 
-      .dialog__input {
-        padding: 0.25em 0.4em;
-        flex: 1 1 auto;
+      /* Attachments */
+      .attachment__button {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(0, -50%);
+        border-radius: 9999px;
+        border: 1px solid skyblue;
+        width: 1.8rem;
+        height: 1.8rem;
+        font-size: 1.8rem;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .attachment__button svg {
+        position: absolute;
+      }
+
+      .attachment__editor.ProseMirror-selectednode .attachment__button {
+        display: flex;
+      }
+
+      .attachment__editor {
+        position: relative;
+      }
+
+      .attachment__editor.ProseMirror-selectednode  {
+        box-shadow: 0 0 0 2px skyblue;
+      }
+
+      .attachment__metadata {
+        position: absolute;
+        left: 50%;
+        top: 2em;
+        transform: translateX(-50%);
+        max-width: 90%;
+        padding: 0.1em 0.6em;
+        font-size: 0.8em;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 3px;
+        text-align: center;
+        outline: 1px solid hsl(0 0% 100% / 50%);
+        display: none;
+      }
+
+      .attachment__editor.ProseMirror-selectednode .attachment__metadata {
+        display: block;
+      }
+
+      .attachment__metadata__file-name {
+        display: inline-block;
+        max-width: 100%;
+        vertical-align: bottom;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-right: 0.2em;
+      }
+
+      .attachment__metadata__file-size {
+        white-space: nowrap;
       }
     `
   }
@@ -148,11 +233,26 @@ export class TipTapElement extends LitElement {
     return icons
   }
 
+  connectedCallback () {
+    super.connectedCallback()
+    this.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "escape" && this.linkDialogExpanded) {
+        this.closeLinkDialog()
+      }
+    })
+  }
+
   get icons () {
     return this.constructor.icons
   }
 
+  constructor () {
+    super()
+    this.linkInputRef = createRef();
+  }
+
   editorElementChanged (element) {
+    // Non-light-dom version.
     // const div = document.createElement("div")
     // this.insertAdjacentElement("afterend", div)
     this.editor = this.setupEditor(element)
@@ -164,12 +264,14 @@ export class TipTapElement extends LitElement {
   }
 
   setupEditor (element) {
+    console.log(this.inputElement.value)
     return new Editor({
       element,
       extensions: [
         StarterKit,
         Link,
-        Image,
+        Attachment,
+        Image
       ],
       content: this.inputElement?.value,
       autofocus: true,
@@ -179,7 +281,6 @@ export class TipTapElement extends LitElement {
       // },
       onCreate: ({ editor }) => {
         // The editor is ready.
-        // element.outerHTML = element.innerHTML
         this.requestUpdate()
       },
       onUpdate: ({ editor }) => {
@@ -197,7 +298,7 @@ export class TipTapElement extends LitElement {
       },
       onFocus: ({ editor, event }) => {
         // The editor is focused.
-        this.shadowRoot.querySelector(".ProseMirror").click()
+        this.closeLinkDialog()
         this.requestUpdate()
       },
       onBlur: ({ editor, event }) => {
@@ -206,13 +307,31 @@ export class TipTapElement extends LitElement {
         this.requestUpdate()
       },
       // onDestroy: () => {
-      //   // The editor is being destro?yed.
+      //   // The editor is being destroyed.
       // },
     })
   }
 
   get inputElement () {
     return document.getElementById(this.input)
+  }
+
+  closeLinkDialog () {
+    if (this.linkDialog == null) return
+
+    this.linkDialogExpanded = false
+    this.linkDialog.setAttribute("hidden", "")
+  }
+
+  showLinkDialog () {
+    if (this.linkDialog == null) return
+
+    this.linkDialogExpanded = true
+    this.linkDialog.removeAttribute("hidden")
+  }
+
+  get linkDialog () {
+    return this.shadowRoot.querySelector(".link-dialog")
   }
 
   activeButton (action) {
@@ -223,45 +342,45 @@ export class TipTapElement extends LitElement {
     return this.can(action, ...args) ? "" : "button--disabled"
   }
 
-
   run (action, ...args) {
     if (this.ariaDisabled === "true") return
 
     this.editor.chain().focus()[action](...args).run() && this.requestUpdate()
   }
 
-  buttonParts (actionName) {
+  toolbarButtonParts (actionName) {
     return `button button__${actionName} ${this.activeButton(actionName)}`
-  }
-
-  showLinkDialog () {
-    this.shadowRoot.querySelector(".dialog").removeAttribute("hidden")
   }
 
   attachFiles () {
     return new Promise((resolve, reject) => {
-      const input = makeElement("input", { type: "file", multiple: true, hidden: true, id: "TODO" })
+      const input = makeElement("input", { type: "file", multiple: true, hidden: true })
 
       input.addEventListener("change", () => {
         const files = input.files
-        const imgUrls = []
+        console.log(files)
+        const attachments = []
         for (let i = 0; i < files.length; i++) {
           const file = files[i]
           const src = URL.createObjectURL(file);
-          imgUrls.push(src)
-          // const onload = () => URL.revokeObjectURL(src);
-          console.log(file.name + ": " + file.size + " bytes");
+
+          const attachment = { src, metadata: { contentType: file.type, fileName: file.name, fileSize: file.size } }
+          attachments.push(attachment)
         }
 
         const chain = this.editor.chain().focus()
-        imgUrls.forEach((src) => chain.setImage({ src }))
+        attachments.forEach((attachment) => {
+          // chain.setImage({ src: attachment.src })
+          chain.setAttachment(attachment)
+        })
         chain.run()
+
         input.remove()
+        resolve()
       })
 
       document.body.appendChild(input)
       input.click()
-      resolve()
     })
   }
 
@@ -269,11 +388,41 @@ export class TipTapElement extends LitElement {
     return this.editor && this.editor.can()[action](...args)
   }
 
+  addLink () {
+    const inputElement = this.linkInputRef.value
+
+    if (inputElement == null) return
+
+    inputElement.className += " link-validate"
+    const href = inputElement.value
+
+    try {
+      new URL(href)
+      inputElement.setCustomValidity("")
+    } catch(error) {
+      inputElement.setCustomValidity("Not a valid URL")
+      return
+    }
+
+    if (href) {
+      this.closeLinkDialog()
+      inputElement.value = ""
+      let chain = this.editor.chain().focus().extendMarkRange('link').setLink({ href })
+
+      if (this.editor.state.selection.empty) {
+        chain.insertContent(href)
+      }
+
+      chain.run()
+    }
+  }
+
   render () {
     return html`
       <div class="toolbar" part="toolbar" role="tablist">
         <button
-          part=${`${this.buttonParts("bold")} ${this.disabledButton("toggleBold")}`}
+          class="toolbar__button"
+          part=${`${this.toolbarButtonParts("bold")} ${this.disabledButton("toggleBold")}`}
           title="Bold"
           aria-disabled=${!this.can("toggleBold")}
           @click=${() => this.run("toggleBold")}
@@ -282,8 +431,9 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("italic")}
+          part=${`${this.toolbarButtonParts("italic")} ${this.disabledButton("toggleItalic")}`}
           title="Italics"
           aria-disabled=${!this.can("toggleItalic")}
           @click=${() => this.run("toggleItalic")}
@@ -292,8 +442,9 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("strike")}
+          part=${this.toolbarButtonParts("strike")}
           title="Strikethrough"
           aria-disabled=${!this.can("toggleStrike")}
           @click=${() => this.run("toggleStrike")}
@@ -302,9 +453,10 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
           title="Link"
-          part=${this.buttonParts("link")}
+          part=${this.toolbarButtonParts("link")}
           aria-disabled=${!this.can("toggleLink")}
           @click=${() => {
             if (this.ariaDisabled === "true") return
@@ -315,8 +467,9 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("heading", { level: 1 })}
+          part=${this.toolbarButtonParts("heading", { level: 1 })}
           title="Heading"
           aria-disabled=${!this.can("toggleHeading", { level: 1 })}
           @click=${() => this.run("toggleHeading", { level: 1 })}
@@ -325,8 +478,9 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("blockquote")}
+          part=${this.toolbarButtonParts("blockquote")}
           title="Quote"
           aria-disabled=${!this.can("toggleBlockquote")}
           @click=${() => this.run("toggleBlockquote")}
@@ -335,8 +489,9 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("code")}
+          part=${this.toolbarButtonParts("code")}
           title="Code"
           aria-disabled=${!this.can("toggleBlockquote")}
           @click=${() => this.run("toggleCode")}
@@ -345,8 +500,9 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("bulletList")}
+          part=${this.toolbarButtonParts("bulletList")}
           title="Bullets"
           aria-disabled=${!this.can("toggleBulletList")}
           @click=${() => this.run("toggleBulletList")}
@@ -355,8 +511,9 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("orderedList")}
+          part=${this.toolbarButtonParts("orderedList")}
           title="Numbers"
           aria-disabled=${!this.can("toggleOrderedList")}
           @click=${() => this.run("toggleOrderedList")}>
@@ -364,8 +521,9 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("files")}
+          part=${this.toolbarButtonParts("files")}
           title="Attach Files"
           aria-disabled=${this.editor == null}
           @click=${async () => await this.attachFiles()}
@@ -374,8 +532,9 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("undo")}
+          part=${this.toolbarButtonParts("undo")}
           title="Undo"
           aria-disabled=${!this.can("undo")}
           @click=${() => this.run("undo")}
@@ -384,45 +543,60 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
+          class="toolbar__button"
           tabindex="-1"
-          part=${this.buttonParts("redo")}
+          part=${this.toolbarButtonParts("redo")}
           title="Redo"
           aria-disabled=${!this.can("redo")}
           @click=${() => this.run("redo")}
         >
-          ${this.icons.redo}
+         ${this.icons.redo}
         </button>
       </div>
 
-
       <div ${ref(this.editorElementChanged)} style="position: relative;">
-        <div class="dialog" hidden @click=${() => this.shadowRoot.querySelector(".dialog").setAttribute("hidden", "")}>
-          <div class="dialog__container">
-            <input class="dialog__input" type="text" placeholder="Enter a URL..." aria-label="Enter a URL">
-            <div class="dialog__buttons">
-              <button class="dialog__button" @click=${() => {
-                const href = this.shadowRoot.querySelector(".dialog__input").value
-                if (href) {
-                  this.shadowRoot.querySelector(".dialog").setAttribute("hidden", "")
-                  this.editor.chain().focus().toggleLink({ href }).run()
+        <div class="link-dialog" hidden @click=${(event) => {
+          if (event.currentTarget.contains(event.target) && event.currentTarget !== event.target) {
+            return
+          }
+
+          this.closeLinkDialog()
+        }}>
+          <div class="link-dialog__container">
+            <input
+              id="link-dialog__input"
+              class="link-dialog__input"
+              type="text"
+              placeholder="Enter a URL..."
+              aria-label="Enter a URL"
+              required
+              type="url"
+              ${ref(this.linkInputRef)}
+              @input=${() => {
+                const inputElement = this.linkInputRef.value
+                if (inputElement == null) return
+                inputElement.setCustomValidity("")
+              }}
+              @blur=${() => {
+              }}
+              @keydown=${(e) => {
+                if (e.key.toLowerCase() === "enter") {
+                  e.preventDefault()
+                  this.addLink()
                 }
-              }}>Link</button>
-              <button class="dialog__button">Unlink</button>
+              }}
+            >
+            <div class="link-dialog__buttons">
+              <button class="link-dialog__button" @click=${this.addLink}>Link</button>
+              <button class="link-dialog__button" aria-disabled=${() => {}} @click=${() => {
+                editor.chain().focus().extendMarkRange('link').unsetLink().run()
+              }}>Unlink</button>
             </div>
           </div>
         </div>
       </div>
     `
   }
-}
-
-function makeElement (tag, obj = {}) {
-  const el = document.createElement(tag)
-  for (const [key, value] of Object.entries(obj)) {
-    el[key] = value
-  }
-
-  return el
 }
 
 export default TipTapElement
