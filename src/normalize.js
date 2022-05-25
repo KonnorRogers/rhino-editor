@@ -10,6 +10,9 @@ export const normalize = css`
   }
 
   button {
+    background-color: inherit;
+    border: none;
+    color: inherit;
     cursor: pointer;
   }
 `

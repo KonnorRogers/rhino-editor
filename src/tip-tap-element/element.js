@@ -1,11 +1,12 @@
 import { tipTapCoreStyles } from "./tip-tap-core-styles"
 import { Editor } from '@tiptap/core'
 
-
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from '@tiptap/starter-kit'
 import Link from "@tiptap/extension-link"
-import Image from "@tiptap/extension-image"
+import Focus from "@tiptap/extension-focus";
+import Placeholder from "@tiptap/extension-placeholder"
+
 import Attachment from './attachment'
 import { makeElement } from './make-element'
 
@@ -15,12 +16,14 @@ import { ref, createRef } from 'lit/directives/ref.js';
 import * as icons from './icons'
 import { normalize } from '../normalize'
 
+import { DirectUploader } from "./direct-uploader"
+
 export class TipTapElement extends LitElement {
   static get properties () {
     return {
-      editor: {attribute: false},
+      editor: {},
       linkDialogExpanded: {},
-      input: {}
+      input: {},
     }
   }
 
@@ -71,14 +74,12 @@ export class TipTapElement extends LitElement {
       }
 
       figure, p {
-        margin: 0;
         padding: 0;
+        margin: 0;
       }
 
-      button {
-        background-color: white;
-        border: none;
-        color: inherit;
+      figure {
+        position: relative;
       }
 
       button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
@@ -162,70 +163,42 @@ export class TipTapElement extends LitElement {
       }
 
       /* Attachments */
-      .attachment__button {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translate(0, -50%);
-        border-radius: 9999px;
-        border: 1px solid skyblue;
-        width: 1.8rem;
-        height: 1.8rem;
-        font-size: 1.8rem;
-        display: none;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .attachment__button svg {
-        position: absolute;
-      }
-
-      .attachment__editor.ProseMirror-selectednode .attachment__button {
-        display: flex;
-      }
-
-      .attachment__editor {
-        position: relative;
-      }
-
-      .attachment__editor.ProseMirror-selectednode  {
+      figure.has-focus {
         box-shadow: 0 0 0 2px skyblue;
       }
 
-      .attachment__metadata {
-        position: absolute;
-        left: 50%;
-        top: 2em;
-        transform: translateX(-50%);
-        max-width: 90%;
-        padding: 0.1em 0.6em;
-        font-size: 0.8em;
-        color: #fff;
-        background-color: rgba(0, 0, 0, 0.7);
-        border-radius: 3px;
-        text-align: center;
-        outline: 1px solid hsl(0 0% 100% / 50%);
+      attachment-editor {
         display: none;
       }
 
-      .attachment__editor.ProseMirror-selectednode .attachment__metadata {
-        display: block;
+      .ProseMirror[contenteditable="true"] figure.has-focus attachment-editor {
+        display: flex;
       }
 
-      .attachment__metadata__file-name {
-        display: inline-block;
-        max-width: 100%;
-        vertical-align: bottom;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        padding-right: 0.2em;
+      figcaption {
+        position: relative;
       }
 
-      .attachment__metadata__file-size {
-        white-space: nowrap;
+      .ProseMirror p.is-editor-empty:first-child::before,
+      figcaption p:first-child.is-empty::before {
+        color: #adb5bd;
+        content: attr(data-placeholder);
       }
+
+      figcaption p:first-child.is-empty::before {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        cursor: text;
+      }
+
+      .ProseMirror p.is-editor-empty:first-child::before {
+        float: left;
+        height: 0;
+        pointer-events: none;
+      }
+
     `
   }
 
@@ -264,14 +237,23 @@ export class TipTapElement extends LitElement {
   }
 
   setupEditor (element) {
-    console.log(this.inputElement.value)
     return new Editor({
       element,
       extensions: [
         StarterKit,
         Link,
         Attachment,
-        Image
+        Focus,
+        Placeholder.configure({
+          includeChildren: true,
+          // Use a placeholder:
+          placeholder: ({ editor, node, pos }) => {
+            if (editor.state.doc.resolve(pos).parent.type.name === "attachment-figure") {
+              return "Add a caption..."
+            }
+            return "Write something..."
+          }
+        })
       ],
       content: this.inputElement?.value,
       autofocus: true,
@@ -316,6 +298,15 @@ export class TipTapElement extends LitElement {
     return document.getElementById(this.input)
   }
 
+  toggleLinkDialog () {
+    if (this.linkDialogExpanded) {
+      this.closeLinkDialog()
+      return
+    }
+
+    this.showLinkDialog()
+  }
+
   closeLinkDialog () {
     if (this.linkDialog == null) return
 
@@ -358,23 +349,22 @@ export class TipTapElement extends LitElement {
 
       input.addEventListener("change", () => {
         const files = input.files
-        console.log(files)
         const attachments = []
         for (let i = 0; i < files.length; i++) {
           const file = files[i]
           const src = URL.createObjectURL(file);
 
-          const attachment = { src, metadata: { contentType: file.type, fileName: file.name, fileSize: file.size } }
+          const attachment = { src, caption: "hi there", contentType: file.type, fileName: file.name, fileSize: file.size, file }
+
+          const directUploader = new DirectUploader(file, "http://0.0.0.0:4566")
+          directUploader.start()
+
           attachments.push(attachment)
         }
 
         const chain = this.editor.chain().focus()
-        attachments.forEach((attachment) => {
-          // chain.setImage({ src: attachment.src })
-          chain.setAttachment(attachment)
-        })
+        chain.setAttachment(attachments)
         chain.run()
-
         input.remove()
         resolve()
       })
@@ -460,7 +450,7 @@ export class TipTapElement extends LitElement {
           aria-disabled=${!this.can("toggleLink")}
           @click=${() => {
             if (this.ariaDisabled === "true") return
-            this.showLinkDialog()
+            this.toggleLinkDialog()
           }}
         >
           ${this.icons.link}

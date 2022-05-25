@@ -1,25 +1,37 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@rails/activestorage': ^6.0.5
   '@tiptap/core': ^2.0.0-beta.174
+  '@tiptap/extension-focus': ^2.0.0-beta.40
   '@tiptap/extension-image': ^2.0.0-beta.27
   '@tiptap/extension-link': ^2.0.0-beta.36
   '@tiptap/extension-placeholder': ^2.0.0-beta.48
   '@tiptap/starter-kit': ^2.0.0-beta.183
   lit: ^2.2.2
+  prosemirror-state: ^1.3.4
 
 dependencies:
+  '@rails/activestorage': 6.0.5
   '@tiptap/core': 2.0.0-beta.174
+  '@tiptap/extension-focus': 2.0.0-beta.40_@tiptap+core@2.0.0-beta.174
   '@tiptap/extension-image': 2.0.0-beta.27_@tiptap+core@2.0.0-beta.174
   '@tiptap/extension-link': 2.0.0-beta.36_@tiptap+core@2.0.0-beta.174
   '@tiptap/extension-placeholder': 2.0.0-beta.48_@tiptap+core@2.0.0-beta.174
   '@tiptap/starter-kit': 2.0.0-beta.183
   lit: 2.2.2
+  prosemirror-state: 1.3.4
 
 packages:
 
   /@lit/reactive-element/1.3.1:
     resolution: {integrity: sha512-nOJARIr3pReqK3hfFCSW2Zg/kFcFsSAlIE7z4a0C9D2dPrgD/YSn3ZP2ET/rxKB65SXyG7jJbkynBRm+tGlacw==}
+    dev: false
+
+  /@rails/activestorage/6.0.5:
+    resolution: {integrity: sha512-jp2UKh1QChjOGsApYO3HHuBH1yfv4mqOcKuB70fsT79O/CJWEACVnjKIdaqO+B9BJTKihaxyyepvL7kLfUFiDw==}
+    dependencies:
+      spark-md5: 3.0.2
     dev: false
 
   /@tiptap/core/2.0.0-beta.174:
@@ -98,6 +110,16 @@ packages:
       '@tiptap/core': 2.0.0-beta.174
       '@types/prosemirror-dropcursor': 1.0.3
       prosemirror-dropcursor: 1.4.0
+    dev: false
+
+  /@tiptap/extension-focus/2.0.0-beta.40_@tiptap+core@2.0.0-beta.174:
+    resolution: {integrity: sha512-7L1vlHWofjRG6R+NUNrKLLnUHSFZO++G2wVm8vPK/4kB/11jZfAosECmtyCm+ihxQ8fYc6ZnAUv18TuICLcgPA==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0-beta.1
+    dependencies:
+      '@tiptap/core': 2.0.0-beta.174
+      prosemirror-state: 1.3.4
+      prosemirror-view: 1.23.12
     dev: false
 
   /@tiptap/extension-gapcursor/2.0.0-beta.34_@tiptap+core@2.0.0-beta.174:
@@ -433,6 +455,10 @@ packages:
 
   /rope-sequence/1.3.2:
     resolution: {integrity: sha512-ku6MFrwEVSVmXLvy3dYph3LAMNS0890K7fabn+0YIRQ2T96T9F4gkFf0vf0WW0JUraNWwGRtInEpH7yO4tbQZg==}
+    dev: false
+
+  /spark-md5/3.0.2:
+    resolution: {integrity: sha512-wcFzz9cDfbuqe0FZzfi2or1sgyIrsDwmPwfZC4hiNidPdPINjeUwNfv5kldczoEAcjl9Y1L3SM7Uz2PUEQzxQw==}
     dev: false
 
   /w3c-keyname/2.2.4:
