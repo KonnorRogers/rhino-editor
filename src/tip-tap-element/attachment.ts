@@ -7,10 +7,10 @@ export interface AttachmentOptions {
 
 interface AttachmentArgs {
   src: string;
-  caption?: string;
   fileName?: string;
   fileSize?: number;
   contentType?: string;
+  caption?: string;
 }
 
 declare module "@tiptap/core" {
@@ -74,10 +74,10 @@ const Attachment = Node.create({
       src: { default: null },
       height: { default: null },
       width: { default: null },
-      caption: { default: null },
       contentType: { default: null },
       fileName: { default: null },
       fileSize: { default: null },
+      content: { default: null },
     };
   },
 
@@ -126,6 +126,13 @@ const Attachment = Node.create({
         const content = [];
 
         attachments.forEach((attachment) => {
+          let captionContent = {}
+
+          if (attachment.caption) {
+            captionContent.type = "text"
+            captionContent.text = attachment.caption
+          }
+
           content.push({
             type: "attachment-figure",
             attrs: attachment,
@@ -133,10 +140,7 @@ const Attachment = Node.create({
               {
                 type: "paragraph",
                 content: [
-                  {
-                    type: "text",
-                    text: "image caption",
-                  },
+                  captionContent
                 ],
               },
             ],

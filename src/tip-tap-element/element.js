@@ -7,15 +7,14 @@ import Link from "@tiptap/extension-link"
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder"
 
-import Attachment from './attachment'
-import { makeElement } from './make-element'
-
 import { css, html, LitElement } from 'lit'
 import { ref, createRef } from 'lit/directives/ref.js';
 
+import Attachment from './attachment'
+import { makeElement } from './make-element'
+import { toMemorySize } from './toMemorySize'
 import * as icons from './icons'
 import { normalize } from '../normalize'
-
 import { DirectUploader } from "./direct-uploader"
 
 export class TipTapElement extends LitElement {
@@ -343,8 +342,9 @@ export class TipTapElement extends LitElement {
     return `button button__${actionName} ${this.activeButton(actionName)}`
   }
 
+
   attachFiles () {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const input = makeElement("input", { type: "file", multiple: true, hidden: true })
 
       input.addEventListener("change", () => {
@@ -354,7 +354,14 @@ export class TipTapElement extends LitElement {
           const file = files[i]
           const src = URL.createObjectURL(file);
 
-          const attachment = { src, caption: "hi there", contentType: file.type, fileName: file.name, fileSize: file.size, file }
+          const attachment = {
+            src,
+            file,
+            contentType: file.type,
+            fileName: file.name,
+            fileSize: file.size,
+            caption: `${file.name} ${toMemorySize(file.size)}`
+          }
 
           const directUploader = new DirectUploader(file, "http://0.0.0.0:4566")
           directUploader.start()

@@ -2,6 +2,7 @@ import { css, html, LitElement } from 'lit'
 
 import { close } from './icons'
 import { normalize } from '../normalize'
+import { toMemorySize } from './toMemorySize'
 
 export class AttachmentEditor extends LitElement {
   close () {
@@ -93,16 +94,20 @@ export class AttachmentEditor extends LitElement {
     `
   }
 
+  toFileSize () {
+    return toMemorySize(this.fileSize)
+  }
+
   render () {
     return html`
-      <button class="close-button" @click=${() => {
-        console.log("closing...")
+      <button class="close-button" @mousedown=${(e) => {
+        e.preventDefault()
         this.parentElement.remove()
       }}>
         ${this.close()}
       </button>
       <span class="file-metadata">
-        <span class="file-name">${this.fileName}</span><span class="file-size">${this.fileSize}</span>
+        <span class="file-name">${this.fileName}</span><span class="file-size">${this.toFileSize()}</span>
       </span>
       <progress class="file-progress" value=${this.progress} max="100"></progress>
     `
