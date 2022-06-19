@@ -5,6 +5,10 @@ import { normalize } from '../normalize'
 import { toMemorySize } from './toMemorySize'
 
 export class AttachmentEditor extends LitElement {
+  fileName: string;
+  fileSize: number;
+  progress: string;
+
   close () {
     return html`${close}`
   }
@@ -12,7 +16,7 @@ export class AttachmentEditor extends LitElement {
   static get properties () {
     return {
       fileName: { attribute: "file-name", type: String },
-      fileSize: { attribute: "file-size", type: String },
+      fileSize: { attribute: "file-size", type: Number },
       progress: { type: String }
     }
   }

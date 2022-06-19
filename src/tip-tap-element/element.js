@@ -231,8 +231,16 @@ export class TipTapElement extends LitElement {
     this.editorElement = element
   }
 
-  activeButton (action) {
-    return this.editor.isActive(action) ? "button--active" : ""
+  activeButton (action, ...args) {
+    return this.editor?.isActive(action, ...args) ? "button--active" : ""
+  }
+
+  disabledButton (action, ...args) {
+    return this.can(action, ...args) ? "" : "button--disabled"
+  }
+
+  pressedButton (action, ...args) {
+    return this.editor?.isActive(action, ...args) ? "true" : "false"
   }
 
   setupEditor (element) {
@@ -324,24 +332,16 @@ export class TipTapElement extends LitElement {
     return this.shadowRoot.querySelector(".link-dialog")
   }
 
-  activeButton (action) {
-    return this.editor?.isActive(action) ? "button--active" : ""
-  }
-
-  disabledButton (action, ...args) {
-    return this.can(action, ...args) ? "" : "button--disabled"
-  }
-
   run (action, ...args) {
     if (this.ariaDisabled === "true") return
 
     this.editor.chain().focus()[action](...args).run() && this.requestUpdate()
   }
 
-  toolbarButtonParts (actionName) {
-    return `button button__${actionName} ${this.activeButton(actionName)}`
+  toolbarButtonParts (actionName, ...args) {
+    const disabled = this.disabledButton("toggle" + capitalize(actionName), ...args)
+    return `button button__${actionName} ${this.activeButton(actionName)} ${disabled}`
   }
-
 
   attachFiles () {
     return new Promise((resolve, _reject) => {
@@ -382,7 +382,7 @@ export class TipTapElement extends LitElement {
   }
 
   can (action, ...args) {
-    return this.editor && this.editor.can()[action](...args)
+    return this.editor && this.editor.can()[action]?.(...args)
   }
 
   addLink () {
@@ -416,12 +416,13 @@ export class TipTapElement extends LitElement {
 
   render () {
     return html`
-      <div class="toolbar" part="toolbar" role="tablist">
+      <div class="toolbar" part="toolbar" role="toolbar">
         <button
           class="toolbar__button"
-          part=${`${this.toolbarButtonParts("bold")} ${this.disabledButton("toggleBold")}`}
+          part=${this.toolbarButtonParts("bold")}
           title="Bold"
           aria-disabled=${!this.can("toggleBold")}
+          aria-pressed=${this.pressedButton("bold")}
           @click=${() => this.run("toggleBold")}
         >
           ${this.icons.bold}
@@ -430,9 +431,10 @@ export class TipTapElement extends LitElement {
         <button
           class="toolbar__button"
           tabindex="-1"
-          part=${`${this.toolbarButtonParts("italic")} ${this.disabledButton("toggleItalic")}`}
+          part=${this.toolbarButtonParts("italic")}
           title="Italics"
           aria-disabled=${!this.can("toggleItalic")}
+          aria-pressed=${this.pressedButton("italic")}
           @click=${() => this.run("toggleItalic")}
         >
           ${this.icons.italics}
@@ -444,6 +446,7 @@ export class TipTapElement extends LitElement {
           part=${this.toolbarButtonParts("strike")}
           title="Strikethrough"
           aria-disabled=${!this.can("toggleStrike")}
+          aria-pressed=${this.pressedButton("strike")}
           @click=${() => this.run("toggleStrike")}
         >
           ${this.icons.strikeThrough}
@@ -455,6 +458,7 @@ export class TipTapElement extends LitElement {
           title="Link"
           part=${this.toolbarButtonParts("link")}
           aria-disabled=${!this.can("toggleLink")}
+          aria-pressed=${this.pressedButton("link")}
           @click=${() => {
             if (this.ariaDisabled === "true") return
             this.toggleLinkDialog()
@@ -469,6 +473,7 @@ export class TipTapElement extends LitElement {
           part=${this.toolbarButtonParts("heading", { level: 1 })}
           title="Heading"
           aria-disabled=${!this.can("toggleHeading", { level: 1 })}
+          aria-pressed=${this.pressedButton("link", { level: 1 })}
           @click=${() => this.run("toggleHeading", { level: 1 })}
         >
           ${this.icons.heading}
@@ -477,9 +482,10 @@ export class TipTapElement extends LitElement {
         <button
           class="toolbar__button"
           tabindex="-1"
-          part=${this.toolbarButtonParts("blockquote")}
+          part=${this.toolbarButtonParts("blockquote") }
           title="Quote"
           aria-disabled=${!this.can("toggleBlockquote")}
+          aria-pressed=${this.pressedButton("link")}
           @click=${() => this.run("toggleBlockquote")}
         >
           ${this.icons.quote}
@@ -491,6 +497,7 @@ export class TipTapElement extends LitElement {
           part=${this.toolbarButtonParts("code")}
           title="Code"
           aria-disabled=${!this.can("toggleBlockquote")}
+          aria-pressed=${this.pressedButton("code")}
           @click=${() => this.run("toggleCode")}
         >
           ${this.icons.code}
@@ -502,6 +509,7 @@ export class TipTapElement extends LitElement {
           part=${this.toolbarButtonParts("bulletList")}
           title="Bullets"
           aria-disabled=${!this.can("toggleBulletList")}
+          aria-pressed=${this.pressedButton("bulletList")}
           @click=${() => this.run("toggleBulletList")}
         >
           ${this.icons.bullets}
@@ -513,7 +521,9 @@ export class TipTapElement extends LitElement {
           part=${this.toolbarButtonParts("orderedList")}
           title="Numbers"
           aria-disabled=${!this.can("toggleOrderedList")}
-          @click=${() => this.run("toggleOrderedList")}>
+          aria-pressed=${this.pressedButton("orderedList")}
+          @click=${() => this.run("toggleOrderedList")}
+        >
           ${this.icons.numbers}
         </button>
 
@@ -575,6 +585,9 @@ export class TipTapElement extends LitElement {
                 inputElement.setCustomValidity("")
               }}
               @blur=${() => {
+                const inputElement = this.linkInputRef.value
+                inputElement.classList.remove("link-validate")
+                inputElement.value = ""
               }}
               @keydown=${(e) => {
                 if (e.key.toLowerCase() === "enter") {
@@ -594,6 +607,10 @@ export class TipTapElement extends LitElement {
       </div>
     `
   }
+}
+
+function capitalize (str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export default TipTapElement

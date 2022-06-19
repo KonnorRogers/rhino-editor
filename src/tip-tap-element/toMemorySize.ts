@@ -2,7 +2,7 @@ export function toMemorySize (bytes: number) {
   const kilobytes = bytes / 1024
 
   if (kilobytes < 1) {
-    return bytes.toString() + 'b'
+    return bytes.toString() + 'B'
   }
 
   const megabytes = kilobytes / 1024

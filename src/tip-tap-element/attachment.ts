@@ -94,11 +94,8 @@ const Attachment = Node.create({
       img.setAttribute("draggable", "false");
       const figcaption = document.createElement("figcaption");
 
-      figure.addEventListener("click", (e) => {
-        // @ts-expect-error
-        if (e.path.includes(figcaption)) return
-
-        console.log(e)
+      figure.addEventListener("click", (e: Event) => {
+        if (e.composedPath().includes(figcaption)) return
 
         if (typeof getPos === "function") {
           e.preventDefault()
@@ -108,6 +105,7 @@ const Attachment = Node.create({
       });
 
       figure.append(attachmentEditor, img, figcaption);
+
       return {
         dom: figure,
         contentDOM: figcaption,
@@ -126,11 +124,13 @@ const Attachment = Node.create({
         const content = [];
 
         attachments.forEach((attachment) => {
-          let captionContent = {}
+          let captionContent: { type: "text"; text: string }
 
           if (attachment.caption) {
-            captionContent.type = "text"
-            captionContent.text = attachment.caption
+            captionContent = {
+              type: "text",
+              text: attachment.caption
+            }
           }
 
           content.push({
