@@ -7,26 +7,41 @@ import Link from "@tiptap/extension-link"
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder"
 
-import { css, html, LitElement } from 'lit'
-import { ref, createRef } from 'lit/directives/ref.js';
+import { css, CSSResult, html, LitElement, PropertyDeclarations, TemplateResult } from 'lit'
+import { ref, createRef, Ref } from 'lit/directives/ref.js';
 
 import Attachment from './attachment'
 import { makeElement } from './make-element'
 import { toMemorySize } from './toMemorySize'
 import * as icons from './icons'
 import { normalize } from '../normalize'
-import { DirectUploader } from "./direct-uploader"
+import type { Maybe } from './types'
+// import { DirectUploader } from "./direct-uploader"
+
+export type ToolbarButton<T extends string> =
+| `button button__${T}`
+| `button button__${T} button--disabled`
+| `button button__${T} button--active`
+| `button button__${T} button--active button--disabled`
 
 export class TipTapElement extends LitElement {
-  static get properties () {
+  linkInputRef: Ref<HTMLInputElement>
+  linkDialogExpanded: boolean
+  input: string
+  editor: Editor
+  editorElement: HTMLElement
+
+  static get properties (): PropertyDeclarations {
     return {
-      editor: {},
-      linkDialogExpanded: {},
+      editor: {state: true},
+      editorElement: {state: true},
+      linkDialogExpanded: {type: Boolean},
       input: {},
+      linkInputRef: {state: true}
     }
   }
 
-  static get styles () {
+  static get styles (): CSSResult {
     return css`
       ${normalize}
       ${tipTapCoreStyles}
@@ -201,11 +216,11 @@ export class TipTapElement extends LitElement {
     `
   }
 
-  static get icons () {
+  static get icons (): typeof icons {
     return icons
   }
 
-  connectedCallback () {
+  connectedCallback (): void {
     super.connectedCallback()
     this.addEventListener("keydown", (e) => {
       if (e.key.toLowerCase() === "escape" && this.linkDialogExpanded) {
@@ -214,7 +229,8 @@ export class TipTapElement extends LitElement {
     })
   }
 
-  get icons () {
+  get icons (): typeof icons {
+    // @ts-expect-error
     return this.constructor.icons
   }
 
@@ -223,7 +239,7 @@ export class TipTapElement extends LitElement {
     this.linkInputRef = createRef();
   }
 
-  editorElementChanged (element) {
+  editorElementChanged (element: HTMLElement): void {
     // Non-light-dom version.
     // const div = document.createElement("div")
     // this.insertAdjacentElement("afterend", div)
@@ -231,19 +247,19 @@ export class TipTapElement extends LitElement {
     this.editorElement = element
   }
 
-  activeButton (action, ...args) {
+  activeButton (action: string, ...args: any[]): "" | "button--active" {
     return this.editor?.isActive(action, ...args) ? "button--active" : ""
   }
 
-  disabledButton (action, ...args) {
+  disabledButton (action: string, ...args: any[]): "" | "button--disabled" {
     return this.can(action, ...args) ? "" : "button--disabled"
   }
 
-  pressedButton (action, ...args) {
+  pressedButton (action: string, ...args: any[]): "true" | "false" {
     return this.editor?.isActive(action, ...args) ? "true" : "false"
   }
 
-  setupEditor (element) {
+  setupEditor (element: HTMLElement): Editor {
     return new Editor({
       element,
       extensions: [
@@ -254,7 +270,7 @@ export class TipTapElement extends LitElement {
         Placeholder.configure({
           includeChildren: true,
           // Use a placeholder:
-          placeholder: ({ editor, node, pos }) => {
+          placeholder: ({ editor, pos }) => {
             if (editor.state.doc.resolve(pos).parent.type.name === "attachment-figure") {
               return "Add a caption..."
             }
@@ -268,29 +284,29 @@ export class TipTapElement extends LitElement {
       // onBeforeCreate: ({ editor }) => {
       //   // Before the view is created.
       // },
-      onCreate: ({ editor }) => {
+      onCreate: (_args) => {
         // The editor is ready.
         this.requestUpdate()
       },
-      onUpdate: ({ editor }) => {
+      onUpdate: (_args) => {
         // The content has changed.
         this.inputElement.value = this.editor.getHTML()
         this.requestUpdate()
       },
-      onSelectionUpdate: ({ editor }) => {
+      onSelectionUpdate: (_args) => {
         // The selection has changed.
         this.requestUpdate()
       },
-      onTransaction: ({ editor, transaction }) => {
+      onTransaction: (_args) => {
         // The editor state has changed.
         this.requestUpdate()
       },
-      onFocus: ({ editor, event }) => {
+      onFocus: (_args) => {
         // The editor is focused.
         this.closeLinkDialog()
         this.requestUpdate()
       },
-      onBlur: ({ editor, event }) => {
+      onBlur: (_args) => {
         // The editor isn’t focused anymore.
         this.inputElement.value = this.editor.getHTML()
         this.requestUpdate()
@@ -301,11 +317,11 @@ export class TipTapElement extends LitElement {
     })
   }
 
-  get inputElement () {
-    return document.getElementById(this.input)
+  get inputElement (): Maybe<HTMLInputElement> {
+    return document.getElementById(this.input) as Maybe<HTMLInputElement>
   }
 
-  toggleLinkDialog () {
+  toggleLinkDialog (): void {
     if (this.linkDialogExpanded) {
       this.closeLinkDialog()
       return
@@ -314,36 +330,49 @@ export class TipTapElement extends LitElement {
     this.showLinkDialog()
   }
 
-  closeLinkDialog () {
+  closeLinkDialog (): void {
     if (this.linkDialog == null) return
 
     this.linkDialogExpanded = false
     this.linkDialog.setAttribute("hidden", "")
   }
 
-  showLinkDialog () {
+  showLinkDialog (): void {
     if (this.linkDialog == null) return
 
     this.linkDialogExpanded = true
     this.linkDialog.removeAttribute("hidden")
   }
 
-  get linkDialog () {
+  get linkDialog (): Maybe<HTMLAnchorElement>  {
     return this.shadowRoot.querySelector(".link-dialog")
   }
 
-  run (action, ...args) {
+  run (action: string, ...args: any[]) {
     if (this.ariaDisabled === "true") return
 
     this.editor.chain().focus()[action](...args).run() && this.requestUpdate()
   }
 
-  toolbarButtonParts (actionName, ...args) {
+  toolbarButtonParts<T extends string> (actionName: T, ...args: any[]): ToolbarButton<T> {
     const disabled = this.disabledButton("toggle" + capitalize(actionName), ...args)
-    return `button button__${actionName} ${this.activeButton(actionName)} ${disabled}`
+    const active = this.activeButton(actionName)
+
+    let str = `button button__${actionName}`
+
+    if (active) {
+      str += ` ${active}`
+    }
+
+    if (disabled) {
+      str += ` ${disabled}`
+    }
+
+
+    return str as ToolbarButton<T>
   }
 
-  attachFiles () {
+  attachFiles (): Promise<void> {
     return new Promise((resolve, _reject) => {
       const input = makeElement("input", { type: "file", multiple: true, hidden: true })
 
@@ -363,9 +392,6 @@ export class TipTapElement extends LitElement {
             caption: `${file.name} ${toMemorySize(file.size)}`
           }
 
-          const directUploader = new DirectUploader(file, "http://0.0.0.0:4566")
-          directUploader.start()
-
           attachments.push(attachment)
         }
 
@@ -381,16 +407,16 @@ export class TipTapElement extends LitElement {
     })
   }
 
-  can (action, ...args) {
+  can (action: string, ...args: any[]): boolean {
     return this.editor && this.editor.can()[action]?.(...args)
   }
 
-  addLink () {
+  addLink (): void {
     const inputElement = this.linkInputRef.value
 
     if (inputElement == null) return
 
-    inputElement.className += " link-validate"
+    inputElement.classList.add("link-validate")
     const href = inputElement.value
 
     try {
@@ -414,7 +440,7 @@ export class TipTapElement extends LitElement {
     }
   }
 
-  render () {
+  render (): TemplateResult {
     return html`
       <div class="toolbar" part="toolbar" role="toolbar">
         <button
@@ -599,7 +625,7 @@ export class TipTapElement extends LitElement {
             <div class="link-dialog__buttons">
               <button class="link-dialog__button" @click=${this.addLink}>Link</button>
               <button class="link-dialog__button" aria-disabled=${() => {}} @click=${() => {
-                editor.chain().focus().extendMarkRange('link').unsetLink().run()
+                this.editor.chain().focus().extendMarkRange('link').unsetLink().run()
               }}>Unlink</button>
             </div>
           </div>
@@ -609,8 +635,8 @@ export class TipTapElement extends LitElement {
   }
 }
 
-function capitalize (str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+function capitalize<T extends string> (str: T): Capitalize<T> {
+  return str.charAt(0).toUpperCase() + str.slice(1) as Capitalize<T>
 }
 
 export default TipTapElement
