@@ -11,18 +11,33 @@ import { css, CSSResult, html, LitElement, PropertyDeclarations, TemplateResult 
 import { ref, createRef, Ref } from 'lit/directives/ref.js';
 
 import Attachment from './attachment'
-import { makeElement } from './make-element'
 import { toMemorySize } from './toMemorySize'
 import * as icons from './icons'
 import { normalize } from '../normalize'
 import type { Maybe } from './types'
 // import { DirectUploader } from "./direct-uploader"
 
+interface FileAttachment {
+  file: File
+}
+
+class TipTapAddAttachmentEvent extends Event {
+  attachment: FileAttachment
+
+  constructor (attachment: FileAttachment, options: Partial<EventInit> = {}) {
+    ["bubbles", "composed", "cancelable"].forEach((option) => {
+      if (options[option] == null) options[option] = true
+    })
+
+    super("tip-tap-add-attachment", options);
+    this.attachment = attachment
+  }
+}
+
 export type ToolbarButton<T extends string> =
 | `button button__${T}`
 | `button button__${T} button--disabled`
 | `button button__${T} button--active`
-| `button button__${T} button--active button--disabled`
 
 export class TipTapElement extends LitElement {
   linkInputRef: Ref<HTMLInputElement>
@@ -216,10 +231,6 @@ export class TipTapElement extends LitElement {
     `
   }
 
-  static get icons (): typeof icons {
-    return icons
-  }
-
   connectedCallback (): void {
     super.connectedCallback()
     this.addEventListener("keydown", (e) => {
@@ -230,8 +241,7 @@ export class TipTapElement extends LitElement {
   }
 
   get icons (): typeof icons {
-    // @ts-expect-error
-    return this.constructor.icons
+    return icons
   }
 
   constructor () {
@@ -374,7 +384,10 @@ export class TipTapElement extends LitElement {
 
   attachFiles (): Promise<void> {
     return new Promise((resolve, _reject) => {
-      const input = makeElement("input", { type: "file", multiple: true, hidden: true })
+      const input = document.createElement("input")
+      input.type = "file"
+      input.multiple = true
+      input.hidden = true
 
       input.addEventListener("change", () => {
         const files = input.files
@@ -399,6 +412,11 @@ export class TipTapElement extends LitElement {
         chain.setAttachment(attachments)
         chain.run()
         input.remove()
+
+        attachments.forEach((attachment) => {
+          this.dispatchEvent(new TipTapAddAttachmentEvent(attachment))
+        })
+
         resolve()
       })
 
