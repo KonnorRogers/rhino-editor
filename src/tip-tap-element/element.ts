@@ -1,5 +1,6 @@
 import { tipTapCoreStyles } from "./tip-tap-core-styles"
 import { Editor } from '@tiptap/core'
+import "role-components"
 
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from '@tiptap/starter-kit'
@@ -119,7 +120,6 @@ export class TipTapElement extends LitElement {
       .toolbar__button {
         height: 2rem;
         min-width: 2.5rem;
-        contain: strict;
         position: relative;
         margin: -1px;
         border: 1px solid var(--border-color);
@@ -460,15 +460,17 @@ export class TipTapElement extends LitElement {
 
   render (): TemplateResult {
     return html`
-      <div class="toolbar" part="toolbar" role="toolbar">
+      <role-toolbar class="toolbar" part="toolbar" role="toolbar">
         <button
           class="toolbar__button"
           part=${this.toolbarButtonParts("bold")}
-          title="Bold"
+          aria-describedby="bold"
           aria-disabled=${!this.can("toggleBold")}
           aria-pressed=${this.pressedButton("bold")}
+          data-role="toolbar-item"
           @click=${() => this.run("toggleBold")}
         >
+          <role-tooltip id="bold" no-contain .rootElement=${this.shadowRoot}>Bold</role-tooltip>
           ${this.icons.bold}
         </button>
 
@@ -476,11 +478,13 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("italic")}
-          title="Italics"
+          aria-describedby="italics"
           aria-disabled=${!this.can("toggleItalic")}
           aria-pressed=${this.pressedButton("italic")}
+          data-role="toolbar-item"
           @click=${() => this.run("toggleItalic")}
         >
+          <role-tooltip id="italics" no-contain .rootElement=${this.shadowRoot}>Italics</role-tooltip>
           ${this.icons.italics}
         </button>
 
@@ -488,26 +492,30 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("strike")}
-          title="Strikethrough"
+          aria-describedby="strikethrough"
           aria-disabled=${!this.can("toggleStrike")}
           aria-pressed=${this.pressedButton("strike")}
+          data-role="toolbar-item"
           @click=${() => this.run("toggleStrike")}
         >
+          <role-tooltip id="strikethrough" no-contain .rootElement=${this.shadowRoot}>Strikethrough</role-tooltip>
           ${this.icons.strikeThrough}
         </button>
 
         <button
           class="toolbar__button"
           tabindex="-1"
-          title="Link"
+          aria-describedby="link"
           part=${this.toolbarButtonParts("link")}
           aria-disabled=${!this.can("toggleLink")}
           aria-pressed=${this.pressedButton("link")}
+          data-role="toolbar-item"
           @click=${() => {
             if (this.ariaDisabled === "true") return
             this.toggleLinkDialog()
           }}
         >
+          <role-tooltip id="link" no-contain .rootElement=${this.shadowRoot}>Link</role-tooltip>
           ${this.icons.link}
         </button>
 
@@ -515,11 +523,13 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("heading", { level: 1 })}
-          title="Heading"
+          aria-describedby="heading"
           aria-disabled=${!this.can("toggleHeading", { level: 1 })}
           aria-pressed=${this.pressedButton("link", { level: 1 })}
+          data-role="toolbar-item"
           @click=${() => this.run("toggleHeading", { level: 1 })}
         >
+          <role-tooltip id="heading" no-contain .rootElement=${this.shadowRoot}>Heading</role-tooltip>
           ${this.icons.heading}
         </button>
 
@@ -527,11 +537,13 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("blockquote") }
-          title="Quote"
+          aria-describedby="block-quote"
           aria-disabled=${!this.can("toggleBlockquote")}
           aria-pressed=${this.pressedButton("link")}
+          data-role="toolbar-item"
           @click=${() => this.run("toggleBlockquote")}
         >
+          <role-tooltip id="block-quote" no-contain .rootElement=${this.shadowRoot}>Block Quote</role-tooltip>
           ${this.icons.quote}
         </button>
 
@@ -539,11 +551,13 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("code")}
-          title="Code"
-          aria-disabled=${!this.can("toggleBlockquote")}
+          aria-describedby="code"
+          aria-disabled=${!this.can("toggleCode")}
           aria-pressed=${this.pressedButton("code")}
+          data-role="toolbar-item"
           @click=${() => this.run("toggleCode")}
         >
+          <role-tooltip id="code" no-contain .rootElement=${this.shadowRoot}>Code</role-tooltip>
           ${this.icons.code}
         </button>
 
@@ -551,11 +565,13 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("bulletList")}
-          title="Bullets"
+          aria-describedby="bullets"
           aria-disabled=${!this.can("toggleBulletList")}
           aria-pressed=${this.pressedButton("bulletList")}
+          data-role="toolbar-item"
           @click=${() => this.run("toggleBulletList")}
         >
+          <role-tooltip id="bullets" no-contain .rootElement=${this.shadowRoot}>Bullets</role-tooltip>
           ${this.icons.bullets}
         </button>
 
@@ -563,11 +579,13 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("orderedList")}
-          title="Numbers"
+          aria-describedby="ordered-list"
           aria-disabled=${!this.can("toggleOrderedList")}
           aria-pressed=${this.pressedButton("orderedList")}
+          data-role="toolbar-item"
           @click=${() => this.run("toggleOrderedList")}
         >
+          <role-tooltip id="ordered-list" no-contain .rootElement=${this.shadowRoot}>Ordered List</role-tooltip>
           ${this.icons.numbers}
         </button>
 
@@ -575,10 +593,12 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("files")}
-          title="Attach Files"
+          aria-describedby="attach-files"
           aria-disabled=${this.editor == null}
+          data-role="toolbar-item"
           @click=${async () => await this.attachFiles()}
         >
+          <role-tooltip id="attach-files" no-contain .rootElement=${this.shadowRoot}>Attach Files</role-tooltip>
           ${this.icons.files}
         </button>
 
@@ -586,10 +606,12 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("undo")}
-          title="Undo"
+          aria-describedby="undo"
           aria-disabled=${!this.can("undo")}
+          data-role="toolbar-item"
           @click=${() => this.run("undo")}
         >
+          <role-tooltip id="undo" no-contain .rootElement=${this.shadowRoot}>Undo</role-tooltip>
           ${this.icons.undo}
         </button>
 
@@ -597,17 +619,19 @@ export class TipTapElement extends LitElement {
           class="toolbar__button"
           tabindex="-1"
           part=${this.toolbarButtonParts("redo")}
-          title="Redo"
+          aria-describedby="redo"
           aria-disabled=${!this.can("redo")}
+          data-role="toolbar-item"
           @click=${() => this.run("redo")}
         >
-         ${this.icons.redo}
+          <role-tooltip id="redo" no-contain .rootElement=${this.shadowRoot}>Redo</role-tooltip>
+          ${this.icons.redo}
         </button>
-      </div>
+      </role-toolbar>
 
       <div ${ref(this.editorElementChanged)} style="position: relative;">
-        <div class="link-dialog" hidden @click=${(event) => {
-          if (event.currentTarget.contains(event.target) && event.currentTarget !== event.target) {
+        <div class="link-dialog" hidden @click=${(event: MouseEvent) => {
+          if ((event.currentTarget as HTMLElement).contains(event.target as HTMLElement) && event.currentTarget !== event.target) {
             return
           }
 
@@ -633,8 +657,8 @@ export class TipTapElement extends LitElement {
                 inputElement.classList.remove("link-validate")
                 inputElement.value = ""
               }}
-              @keydown=${(e) => {
-                if (e.key.toLowerCase() === "enter") {
+              @keydown=${(e: KeyboardEvent) => {
+                if (e.key?.toLowerCase() === "enter") {
                   e.preventDefault()
                   this.addLink()
                 }
