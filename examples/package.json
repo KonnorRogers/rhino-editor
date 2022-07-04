@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "start": "",
+    "build": ""
+  },
+  "author": "Konnor Rogers",
+  "license": "MIT",
+  "dependencies": {
+    "tip-tap-element": "link:../"
+  },
+  "devDependencies": {
+    "parcel": "^2.6.2"
+  }
+}
