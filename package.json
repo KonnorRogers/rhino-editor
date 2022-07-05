@@ -7,7 +7,6 @@
   "main": "dist/tip-tap-element.cjs",
   "module": "dist/tip-tap-element.js",
   "scripts": {
-    "prebuild": "[[ $CI = true ]] && npx pnpm@3 install -r --store=node_modules/.pnpm-store || echo skiping pnpm install",
     "build": "rm -rf dist && rollup -c",
     "start:example": "web-dev-server",
     "build:example": "npx pnpm build && rm -rf examples/dist && cp -R dist/ examples/dist",
