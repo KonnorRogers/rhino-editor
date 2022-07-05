@@ -3,8 +3,31 @@
   <head>
     <meta charset="utf-8"/>
     <title>TipTapElement</title>
+    <script type="module" src="/dist/tip-tap-element.js"></script>
     <script type="module">
-      import "../dist/index.js"
+      const input = document.querySelector("#my-input")
+      const readonly = document.querySelector("#readonly")
+
+      readonly.editor.commands.setContent(input.value)
+
+      replaceWithWrapper(input, "value", function(obj, property, value) {
+        readonly.editor.commands.setContent(value)
+      });
+
+      function replaceWithWrapper(obj, property, callback) {
+        Object.defineProperty(obj, property, new function() {
+          var _value = obj[property];
+          return {
+            set: function(value) {
+              _value = value;
+              callback(obj, property, value)
+            },
+            get: function() {
+              return _value;
+            }
+          }
+        });
+      }
     </script>
   </head>
   <body>
@@ -17,18 +40,28 @@
         <br>
         &nbsp;&nbsp;&lt;input id="my-input" type="hidden"&gt;
         <br>
-        &nbsp;&nbsp;&lt;tip-tap-trix input="my-input"&gt;&lt;/tip-tap-element&gt;
+        &nbsp;&nbsp;&lt;tip-tap-trix input="my-input"&gt;&lt;/tip-tap-trix&gt;
       <br>
       &lt;/form&gt;
     </code>
+
+    <br><br>
+
+    Because the following is not hooked up a backend for direct-uploads,
+    none of the images will save properly or be displayed in the output editor.
 
     <br><br><br><br><br>
 
     <form>
       <input id="my-input" type="hidden">
-      <tip-tap-trix input="my-input"></tip-tap-element>
+      <tip-tap-trix input="my-input"></tip-tap-trix>
     </form>
 
-    <tip-tap-trix readonly></tip-tap-trix>
+    <br><br><br><br><br>
+
+    Mirrored output in a readonly instance:
+    <br>
+
+    <tip-tap-trix id="readonly" readonly></tip-tap-trix>
   </body>
 </html>

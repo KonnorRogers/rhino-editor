@@ -4,3 +4,4 @@ export { AttachmentEditor, TipTapElement }
 
 window.customElements.define("attachment-editor", class extends AttachmentEditor{})
 window.customElements.define("tip-tap-trix", class extends TipTapElement{})
+

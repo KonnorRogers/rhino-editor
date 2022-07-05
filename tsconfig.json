@@ -3,11 +3,6 @@
   "exclude": ["./dist"],
   "compilerOptions": {
     "baseUrl": ".",
-    "declaration": true,
-    "declarationMap": true,
-    "declarationDir": "./dist",
-    "outDir": "./dist",
-    "noEmit": true,
     "esModuleInterop": true,
     "importHelpers": true,
     "experimentalDecorators": true,

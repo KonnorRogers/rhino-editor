@@ -1,1 +1,1 @@
-import "../dist/index.js"
+import "../src/index"
