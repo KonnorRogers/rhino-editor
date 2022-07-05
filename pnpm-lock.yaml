@@ -4,7 +4,6 @@ specifiers:
   '@rails/activestorage': ^6.0.5
   '@rollup/plugin-node-resolve': ^13.3.0
   '@rollup/plugin-typescript': ^8.3.3
-  '@swc/helpers': ^0.4.3
   '@tiptap/core': ^2.0.0-beta.174
   '@tiptap/extension-focus': ^2.0.0-beta.40
   '@tiptap/extension-image': ^2.0.0-beta.27
@@ -25,7 +24,6 @@ specifiers:
 
 dependencies:
   '@rails/activestorage': 6.0.5
-  '@swc/helpers': 0.4.3
   '@tiptap/core': 2.0.0-beta.174
   '@tiptap/extension-focus': 2.0.0-beta.40_@tiptap+core@2.0.0-beta.174
   '@tiptap/extension-image': 2.0.0-beta.27_@tiptap+core@2.0.0-beta.174
