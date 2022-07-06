@@ -3,31 +3,54 @@
   <head>
     <meta charset="utf-8"/>
     <title>TipTapElement</title>
+    <style>
+      html, body {
+        margin: 0;
+        height: 100%;
+      }
+
+      body {
+        padding: 2rem;
+      }
+
+      body {
+        max-width: 100%;
+      }
+      :where(:not(:defined)) {
+        visibility: hidden;
+      }
+    </style>
     <script type="module" src="/dist/tip-tap-element.js"></script>
     <script type="module">
-      const input = document.querySelector("#my-input")
-      const readonly = document.querySelector("#readonly")
+      ;(async function () {
+        await window.customElements.whenDefined("tip-tap-trix");
 
-      readonly.editor.commands.setContent(input.value)
+        const input = document.querySelector("#my-input")
+        const readonly = document.querySelector("#readonly")
 
-      replaceWithWrapper(input, "value", function(obj, property, value) {
-        readonly.editor.commands.setContent(value)
-      });
+        document.addEventListener("DOMContentLoad", () => {
+          readonly.editor.commands.setContent(input.value)
+        })
 
-      function replaceWithWrapper(obj, property, callback) {
-        Object.defineProperty(obj, property, new function() {
-          var _value = obj[property];
-          return {
-            set: function(value) {
-              _value = value;
-              callback(obj, property, value)
-            },
-            get: function() {
-              return _value;
-            }
-          }
+        replaceWithWrapper(input, "value", function(obj, property, value) {
+          readonly.editor.commands.setContent(value)
         });
-      }
+
+        function replaceWithWrapper(obj, property, callback) {
+          Object.defineProperty(obj, property, new function() {
+            var _value = obj[property];
+            return {
+              set: function(value) {
+                _value = value;
+                callback(obj, property, value)
+              },
+              get: function() {
+                return _value;
+              }
+            }
+          });
+        }
+      })()
     </script>
   </head>
   <body>

@@ -15,7 +15,7 @@ export const config = {
   blockQuote: `Bold <${modifierKey}+b>`,
   code: `Code <${modifierKey}+e>`,
   bulletList: `Bullet List <${modifierKey}+shift+7>`,
-  orderedList: `Bold <${modifierKey}+shift+8>`,
+  orderedList: `Ordered List <${modifierKey}+shift+8>`,
   files: `Attach Files`,
   undo: `Undo <${modifierKey}+z>`,
   redo: `Redo <${modifierKey}+shift+z>`,
@@ -85,6 +85,7 @@ export class TipTapElement extends LitElement {
       ${tipTapCoreStyles}
 
       :host {
+        display: block;
         --border-color: #cecece;
         --placeholder-text-color: #cecece;
         --input-focus-ring: 0 0 2px 1px #005a9c;
@@ -148,8 +149,19 @@ export class TipTapElement extends LitElement {
 
       .toolbar {
         color: var(--toolbar-text-color);
-        flex-wrap: wrap;
         overflow: auto;
+      }
+
+      .toolbar__button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 32px;
+        margin-right: -3px;
+        min-width: 32px;
+        position: relative;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
       }
 
       .toolbar__button[aria-disabled="true"] {
@@ -161,19 +173,10 @@ export class TipTapElement extends LitElement {
         border-color: var(--disabled-button-border-color);
       }
 
-      .toolbar__button {
-        height: 2rem;
-        margin-right: -3px;
-        min-width: 2rem;
-        position: relative;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        padding: 0.2em 0.4em;
-      }
-
       .toolbar__button svg {
-        height: 100%;
-        width: 100%;
+        flex-shrink: 0;
+        height: 24px;
+        width: 24px;
       }
 
       button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
