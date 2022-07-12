@@ -19,12 +19,20 @@
       :where(:not(:defined)) {
         visibility: hidden;
       }
+      pre, code {
+        margin: 0;
+        padding: 0;
+      }
+      pre {
+        white-space: pre-line;
+      }
     </style>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
 
+      <link href="https://cdn.skypack.dev/prismjs/themes/prism.css" rel="stylesheet" />
     <script type="module" src="/dist/tip-tap-element.min.js"></script>
     <script type="module">
+      import Prism from "https://cdn.skypack.dev/prismjs"
+
       ;(async function () {
         await window.customElements.whenDefined("tip-tap-trix");
 
@@ -35,10 +43,20 @@
         // const jsonMirror = document.querySelector("#mirrored-json")
         readonly.editor.commands.setContent(input.value)
 
+        Prism.highlightElement(htmlMirror)
+
         replaceWithWrapper(input, "value", function(obj, property, value) {
           readonly.editor.commands.setContent(value)
-          const html = tiptap.editor.getHTML()
-          htmlMirror.innerText = html
+          const escapeHTML = (str) => {
+            const p = document.createElement("p");
+            p.appendChild(document.createTextNode(str));
+            return p.innerHTML;
+          }
+
+          const html = escapeHTML(tiptap.editor.getHTML().replace(/<p>/g, "\n<p>").replace(/<blockquote>/g, "\n<blockquote>").replace(/<\/blockquote>/g, "\n</blockquote>"))
+
+          htmlMirror.innerHTML = html
+          Prism.highlightElement(htmlMirror)
           // const json = JSON.stringify(tiptap.editor.getJSON())
           // jsonMirror.innerText = json
         });
@@ -97,7 +115,7 @@
     <div>
       Mirrored HTML:
       <br>
-      <pre style="max-width: 300px; white-space: pre-wrap;">
+      <pre style="max-width: 80ch;">
         <code id="mirrored-html" class="language-html">
         </code>
       </pre>
