@@ -20,20 +20,27 @@
         visibility: hidden;
       }
     </style>
-    <script type="module" src="/dist/tip-tap-element.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+
+    <script type="module" src="/dist/tip-tap-element.min.js"></script>
     <script type="module">
       ;(async function () {
         await window.customElements.whenDefined("tip-tap-trix");
 
+        const tiptap = document.querySelector("#editor")
         const input = document.querySelector("#my-input")
         const readonly = document.querySelector("#readonly")
-
-        document.addEventListener("DOMContentLoad", () => {
-          readonly.editor.commands.setContent(input.value)
-        })
+        const htmlMirror = document.querySelector("#mirrored-html")
+        // const jsonMirror = document.querySelector("#mirrored-json")
+        readonly.editor.commands.setContent(input.value)
 
         replaceWithWrapper(input, "value", function(obj, property, value) {
           readonly.editor.commands.setContent(value)
+          const html = tiptap.editor.getHTML()
+          htmlMirror.innerText = html
+          // const json = JSON.stringify(tiptap.editor.getJSON())
+          // jsonMirror.innerText = json
         });
 
         function replaceWithWrapper(obj, property, callback) {
@@ -58,15 +65,14 @@
 
     <br>
 
-    <code>
-      &lt;form&gt;
-        <br>
-        &nbsp;&nbsp;&lt;input id="my-input" type="hidden"&gt;
-        <br>
-        &nbsp;&nbsp;&lt;tip-tap-trix input="my-input"&gt;&lt;/tip-tap-trix&gt;
-      <br>
-      &lt;/form&gt;
-    </code>
+    <pre>
+      <code class="language-html">
+        &lt;form&gt;
+          &nbsp;&nbsp;&lt;input id="my-input" type="hidden"&gt;
+          &nbsp;&nbsp;&lt;tip-tap-trix input="my-input"&gt;&lt;/tip-tap-trix&gt;
+        &lt;/form&gt;
+      </code>
+    </pre>
 
     <br><br>
 
@@ -77,7 +83,7 @@
 
     <form>
       <input id="my-input" type="hidden">
-      <tip-tap-trix input="my-input"></tip-tap-trix>
+      <tip-tap-trix id="editor" input="my-input"></tip-tap-trix>
     </form>
 
     <br><br><br><br><br>
@@ -86,5 +92,24 @@
     <br>
 
     <tip-tap-trix id="readonly" readonly></tip-tap-trix>
+
+    <br><br>
+    <div>
+      Mirrored HTML:
+      <br>
+      <pre style="max-width: 300px; white-space: pre-wrap;">
+        <code id="mirrored-html" class="language-html">
+        </code>
+      </pre>
+    </div>
+
+    <!-- <div> -->
+    <!--   Mirrored JSON: -->
+    <!--   <br> -->
+    <!--   <pre style="max-width: 300px; white-space: pre-wrap;"> -->
+    <!--     <code id="mirrored-json" class="language-json"> -->
+    <!--     </code> -->
+    <!--   </pre> -->
+    <!-- </div> -->
   </body>
 </html>
