@@ -11,30 +11,31 @@ let entries = {}
 glob
   .sync("src/**/*.{ts,js}")
   .forEach((file) => {
-    const key = path.join(path.dirname(file), path.basename(file, path.extname(file)))
+    let key = path.join(path.dirname(file), path.basename(file, path.extname(file)))
+    key = key.replace(/^src\//, "")
     entries[key] = file
   });
 
-const input = "./src/index.ts"
-// console.log(entries)
-
 export default [
-  // {
-    // input,
-    // plugins: [compressionPlugins()],
-    // output: [
-    //   {
-    //     file: "dist/bundle/tip-tap-element.umd.js",
-    //     format: "umd",
-    //     name: "TipTapElement",
-    //     esModule: false,
-    //   },
-    //   {
-    //     file: "dist/bundle/tip-tap-element.module.js",
-    //     format: "es",
-    //   }
-    // ]
-  // },
+  {
+    input: "src/index.ts",
+    output: [
+      {
+        name: "mrujs",
+        file: "dist/bundle/index.umd.js",
+        format: "umd",
+        sourcemap: true,
+        esModule: false,
+        exports: "named",
+      },
+      {
+        file: "dist/bundle/index.module.js",
+        format: "es",
+        sourcemap: true,
+      }
+    ],
+    plugins: compressionPlugins()
+  },
   {
     input: entries,
     plugins: basePlugins(),
@@ -42,6 +43,7 @@ export default [
       {
         dir: "dist",
         format: "es",
+        sourcemap: true
       },
     ],
   },
