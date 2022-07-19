@@ -1,11 +1,12 @@
 import { Node, mergeAttributes, Extension } from "@tiptap/core";
 import Image from "@tiptap/extension-image";
+import { FileAttachment } from "./element";
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
 }
 
-interface AttachmentArgs {
+export interface AttachmentArgs {
   src: string;
   fileName?: string;
   fileSize?: number;
@@ -118,13 +119,13 @@ const Attachment = Node.create({
       setAttachment: (options: AttachmentArgs | AttachmentArgs[]) => ({
         commands,
       }) => {
-        const attachments = Array.isArray(options)
+        const attachments: AttachmentArgs[] = Array.isArray(options)
           ? options
-          : [].concat(options);
-        const content = [];
+          : ([] as AttachmentArgs[]).concat(options);
+        const content: Record<string, unknown>[] = [];
 
         attachments.forEach((attachment) => {
-          let captionContent: { type: "text"; text: string }
+          let captionContent: { type: "text"; text: string } | undefined
 
           if (attachment.caption) {
             captionContent = {

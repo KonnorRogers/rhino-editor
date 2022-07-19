@@ -32,26 +32,32 @@ import Placeholder from "@tiptap/extension-placeholder"
 import { css, CSSResult, html, LitElement, PropertyDeclarations, PropertyValueMap, TemplateResult } from 'lit'
 import { ref, createRef, Ref } from 'lit/directives/ref.js';
 
-import Attachment from './attachment'
+import Attachment, { AttachmentArgs } from './attachment'
 import { toMemorySize } from './toMemorySize'
 import * as icons from './icons'
 import { normalize } from '../normalize'
 import type { Maybe } from './types'
 // import { DirectUploader } from "./direct-uploader"
 
-interface FileAttachment {
+export interface FileAttachment extends AttachmentArgs {
   file: File
+  setUploadProgress?: (progress: number) => void
+  setAttributes?: (obj: { sgid: string, url: string }) => void
 }
 
-class TipTapAddAttachmentEvent extends Event {
+export class TipTapAddAttachmentEvent extends Event {
   attachment: FileAttachment
+
+  static get eventName (): "tip-tap-add-attachment" {
+    return "tip-tap-add-attachment"
+  }
 
   constructor (attachment: FileAttachment, options: Partial<EventInit> = {}) {
     if (options.bubbles == null) options.bubbles = true
     if (options.composed == null) options.composed = true
     if (options.cancelable == null) options.cancelable = true
 
-    super("tip-tap-add-attachment", options);
+    super(TipTapAddAttachmentEvent.eventName, options);
     this.attachment = attachment
   }
 }
@@ -503,14 +509,14 @@ export class TipTapElement extends LitElement {
         const files = input.files
         if (files == null || files.length === 0) return
 
-        const attachments = []
+        const attachments: FileAttachment[] = []
         for (let i = 0; i < files.length; i++) {
           const file = files[i]
 
           if (file == null) return
           const src = URL.createObjectURL(file);
 
-          const attachment = {
+          const attachment: FileAttachment = {
             src,
             file,
             contentType: file.type,

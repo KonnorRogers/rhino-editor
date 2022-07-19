@@ -1,14 +1,58 @@
-import resolve from "@rollup/plugin-node-resolve"
-import typescript from "@rollup/plugin-typescript"
+import * as path from "path";
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from "@rollup/plugin-node-resolve";
+import typescript from "@rollup/plugin-typescript";
 import { terser } from "rollup-plugin-terser";
-import { brotliCompressSync } from 'zlib'
-import gzipPlugin from 'rollup-plugin-gzip'
+import { brotliCompressSync } from "zlib";
+import gzipPlugin from "rollup-plugin-gzip";
+import glob from "glob"
+
+let entries = {}
+glob
+  .sync("src/**/*.{ts,js}")
+  .forEach((file) => {
+    const key = path.join(path.dirname(file), path.basename(file, path.extname(file)))
+    entries[key] = file
+  });
+
+const input = "./src/index.ts"
+// console.log(entries)
+
+export default [
+  // {
+    // input,
+    // plugins: [compressionPlugins()],
+    // output: [
+    //   {
+    //     file: "dist/bundle/tip-tap-element.umd.js",
+    //     format: "umd",
+    //     name: "TipTapElement",
+    //     esModule: false,
+    //   },
+    //   {
+    //     file: "dist/bundle/tip-tap-element.module.js",
+    //     format: "es",
+    //   }
+    // ]
+  // },
+  {
+    input: entries,
+    plugins: basePlugins(),
+    output: [
+      {
+        dir: "dist",
+        format: "es",
+      },
+    ],
+  },
+];
 
 function basePlugins(tsconfig = "./tsconfig.json") {
   return [
     resolve(),
-    typescript({ tsconfig }),
-  ]
+    commonjs(),
+    typescript({ tsconfig })
+  ];
 }
 
 function compressionPlugins(tsconfig = "./tsconfig.json") {
@@ -16,38 +60,15 @@ function compressionPlugins(tsconfig = "./tsconfig.json") {
     ...basePlugins(tsconfig),
     terser({
       compress: {
-        passes: 10
-      }
+        passes: 10,
+      },
     }),
     // GZIP compression as .gz files
     gzipPlugin(),
     // Brotil compression as .br files
     gzipPlugin({
-        customCompression: content =>
-            brotliCompressSync(Buffer.from(content)),
-        fileName: '.br',
+      customCompression: (content) => brotliCompressSync(Buffer.from(content)),
+      fileName: ".br",
     }),
-  ]
+  ];
 }
-
-export default [
-  {
-    input: "src/index.ts",
-    output: [{
-      file: "dist/tip-tap-element.js",
-      format: "es",
-      sourcemap: true,
-    }],
-    plugins: basePlugins()
-  },
-  // Compressed
-  {
-    input: "src/index.ts",
-    output: [{
-      file: "dist/tip-tap-element.min.js",
-      format: "es",
-      sourcemap: true,
-    }],
-    plugins: compressionPlugins()
-  },
-]
