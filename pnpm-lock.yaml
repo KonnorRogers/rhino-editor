@@ -17,7 +17,7 @@ specifiers:
   glob: ^8.0.3
   lit: ^2.2.7
   prosemirror-state: ^1.3.4
-  role-components: ^1.0.5
+  role-components: ^1.0.6
   rollup: ^2.75.7
   rollup-plugin-gzip: ^3.0.1
   rollup-plugin-terser: ^7.0.2
@@ -37,7 +37,7 @@ dependencies:
   '@tiptap/starter-kit': 2.0.0-beta.183
   lit: 2.2.7
   prosemirror-state: 1.3.4
-  role-components: 1.0.5
+  role-components: 1.0.6
   spark-md5: 3.0.2
   tslib: 2.4.0
 
@@ -2664,8 +2664,8 @@ packages:
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
 
-  /role-components/1.0.5:
-    resolution: {integrity: sha512-zr5fFxVXb4s+4c+qyW6cN7khxNY4P60BSGK+Q89i/DugtM16laM/1zsRgDc00X0jz6SPgu7qbjJTDPgHF1Ghcw==}
+  /role-components/1.0.6:
+    resolution: {integrity: sha512-8tW+TPH9xOJFCMBimuCnIpxOmLtvTxpCbL/NgpP+0wYX6un3lDsCBtJ/u6a123ERrjuCsNC0+hdDOD4FoxZXCA==}
     dependencies:
       '@floating-ui/dom': 0.5.4
       '@swc/helpers': 0.4.3
