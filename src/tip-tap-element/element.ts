@@ -1,7 +1,6 @@
 import { tipTapCoreStyles } from "./tip-tap-core-styles"
 import { Editor } from '@tiptap/core'
-// import "role-components"
-import "../../../role-components/dist/index.js"
+import "role-components"
 
 export const isiOS = /Mac|iOS|iPhone|iPad|iPod/i.test(window.navigator.platform)
 
