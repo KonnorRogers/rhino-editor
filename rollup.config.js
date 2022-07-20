@@ -19,6 +19,7 @@ glob
 export default [
   {
     input: "src/index.ts",
+    external: [],
     output: [
       {
         name: "mrujs",
