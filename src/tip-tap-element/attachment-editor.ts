@@ -5,9 +5,9 @@ import { normalize } from '../normalize'
 import { toMemorySize } from './toMemorySize'
 
 export class AttachmentEditor extends LitElement {
-  fileName: string;
-  fileSize: number;
-  progress: string;
+  fileName!: string;
+  fileSize!: number;
+  progress!: number;
 
   close () {
     return html`${close}`
@@ -17,7 +17,7 @@ export class AttachmentEditor extends LitElement {
     return {
       fileName: { attribute: "file-name", type: String },
       fileSize: { attribute: "file-size", type: Number },
-      progress: { type: String }
+      progress: { type: Number }
     }
   }
 
@@ -31,7 +31,7 @@ export class AttachmentEditor extends LitElement {
 
       button {
         background-color: white;
-        border: 1px solid skyblue;
+        border: 1px solid var(--button-border-color);
         border-radius: 9999px;
         display: flex;
         align-items: center;
@@ -48,7 +48,7 @@ export class AttachmentEditor extends LitElement {
       }
 
       button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
-        outline: none;
+        outline: transparent;
         background-color: rgb(240, 240, 240);
       }
 
@@ -95,6 +95,10 @@ export class AttachmentEditor extends LitElement {
         opacity: 0.9;
         transition: opacity 200ms ease-in;
       }
+
+      .file-progress[value="100"] {
+        display: none;
+      }
     `
   }
 
@@ -104,16 +108,16 @@ export class AttachmentEditor extends LitElement {
 
   render () {
     return html`
-      <button class="close-button" @mousedown=${(e) => {
+      <button class="close-button" @pointerdown=${(e: PointerEvent) => {
         e.preventDefault()
-        this.parentElement.remove()
+        this.parentElement?.remove()
       }}>
         ${this.close()}
       </button>
       <span class="file-metadata">
         <span class="file-name">${this.fileName}</span><span class="file-size">${this.toFileSize()}</span>
       </span>
-      <progress class="file-progress" value=${this.progress} max="100"></progress>
+      <progress class="file-progress" value=${(this.progress || 0)} min="0" max="100"></progress>
     `
   }
 }

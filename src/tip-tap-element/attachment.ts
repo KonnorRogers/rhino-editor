@@ -1,17 +1,9 @@
-import { Node, mergeAttributes, Extension } from "@tiptap/core";
-import Image from "@tiptap/extension-image";
-import { FileAttachment } from "./element";
+import { Node, mergeAttributes, Extension, NodeView } from "@tiptap/core";
+import {default as TipTapImage } from "@tiptap/extension-image";
+import { AttachmentManager } from "../attachment-upload";
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
-}
-
-export interface AttachmentArgs {
-  src: string;
-  fileName?: string;
-  fileSize?: number;
-  contentType?: string;
-  caption?: string;
 }
 
 declare module "@tiptap/core" {
@@ -20,14 +12,14 @@ declare module "@tiptap/core" {
       /**
        * Add an attachment(s)
        */
-      setAttachment: (options: AttachmentArgs | AttachmentArgs[]) => ReturnType;
+      setAttachment: (options: AttachmentManager | AttachmentManager[]) => ReturnType;
     };
   }
 }
 
 export const inputRegex = /(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/;
 
-const AttachmentImage = Image.extend({
+const AttachmentImage = TipTapImage.extend({
   selectable: false,
   draggable: false,
 });
@@ -72,6 +64,9 @@ const Attachment = Node.create({
 
   addAttributes() {
     return {
+      attachmentId: { default: null },
+      imageId: { default: null },
+      sgid: { default: null },
       src: { default: null },
       height: { default: null },
       width: { default: null },
@@ -79,6 +74,7 @@ const Attachment = Node.create({
       fileName: { default: null },
       fileSize: { default: null },
       content: { default: null },
+      url: { default: null },
     };
   },
 
@@ -86,11 +82,34 @@ const Attachment = Node.create({
     return ({ node, getPos, editor }) => {
       const figure = document.createElement("figure");
       const attachmentEditor = document.createElement("attachment-editor")
+      attachmentEditor.setAttribute("data-attachment-id", node.attrs.attachmentId)
       attachmentEditor.setAttribute("file-name", node.attrs.fileName)
       attachmentEditor.setAttribute("file-size", node.attrs.fileSize)
 
       const img = document.createElement("img");
-      img.src = node.attrs.src;
+      Object.defineProperties(img, {
+        src: {
+          set (val: string) {
+            const image = new Image()
+            image.src = val
+
+            image.onload = () => {
+              node.attrs.src = val
+              this.setAttribute("src", val)
+              image.remove()
+            }
+          }
+        },
+        sgid: {
+          set (val: string) {
+            node.attrs.sgid = val
+            this.setAttribute("sgid", val)
+          }
+        }
+      })
+      img.setAttribute("data-image-id", node.attrs.imageId)
+      img.setAttribute("src", node.attrs.src);
+      img.setAttribute("sgid", node.attrs.sgid)
       img.contentEditable = "false";
       img.setAttribute("draggable", "false");
       const figcaption = document.createElement("figcaption");
@@ -116,12 +135,12 @@ const Attachment = Node.create({
 
   addCommands() {
     return {
-      setAttachment: (options: AttachmentArgs | AttachmentArgs[]) => ({
+      setAttachment: (options: AttachmentManager | AttachmentManager[]) => ({
         commands,
       }) => {
-        const attachments: AttachmentArgs[] = Array.isArray(options)
+        const attachments: AttachmentManager[] = Array.isArray(options)
           ? options
-          : ([] as AttachmentArgs[]).concat(options);
+          : ([] as AttachmentManager[]).concat(options);
         const content: Record<string, unknown>[] = [];
 
         attachments.forEach((attachment) => {

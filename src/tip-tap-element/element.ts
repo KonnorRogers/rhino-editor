@@ -1,6 +1,20 @@
 import { tipTapCoreStyles } from "./tip-tap-core-styles"
 import { Editor } from '@tiptap/core'
+// https://tiptap.dev/api/extensions/starter-kit#included-extensions
+import StarterKit from '@tiptap/starter-kit'
+import Link from "@tiptap/extension-link"
+import Focus from "@tiptap/extension-focus";
+import Placeholder from "@tiptap/extension-placeholder"
+
+import { css, CSSResult, html, LitElement, PropertyDeclarations, PropertyValueMap, TemplateResult } from 'lit'
+import { ref, createRef, Ref } from 'lit/directives/ref.js';
 import "role-components"
+
+import { AttachmentUpload, AttachmentManager } from "../attachment-upload"
+import Attachment from './attachment'
+import * as icons from './icons'
+import { normalize } from '../normalize'
+import type { Maybe } from './types'
 
 export const isiOS = /Mac|iOS|iPhone|iPad|iPod/i.test(window.navigator.platform)
 
@@ -23,36 +37,14 @@ export const config = {
   linkDialogUnlink: `Unlink`
 }
 
-// https://tiptap.dev/api/extensions/starter-kit#included-extensions
-import StarterKit from '@tiptap/starter-kit'
-import Link from "@tiptap/extension-link"
-import Focus from "@tiptap/extension-focus";
-import Placeholder from "@tiptap/extension-placeholder"
-
-import { css, CSSResult, html, LitElement, PropertyDeclarations, PropertyValueMap, TemplateResult } from 'lit'
-import { ref, createRef, Ref } from 'lit/directives/ref.js';
-
-import Attachment, { AttachmentArgs } from './attachment'
-import { toMemorySize } from './toMemorySize'
-import * as icons from './icons'
-import { normalize } from '../normalize'
-import type { Maybe } from './types'
-// import { DirectUploader } from "./direct-uploader"
-
-export interface FileAttachment extends AttachmentArgs {
-  file: File
-  setUploadProgress?: (progress: number) => void
-  setAttributes?: (obj: { sgid: string, url: string }) => void
-}
-
 export class TipTapAddAttachmentEvent extends Event {
-  attachment: FileAttachment
+  attachment: AttachmentManager
 
   static get eventName (): "tip-tap-add-attachment" {
     return "tip-tap-add-attachment"
   }
 
-  constructor (attachment: FileAttachment, options: Partial<EventInit> = {}) {
+  constructor (attachment: AttachmentManager, options: Partial<EventInit> = {}) {
     if (options.bubbles == null) options.bubbles = true
     if (options.composed == null) options.composed = true
     if (options.cancelable == null) options.cancelable = true
@@ -270,7 +262,8 @@ export class TipTapElement extends LitElement {
 
       /* Attachments */
       figure.has-focus {
-        box-shadow: 0 0 0 2px skyblue;
+        outline: transparent;
+        box-shadow: 0 0 0 2px var(--button-border-color);
       }
 
       attachment-editor {
@@ -376,6 +369,7 @@ export class TipTapElement extends LitElement {
   setupEditor (element: Element): Editor {
     return new Editor({
       element,
+      injectCSS: false,
       extensions: [
         StarterKit,
         Link,
@@ -390,7 +384,7 @@ export class TipTapElement extends LitElement {
             }
             return "Write something..."
           }
-        })
+        }),
       ],
       content: this.inputElement?.value,
       autofocus: true,
@@ -509,21 +503,17 @@ export class TipTapElement extends LitElement {
         const files = input.files
         if (files == null || files.length === 0) return
 
-        const attachments: FileAttachment[] = []
+        const attachments: AttachmentManager[] = []
         for (let i = 0; i < files.length; i++) {
           const file = files[i]
 
           if (file == null) return
           const src = URL.createObjectURL(file);
 
-          const attachment: FileAttachment = {
+          const attachment: AttachmentManager = new AttachmentManager({
             src,
             file,
-            contentType: file.type,
-            fileName: file.name,
-            fileSize: file.size,
-            caption: `${file.name} ${toMemorySize(file.size)}`
-          }
+          }, this)
 
           attachments.push(attachment)
         }
@@ -818,5 +808,21 @@ export class TipTapElement extends LitElement {
     `
   }
 }
+
+declare global {
+  interface WindowEventMap {
+    [TipTapAddAttachmentEvent.eventName]: TipTapAddAttachmentEvent
+  }
+}
+
+addEventListener(TipTapAddAttachmentEvent.eventName, (event: TipTapAddAttachmentEvent) => {
+  console.log(event)
+  const { attachment, target } = event
+
+  if (target instanceof HTMLElement && attachment.file) {
+    const upload = new AttachmentUpload(attachment, target)
+    upload.start()
+  }
+})
 
 export default TipTapElement
