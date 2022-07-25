@@ -1,4 +1,4 @@
-import { Node, mergeAttributes, Extension, NodeView } from "@tiptap/core";
+import { Node, mergeAttributes, Extension } from "@tiptap/core";
 import {default as TipTapImage } from "@tiptap/extension-image";
 import { AttachmentManager } from "../attachment-upload";
 
