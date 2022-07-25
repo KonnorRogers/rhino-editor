@@ -14,6 +14,9 @@
     "target": "es2018",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationDir": "dist/",
+    "emitDeclarationOnly": true,
 
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
