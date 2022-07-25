@@ -4,13 +4,13 @@
   "description": "A predefined TipTap Rich Text Editor",
   "type": "module",
   "source": "src/index.ts",
-  "main": "dist/bundle/index.umd.js",
+  "main": "dist/bundle/index.common.js",
   "module": "dist/bundle/index.module.js",
   "scripts": {
-    "build": "rm -rf dist && rollup -c",
+    "build": "rm -rf dist && node esbuild.config.js",
     "start:example": "web-dev-server",
     "build:example": "npx pnpm build && rm -rf examples/dist && cp -R dist/ examples/dist",
-    "start": "rm -rf dist/ && rollup -wc",
+    "start": "pnpm build -- --watch",
     "deploy": "pnpm build && standard-version --release-as",
     "deploy:beta": "pnpm build && standard-version --prerelease beta",
     "deploy:patch": "pnpm build && standard-version --release-as patch",
@@ -32,19 +32,13 @@
   "author": "paramagicdev",
   "license": "MIT",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^22.0.1",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@rollup/plugin-typescript": "^8.3.3",
     "@types/rails__activestorage": "^7.0.1",
     "@web/dev-server": "^0.1.32",
     "@web/dev-server-esbuild": "^0.3.1",
+    "esbuild": "^0.14.49",
     "glob": "^8.0.3",
-    "rollup": "^2.75.7",
-    "rollup-plugin-gzip": "^3.0.1",
-    "rollup-plugin-terser": "^7.0.2",
     "standard-version": "^9.5.0",
-    "typescript": "^4.7.4",
-    "zlib": "^1.0.5"
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "@rails/activestorage": "^6.0.5",
