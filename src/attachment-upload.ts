@@ -4,6 +4,7 @@ import { toMemorySize } from "./tip-tap-element/toMemorySize"
 import { Maybe } from "./tip-tap-element/types"
 import { uuidv4 } from "./uuidv4"
 import type { AttachmentEditor } from "./tip-tap-element/attachment-editor"
+import TipTapElement from "./tip-tap-element/element"
 
 export type AttachmentAttributes = {
   file: File
@@ -15,9 +16,9 @@ export type AttachmentAttributes = {
 
 export class AttachmentManager implements AttachmentAttributes {
   attributes: AttachmentAttributes & { attachmentId: string, imageId: string }
-  editor: HTMLElement
+  editor: TipTapElement
 
-  constructor (obj: AttachmentAttributes, editor: HTMLElement) {
+  constructor (obj: AttachmentAttributes, editor: TipTapElement) {
     this.editor = editor
     this.attributes = {
       attachmentId: uuidv4(),
@@ -29,28 +30,45 @@ export class AttachmentManager implements AttachmentAttributes {
   }
 
   setUploadProgress (progress: number): void {
-    const attachmentEditor = this.attachmentEditor
-    if (attachmentEditor) {
-      attachmentEditor.progress = progress
-    }
-  }
-
-  get attachmentEditor (): Maybe<AttachmentEditor> {
-    return (this.editor.shadowRoot?.querySelector(`[data-attachment-id="${this.attachmentId}"]`) as Maybe<AttachmentEditor>)
+    this.setNodeMarkup({progress})
   }
 
   setAttributes (obj: Record<"sgid" | "url", string>) {
-    const image = this.editor.shadowRoot?.querySelector(`[data-image-id="${this.imageId}"]`) as Maybe<HTMLMediaElement>
-
-    if (image == null) return
-
-    this.attributes.sgid = obj.sgid
-    this.attributes.url = obj.url
+    const image = new Image()
 
     image.src = obj.url
 
-    // @ts-expect-error
-    image.sgid = obj.sgid
+    image.onload = () => {
+      this.setNodeMarkup({
+        sgid: obj.sgid,
+        url: obj.url,
+        src: obj.url
+      })
+      image.remove()
+    }
+
+    this.attributes.sgid = obj.sgid
+    this.attributes.url = obj.url
+  }
+
+  setNodeMarkup (obj: Record<string, unknown>) {
+    const editor = this.editor.editor
+
+    if (editor == null) return
+
+    editor.state.doc.descendants((descendantNode, position) => {
+      if (descendantNode.attrs.attachmentId === this.attachmentId) {
+        const tr = editor.state.tr
+
+        tr.setNodeMarkup(position, undefined, {
+          ...descendantNode.attrs,
+          ...obj
+        })
+
+        editor.view.dispatch(tr)
+      }
+    })
+
   }
 
   get attachmentId (): string {

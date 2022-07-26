@@ -1,6 +1,7 @@
 import { Node, mergeAttributes, Extension } from "@tiptap/core";
 import {default as TipTapImage } from "@tiptap/extension-image";
 import { AttachmentManager } from "../attachment-upload";
+import { AttachmentEditor } from "./attachment-editor";
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
@@ -34,7 +35,10 @@ const Attachment = Node.create({
 
   addOptions() {
     return {
-      HTMLAttributes: {},
+      HTMLAttributes: {
+        className: "attachment attachment--preview attachment--png",
+        "data-trix-attributes": JSON.stringify({presentation: "gallery"})
+      },
     };
   },
 
@@ -48,12 +52,30 @@ const Attachment = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
+    const {
+      // Figure
+      contentType, sgid, fileName,
+
+      // Image
+      imageId, src, width, height } = HTMLAttributes
     return [
       "figure",
-      this.options.HTMLAttributes,
+      mergeAttributes(this.options.HTMLAttributes, {
+        // "data-attachment-id": attachmentId,
+        "data-trix-content-type": contentType,
+        "data-trix-attachment": JSON.stringify({
+          contentType,
+          filename: fileName,
+          height,
+          width
+        }),
+        sgid
+      }),
       [
         "img",
-        mergeAttributes(HTMLAttributes, {
+        mergeAttributes({}, {
+          src,
+          "data-image-id": imageId,
           draggable: false,
           contenteditable: false,
         }),
@@ -65,6 +87,7 @@ const Attachment = Node.create({
   addAttributes() {
     return {
       attachmentId: { default: null },
+      progress: { default: null },
       imageId: { default: null },
       sgid: { default: null },
       src: { default: null },
@@ -80,36 +103,42 @@ const Attachment = Node.create({
 
   addNodeView() {
     return ({ node, getPos, editor }) => {
+      const {
+        attachmentId,
+        contentType,
+        sgid,
+        fileName,
+        progress,
+        fileSize,
+        url,
+        imageId,
+        src,
+        width,
+        height
+      } = node.attrs
+
       const figure = document.createElement("figure");
-      const attachmentEditor = document.createElement("attachment-editor")
-      attachmentEditor.setAttribute("data-attachment-id", node.attrs.attachmentId)
-      attachmentEditor.setAttribute("file-name", node.attrs.fileName)
-      attachmentEditor.setAttribute("file-size", node.attrs.fileSize)
+
+      figure.setAttribute("data-trix-content-type", node.attrs.contentType),
+      figure.setAttribute("data-trix-attachment", JSON.stringify({
+        contentType,
+        filename: fileName,
+        height,
+        width,
+        sgid,
+        url
+      }))
+      figure.setAttribute("sgid", sgid)
+
+      const attachmentEditor = document.createElement("attachment-editor") as AttachmentEditor
+      attachmentEditor.setAttribute("data-attachment-id", attachmentId)
+      attachmentEditor.setAttribute("file-name", fileName)
+      attachmentEditor.setAttribute("file-size", fileSize)
+      attachmentEditor.progress = progress
 
       const img = document.createElement("img");
-      Object.defineProperties(img, {
-        src: {
-          set (val: string) {
-            const image = new Image()
-            image.src = val
-
-            image.onload = () => {
-              node.attrs.src = val
-              this.setAttribute("src", val)
-              image.remove()
-            }
-          }
-        },
-        sgid: {
-          set (val: string) {
-            node.attrs.sgid = val
-            this.setAttribute("sgid", val)
-          }
-        }
-      })
-      img.setAttribute("data-image-id", node.attrs.imageId)
-      img.setAttribute("src", node.attrs.src);
-      img.setAttribute("sgid", node.attrs.sgid)
+      img.setAttribute("data-image-id", imageId)
+      img.setAttribute("src", src);
       img.contentEditable = "false";
       img.setAttribute("draggable", "false");
       const figcaption = document.createElement("figcaption");
