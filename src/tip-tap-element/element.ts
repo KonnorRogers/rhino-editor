@@ -492,51 +492,60 @@ export class TipTapElement extends LitElement {
     return str as ToolbarButton<T>
   }
 
-  attachFiles (): Promise<void> {
+  handleFileUpload (): Promise<void> {
+    const input = this.fileInputEl
+
     return new Promise((resolve, _reject) => {
-      const input = document.createElement("input")
-      input.type = "file"
-      input.multiple = true
-      input.hidden = true
-
-      input.addEventListener("change", () => {
-        const files = input.files
-        if (files == null || files.length === 0) return
-
-        const attachments: AttachmentManager[] = []
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i]
-
-          if (file == null) return
-          const src = URL.createObjectURL(file);
-
-          const attachment: AttachmentManager = new AttachmentManager({
-            src,
-            file,
-          }, this)
-
-          attachments.push(attachment)
-        }
-
-        if (this.editor == null) {
-          resolve()
-          return
-        }
-        const chain = this.editor.chain().focus()
-        chain.setAttachment(attachments)
-        chain.run()
-        input.remove()
-
-        attachments.forEach((attachment) => {
-          this.dispatchEvent(new TipTapAddAttachmentEvent(attachment))
-        })
-
+      if (input == null) {
         resolve()
+        return
+      }
+
+      const files = input.files
+      if (files == null || files.length === 0) return
+
+      const attachments: AttachmentManager[] = []
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+
+        if (file == null) return
+        const src = URL.createObjectURL(file);
+
+        const attachment: AttachmentManager = new AttachmentManager({
+          src,
+          file,
+        }, this)
+
+        attachments.push(attachment)
+      }
+
+      if (this.editor == null) {
+        resolve()
+        return
+      }
+
+      const chain = this.editor.chain().focus()
+      chain.setAttachment(attachments)
+      chain.run()
+
+      attachments.forEach((attachment) => {
+        this.dispatchEvent(new TipTapAddAttachmentEvent(attachment))
       })
 
-      document.body.appendChild(input)
-      input.click()
+      resolve()
     })
+  }
+
+  get fileInputEl(): Maybe<HTMLInputElement> {
+    return this.shadowRoot?.getElementById("file-input") as Maybe<HTMLInputElement>
+  }
+
+  attachFiles (): void {
+    const input = this.fileInputEl
+
+    if (input == null) return
+
+    input.click()
   }
 
   can (action: string, ...args: any[]): boolean {
@@ -714,10 +723,12 @@ export class TipTapElement extends LitElement {
           aria-describedby="attach-files"
           aria-disabled=${this.editor == null}
           data-role="toolbar-item"
-          @click=${async () => await this.attachFiles()}
+          @click=${this.attachFiles}
         >
           <role-tooltip id="attach-files" hoist .rootElement=${this.shadowRoot}>${config.files}</role-tooltip>
           ${this.icons.files}
+
+          <input id="file-input" type="file" hidden multiple @change=${async () => await this.handleFileUpload()}>
         </button>
 
         <button
