@@ -1,7 +1,7 @@
 import { Node, mergeAttributes, Extension } from "@tiptap/core";
 import {default as TipTapImage } from "@tiptap/extension-image";
-import { AttachmentManager } from "../attachment-upload";
-import { AttachmentEditor } from "./attachment-editor";
+import { AttachmentManager } from "./attachment-upload";
+import type { AttachmentEditor } from "./elements/attachment-editor";
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;

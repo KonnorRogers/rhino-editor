@@ -1,10 +1,9 @@
 import {DirectUpload} from "@rails/activestorage"
 import type { Blob, DirectUploadDelegate } from "@rails/activestorage"
-import { toMemorySize } from "./tip-tap-element/toMemorySize"
-import { Maybe } from "./tip-tap-element/types"
+import { toMemorySize } from "./toMemorySize"
+import { Maybe } from "./types"
 import { uuidv4 } from "./uuidv4"
-import type { AttachmentEditor } from "./tip-tap-element/attachment-editor"
-import TipTapElement from "./tip-tap-element/element"
+import TipTapElement from "./elements/trix"
 
 export type AttachmentAttributes = {
   file: File
@@ -56,7 +55,7 @@ export class AttachmentManager implements AttachmentAttributes {
 
     if (editor == null) return
 
-    editor.state.doc.descendants((descendantNode, position) => {
+    editor.state.doc.descendants((descendantNode, position: number) => {
       if (descendantNode.attrs.attachmentId === this.attachmentId) {
         const tr = editor.state.tr
 

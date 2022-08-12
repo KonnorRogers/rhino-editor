@@ -1,8 +1,8 @@
 import { css, html, LitElement } from 'lit'
 
-import { close } from './icons'
-import { normalize } from '../normalize'
-import { toMemorySize } from './toMemorySize'
+import { close } from '../icons'
+import { normalize } from '../styles/normalize'
+import { toMemorySize } from '../toMemorySize'
 
 export class AttachmentEditor extends LitElement {
   fileName!: string;

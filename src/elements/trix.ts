@@ -1,4 +1,4 @@
-import { tipTapCoreStyles } from "./tip-tap-core-styles"
+import { tipTapCoreStyles } from "../styles/tip-tap-core-styles"
 import { Editor } from '@tiptap/core'
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from '@tiptap/starter-kit'
@@ -11,10 +11,10 @@ import { ref, createRef, Ref } from 'lit/directives/ref.js';
 import "role-components"
 
 import { AttachmentUpload, AttachmentManager } from "../attachment-upload"
-import Attachment from './attachment'
-import * as icons from './icons'
-import { normalize } from '../normalize'
-import type { Maybe } from './types'
+import Attachment from '../attachment'
+import * as icons from '../icons'
+import { normalize } from '../styles/normalize'
+import type { Maybe } from '../types'
 
 export const isiOS = /Mac|iOS|iPhone|iPad|iPod/i.test(window.navigator.platform)
 
@@ -303,6 +303,16 @@ export class TipTapElement extends LitElement {
 
   connectedCallback (): void {
     super.connectedCallback()
+
+    addEventListener(TipTapAddAttachmentEvent.eventName, (event: TipTapAddAttachmentEvent) => {
+      const { attachment, target } = event
+
+      if (target instanceof HTMLElement && attachment.file) {
+        const upload = new AttachmentUpload(attachment, target)
+        upload.start()
+      }
+    })
+
     this.addEventListener("keydown", (e) => {
       let { key, metaKey, ctrlKey } = e
 
@@ -825,15 +835,5 @@ declare global {
     [TipTapAddAttachmentEvent.eventName]: TipTapAddAttachmentEvent
   }
 }
-
-addEventListener(TipTapAddAttachmentEvent.eventName, (event: TipTapAddAttachmentEvent) => {
-  console.log(event)
-  const { attachment, target } = event
-
-  if (target instanceof HTMLElement && attachment.file) {
-    const upload = new AttachmentUpload(attachment, target)
-    upload.start()
-  }
-})
 
 export default TipTapElement
