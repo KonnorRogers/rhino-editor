@@ -23,6 +23,8 @@ export const inputRegex = /(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/;
 const AttachmentImage = TipTapImage.extend({
   selectable: false,
   draggable: false,
+
+  addEventListener
 });
 
 const Attachment = Node.create({
@@ -67,9 +69,12 @@ const Attachment = Node.create({
           contentType,
           filename: fileName,
           height,
-          width
+          width,
+          sgid
         }),
-        sgid
+        "data-trix-attributes": JSON.stringify({
+          presentation: "gallery"
+        })
       }),
       [
         "img",
@@ -78,6 +83,8 @@ const Attachment = Node.create({
           "data-image-id": imageId,
           draggable: false,
           contenteditable: false,
+          width,
+          height
         }),
       ],
       ["figcaption", 0],
@@ -119,16 +126,21 @@ const Attachment = Node.create({
 
       const figure = document.createElement("figure");
 
+      figure.setAttribute("class", this.options.HTMLAttributes.className)
       figure.setAttribute("data-trix-content-type", node.attrs.contentType),
       figure.setAttribute("data-trix-attachment", JSON.stringify({
         contentType,
         filename: fileName,
+        filesize: fileSize,
         height,
         width,
         sgid,
         url
       }))
-      figure.setAttribute("sgid", sgid)
+
+      figure.setAttribute("data-trix-attributes", JSON.stringify({
+        presentation: "gallery"
+      }))
 
       const attachmentEditor = document.createElement("attachment-editor") as AttachmentEditor
       attachmentEditor.setAttribute("data-attachment-id", attachmentId)
@@ -137,8 +149,19 @@ const Attachment = Node.create({
       attachmentEditor.progress = progress
 
       const img = document.createElement("img");
+      const image = new Image()
+      image.src = src
+
+      image.onload = () => {
+        const { naturalHeight: height, naturalWidth: width } = image
+        node.attrs.height = height
+        node.attrs.width = width
+      }
+
       img.setAttribute("data-image-id", imageId)
       img.setAttribute("src", src);
+      img.setAttribute("width", width)
+      img.setAttribute("height", height)
       img.contentEditable = "false";
       img.setAttribute("draggable", "false");
       const figcaption = document.createElement("figcaption");
