@@ -70,10 +70,11 @@ jobs:
     - name: Install via pnpm
       run: |
         pnpm install
-        pnpm run build
         cd tests/rails
         pnpm install
+        bundle install
         cd -
     - name: Tests
       run: |
+        pnpm run build
         pnpm run test:ci
