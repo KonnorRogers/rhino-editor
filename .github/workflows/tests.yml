@@ -1,0 +1,80 @@
+name: Actions
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "*"
+jobs:
+  js-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # For playwright
+      - uses: microsoft/playwright-github-action@v1
+
+      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+        with:
+          version: 6.22.1
+      - name: use node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            plugins/pnpm-lock.yaml
+      - name: Install via pnpm
+        run: |
+          pnpm install
+      - name: lint, and test
+        run: |
+          pnpm lint
+          pnpm test:ci
+  ruby-test:
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
+      RAILS_ENV: test
+
+    strategy:
+      matrix:
+        ruby: ['2.7', '3.0']
+        node-version: [16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+
+
+    - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
+      with:
+        version: 6.22.1
+    - name: use node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
+        cache-dependency-path: |
+          pnpm-lock.yaml
+          plugins/pnpm-lock.yaml
+    - name: Install via pnpm
+      run: |
+        pnpm install
+        pnpm build
+        cd test/rails/dummy
+        pnpm install
+        cd -
+    - name: Tests
+      run: |
+        bundle exec rake ci:test

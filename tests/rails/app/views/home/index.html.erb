@@ -1,0 +1,42 @@
+<br><br>
+
+<h2>TipTap Editor</h2>
+<form>
+  <input id="y" type="hidden" name="content">
+  <tip-tap-element
+    input="y"
+    data-blob-url-template="<%= rails_service_blob_path(":signed_id", ":filename") %>"
+    data-direct-upload-url="<%= rails_direct_uploads_url %>"
+  >
+  </tip-tap-element>
+</form>
+
+<br><br>
+<h2>Trix Editor</h2>
+<form>
+  <input id="x" type="hidden" name="content">
+  <trix-editor
+    input="x"
+    data-blob-url-template="<%= rails_service_blob_path(":signed_id", ":filename") %>"
+    data-direct-upload-url="<%= rails_direct_uploads_url %>"
+  >
+  </trix-editor>
+</form>
+
+<div>
+  Mirrored TipTap HTML:
+  <br>
+  <pre style="max-width: 80ch;">
+    <code id="tip-tap-mirrored-html" class="language-html">
+    </code>
+  </pre>
+</div>
+
+<div>
+  Mirrored Trix HTML:
+  <br>
+  <pre style="max-width: 80ch;">
+    <code id="trix-mirrored-html" class="language-html">
+    </code>
+  </pre>
+</div>

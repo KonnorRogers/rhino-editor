@@ -7,16 +7,20 @@
   "main": "dist/bundle/index.common.js",
   "module": "dist/bundle/index.module.js",
   "scripts": {
-    "build": "rm -rf dist && node esbuild.config.js",
+    "build": "rm -rf dist && pnpm build:types && node esbuild.config.js",
     "build:types": "tsc",
+    "lint": "ts-standard src/",
+    "fix": "ts-standard src/ --fix",
+    "test:ci": "pnpm test",
+    "test": "pnpm build && cd tests/rails && pnpm install && bundle install && bundle exec rails test:all",
     "start:example": "web-dev-server",
-    "build:example": "npx pnpm build && rm -rf examples/dist && cp -R dist/ examples/dist",
+    "build:example": "pnpm build && rm -rf examples/dist && cp -R dist/ examples/dist",
     "start": "pnpm build -- --watch",
-    "deploy": "pnpm build && pnpm build:types && standard-version --release-as",
-    "deploy:beta": "pnpm build && pnpm build:types && standard-version --prerelease beta",
-    "deploy:patch": "pnpm build && pnpm build:types && standard-version --release-as patch",
-    "deploy:minor": "pnpm build && pnpm build:types && standard-version --release-as minor",
-    "deploy:major": "pnpm build && pnpm build:types && standard-version --release-as major",
+    "deploy": "pnpm build && standard-version --release-as",
+    "deploy:beta": "pnpm build && standard-version --prerelease beta",
+    "deploy:patch": "pnpm build && standard-version --release-as patch",
+    "deploy:minor": "pnpm build && standard-version --release-as minor",
+    "deploy:major": "pnpm build && standard-version --release-as major",
     "push": "git push --follow-tags origin main && pnpm publish"
   },
   "files": [
@@ -34,11 +38,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/rails__activestorage": "^7.0.1",
+    "@typescript-eslint/parser": "^4.0.0",
     "@web/dev-server": "^0.1.32",
     "@web/dev-server-esbuild": "^0.3.1",
     "esbuild": "^0.14.49",
+    "eslint": "^7",
     "glob": "^8.0.3",
     "standard-version": "^9.5.0",
+    "ts-standard": "^11.0.0",
     "typescript": "^4.7.4"
   },
   "dependencies": {
