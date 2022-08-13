@@ -46,7 +46,11 @@ jobs:
         ruby: ['2.7', '3.0']
         node-version: [16.x, 18.x]
     steps:
+
     - uses: actions/checkout@v3
+
+    - name: Setup docker
+    - run: docker-compose up
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
@@ -62,6 +66,7 @@ jobs:
         cache-dependency-path: |
           pnpm-lock.yaml
           tests/rails/pnpm-lock.yaml
+
     - name: Install via pnpm
       run: |
         pnpm install
