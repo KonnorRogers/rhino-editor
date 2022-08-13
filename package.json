@@ -12,7 +12,7 @@
     "lint": "ts-standard src/",
     "fix": "ts-standard src/ --fix",
     "test:ci": "pnpm test",
-    "test": "pnpm build && cd tests/rails && pnpm install && bundle install && bundle exec rails test:all",
+    "test": "pnpm build && cd tests/rails && bundle exec rails test:all",
     "start:example": "web-dev-server",
     "build:example": "pnpm build && rm -rf examples/dist && cp -R dist/ examples/dist",
     "start": "pnpm build -- --watch",

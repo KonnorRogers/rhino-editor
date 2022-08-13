@@ -5,6 +5,8 @@ require 'capybara'
 # require 'capybara/cuprite'
 require 'evil_systems'
 
+EvilSystems.initial_setup
+
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :selenium, using: ENV.fetch("BROWSER", :headless_chrome).to_sym, screen_size: [1400, 1400]
 
