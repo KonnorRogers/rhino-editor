@@ -23,8 +23,6 @@ export const inputRegex = /(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/;
 const AttachmentImage = TipTapImage.extend({
   selectable: false,
   draggable: false,
-
-  addEventListener
 });
 
 const Attachment = Node.create({
