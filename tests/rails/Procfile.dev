@@ -1,3 +1,3 @@
 vite: bin/vite dev --clobber
-web: bin/rails s
-podman: docker-compose up
+rails: bin/rails s
+docker: docker compose up --build
