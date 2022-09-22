@@ -103,6 +103,7 @@ const Attachment = Node.create({
       fileSize: { default: null },
       content: { default: null },
       url: { default: null },
+      href: { default: null }
     };
   },
 
@@ -119,7 +120,8 @@ const Attachment = Node.create({
         imageId,
         src,
         width,
-        height
+        height,
+        href
       } = node.attrs
 
       const figure = document.createElement("figure");
@@ -174,7 +176,17 @@ const Attachment = Node.create({
         }
       });
 
-      figure.append(attachmentEditor, img, figcaption);
+      if (href) {
+        const anchor = document.createElement("a")
+        anchor.href = href
+        anchor.tabIndex = -1
+        anchor.contentEditable = "false"
+        console.log(href)
+        anchor.append(img)
+        figure.append(attachmentEditor, anchor, figcaption);
+      } else {
+        figure.append(attachmentEditor, img, figcaption);
+      }
 
       return {
         dom: figure,

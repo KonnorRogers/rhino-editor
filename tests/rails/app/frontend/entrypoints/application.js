@@ -26,8 +26,8 @@ addEventListener("trix-attachment-add", (e) => {
   const trixInput = document.querySelector("#x")
   const trixHtmlMirror = document.querySelector("#trix-mirrored-html")
 
-  Prism.highlightElement(trixHtmlMirror)
-  Prism.highlightElement(tipTapHtmlMirror)
+  if (trixHtmlMirror) Prism.highlightElement(trixHtmlMirror)
+  if (tipTapHtmlMirror) Prism.highlightElement(tipTapHtmlMirror)
 
   const escapeHTML = (str) => {
     const p = document.createElement("p");
@@ -35,21 +35,25 @@ addEventListener("trix-attachment-add", (e) => {
     return p.innerHTML;
   }
 
-  replaceWithWrapper(tipTapInput, "value", function(obj, property, value) {
-    const html = escapeHTML(value.replace(/<p>/g, "\n<p>").replace(/<blockquote>/g, "\n<blockquote>").replace(/<\/blockquote>/g, "\n</blockquote>"))
+  if (tipTapInput) {
+    replaceWithWrapper(tipTapInput, "value", function(obj, property, value) {
+      const html = escapeHTML(value.replace(/<p>/g, "\n<p>").replace(/<blockquote>/g, "\n<blockquote>").replace(/<\/blockquote>/g, "\n</blockquote>"))
 
-    tipTapHtmlMirror.innerHTML = html
-    Prism.highlightElement(tipTapHtmlMirror)
-    obj.setAttribute(property, value)
-  });
+      tipTapHtmlMirror.innerHTML = html
+      Prism.highlightElement(tipTapHtmlMirror)
+      obj.setAttribute(property, value)
+    });
+  }
 
-  replaceWithWrapper(trixInput, "value", function(obj, property, value) {
-    const html = escapeHTML(value.replace(/<p>/g, "\n<p>").replace(/<blockquote>/g, "\n<blockquote>").replace(/<\/blockquote>/g, "\n</blockquote>"))
+  if (trixInput) {
+    replaceWithWrapper(trixInput, "value", function(obj, property, value) {
+      const html = escapeHTML(value.replace(/<p>/g, "\n<p>").replace(/<blockquote>/g, "\n<blockquote>").replace(/<\/blockquote>/g, "\n</blockquote>"))
 
-    trixHtmlMirror.innerHTML = html
-    Prism.highlightElement(trixHtmlMirror)
-    obj.setAttribute(property, value)
-  });
+      trixHtmlMirror.innerHTML = html
+      Prism.highlightElement(trixHtmlMirror)
+      obj.setAttribute(property, value)
+    });
+  }
 
   function replaceWithWrapper(obj, property, callback) {
     Object.defineProperty(obj, property, new function() {

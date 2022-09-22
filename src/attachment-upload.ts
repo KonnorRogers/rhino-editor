@@ -41,7 +41,8 @@ export class AttachmentManager implements AttachmentAttributes {
       this.setNodeMarkup({
         sgid: obj.sgid,
         url: obj.url,
-        src: obj.url
+        src: obj.url,
+        href: obj.url + "?content-disposition=attachment"
       })
       image.remove()
     }

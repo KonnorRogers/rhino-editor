@@ -1,0 +1,33 @@
+<%= form_with(model: post) do |form| %>
+  <% if post.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+        <% post.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :body, style: "display: block" %>
+    <%= tag.input type: :hidden, **post.form_fields(:body) %>
+
+    <tip-tap-element
+      input="<%= post.form_id(:body) %>"
+      data-blob-url-template="<%= rails_service_blob_path(":signed_id", ":filename") %>"
+      data-direct-upload-url="<%= rails_direct_uploads_url %>"
+    >
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
