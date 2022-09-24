@@ -58,7 +58,11 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
       assert_equal tip_tap_attachment_attrs[attr], trix_attachment_attrs[attr]
     end
 
-    blob_path = rails_service_blob_path(":signed_id", ":filename").split(":signed_id")[0]
+
+    blob_path = rails_service_blob_path(":signed_id", ":filename")
+    puts "BLOB PATH: #{blob_path}"
+    blob_path = blob_path.split(":signed_id")[0]
+    puts "BLOB PATH SPLIT: #{blob_path}"
     assert_match /#{blob_path}\S+\//, tip_tap_attachment_attrs["url"]
     refute_nil tip_tap_attachment_attrs["sgid"]
 

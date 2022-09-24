@@ -154,8 +154,14 @@ const Attachment = Node.create({
 
       image.onload = () => {
         const { naturalHeight: height, naturalWidth: width } = image
-        node.attrs.height = height
-        node.attrs.width = width
+
+				if (typeof getPos === "function") {
+        	editor.state.tr.setNodeMarkup(getPos(), undefined, {
+          	...node.attrs,
+          	height: height,
+          	width: width
+        	})
+				}
       }
 
       img.setAttribute("data-image-id", imageId)
