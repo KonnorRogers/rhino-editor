@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@rails/activestorage': ^6
+  '@rails/activestorage': ^7
   '@tiptap/core': 2.0.0-beta.196
   '@tiptap/extension-focus': 2.0.0-beta.196
   '@tiptap/extension-image': 2.0.0-beta.196
@@ -26,7 +26,7 @@ specifiers:
   typescript: ^4.8.3
 
 dependencies:
-  '@rails/activestorage': 6.1.7
+  '@rails/activestorage': 7.0.4
   '@tiptap/core': 2.0.0-beta.196
   '@tiptap/extension-focus': 2.0.0-beta.196_wfvnwgzkyirymnacbqpm22v55m
   '@tiptap/extension-image': 2.0.0-beta.196_wfvnwgzkyirymnacbqpm22v55m
@@ -166,8 +166,8 @@ packages:
       fastq: 1.13.0
     dev: true
 
-  /@rails/activestorage/6.1.7:
-    resolution: {integrity: sha512-h++k8LBLns4O8AqzdaFp1TsCLP9VSc2hgWI37bjzJ+4D995X7Rd8kdkRmXRaNAUlHDJgy6RpnbhBJ5oiIgWTDw==}
+  /@rails/activestorage/7.0.4:
+    resolution: {integrity: sha512-K2fV9C0z88fapu58nt9uHzMylsmJWUFuaIFvuZQEf1WTiPMsgTsj1bf8+cD81zXfTXYMZDQNRq4164JmuBKD3A==}
     dependencies:
       spark-md5: 3.0.2
     dev: false
