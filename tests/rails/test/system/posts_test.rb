@@ -14,9 +14,8 @@ class PostsTest < ApplicationSystemTestCase
     visit(posts_path)
     page.locator("text=New post").click
 
-    create_post = page.locator("text=Create Post")
-    page.locator("text=Title").fill(@post.title)
-    create_post.click
+    page.locator("##{@post.form_id(:title)}").fill(@post.title)
+    page.locator("text=Create Post").click
 
     assert page.locator("text=Post was successfully created")
 
@@ -28,10 +27,8 @@ class PostsTest < ApplicationSystemTestCase
     visit post_path(@post)
 
     page.locator("text=Edit this post").click
-
-    update_post = page.locator("text=Update Post")
-    page.locator("text=Title").fill(@post.title)
-    update_post.click
+    page.locator("##{@post.form_id(:title)}").fill(@post.title)
+    page.locator("text=Update Post").click
 
     assert page.locator("text=Post was successfully updated")
     page.locator("text=Back").click

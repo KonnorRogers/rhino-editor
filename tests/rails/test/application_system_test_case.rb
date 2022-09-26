@@ -15,6 +15,7 @@ class CapybaraNullDriver < Capybara::Driver::Base
   end
 end
 
+ENV["APP_HOST"] = ENV.fetch("APP_HOST", "0.0.0.0")
 Capybara.register_driver(:null) { CapybaraNullDriver.new }
 EvilSystems.initial_setup
 
@@ -62,7 +63,8 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   def context(base_url = nil)
-    @context ||= browser.new_context(ignoreHTTPSErrors: true, baseURL: base_url || Capybara.current_session.server.base_url.gsub("0.0.0.0", "localhost"))
+    # Gotta do some debugging here around urls.
+    @context ||= browser.new_context(baseURL: base_url || Capybara.current_session.server.base_url.gsub("0.0.0.0", "localhost"))
   end
 
 end
