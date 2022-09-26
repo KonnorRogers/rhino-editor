@@ -3,8 +3,9 @@ lockfileVersion: 5.4
 specifiers:
   '@hotwired/turbo': ^7.2.0
   '@rails/actioncable': 7.0.0
-  '@rails/actiontext': ^6
-  '@rails/activestorage': ^6
+  '@rails/actiontext': ^7
+  '@rails/activestorage': ^7
+  playwright: ~1.25.2
   tip-tap-element: link:../../
   trix: ^2.0.0-beta.0
   vite: ^3.1.3
@@ -13,12 +14,13 @@ specifiers:
 dependencies:
   '@hotwired/turbo': 7.2.0
   '@rails/actioncable': 7.0.0
-  '@rails/actiontext': 6.1.7_trix@2.0.0-beta.0
-  '@rails/activestorage': 6.1.7
+  '@rails/actiontext': 7.0.4_trix@2.0.0-beta.0
+  '@rails/activestorage': 7.0.4
   tip-tap-element: link:../..
   trix: 2.0.0-beta.0
 
 devDependencies:
+  playwright: 1.25.2
   vite: 3.1.3
   vite-plugin-ruby: 3.1.2_vite@3.1.3
 
@@ -72,17 +74,17 @@ packages:
     resolution: {integrity: sha512-uKOGaA8xMNuMwsQrH65l4LxLZ4RD2czP0MKBU7PHIbQS6XvYc6xV9HDveGfgumZSZJYJSfUIiKiqh5mjlCOxPA==}
     dev: false
 
-  /@rails/actiontext/6.1.7_trix@2.0.0-beta.0:
-    resolution: {integrity: sha512-o3TYFeFzDQKR22EGqE9qqJ6SD4DM+cATw8nioPtrRkIlAsBIHeaV0h4Kok1sDXyNjXiJztCr89CsfV7YXnYFmw==}
+  /@rails/actiontext/7.0.4_trix@2.0.0-beta.0:
+    resolution: {integrity: sha512-vyXZ4cNkudpfSfFWuyo1SSKBQXTK2H02xjd5vLHIBqJOKaqcZ7aFWe6n8NoQrTpAt+ULYtjkH0xMhJ5holswsQ==}
     peerDependencies:
-      trix: ^1.2.0
+      trix: ^1.3.1
     dependencies:
-      '@rails/activestorage': 6.1.7
+      '@rails/activestorage': 7.0.4
       trix: 2.0.0-beta.0
     dev: false
 
-  /@rails/activestorage/6.1.7:
-    resolution: {integrity: sha512-h++k8LBLns4O8AqzdaFp1TsCLP9VSc2hgWI37bjzJ+4D995X7Rd8kdkRmXRaNAUlHDJgy6RpnbhBJ5oiIgWTDw==}
+  /@rails/activestorage/7.0.4:
+    resolution: {integrity: sha512-K2fV9C0z88fapu58nt9uHzMylsmJWUFuaIFvuZQEf1WTiPMsgTsj1bf8+cD81zXfTXYMZDQNRq4164JmuBKD3A==}
     dependencies:
       spark-md5: 3.0.2
     dev: false
@@ -423,6 +425,21 @@ packages:
   /picomatch/2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
+    dev: true
+
+  /playwright-core/1.25.2:
+    resolution: {integrity: sha512-0yTbUE9lIddkEpLHL3u8PoCL+pWiZtj5A/j3U7YoNjcmKKDGBnCrgHJMzwd2J5vy6l28q4ki3JIuz7McLHhl1A==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /playwright/1.25.2:
+    resolution: {integrity: sha512-RwMB5SFRV/8wSfK+tK8ycpqdzORvoqUNz9DUeRfSgZFrZej5uuBl9wFjWcc+OkXFEtaPmx1acAVGG7hA4IJ1kg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      playwright-core: 1.25.2
     dev: true
 
   /postcss/8.4.16:

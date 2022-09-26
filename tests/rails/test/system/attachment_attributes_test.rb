@@ -1,46 +1,53 @@
 require "application_system_test_case"
 
-class Selenium::WebDriver::ShadowRoot
-  def tag_name
-    "shadow-root"
-  end
-end
-
 class AttachmentAttributesTest < ApplicationSystemTestCase
   def setup
-    visit root_path
-    assert_selector "h2", text: "TipTap Editor"
+    page.goto(root_path)
+    assert page.text_content("h2").include?("TipTap Editor")
 
     @file_name = "view-layer-benchmarks.png"
-    attach_images(file_fixture(@file_name))
+    attach_images(file_fixture(@file_name).to_s)
   end
 
   def tip_tap_element
-    find("tip-tap-element")
+    page.locator("tip-tap-element")
   end
 
   def tip_tap_figure
-    tip_tap_element.shadow_root.find("figure.attachment.attachment--preview.attachment--png")
+    page.locator("tip-tap-element figure.attachment.attachment--preview.attachment--png.attachment--finalized")
+  end
+
+  def tip_tap_image
+    page.locator("tip-tap-element img[width='2880']")
+  end
+
+  def trix_image
+    page.locator("trix-editor img[width='2880']")
   end
 
   def trix_element
-    find("trix-editor")
+    page.locator("trix-editor")
   end
 
   def trix_figure
-    trix_element.find("figure.attachment.attachment--preview.attachment--png")
+    page.locator("trix-editor figure.attachment.attachment--preview.attachment--png")
   end
 
   def attach_images(file)
-    tip_tap_element.shadow_root.find("#file-input", visible: false).attach_file(file)
-
-    page.attach_file(file) do
-      find(".trix-button--icon-attach").click
+    tip_tap = page.expect_file_chooser do
+      # hacky workaround because clicking the button that clicks the input[type="file"] doesnt actually work.
+      page.locator("tip-tap-element #file-input").evaluate("node => node.click()")
     end
+    tip_tap.set_files(file)
+
+    trix = page.expect_file_chooser do
+      page.locator(".trix-button--icon-attach").click
+    end
+    trix.set_files(file)
   end
 
   test "Attachment Attributes" do
-    figure_attributes = ["class", "data-trix-content-type"]
+    figure_attributes = ["data-trix-content-type"]
     figure_attributes.each { |str| assert_equal tip_tap_figure[str], trix_figure[str] }
 
     tip_tap_attachment_attrs = JSON.parse(tip_tap_figure["data-trix-attachment"])
@@ -60,9 +67,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
 
     blob_path = rails_service_blob_path(":signed_id", ":filename")
-    puts "BLOB PATH: #{blob_path}"
     blob_path = blob_path.split(":signed_id")[0]
-    puts "BLOB PATH SPLIT: #{blob_path}"
     assert_match /#{blob_path}\S+\//, tip_tap_attachment_attrs["url"]
     refute_nil tip_tap_attachment_attrs["sgid"]
 
@@ -76,10 +81,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   test "Image attributes" do
-    tip_tap_img = tip_tap_element.shadow_root.find("img")
-    trix_img = trix_element.find("img")
-
-    assert_equal get_attributes(tip_tap_img, "width"), get_attributes(trix_img, "width")
-    assert_equal get_attributes(tip_tap_img, "height"), get_attributes(trix_img, "height")
+    assert_equal tip_tap_image["width"], trix_image["width"]
+    assert_equal tip_tap_image["height"], trix_image["height"]
   end
 end

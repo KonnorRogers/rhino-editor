@@ -126,7 +126,14 @@ const Attachment = Node.create({
 
       const figure = document.createElement("figure");
 
-      figure.setAttribute("class", this.options.HTMLAttributes.className)
+
+			let finalized = " "
+
+			if (url && sgid) {
+				finalized += "attachment--finalized"
+			}
+
+      figure.setAttribute("class", this.options.HTMLAttributes.className + finalized)
       figure.setAttribute("data-trix-content-type", node.attrs.contentType),
       figure.setAttribute("data-trix-attachment", JSON.stringify({
         contentType,
@@ -156,11 +163,12 @@ const Attachment = Node.create({
         const { naturalHeight: height, naturalWidth: width } = image
 
 				if (typeof getPos === "function") {
-        	editor.state.tr.setNodeMarkup(getPos(), undefined, {
+					const view = editor.view
+        	view.dispatch(view.state.tr.setNodeMarkup(getPos(), undefined, {
           	...node.attrs,
           	height: height,
           	width: width
-        	})
+        	}))
 				}
       }
 

@@ -1,36 +1,68 @@
 require "test_helper"
 
-# 'capybara' and 'capybara/cuprite' need to be defined for EvilSystems to work properly.
+# 'capybara' need to be defined for EvilSystems to work properly.
 require 'capybara'
-# require 'capybara/cuprite'
 require 'evil_systems'
+require 'playwright'
 
+class CapybaraNullDriver < Capybara::Driver::Base
+  def needs_server?
+    true
+  end
+
+  def save_screenshot(arg)
+    # no-op
+  end
+end
+
+Capybara.register_driver(:null) { CapybaraNullDriver.new }
 EvilSystems.initial_setup
 
-class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :selenium, using: ENV.fetch("BROWSER", :headless_chrome).to_sym, screen_size: [1400, 1400]
-
-  include EvilSystems::Helpers
-
-  def get_attributes(node, *attrs)
-    attribute_script = <<~JAVASCRIPT
-      (function(){
-        var result = {};
-        for (var i = arguments.length; i--; ) {
-          var property_name = arguments[i];
-          result[property_name] = this.getAttribute(property_name);
-        }
-        return result;
-      }).apply(this, arguments)
-    JAVASCRIPT
-
-    attrs = attrs.flatten.map(&:to_s)
-    raise ArgumentError, 'You must specify at least one attribute' if attrs.empty?
-
-    begin
-      node.evaluate_script(attribute_script, *attrs)
-    rescue Capybara::NotSupportedByDriverError
-      raise e
+module Playwright
+  class Page
+    def save_screenshot(...)
+      true
     end
   end
+end
+
+class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
+  driven_by :null
+
+  def before_setup
+    super
+    page
+  end
+
+  def after_teardown
+    super
+    browser.close
+  end
+
+  def self.playwright
+    @playwright ||= Playwright.create(playwright_cli_executable_path: Rails.root.join("node_modules/.bin/playwright"))
+  end
+
+  def visit(location, **options)
+    opts = options || {}
+    opts[:waitUntil] = opts.fetch(:waitUntil, 'networkidle')
+    page.goto(location, **opts)
+  end
+
+  def wait_for_network_idle
+    page.wait_for_load_state(state: 'networkidle')
+  end
+
+  def page
+    @page ||= context.new_page
+  end
+
+  def browser
+    @browser ||= self.class.playwright.playwright.chromium.launch(headless: false)
+  end
+
+  def context(base_url = nil)
+    @context ||= browser.new_context(ignoreHTTPSErrors: true, baseURL: base_url || Capybara.current_session.server.base_url.gsub("0.0.0.0", "localhost"))
+  end
+
 end
