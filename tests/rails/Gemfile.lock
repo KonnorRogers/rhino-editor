@@ -105,7 +105,7 @@ GEM
     digest (3.1.0)
     dry-cli (0.7.0)
     erubi (1.11.0)
-    evil_systems (1.1.4)
+    evil_systems (1.1.5)
       capybara
       zeitwerk (>= 2)
     ffi (1.15.5)
@@ -136,6 +136,7 @@ GEM
     mime-types-data (3.2022.0105)
     mini_magick (4.11.0)
     mini_mime (1.1.2)
+    mini_portile2 (2.8.0)
     minitest (5.16.3)
     msgpack (1.5.4)
     net-imap (0.2.3)
@@ -153,6 +154,9 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
+    nokogiri (1.13.8)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
     nokogiri (1.13.8-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.13.8-x86_64-darwin)
@@ -199,7 +203,7 @@ GEM
       zeitwerk (~> 2.5)
     rake (13.0.6)
     redis (4.7.1)
-    regexp_parser (2.5.0)
+    regexp_parser (2.6.0)
     reline (0.3.1)
       io-console (~> 0.5)
     ruby-vips (2.1.4)
@@ -235,14 +239,16 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  ruby
   x86_64-darwin-20
   x86_64-linux
 
 DEPENDENCIES
   aws-sdk-s3 (~> 1.114)
   bootsnap
+  capybara
   debug
-  evil_systems (~> 1.1.4)
+  evil_systems (~> 1.1.5)
   image_processing (~> 1.2)
   jbuilder
   playwright-ruby-client

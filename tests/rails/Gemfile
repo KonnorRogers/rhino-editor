@@ -48,7 +48,7 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  # gem "capybara"
+  gem "capybara"
   # gem "selenium-webdriver"
   # gem "webdrivers"
   gem 'playwright-ruby-client'
@@ -59,6 +59,6 @@ gem "vite_rails", "~> 3.0"
 gem "aws-sdk-s3", "~> 1.114"
 
 # gem "cuprite", "~> 0.13", :group => :test
-gem "evil_systems", "~> 1.1.4", :group => :test
+gem "evil_systems", "~> 1.1.5", :group => :test
 
 # gem "capybara-shadowdom", :group => :test, github: "yuki24/capybara-shadowdom"

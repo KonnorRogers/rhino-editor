@@ -1,8 +1,4 @@
 require "test_helper"
-
-# 'capybara' need to be defined for EvilSystems to work properly.
-require 'capybara'
-require 'evil_systems'
 require 'playwright'
 
 class CapybaraNullDriver < Capybara::Driver::Base
@@ -59,7 +55,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   def browser
-    @browser ||= self.class.playwright.playwright.chromium.launch(headless: false)
+    @browser ||= self.class.playwright.playwright.chromium.launch(headless: ENV["CI"] == "true")
   end
 
   def context(base_url = nil)
