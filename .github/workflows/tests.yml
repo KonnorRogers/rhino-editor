@@ -48,7 +48,7 @@ jobs:
     steps:
 
     - uses: actions/checkout@v3
-
+    - uses: microsoft/playwright-github-action@v1
     - name: Setup docker
       run: cd tests/rails && docker-compose up -d
     - uses: ruby/setup-ruby@v1
