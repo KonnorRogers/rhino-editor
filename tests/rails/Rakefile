@@ -5,6 +5,4 @@ require_relative "config/application"
 
 Rails.application.load_tasks
 
-Rake::Task["assets:precompile"].enhance do
-  Rake::Task["vite:clobber"].invoke
-end
+Rake::Task["assets:precompile"].enhance([Rake::Task["assets:clobber"]])
