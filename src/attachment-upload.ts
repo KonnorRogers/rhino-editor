@@ -58,14 +58,11 @@ export class AttachmentManager implements AttachmentAttributes {
 
     editor.state.doc.descendants((descendantNode, position: number) => {
       if (descendantNode.attrs.attachmentId === this.attachmentId) {
-        const tr = editor.state.tr
-
-        tr.setNodeMarkup(position, undefined, {
+				const view = editor.view
+        view.dispatch(view.state.tr.setNodeMarkup(position, undefined, {
           ...descendantNode.attrs,
           ...obj
-        })
-
-        editor.view.dispatch(tr)
+        }))
       }
     })
 

@@ -727,7 +727,7 @@ export class TipTapElement extends LitElement {
         </button>
 
         <button
-          class="toolbar__button"
+          class="toolbar__button toolbar__button--attach-files"
           tabindex="-1"
           part=${this.toolbarButtonParts("files")}
           aria-describedby="attach-files"

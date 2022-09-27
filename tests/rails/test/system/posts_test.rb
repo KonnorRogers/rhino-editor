@@ -6,36 +6,39 @@ class PostsTest < ApplicationSystemTestCase
   end
 
   test "visiting the index" do
-    visit posts_url
-    assert_selector "h1", text: "Posts"
+    visit(posts_path)
+    assert page.locator("h1").text_content.include? "Posts"
   end
 
   test "should create post" do
-    visit posts_url
-    click_on "New post"
+    visit(posts_path)
+    page.locator("text=New post").click
 
-    fill_in "Title", with: @post.title
-    click_on "Create Post"
+    page.locator("##{@post.form_id(:title)}").fill(@post.title)
+    page.locator("text=Create Post").click
 
-    assert_text "Post was successfully created"
-    click_on "Back"
+    assert page.locator("text=Post was successfully created")
+
+    page.locator("text=Back").click
+    assert page.locator("text=New post")
   end
 
   test "should update Post" do
-    visit post_url(@post)
-    click_on "Edit this post", match: :first
+    visit post_path(@post)
 
-    fill_in "Title", with: @post.title
-    click_on "Update Post"
+    page.locator("text=Edit this post").click
+    page.locator("##{@post.form_id(:title)}").fill(@post.title)
+    page.locator("text=Update Post").click
 
-    assert_text "Post was successfully updated"
-    click_on "Back"
+    assert page.locator("text=Post was successfully updated")
+    page.locator("text=Back").click
   end
 
   test "should destroy Post" do
-    visit post_url(@post)
-    click_on "Destroy this post", match: :first
+    visit post_path(@post)
 
-    assert_text "Post was successfully destroyed"
+    page.locator("text=Destroy this post").click
+
+    assert page.locator("text=Post was successfully destroyed")
   end
 end
