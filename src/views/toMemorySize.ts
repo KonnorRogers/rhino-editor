@@ -1,3 +1,6 @@
+/**
+ * A function that handles returning human readable file sizes.
+ */
 export function toMemorySize (bytes: number) {
   const kilobytes = bytes / 1024
 

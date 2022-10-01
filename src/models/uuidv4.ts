@@ -1,3 +1,4 @@
+/** uuid generator for attaching unique ids to attachments that need uploading. */
 export function uuidv4(): string {
   // @ts-expect-error
   const crypto = window.crypto || window.msCrypto

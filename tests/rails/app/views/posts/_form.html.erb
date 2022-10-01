@@ -14,17 +14,27 @@
   <div>
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title %>
-  </div>
 
-  <div>
-    <%= form.label :body, style: "display: block" %>
+    <h3>Tip Tap Editor</h3>
+
     <%= tag.input type: :hidden, **post.form_fields(:body) %>
-
     <tip-tap-element
       input="<%= post.form_id(:body) %>"
       data-blob-url-template="<%= rails_service_blob_path(":signed_id", ":filename") %>"
       data-direct-upload-url="<%= rails_direct_uploads_url %>"
-    >
+      >
+    </tip-tap-element>
+
+    <%# <%= tag.input type: :hidden, id: "tip-tap-input", **post.form_fields(:body).except(:id, :name) %1> %>
+    <%# <tip-tap-element %>
+    <%#   input="tip-tap-input" %>
+    <%#   data-blob-url-template="<%= rails_service_blob_path(":signed_id", ":filename") %1>" %>
+    <%#   data-direct-upload-url="<%= rails_direct_uploads_url %1>" %>
+    <%#   > %>
+    <%# </tip-tap-element> %>
+
+    <%# <h3>Trix Editor</h3> %>
+    <%# <%= form.rich_text_area :body %1> %>
   </div>
 
   <div>

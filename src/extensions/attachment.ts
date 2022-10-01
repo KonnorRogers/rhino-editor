@@ -1,7 +1,8 @@
-import { Node, mergeAttributes, Extension } from "@tiptap/core";
+import { Node, Extension, mergeAttributes } from "@tiptap/core"
 import {default as TipTapImage } from "@tiptap/extension-image";
-import { AttachmentManager } from "./attachment-upload";
-import type { AttachmentEditor } from "./elements/attachment-editor";
+import { AttachmentManager } from "src/models/attachment-manager";
+import type { AttachmentEditor } from "src/elements/attachment-editor";
+import { Plugin } from 'prosemirror-state'
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
@@ -45,6 +46,10 @@ const Attachment = Node.create({
   parseHTML() {
     return [
       {
+        tag: "action-text-attachment",
+        contentElement: "figcaption",
+      },
+      {
         tag: "figure",
         contentElement: "figcaption",
       },
@@ -52,16 +57,18 @@ const Attachment = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
+
     const {
       // Figure
       contentType, sgid, fileName,
 
       // Image
-      imageId, src, width, height } = HTMLAttributes
+      imageId, src, width, height
+    } = HTMLAttributes
+
     return [
       "figure",
       mergeAttributes(this.options.HTMLAttributes, {
-        // "data-attachment-id": attachmentId,
         "data-trix-content-type": contentType,
         "data-trix-attachment": JSON.stringify({
           contentType,
@@ -91,14 +98,20 @@ const Attachment = Node.create({
 
   addAttributes() {
     return {
-      attachmentId: { default: null },
+    	attachmentId: { default: null },
       progress: { default: null },
       imageId: { default: null },
       sgid: { default: null },
-      src: { default: null },
+      src: {
+      	default: null,
+      	parseHTML: element => element.querySelector("img")?.getAttribute("src")
+      },
       height: { default: null },
       width: { default: null },
-      contentType: { default: null },
+      contentType: {
+      	default: null,
+      	parseHTML: element => element.getAttribute("content-type")
+      },
       fileName: { default: null },
       fileSize: { default: null },
       content: { default: null },
@@ -110,7 +123,6 @@ const Attachment = Node.create({
   addNodeView() {
     return ({ node, getPos, editor }) => {
       const {
-        attachmentId,
         contentType,
         sgid,
         fileName,
@@ -126,15 +138,12 @@ const Attachment = Node.create({
 
       const figure = document.createElement("figure");
 
+      figure.setAttribute("class", this.options.HTMLAttributes.className)
+      figure.setAttribute("data-trix-content-type", node.attrs.contentType)
 
-			let finalized = " "
+			// // Convenient way to tell us its "final"
+      if (sgid != null) figure.setAttribute("sgid", sgid)
 
-			if (url && sgid) {
-				finalized += "attachment--finalized"
-			}
-
-      figure.setAttribute("class", this.options.HTMLAttributes.className + finalized)
-      figure.setAttribute("data-trix-content-type", node.attrs.contentType),
       figure.setAttribute("data-trix-attachment", JSON.stringify({
         contentType,
         filename: fileName,
@@ -150,26 +159,32 @@ const Attachment = Node.create({
       }))
 
       const attachmentEditor = document.createElement("attachment-editor") as AttachmentEditor
-      attachmentEditor.setAttribute("data-attachment-id", attachmentId)
       attachmentEditor.setAttribute("file-name", fileName)
       attachmentEditor.setAttribute("file-size", fileSize)
-      attachmentEditor.progress = progress
+
+      if (sgid == null) {
+      	attachmentEditor.progress = progress
+      } else {
+      	attachmentEditor.progress = 100
+      }
 
       const img = document.createElement("img");
       const image = new Image()
       image.src = src
 
-      image.onload = () => {
-        const { naturalHeight: height, naturalWidth: width } = image
+			if (width == null || height == null) {
+      	image.onload = () => {
+        	const { naturalHeight: height, naturalWidth: width } = image
 
-				if (typeof getPos === "function") {
-					const view = editor.view
-        	view.dispatch(view.state.tr.setNodeMarkup(getPos(), undefined, {
-          	...node.attrs,
-          	height: height,
-          	width: width
-        	}))
-				}
+					if (typeof getPos === "function") {
+						const view = editor.view
+        		view.dispatch(view.state.tr.setNodeMarkup(getPos(), undefined, {
+          		...node.attrs,
+          		height: height,
+          		width: width
+        		}))
+					}
+      	}
       }
 
       img.setAttribute("data-image-id", imageId)
@@ -195,7 +210,6 @@ const Attachment = Node.create({
         anchor.href = href
         anchor.tabIndex = -1
         anchor.contentEditable = "false"
-        console.log(href)
         anchor.append(img)
         figure.append(attachmentEditor, anchor, figcaption);
       } else {
@@ -285,7 +299,34 @@ const Figcaption = Node.create({
   },
 });
 
+
+/**
+ * Plugin to fix firefox cursor disappearing inside contenteditable.
+ * https://github.com/ProseMirror/prosemirror/issues/1113#issue-780389225
+ */
+export function FirefoxCaretFixPlugin () {
+  let focusing = false
+  return new Plugin({
+    props: {
+      handleDOMEvents: {
+        focus: view => {
+          if (focusing) {
+          	focusing = false
+          } else {
+            focusing = true
+            setTimeout(() => { view.dom.blur(); view.dom.focus() })
+          }
+          return false
+        }
+      }
+    }
+  })
+}
+
 export default Extension.create({
+	addProseMirrorPlugins () {
+		return [FirefoxCaretFixPlugin()]
+	},
   addExtensions() {
     return [Attachment, AttachmentImage, Figcaption];
   },

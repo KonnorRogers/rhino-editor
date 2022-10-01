@@ -14,7 +14,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def tip_tap_figure
-    page.locator("tip-tap-element figure.attachment.attachment--preview.attachment--png.attachment--finalized")
+    page.locator("tip-tap-element figure.attachment.attachment--preview.attachment--png[sgid]")
   end
 
   def tip_tap_image
