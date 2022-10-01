@@ -1,13 +1,17 @@
 import { css, html, LitElement } from 'lit'
 
-import { close } from '../icons'
-import { normalize } from '../styles/normalize'
-import { toMemorySize } from '../toMemorySize'
+import { close } from 'src/views/icons'
+import { toMemorySize } from 'src/views/toMemorySize'
+import { normalize } from 'src/styles/normalize'
 
+/**
+ * An attachment editor element for managing tip-tap attachments. This encompasses the
+ *   delete button, tooltip, and progress handler.
+ */
 export class AttachmentEditor extends LitElement {
-  fileName!: string;
-  fileSize!: number;
-  progress!: number;
+  fileName?: string;
+  fileSize?: number;
+  progress?: number;
 
   close () {
     return html`${close}`
@@ -102,8 +106,10 @@ export class AttachmentEditor extends LitElement {
     `
   }
 
-  toFileSize () {
-    return toMemorySize(this.fileSize)
+  toFileSize (): string {
+  	if (this.fileSize) return toMemorySize(this.fileSize)
+
+  	return ""
   }
 
   render () {

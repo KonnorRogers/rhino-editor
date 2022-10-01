@@ -17,7 +17,7 @@ services:
       - runner
   runner:
     image: ubuntu:latest
-    command: mkdir -p /data/my-bucket && /bin/sh
+    command: rm -rf /data/my-bucket && mkdir -p /data/my-bucket && /bin/sh
     volumes:
       - minio:/data
 volumes:
