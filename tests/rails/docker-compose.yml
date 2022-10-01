@@ -13,12 +13,10 @@ services:
     volumes:
       - minio:/data
     command: minio server /data --console-address ":9001"
-    depends_on:
-      - runner
   runner:
     image: ubuntu:latest
-    command: rm -rf /data/my-bucket && mkdir -p /data/my-bucket && /bin/sh
-    volumes:
-      - minio:/data
+    command: mkdir -p /data/my-bucket && /bin/sh
+    depends_on:
+      - minio
 volumes:
   minio:
