@@ -16,6 +16,8 @@ services:
   runner:
     image: ubuntu:latest
     command: mkdir -p /data/my-bucket && /bin/sh
+    volumes:
+      - minio:/data
     depends_on:
       - minio
 volumes:
