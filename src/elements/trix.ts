@@ -388,7 +388,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("toggleBold")}
         >
-          <role-tooltip id="bold" hoist .rootElement=${this.shadowRoot}>${config.bold}</role-tooltip>
+          <role-tooltip id="bold" hoist>${config.bold}</role-tooltip>
           ${this.icons.bold}
         </button>
 
@@ -402,7 +402,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("toggleItalic")}
         >
-          <role-tooltip id="italics" hoist .rootElement=${this.shadowRoot}>${config.italics}</role-tooltip>
+          <role-tooltip id="italics" hoist>${config.italics}</role-tooltip>
           ${this.icons.italics}
         </button>
 
@@ -416,7 +416,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("toggleStrike")}
         >
-          <role-tooltip id="strikethrough" hoist .rootElement=${this.shadowRoot}>${config.strike}</role-tooltip>
+          <role-tooltip id="strikethrough" hoist>${config.strike}</role-tooltip>
           ${this.icons.strikeThrough}
         </button>
 
@@ -434,7 +434,7 @@ export class TipTapElement extends LitElement {
             this.toggleLinkDialog()
           }}
         >
-          <role-tooltip id="link" hoist .rootElement=${this.shadowRoot}>${config.link}</role-tooltip>
+          <role-tooltip id="link" hoist>${config.link}</role-tooltip>
           ${this.icons.link}
         </button>
 
@@ -448,7 +448,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("toggleHeading", { level: 1 })}
         >
-          <role-tooltip id="heading" hoist .rootElement=${this.shadowRoot}>${config.heading}</role-tooltip>
+          <role-tooltip id="heading" hoist>${config.heading}</role-tooltip>
           ${this.icons.heading}
         </button>
 
@@ -462,7 +462,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("toggleBlockquote")}
         >
-          <role-tooltip id="blockquote" hoist .rootElement=${this.shadowRoot}>${config.blockQuote}</role-tooltip>
+          <role-tooltip id="blockquote" hoist>${config.blockQuote}</role-tooltip>
           ${this.icons.quote}
         </button>
 
@@ -476,7 +476,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("toggleCode")}
         >
-          <role-tooltip id="code" hoist .rootElement=${this.shadowRoot}>${config.code}</role-tooltip>
+          <role-tooltip id="code" hoist>${config.code}</role-tooltip>
           ${this.icons.code}
         </button>
 
@@ -490,7 +490,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("toggleBulletList")}
         >
-          <role-tooltip id="bullets" hoist .rootElement=${this.shadowRoot}>${config.bulletList}</role-tooltip>
+          <role-tooltip id="bullets" hoist>${config.bulletList}</role-tooltip>
           ${this.icons.bullets}
         </button>
 
@@ -504,7 +504,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("toggleOrderedList")}
         >
-          <role-tooltip id="ordered-list" hoist .rootElement=${this.shadowRoot}>${config.orderedList}</role-tooltip>
+          <role-tooltip id="ordered-list" hoist>${config.orderedList}</role-tooltip>
           ${this.icons.numbers}
         </button>
 
@@ -517,7 +517,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${this.attachFiles}
         >
-          <role-tooltip id="attach-files" hoist .rootElement=${this.shadowRoot}>${config.files}</role-tooltip>
+          <role-tooltip id="attach-files" hoist>${config.files}</role-tooltip>
           ${this.icons.files}
 
           <input id="file-input" type="file" hidden multiple @change=${async () => await this.handleFileUpload()}>
@@ -532,7 +532,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("undo")}
         >
-          <role-tooltip id="undo" hoist .rootElement=${this.shadowRoot}>${config.undo}</role-tooltip>
+          <role-tooltip id="undo" hoist>${config.undo}</role-tooltip>
           ${this.icons.undo}
         </button>
 
@@ -545,7 +545,7 @@ export class TipTapElement extends LitElement {
           data-role="toolbar-item"
           @click=${() => this.run("redo")}
         >
-          <role-tooltip id="redo" hoist .rootElement=${this.shadowRoot}>${config.redo}</role-tooltip>
+          <role-tooltip id="redo" hoist>${config.redo}</role-tooltip>
           ${this.icons.redo}
         </button>
       </role-toolbar>`
