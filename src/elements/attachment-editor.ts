@@ -1,8 +1,8 @@
-import { css, html, LitElement } from 'lit'
+import { css, html, LitElement } from "lit";
 
-import { close } from 'src/views/icons'
-import { toMemorySize } from 'src/views/toMemorySize'
-import { normalize } from 'src/styles/normalize'
+import { close } from "src/views/icons";
+import { toMemorySize } from "src/views/toMemorySize";
+import { normalize } from "src/styles/normalize";
 
 /**
  * An attachment editor element for managing tip-tap attachments. This encompasses the
@@ -13,19 +13,19 @@ export class AttachmentEditor extends LitElement {
   fileSize?: number;
   progress?: number;
 
-  close () {
-    return html`${close}`
+  close() {
+    return html`${close}`;
   }
 
-  static get properties () {
+  static get properties() {
     return {
       fileName: { attribute: "file-name", type: String },
       fileSize: { attribute: "file-size", type: Number },
-      progress: { type: Number }
-    }
+      progress: { type: Number },
+    };
   }
 
-  static get styles () {
+  static get styles() {
     return css`
       ${normalize}
 
@@ -103,27 +103,36 @@ export class AttachmentEditor extends LitElement {
       .file-progress[value="100"] {
         display: none;
       }
-    `
+    `;
   }
 
-  toFileSize (): string {
-  	if (this.fileSize) return toMemorySize(this.fileSize)
+  toFileSize(): string {
+    if (this.fileSize) return toMemorySize(this.fileSize);
 
-  	return ""
+    return "";
   }
 
-  render () {
+  render() {
     return html`
-      <button class="close-button" @pointerdown=${(e: PointerEvent) => {
-        e.preventDefault()
-        this.parentElement?.remove()
-      }}>
+      <button
+        class="close-button"
+        @pointerdown=${(e: PointerEvent) => {
+          e.preventDefault();
+          this.parentElement?.remove();
+        }}
+      >
         ${this.close()}
       </button>
       <span class="file-metadata">
-        <span class="file-name">${this.fileName}</span><span class="file-size">${this.toFileSize()}</span>
+        <span class="file-name">${this.fileName}</span
+        ><span class="file-size">${this.toFileSize()}</span>
       </span>
-      <progress class="file-progress" value=${(this.progress || 0)} min="0" max="100"></progress>
-    `
+      <progress
+        class="file-progress"
+        value=${this.progress || 0}
+        min="0"
+        max="100"
+      ></progress>
+    `;
   }
 }

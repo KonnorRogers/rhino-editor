@@ -1,8 +1,8 @@
-import { Node, Extension, mergeAttributes } from "@tiptap/core"
-import {default as TipTapImage } from "@tiptap/extension-image";
+import { Node, Extension, mergeAttributes } from "@tiptap/core";
+import { default as TipTapImage } from "@tiptap/extension-image";
 import { AttachmentManager } from "src/models/attachment-manager";
 import type { AttachmentEditor } from "src/elements/attachment-editor";
-import { Plugin } from 'prosemirror-state'
+import { Plugin } from "prosemirror-state";
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
@@ -14,7 +14,9 @@ declare module "@tiptap/core" {
       /**
        * Add an attachment(s)
        */
-      setAttachment: (options: AttachmentManager | AttachmentManager[]) => ReturnType;
+      setAttachment: (
+        options: AttachmentManager | AttachmentManager[]
+      ) => ReturnType;
     };
   }
 }
@@ -38,7 +40,7 @@ const Attachment = Node.create({
     return {
       HTMLAttributes: {
         className: "attachment attachment--preview attachment--png",
-        "data-trix-attributes": JSON.stringify({presentation: "gallery"})
+        "data-trix-attributes": JSON.stringify({ presentation: "gallery" }),
       },
     };
   },
@@ -57,14 +59,18 @@ const Attachment = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-
     const {
       // Figure
-      contentType, sgid, fileName,
+      contentType,
+      sgid,
+      fileName,
 
       // Image
-      imageId, src, width, height
-    } = HTMLAttributes
+      imageId,
+      src,
+      width,
+      height,
+    } = HTMLAttributes;
 
     return [
       "figure",
@@ -75,22 +81,25 @@ const Attachment = Node.create({
           filename: fileName,
           height,
           width,
-          sgid
+          sgid,
         }),
         "data-trix-attributes": JSON.stringify({
-          presentation: "gallery"
-        })
+          presentation: "gallery",
+        }),
       }),
       [
         "img",
-        mergeAttributes({}, {
-          src,
-          "data-image-id": imageId,
-          draggable: false,
-          contenteditable: false,
-          width,
-          height
-        }),
+        mergeAttributes(
+          {},
+          {
+            src,
+            "data-image-id": imageId,
+            draggable: false,
+            contenteditable: false,
+            width,
+            height,
+          }
+        ),
       ],
       ["figcaption", 0],
     ];
@@ -98,25 +107,26 @@ const Attachment = Node.create({
 
   addAttributes() {
     return {
-    	attachmentId: { default: null },
+      attachmentId: { default: null },
       progress: { default: null },
       imageId: { default: null },
       sgid: { default: null },
       src: {
-      	default: null,
-      	parseHTML: element => element.querySelector("img")?.getAttribute("src")
+        default: null,
+        parseHTML: (element) =>
+          element.querySelector("img")?.getAttribute("src"),
       },
       height: { default: null },
       width: { default: null },
       contentType: {
-      	default: null,
-      	parseHTML: element => element.getAttribute("content-type")
+        default: null,
+        parseHTML: (element) => element.getAttribute("content-type"),
       },
       fileName: { default: null },
       fileSize: { default: null },
       content: { default: null },
       url: { default: null },
-      href: { default: null }
+      href: { default: null },
     };
   },
 
@@ -133,84 +143,94 @@ const Attachment = Node.create({
         src,
         width,
         height,
-        href
-      } = node.attrs
+        href,
+      } = node.attrs;
 
       const figure = document.createElement("figure");
 
-      figure.setAttribute("class", this.options.HTMLAttributes.className)
-      figure.setAttribute("data-trix-content-type", node.attrs.contentType)
+      figure.setAttribute("class", this.options.HTMLAttributes.className);
+      figure.setAttribute("data-trix-content-type", node.attrs.contentType);
 
-			// // Convenient way to tell us its "final"
-      if (sgid != null) figure.setAttribute("sgid", sgid)
+      // // Convenient way to tell us its "final"
+      if (sgid != null) figure.setAttribute("sgid", sgid);
 
-      figure.setAttribute("data-trix-attachment", JSON.stringify({
-        contentType,
-        filename: fileName,
-        filesize: fileSize,
-        height,
-        width,
-        sgid,
-        url
-      }))
+      figure.setAttribute(
+        "data-trix-attachment",
+        JSON.stringify({
+          contentType,
+          filename: fileName,
+          filesize: fileSize,
+          height,
+          width,
+          sgid,
+          url,
+        })
+      );
 
-      figure.setAttribute("data-trix-attributes", JSON.stringify({
-        presentation: "gallery"
-      }))
+      figure.setAttribute(
+        "data-trix-attributes",
+        JSON.stringify({
+          presentation: "gallery",
+        })
+      );
 
-      const attachmentEditor = document.createElement("attachment-editor") as AttachmentEditor
-      attachmentEditor.setAttribute("file-name", fileName)
-      attachmentEditor.setAttribute("file-size", fileSize)
+      const attachmentEditor = document.createElement(
+        "attachment-editor"
+      ) as AttachmentEditor;
+      attachmentEditor.setAttribute("file-name", fileName);
+      attachmentEditor.setAttribute("file-size", fileSize);
 
       if (sgid == null) {
-      	attachmentEditor.progress = progress
+        attachmentEditor.progress = progress;
       } else {
-      	attachmentEditor.progress = 100
+        attachmentEditor.progress = 100;
       }
 
       const img = document.createElement("img");
-      const image = new Image()
-      image.src = src
+      const image = new Image();
+      image.src = src;
 
-			if (width == null || height == null) {
-      	image.onload = () => {
-        	const { naturalHeight: height, naturalWidth: width } = image
+      if (width == null || height == null) {
+        image.onload = () => {
+          const { naturalHeight: height, naturalWidth: width } = image;
 
-					if (typeof getPos === "function") {
-						const view = editor.view
-        		view.dispatch(view.state.tr.setNodeMarkup(getPos(), undefined, {
-          		...node.attrs,
-          		height: height,
-          		width: width
-        		}))
-					}
-      	}
+          if (typeof getPos === "function") {
+            const view = editor.view;
+            view.dispatch(
+              view.state.tr.setNodeMarkup(getPos(), undefined, {
+                ...node.attrs,
+                height: height,
+                width: width,
+              })
+            );
+          }
+        };
       }
 
-      img.setAttribute("data-image-id", imageId)
+      img.setAttribute("data-image-id", imageId);
       img.setAttribute("src", src);
-      img.setAttribute("width", width)
-      img.setAttribute("height", height)
+      img.setAttribute("width", width);
+      img.setAttribute("height", height);
       img.contentEditable = "false";
       img.setAttribute("draggable", "false");
       const figcaption = document.createElement("figcaption");
 
       figure.addEventListener("click", (e: Event) => {
-        if (e.composedPath().includes(figcaption)) return
+        if (e.composedPath().includes(figcaption)) return;
 
         if (typeof getPos === "function") {
-          e.preventDefault()
-          const pos = editor.state.doc.resolve(getPos()).pos
-          editor.chain().setTextSelection(pos).selectTextblockEnd().run()
+          e.preventDefault();
+          const pos = editor.state.doc.resolve(getPos()).pos;
+          editor.chain().setTextSelection(pos).selectTextblockEnd().run();
         }
       });
 
       if (href) {
-        const anchor = document.createElement("a")
-        anchor.href = href
-        anchor.tabIndex = -1
-        anchor.contentEditable = "false"
-        anchor.append(img)
+        const anchor = document.createElement("a");
+        anchor.href = href;
+        anchor.tabIndex = -1;
+        anchor.contentEditable = "false";
+        anchor.append(img);
         figure.append(attachmentEditor, anchor, figcaption);
       } else {
         figure.append(attachmentEditor, img, figcaption);
@@ -225,49 +245,47 @@ const Attachment = Node.create({
 
   addCommands() {
     return {
-      setAttachment: (options: AttachmentManager | AttachmentManager[]) => ({
-        commands,
-      }) => {
-        const attachments: AttachmentManager[] = Array.isArray(options)
-          ? options
-          : ([] as AttachmentManager[]).concat(options);
-        const content: Record<string, unknown>[] = [];
+      setAttachment:
+        (options: AttachmentManager | AttachmentManager[]) =>
+        ({ commands }) => {
+          const attachments: AttachmentManager[] = Array.isArray(options)
+            ? options
+            : ([] as AttachmentManager[]).concat(options);
+          const content: Array<Record<string, unknown>> = [];
 
-        attachments.forEach((attachment) => {
-          let captionContent: { type: "text"; text: string } | undefined
+          attachments.forEach((attachment) => {
+            let captionContent: { type: "text"; text: string } | undefined;
 
-          if (attachment.caption) {
-            captionContent = {
-              type: "text",
-              text: attachment.caption
+            if (attachment.caption) {
+              captionContent = {
+                type: "text",
+                text: attachment.caption,
+              };
             }
-          }
 
-          content.push({
-            type: "attachment-figure",
-            attrs: attachment,
-            content: [
-              {
-                type: "paragraph",
-                content: [
-                  captionContent
-                ],
-              },
-            ],
+            content.push({
+              type: "attachment-figure",
+              attrs: attachment,
+              content: [
+                {
+                  type: "paragraph",
+                  content: [captionContent],
+                },
+              ],
+            });
+            content.push({
+              type: "paragraph",
+            });
+            content.push({
+              type: "paragraph",
+            });
+            content.push({
+              type: "paragraph",
+            });
           });
-          content.push({
-            type: "paragraph",
-          });
-          content.push({
-            type: "paragraph",
-          });
-          content.push({
-            type: "paragraph",
-          });
-        });
 
-        return commands.insertContent(content);
-      },
+          return commands.insertContent(content);
+        },
     };
   },
 });
@@ -299,34 +317,36 @@ const Figcaption = Node.create({
   },
 });
 
-
 /**
  * Plugin to fix firefox cursor disappearing inside contenteditable.
  * https://github.com/ProseMirror/prosemirror/issues/1113#issue-780389225
  */
-export function FirefoxCaretFixPlugin () {
-  let focusing = false
+export function FirefoxCaretFixPlugin() {
+  let focusing = false;
   return new Plugin({
     props: {
       handleDOMEvents: {
-        focus: view => {
+        focus: (view) => {
           if (focusing) {
-          	focusing = false
+            focusing = false;
           } else {
-            focusing = true
-            setTimeout(() => { view.dom.blur(); view.dom.focus() })
+            focusing = true;
+            setTimeout(() => {
+              view.dom.blur();
+              view.dom.focus();
+            });
           }
-          return false
-        }
-      }
-    }
-  })
+          return false;
+        },
+      },
+    },
+  });
 }
 
 export default Extension.create({
-	addProseMirrorPlugins () {
-		return [FirefoxCaretFixPlugin()]
-	},
+  addProseMirrorPlugins() {
+    return [FirefoxCaretFixPlugin()];
+  },
   addExtensions() {
     return [Attachment, AttachmentImage, Figcaption];
   },

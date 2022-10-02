@@ -1,106 +1,106 @@
-import { AttachmentAttributes } from 'src/types'
-import { TipTapElement } from 'src/elements/trix'
-import { uuidv4 } from 'src/models/uuidv4'
-import { toMemorySize } from 'src/views/toMemorySize'
+import { AttachmentAttributes } from "src/types";
+import { TipTapElement } from "src/elements/trix";
+import { uuidv4 } from "src/models/uuidv4";
+import { toMemorySize } from "src/views/toMemorySize";
 
 /**
  * An attachment manager that matches the interface of Trix's attachment manager.
  *   This is what gets built on "tip-tap-attachment-add"
  */
 export class AttachmentManager implements AttachmentAttributes {
-  attributes: AttachmentAttributes & { attachmentId: string, imageId: string }
-  editor: TipTapElement
+  attributes: AttachmentAttributes & { attachmentId: string; imageId: string };
+  editor: TipTapElement;
 
-  constructor (obj: AttachmentAttributes, editor: TipTapElement) {
-    this.editor = editor
+  constructor(obj: AttachmentAttributes, editor: TipTapElement) {
+    this.editor = editor;
     this.attributes = {
       attachmentId: uuidv4(),
       imageId: uuidv4(),
       sgid: null,
       url: null,
-      ...obj
-    }
+      ...obj,
+    };
   }
 
-  setUploadProgress (progress: number): void {
-    this.setNodeMarkup({progress})
+  setUploadProgress(progress: number): void {
+    this.setNodeMarkup({ progress });
   }
 
-  setAttributes (obj: Record<"sgid" | "url", string>) {
-    this.attributes.sgid = obj.sgid
-    this.attributes.url = obj.url
+  setAttributes(obj: Record<"sgid" | "url", string>) {
+    this.attributes.sgid = obj.sgid;
+    this.attributes.url = obj.url;
 
+    /** This preloads the image so we don't show a big flash. */
+    const image = new Image();
 
-		/** This preloads the image so we don't show a big flash. */
-    const image = new Image()
-
-    image.src = obj.url
+    image.src = obj.url;
 
     image.onload = () => {
       this.setNodeMarkup({
         sgid: this.attributes.sgid,
         url: this.attributes.url,
         src: this.attributes.url,
-        href: this.attributes.url + "?content-disposition=attachment"
-      })
-      image.remove()
-    }
+        href: this.attributes.url + "?content-disposition=attachment",
+      });
+      image.remove();
+    };
   }
 
-	/**
-	 * Helper function to set the markup for an attachment. We map a uuid to the "attachmentId"
+  /**
+   * Helper function to set the markup for an attachment. We map a uuid to the "attachmentId"
    * of the TipTap node to guarantee we're targeting the right one.
-	 */
-  setNodeMarkup (obj: Record<string, unknown>) {
-    const editor = this.editor.editor
+   */
+  setNodeMarkup(obj: Record<string, unknown>) {
+    const editor = this.editor.editor;
 
-    if (editor == null) return
+    if (editor == null) return;
 
     editor.state.doc.descendants((descendantNode, position: number) => {
       if (descendantNode.attrs.attachmentId === this.attachmentId) {
-				const view = editor.view
-        view.dispatch(view.state.tr.setNodeMarkup(position, undefined, {
-          ...descendantNode.attrs,
-          ...obj
-        }))
+        const view = editor.view;
+        view.dispatch(
+          view.state.tr.setNodeMarkup(position, undefined, {
+            ...descendantNode.attrs,
+            ...obj,
+          })
+        );
       }
-    })
-
+    });
   }
 
-  get attachmentId (): string {
-    return this.attributes.attachmentId
+  get attachmentId(): string {
+    return this.attributes.attachmentId;
   }
 
-  get imageId (): string {
-    return this.attributes.imageId
+  get imageId(): string {
+    return this.attributes.imageId;
   }
 
-  get src (): string {
-    return this.attributes.src
+  get src(): string {
+    return this.attributes.src;
   }
 
-  set src (val: string) {
-    this.attributes.src = val
+  set src(val: string) {
+    this.attributes.src = val;
   }
 
-  get file (): File {
-    return this.attributes.file
+  get file(): File {
+    return this.attributes.file;
   }
 
-  get contentType (): string {
-    return this.file.type
+  get contentType(): string {
+    return this.file.type;
   }
 
-  get fileName (): string {
-    return this.file.name
+  get fileName(): string {
+    return this.file.name;
   }
 
-  get fileSize (): number {
-    return this.file.size
+  get fileSize(): number {
+    return this.file.size;
   }
 
-  get caption (): string {
-    return `${this.fileName} ${toMemorySize(this.fileSize)}`
+  get caption(): string {
+    return `${this.fileName} ${toMemorySize(this.fileSize)}`;
   }
 }

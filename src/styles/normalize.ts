@@ -5,7 +5,9 @@ export const normalize = css`
     display: none !important;
   }
 
-  *, *::after, *::before {
+  *,
+  *::after,
+  *::before {
     box-sizing: border-box;
   }
 
@@ -15,6 +17,4 @@ export const normalize = css`
     color: inherit;
     cursor: pointer;
   }
-`
-
-
+`;
