@@ -154,6 +154,9 @@ const Attachment = Node.create({
       // // Convenient way to tell us its "final"
       if (sgid != null) figure.setAttribute("sgid", sgid);
 
+			// https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4
+      // const isPreviewable = /^image(\/(gif|png|jpe?g)|$)/
+
       figure.setAttribute(
         "data-trix-attachment",
         JSON.stringify({

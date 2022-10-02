@@ -172,7 +172,6 @@ export class TipTapElement extends LitElement {
   }
 
   setupEditor(element: Element): Editor {
-    console.log(this.inputElement?.value);
     return new Editor({
       element,
       injectCSS: false,
