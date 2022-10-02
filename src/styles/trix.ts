@@ -28,17 +28,21 @@ export default css`
     color: #374151;
   }
 
-  img, svg {
+  img,
+  svg {
     width: 100%;
   }
 
-  img, svg, figure {
+  img,
+  svg,
+  figure {
     max-width: 100%;
     height: auto;
     display: block;
   }
 
-  figure, p {
+  figure,
+  p {
     padding: 0;
     margin: 0;
   }
@@ -216,4 +220,4 @@ export default css`
     height: 0;
     pointer-events: none;
   }
-`
+`;
