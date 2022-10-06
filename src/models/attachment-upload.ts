@@ -28,6 +28,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
   directUploadWillStoreFileWithXHR(xhr: XMLHttpRequest) {
     xhr.upload.addEventListener("progress", (event) => {
       const progress = (event.loaded / event.total) * 100;
+      console.log(progress)
       this.attachment.setUploadProgress(progress);
     });
   }

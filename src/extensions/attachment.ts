@@ -39,7 +39,7 @@ const Attachment = Node.create({
   addOptions() {
     return {
       HTMLAttributes: {
-        className: "attachment attachment--preview attachment--png",
+        class: "attachment attachment--preview attachment--png",
         "data-trix-attributes": JSON.stringify({ presentation: "gallery" }),
       },
     };
@@ -101,23 +101,34 @@ const Attachment = Node.create({
           }
         ),
       ],
-      ["figcaption", 0],
+      ["figcaption", mergeAttributes({}, { class: "attachment__caption attachment--edited" }),  0],
     ];
   },
 
   addAttributes() {
     return {
       attachmentId: { default: null },
+      caption: {
+      	default: null,
+				parseHTML: (element) => element.querySelector("figcaption")?.innerHTML
+      },
       progress: { default: null },
       imageId: { default: null },
-      sgid: { default: null },
+      sgid: {
+      	default: null
+      },
       src: {
         default: null,
-        parseHTML: (element) =>
-          element.querySelector("img")?.getAttribute("src"),
+        parseHTML: (element) => element.querySelector("img")?.getAttribute("src"),
       },
-      height: { default: null },
-      width: { default: null },
+      height: {
+      	default: null ,
+      	parseHTML: (element) => element.querySelector("img")?.getAttribute("height")
+      },
+      width: {
+      	default: null ,
+      	parseHTML: (element) => element.querySelector("img")?.getAttribute("width")
+      },
       contentType: {
         default: null,
         parseHTML: (element) => element.getAttribute("content-type"),
@@ -143,12 +154,13 @@ const Attachment = Node.create({
         src,
         width,
         height,
-        href,
+        // href,
+        caption,
       } = node.attrs;
 
       const figure = document.createElement("figure");
 
-      figure.setAttribute("class", this.options.HTMLAttributes.className);
+      figure.setAttribute("class", this.options.HTMLAttributes.class);
       figure.setAttribute("data-trix-content-type", node.attrs.contentType);
 
       // // Convenient way to tell us its "final"
@@ -174,6 +186,7 @@ const Attachment = Node.create({
         "data-trix-attributes",
         JSON.stringify({
           presentation: "gallery",
+        	caption,
         })
       );
 
@@ -184,9 +197,9 @@ const Attachment = Node.create({
       attachmentEditor.setAttribute("file-size", fileSize);
 
       if (sgid == null) {
-        attachmentEditor.progress = progress;
+        attachmentEditor.setAttribute("progress", progress)
       } else {
-        attachmentEditor.progress = 100;
+        attachmentEditor.setAttribute("progress", "100");
       }
 
       const img = document.createElement("img");
@@ -218,6 +231,8 @@ const Attachment = Node.create({
       img.setAttribute("draggable", "false");
       const figcaption = document.createElement("figcaption");
 
+      figcaption.setAttribute("class", "attachment__caption attachment__caption--edited")
+
       figure.addEventListener("click", (e: Event) => {
         if (e.composedPath().includes(figcaption)) return;
 
@@ -228,20 +243,25 @@ const Attachment = Node.create({
         }
       });
 
-      if (href) {
-        const anchor = document.createElement("a");
-        anchor.href = href;
-        anchor.tabIndex = -1;
-        anchor.contentEditable = "false";
-        anchor.append(img);
-        figure.append(attachmentEditor, anchor, figcaption);
-      } else {
-        figure.append(attachmentEditor, img, figcaption);
-      }
+      figure.append(attachmentEditor, img, figcaption);
 
       return {
         dom: figure,
         contentDOM: figcaption,
+        update: (_node) => {
+        	const caption = figcaption.innerHTML
+        	// If we don't setTimeout it override the transaction from the DirectUpload.
+        	setTimeout(() => {
+      			figure.setAttribute(
+        			"data-trix-attributes",
+        			JSON.stringify({
+          			presentation: "gallery",
+        				caption,
+        			})
+      			);
+      		})
+					return true
+        }
       };
     };
   },
@@ -298,7 +318,9 @@ const Figcaption = Node.create({
 
   addOptions() {
     return {
-      HTMLAttributes: {},
+      HTMLAttributes: {
+      	class: "attachment__caption attachment--edited"
+      },
     };
   },
 
@@ -310,7 +332,7 @@ const Figcaption = Node.create({
   parseHTML() {
     return [
       {
-        tag: "figcaption",
+        tag: "figcaption"
       },
     ];
   },

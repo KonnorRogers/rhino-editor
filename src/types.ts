@@ -7,4 +7,5 @@ export interface AttachmentAttributes {
   src: string;
   sgid?: Maybe<string>;
   url?: Maybe<string>;
+  content?: Maybe<string>;
 }

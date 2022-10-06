@@ -1,4 +1,4 @@
-import { AttachmentAttributes } from "src/types";
+import { AttachmentAttributes, Maybe } from "src/types";
 import { TipTapElement } from "src/elements/trix";
 import { uuidv4 } from "src/models/uuidv4";
 import { toMemorySize } from "src/views/toMemorySize";
@@ -15,6 +15,7 @@ export class AttachmentManager implements AttachmentAttributes {
     this.editor = editor;
     this.attributes = {
       attachmentId: uuidv4(),
+      content: null,
       imageId: uuidv4(),
       sgid: null,
       url: null,
@@ -23,27 +24,38 @@ export class AttachmentManager implements AttachmentAttributes {
   }
 
   setUploadProgress(progress: number): void {
-    this.setNodeMarkup({ progress });
+  	if (this.content == null) {
+    	this.setNodeMarkup({ progress });
+    }
   }
 
-  setAttributes(obj: Record<"sgid" | "url", string>) {
+  setAttributes(obj: Omit<AttachmentAttributes, "src" | "file">) {
     this.attributes.sgid = obj.sgid;
-    this.attributes.url = obj.url;
 
-    /** This preloads the image so we don't show a big flash. */
-    const image = new Image();
+		if (obj.content == null && obj.url != null) {
+    	/** This preloads the image so we don't show a big flash. */
+    	const image = new Image();
 
-    image.src = obj.url;
+    	this.attributes.url = obj.url;
 
-    image.onload = () => {
-      this.setNodeMarkup({
-        sgid: this.attributes.sgid,
-        url: this.attributes.url,
-        src: this.attributes.url,
-        href: this.attributes.url + "?content-disposition=attachment",
-      });
-      image.remove();
-    };
+    	image.src = obj.url;
+
+    	image.onload = () => {
+      	this.setNodeMarkup({
+        	sgid: this.attributes.sgid,
+        	url: this.attributes.url,
+        	src: this.attributes.url,
+        	href: this.attributes.url + "?content-disposition=attachment",
+      	});
+      	image.remove();
+    	};
+    	return
+    }
+
+    this.setNodeMarkup({
+      sgid: this.attributes.sgid,
+      content: this.attributes.content
+    })
   }
 
   /**
@@ -100,7 +112,15 @@ export class AttachmentManager implements AttachmentAttributes {
     return this.file.size;
   }
 
+  get content(): Maybe<string> {
+  	return this.attributes.content
+  }
+
+  set content (val: Maybe<string>) {
+  	this.attributes.content = val
+  }
+
   get caption(): string {
-    return `${this.fileName} ${toMemorySize(this.fileSize)}`;
+    return `${this.fileName} · ${toMemorySize(this.fileSize)}`;
   }
 }

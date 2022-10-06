@@ -10,7 +10,7 @@
     "@rails/actiontext": "^7.0.0",
     "@rails/activestorage": "^7.0.0",
     "tip-tap-element": "link:../../",
-    "trix": "^2.0.0-beta.0"
+    "trix": "^1.3"
   },
   "scripts": {
     "playwright": "playwright"

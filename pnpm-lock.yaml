@@ -7,6 +7,7 @@ specifiers:
   '@tiptap/extension-image': 2.0.0-beta.196
   '@tiptap/extension-link': 2.0.0-beta.196
   '@tiptap/extension-placeholder': 2.0.0-beta.196
+  '@tiptap/extension-text-align': 2.0.0-beta.199
   '@tiptap/starter-kit': 2.0.0-beta.196
   '@types/rails__activestorage': ^7.0.1
   '@typescript-eslint/parser': ^4.33.0
@@ -20,7 +21,6 @@ specifiers:
   prosemirror-model: ^1.18.1
   prosemirror-state: ^1.4.1
   role-components: ^1.0.9
-  spark-md5: ^3.0.2
   standard-version: ^9.5.0
   tslib: ^2.4.0
   typescript: ^4.8.4
@@ -32,12 +32,12 @@ dependencies:
   '@tiptap/extension-image': 2.0.0-beta.196_wfvnwgzkyirymnacbqpm22v55m
   '@tiptap/extension-link': 2.0.0-beta.196_wfvnwgzkyirymnacbqpm22v55m
   '@tiptap/extension-placeholder': 2.0.0-beta.196_wfvnwgzkyirymnacbqpm22v55m
+  '@tiptap/extension-text-align': 2.0.0-beta.199_wfvnwgzkyirymnacbqpm22v55m
   '@tiptap/starter-kit': 2.0.0-beta.196
   lit: 2.3.1
   prosemirror-model: 1.18.1
   prosemirror-state: 1.4.1
   role-components: 1.0.9
-  spark-md5: 3.0.2
   tslib: 2.4.0
 
 devDependencies:
@@ -386,6 +386,14 @@ packages:
 
   /@tiptap/extension-strike/2.0.0-beta.196_wfvnwgzkyirymnacbqpm22v55m:
     resolution: {integrity: sha512-9u1CjrqkBIOpDdRVae9RjOVtNdyGenUTy6vX2pqXiIbHtDTtJ1uxktm1a9mzZxpFPFhhJDgxf4tpo4WgzRgOoQ==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0-beta.193
+    dependencies:
+      '@tiptap/core': 2.0.0-beta.196
+    dev: false
+
+  /@tiptap/extension-text-align/2.0.0-beta.199_wfvnwgzkyirymnacbqpm22v55m:
+    resolution: {integrity: sha512-eIBokfIBxQQaMnWw0T+oYTUr5e2GrQMQfZWmyM6EeUS+RIFb10icL859ALHQm2sBplG6Pf2Rty28PuOPNCVJzw==}
     peerDependencies:
       '@tiptap/core': ^2.0.0-beta.193
     dependencies:

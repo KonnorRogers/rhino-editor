@@ -220,4 +220,30 @@ export default css`
     height: 0;
     pointer-events: none;
   }
+
+	.ProseMirror pre {
+		display: inline-block;
+		width: 100%;
+		vertical-align: top;
+		font-family: monospace;
+		font-size: 0.9em;
+		padding: 0.5em;
+		white-space: pre;
+		background-color: #eee;
+		overflow-x: auto;
+	}
+
+	.ProseMirror .attachment__caption {
+		text-align: center;
+		color: #666;
+
+	}
+
+	.ProseMirror blockquote {
+    border: 0 solid #ccc;
+    border-left-width: 0.3em;
+    margin-left: 0.3em;
+    padding-left: 0.6em;
+  }
 `;
+

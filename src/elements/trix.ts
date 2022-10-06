@@ -5,6 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
 import Attachment from "src/extensions/attachment";
 
 import {
@@ -142,6 +143,7 @@ export class TipTapElement extends LitElement {
     this.editor = this.setupEditor(element);
     this.editorElement = element.querySelector(".ProseMirror");
 
+		// this.editorElement?.classList.add("trix-content")
     this.editorElement?.setAttribute("tabindex", "0");
     this.editorElement?.setAttribute("role", "textbox");
   }
@@ -180,6 +182,11 @@ export class TipTapElement extends LitElement {
         Link,
         Attachment,
         Focus,
+        TextAlign.configure({
+        	types: ["heading", "paragraph", "figcaption", "attachment"],
+        	alignments: ['left', 'center', 'right'],
+        	defaultAlignment: this.dir === "rtl" ? "right" : "left"
+        }),
         Placeholder.configure({
           includeChildren: true,
           // Use a placeholder:
