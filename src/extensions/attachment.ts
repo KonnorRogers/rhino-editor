@@ -31,10 +31,11 @@ const AttachmentImage = TipTapImage.extend({
 const Attachment = Node.create({
   name: "attachment-figure",
   group: "block attachmentFigure",
-  content: "paragraph*",
+  content: "inline*",
   draggable: true,
   selectable: true,
   isolating: true,
+  defining: true,
 
   addOptions() {
     return {
@@ -64,6 +65,7 @@ const Attachment = Node.create({
       contentType,
       sgid,
       fileName,
+      caption,
 
       // Image
       imageId,
@@ -84,8 +86,10 @@ const Attachment = Node.create({
           sgid,
         }),
         "data-trix-attributes": JSON.stringify({
+        	caption,
           presentation: "gallery",
         }),
+        draggable: true,
       }),
       [
         "img",
@@ -94,7 +98,7 @@ const Attachment = Node.create({
           {
             src,
             "data-image-id": imageId,
-            draggable: false,
+            draggable: true,
             contenteditable: false,
             width,
             height,
@@ -110,7 +114,8 @@ const Attachment = Node.create({
       attachmentId: { default: null },
       caption: {
       	default: null,
-				parseHTML: (element) => element.querySelector("figcaption")?.innerHTML
+				parseHTML: (element) => element.querySelector("figcaption")?.innerHTML,
+				// renderHTML: (attrs) => console.log(attrs)
       },
       progress: { default: null },
       imageId: { default: null },
@@ -227,40 +232,56 @@ const Attachment = Node.create({
       img.setAttribute("src", src);
       img.setAttribute("width", width);
       img.setAttribute("height", height);
-      img.contentEditable = "false";
+      img.setAttribute("contenteditable", "false");
       img.setAttribute("draggable", "false");
       const figcaption = document.createElement("figcaption");
 
       figcaption.setAttribute("class", "attachment__caption attachment__caption--edited")
+      figcaption.setAttribute("draggable", "false")
+
+      figure.setAttribute("draggable", "true")
 
       figure.addEventListener("click", (e: Event) => {
         if (e.composedPath().includes(figcaption)) return;
 
-        if (typeof getPos === "function") {
-          e.preventDefault();
-          const pos = editor.state.doc.resolve(getPos()).pos;
-          editor.chain().setTextSelection(pos).selectTextblockEnd().run();
-        }
+      	figure.removeAttribute("contenteditable")
+
+      	setTimeout(() => {
+        	if (typeof getPos === "function") {
+          	e.preventDefault();
+          	const pos = editor.state.doc.resolve(getPos()).pos;
+          	editor.chain().setTextSelection(pos).selectTextblockEnd().run();
+        	}
+        })
       });
+
+			// Hacky fix for firefox which doesn't like to let you drag contenteditable.
+			const handlePointerDown = () => {
+				figure.setAttribute("contenteditable", "false")
+			}
+      const handlePointerUp = () => {
+      	figure.removeAttribute("contenteditable")
+      }
+
+      figure.addEventListener("pointerdown", handlePointerDown)
+      figure.addEventListener("pointerup", handlePointerUp)
 
       figure.append(attachmentEditor, img, figcaption);
 
       return {
         dom: figure,
         contentDOM: figcaption,
-        update: (_node) => {
+        update: (node) => {
         	const caption = figcaption.innerHTML
-        	// If we don't setTimeout it override the transaction from the DirectUpload.
-        	setTimeout(() => {
-      			figure.setAttribute(
-        			"data-trix-attributes",
-        			JSON.stringify({
-          			presentation: "gallery",
-        				caption,
-        			})
-      			);
-      		})
-					return true
+    			if (caption !== node.attrs.caption && typeof getPos === "function") {
+    				editor.view.dispatch(
+    					editor.view.state.tr.setNodeMarkup(getPos(), undefined, {
+    						...node.attrs,
+    						caption
+    					})
+    				)
+    			}
+        	return false
         }
       };
     };
@@ -289,12 +310,7 @@ const Attachment = Node.create({
             content.push({
               type: "attachment-figure",
               attrs: attachment,
-              content: [
-                {
-                  type: "paragraph",
-                  content: [captionContent],
-                },
-              ],
+              content: [captionContent]
             });
             content.push({
               type: "paragraph",
@@ -324,8 +340,7 @@ const Figcaption = Node.create({
     };
   },
 
-  content: "paragraph*",
-  isolating: true,
+  content: "inline*",
   selectable: false,
   draggable: false,
 
@@ -367,6 +382,20 @@ export function FirefoxCaretFixPlugin() {
     },
   });
 }
+
+// export function FirefoxDraggingFixPlugin() {
+//   // let dragging = false;
+//   return new Plugin({
+//     props: {
+//       handleDOMEvents: {
+//         dragstart: (_view) => {
+//         	console.log("dragstart")
+//           return false;
+//         },
+//       },
+//     },
+//   });
+// }
 
 export default Extension.create({
   addProseMirrorPlugins() {
