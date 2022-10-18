@@ -1,5 +1,5 @@
 import { Node, Extension, mergeAttributes } from "@tiptap/core";
-import { default as TipTapImage } from "@tiptap/extension-image";
+import { default as TipTapImage } from "@tiptap/extension-image"
 import { AttachmentManager } from "src/models/attachment-manager";
 import type { AttachmentEditor } from "src/elements/attachment-editor";
 import { Plugin } from "prosemirror-state";
@@ -28,14 +28,16 @@ const AttachmentImage = TipTapImage.extend({
   draggable: false,
 });
 
+/** https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4 */
+// const isPreviewable = /^image(\/(gif|png|jpe?g)|$)/
+
 const Attachment = Node.create({
   name: "attachment-figure",
   group: "block attachmentFigure",
   content: "inline*",
-  draggable: true,
   selectable: true,
+  draggable: true,
   isolating: true,
-  defining: true,
 
   addOptions() {
     return {
@@ -47,87 +49,125 @@ const Attachment = Node.create({
   },
 
   parseHTML() {
+  	// action-text-attachment must be before figure.
     return [
       {
         tag: "action-text-attachment",
-        contentElement: "figcaption",
       },
       {
         tag: "figure",
-        contentElement: "figcaption",
       },
     ];
   },
 
-  renderHTML({ HTMLAttributes }) {
+  renderHTML({ node }) {
     const {
       // Figure
+      content,
       contentType,
       sgid,
       fileName,
       caption,
+      url,
 
       // Image
-      imageId,
       src,
       width,
       height,
-    } = HTMLAttributes;
+    } = node.attrs;
 
-    return [
+    const attachmentAttrs: Record<keyof typeof node.attrs, string> = {
+      contentType,
+      filename: fileName,
+      height,
+      width,
+      sgid,
+      url,
+    }
+
+    if (content != null) {
+    	attachmentAttrs.content = content
+    }
+
+		const figure = [
       "figure",
       mergeAttributes(this.options.HTMLAttributes, {
         "data-trix-content-type": contentType,
-        "data-trix-attachment": JSON.stringify({
-          contentType,
-          filename: fileName,
-          height,
-          width,
-          sgid,
-        }),
+        "data-trix-attachment": JSON.stringify(attachmentAttrs),
         "data-trix-attributes": JSON.stringify({
         	caption,
           presentation: "gallery",
         }),
         draggable: true,
       }),
-      [
-        "img",
-        mergeAttributes(
-          {},
-          {
-            src,
-            "data-image-id": imageId,
-            draggable: true,
-            contenteditable: false,
-            width,
-            height,
-          }
-        ),
-      ],
-      ["figcaption", mergeAttributes({}, { class: "attachment__caption attachment--edited" }),  0],
-    ];
+		] as const
+
+		const img = [
+			"img",
+			mergeAttributes({}, {src: url || src, height, width}),
+		] as const
+
+		const figcaption = [
+			"figcaption",
+			mergeAttributes({}, {class: "attachment__caption attachment__caption--edited"}),
+			0
+		] as const
+
+		if (!content) {
+			return [
+				...figure,
+				[...img],
+				[...figcaption]
+			]
+		}
+
+		return [
+			...figure,
+			[...figcaption]
+		]
   },
 
   addAttributes() {
     return {
       attachmentId: { default: null },
       caption: {
-      	default: null,
-				parseHTML: (element) => element.querySelector("figcaption")?.innerHTML,
-				// renderHTML: (attrs) => console.log(attrs)
+      	default: "",
+				parseHTML: (element) => {
+      		const attrs = element.getAttribute("data-trix-attributes")
+
+      		if (!attrs) return null
+
+					const { caption }  = JSON.parse(attrs)
+
+					return caption || null
+				},
       },
-      progress: { default: null },
-      imageId: { default: null },
+      progress: {
+      	default: 0,
+      },
       sgid: {
-      	default: null
+      	default: null,
+      	parseHTML: (element) => {
+					const sgidAttr = element.getAttribute("sgid")
+					if (sgidAttr) return sgidAttr
+
+					// This is for regular <figure>
+      		const attrs = element.getAttribute("data-trix-attachment")
+      		if (!attrs) return null
+
+					const { sgid }  = JSON.parse(attrs)
+
+					return sgid || null
+				}
       },
       src: {
         default: null,
-        parseHTML: (element) => element.querySelector("img")?.getAttribute("src"),
+        parseHTML: (element) => {
+        	return element.querySelector("img")?.getAttribute("src")
+        }
       },
       height: {
-      	default: null ,
+      	default: null,
       	parseHTML: (element) => element.querySelector("img")?.getAttribute("height")
       },
       width: {
@@ -136,12 +176,38 @@ const Attachment = Node.create({
       },
       contentType: {
         default: null,
-        parseHTML: (element) => element.getAttribute("content-type"),
+        parseHTML: (element) => {
+      		const attrs = element.getAttribute("data-trix-attachment")
+      		if (!attrs) return null
+
+					const { contentType }  = JSON.parse(attrs)
+					return contentType || "application/octet-stream"
+        }
       },
-      fileName: { default: null },
-      fileSize: { default: null },
-      content: { default: null },
-      url: { default: null },
+      fileName: {
+      	default: ""
+      },
+      fileSize: { default: "" },
+      content: {
+      	default: null,
+      	parseHTML: (element) => {
+      		const attrs = element.getAttribute("data-trix-attachment")
+      		if (!attrs) return null
+
+					const { content }  = JSON.parse(attrs)
+					return content || null
+      	}
+      },
+      url: {
+      	default: null,
+        parseHTML: (element) => {
+      		const attrs = element.getAttribute("data-trix-attachment")
+      		if (!attrs) return null
+
+					const { url }  = JSON.parse(attrs)
+					return url || null
+        }
+      },
       href: { default: null },
     };
   },
@@ -149,13 +215,13 @@ const Attachment = Node.create({
   addNodeView() {
     return ({ node, getPos, editor }) => {
       const {
+      	content,
         contentType,
         sgid,
         fileName,
         progress,
         fileSize,
         url,
-        imageId,
         src,
         width,
         height,
@@ -164,15 +230,15 @@ const Attachment = Node.create({
       } = node.attrs;
 
       const figure = document.createElement("figure");
+      const figcaption = document.createElement("figcaption")
+
+			figcaption.setAttribute("class", "attachment__caption")
 
       figure.setAttribute("class", this.options.HTMLAttributes.class);
       figure.setAttribute("data-trix-content-type", node.attrs.contentType);
 
       // // Convenient way to tell us its "final"
-      if (sgid != null) figure.setAttribute("sgid", sgid);
-
-			// https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4
-      // const isPreviewable = /^image(\/(gif|png|jpe?g)|$)/
+      if (sgid) figure.setAttribute("sgid", sgid);
 
       figure.setAttribute(
         "data-trix-attachment",
@@ -201,62 +267,29 @@ const Attachment = Node.create({
       attachmentEditor.setAttribute("file-name", fileName);
       attachmentEditor.setAttribute("file-size", fileSize);
 
-      if (sgid == null) {
+      if (!sgid) {
         attachmentEditor.setAttribute("progress", progress)
       } else {
         attachmentEditor.setAttribute("progress", "100");
       }
 
-      const img = document.createElement("img");
-      const image = new Image();
-      image.src = src;
-
-      if (width == null || height == null) {
-        image.onload = () => {
-          const { naturalHeight: height, naturalWidth: width } = image;
-
-          if (typeof getPos === "function") {
-            const view = editor.view;
-            view.dispatch(
-              view.state.tr.setNodeMarkup(getPos(), undefined, {
-                ...node.attrs,
-                height: height,
-                width: width,
-              })
-            );
-          }
-        };
-      }
-
-      img.setAttribute("data-image-id", imageId);
-      img.setAttribute("src", src);
-      img.setAttribute("width", width);
-      img.setAttribute("height", height);
-      img.setAttribute("contenteditable", "false");
-      img.setAttribute("draggable", "false");
-      const figcaption = document.createElement("figcaption");
-
-      figcaption.setAttribute("class", "attachment__caption attachment__caption--edited")
-      figcaption.setAttribute("draggable", "false")
-
-      figure.setAttribute("draggable", "true")
 
       figure.addEventListener("click", (e: Event) => {
-        if (e.composedPath().includes(figcaption)) return;
-
       	figure.removeAttribute("contenteditable")
+      	if (e.composedPath().includes(figcaption)) return
 
-      	setTimeout(() => {
-        	if (typeof getPos === "function") {
-          	e.preventDefault();
-          	const pos = editor.state.doc.resolve(getPos()).pos;
-          	editor.chain().setTextSelection(pos).selectTextblockEnd().run();
-        	}
-        })
+				if (typeof getPos === "function") {
+      		editor.chain().setTextSelection(getPos() + 1).run()
+      	}
       });
 
 			// Hacky fix for firefox which doesn't like to let you drag contenteditable.
-			const handlePointerDown = () => {
+			const handlePointerDown = (e: Event) => {
+        if (e.composedPath().includes(figcaption)) {
+      		figure.removeAttribute("contenteditable")
+        	return;
+        }
+
 				figure.setAttribute("contenteditable", "false")
 			}
       const handlePointerUp = () => {
@@ -266,24 +299,61 @@ const Attachment = Node.create({
       figure.addEventListener("pointerdown", handlePointerDown)
       figure.addEventListener("pointerup", handlePointerUp)
 
-      figure.append(attachmentEditor, img, figcaption);
+      const img = document.createElement("img")
+      img.setAttribute("width", width);
+      img.setAttribute("height", height);
+      if (!content) {
+      	if (url || src) {
+      		img.setAttribute("src", url || src);
+      	}
+      	if (width == null || height == null) {
+      		img.src = url || src
+        	img.onload = () => {
+          	const { naturalHeight: height, naturalWidth: width } = img;
+
+          	if (typeof getPos === "function") {
+            	const view = editor.view;
+            	view.dispatch(
+              	view.state.tr.setNodeMarkup(getPos(), undefined, {
+                	...node.attrs,
+                	height: height,
+                	width: width,
+              	})
+            	);
+          	}
+        	};
+      	}
+      }
+
+			if (content) {
+      	figure.innerHTML = content
+      	figure.append(attachmentEditor, figcaption)
+      } else {
+      	figure.append(attachmentEditor, img, figcaption)
+      }
 
       return {
         dom: figure,
         contentDOM: figcaption,
         update: (node) => {
+        	if (node.type !== this.type) return false
+
         	const caption = figcaption.innerHTML
-    			if (caption !== node.attrs.caption && typeof getPos === "function") {
-    				editor.view.dispatch(
-    					editor.view.state.tr.setNodeMarkup(getPos(), undefined, {
-    						...node.attrs,
-    						caption
-    					})
-    				)
-    			}
+        	if (node.attrs.caption !== caption && typeof getPos === "function") {
+        		// Don't ask me why this works, but we need the position before the setTimeout call.
+						const pos = getPos()
+        		setTimeout(() => {
+        			editor.view.dispatch(
+								editor.view.state.tr.setNodeMarkup(pos, undefined, {
+									...node.attrs,
+									caption
+								})
+        			)
+        		})
+        	}
         	return false
         }
-      };
+      }
     };
   },
 
@@ -291,27 +361,32 @@ const Attachment = Node.create({
     return {
       setAttachment:
         (options: AttachmentManager | AttachmentManager[]) =>
-        ({ commands }) => {
+        ({ commands, state }) => {
+        	const currentSelection = state.doc.resolve(state.selection.anchor)
+
+        	const endPos = currentSelection.after()
+
           const attachments: AttachmentManager[] = Array.isArray(options)
             ? options
             : ([] as AttachmentManager[]).concat(options);
           const content: Array<Record<string, unknown>> = [];
 
           attachments.forEach((attachment) => {
-            let captionContent: { type: "text"; text: string } | undefined;
+						const attachmentContent: Record<string, unknown> = {
+							type: "attachment-figure",
+							attrs: attachment,
+						}
 
-            if (attachment.caption) {
-              captionContent = {
-                type: "text",
-                text: attachment.caption,
-              };
-            }
+						if (attachment.caption) {
+							attachmentContent.content = [
+								{
+									type: "text",
+									text: attachment.caption
+								}
+							]
+						}
 
-            content.push({
-              type: "attachment-figure",
-              attrs: attachment,
-              content: [captionContent]
-            });
+            content.push(attachmentContent)
             content.push({
               type: "paragraph",
             });
@@ -323,39 +398,41 @@ const Attachment = Node.create({
             });
           });
 
-          return commands.insertContent(content);
+          return commands.insertContentAt(endPos, content);
         },
     };
   },
 });
 
-const Figcaption = Node.create({
-  name: "figcaption",
+export const AttachmentFigcaption = Node.create({
+  name: 'attachment-figcaption',
+
+  group: "block figcaption",
 
   addOptions() {
     return {
-      HTMLAttributes: {
-      	class: "attachment__caption attachment--edited"
-      },
-    };
+      HTMLAttributes: {class: "attachment__caption attachment--edited"},
+    }
   },
 
-  content: "inline*",
-  selectable: false,
-  draggable: false,
+  content: 'inline*',
+
+  // selectable: false,
+  // draggable: false,
+  isolating: true,
 
   parseHTML() {
     return [
       {
-        tag: "figcaption"
+        tag: `figcaption`,
       },
-    ];
+    ]
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["figcaption", mergeAttributes(HTMLAttributes), 0];
+    return ['figcaption', mergeAttributes(HTMLAttributes), 0]
   },
-});
+})
 
 /**
  * Plugin to fix firefox cursor disappearing inside contenteditable.
@@ -383,25 +460,12 @@ export function FirefoxCaretFixPlugin() {
   });
 }
 
-// export function FirefoxDraggingFixPlugin() {
-//   // let dragging = false;
-//   return new Plugin({
-//     props: {
-//       handleDOMEvents: {
-//         dragstart: (_view) => {
-//         	console.log("dragstart")
-//           return false;
-//         },
-//       },
-//     },
-//   });
-// }
-
 export default Extension.create({
   addProseMirrorPlugins() {
     return [FirefoxCaretFixPlugin()];
   },
   addExtensions() {
-    return [Attachment, AttachmentImage, Figcaption];
+    return [Attachment, AttachmentImage, AttachmentFigcaption];
   },
 });
+

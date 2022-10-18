@@ -1,5 +1,6 @@
 import { TipTapElement } from "./elements/trix";
 import { AttachmentEditor } from "./elements/attachment-editor";
+import { AttachmentManager } from "./models/attachment-manager";
 
 window.customElements.define(
   "attachment-editor",
@@ -7,4 +8,8 @@ window.customElements.define(
 );
 window.customElements.define("tip-tap-trix", class extends TipTapElement {});
 
-export { AttachmentEditor, TipTapElement };
+export {
+	AttachmentEditor,
+	TipTapElement,
+	AttachmentManager
+};

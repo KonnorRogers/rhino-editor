@@ -33,17 +33,17 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     page.locator("trix-editor figure.attachment.attachment--preview.attachment--png")
   end
 
-  def attach_images(file)
+  def attach_images(files)
     tip_tap = page.expect_file_chooser do
       # hacky workaround because clicking the button that clicks the input[type="file"] doesnt actually work.
       page.locator("tip-tap-element #file-input").evaluate("node => node.click()")
     end
-    tip_tap.set_files(file)
+    tip_tap.set_files(files)
 
     trix = page.expect_file_chooser do
       page.locator(".trix-button--icon-attach").click
     end
-    trix.set_files(file)
+    trix.set_files(files)
   end
 
   test "Attachment Attributes" do

@@ -101,7 +101,7 @@ export class AttachmentEditor extends LitElement {
       }
 
       .file-progress[value="100"] {
-        display: none;
+        opacity: 0;
       }
     `;
   }
@@ -123,9 +123,10 @@ export class AttachmentEditor extends LitElement {
       >
         ${this.close()}
       </button>
-      <span class="file-metadata">
-        <span class="file-name">${this.fileName}</span
-        ><span class="file-size">${this.toFileSize()}</span>
+
+      <span class="file-metadata" ?hidden=${!(this.fileName && this.toFileSize())}>
+        <span class="file-name">${this.fileName}</span>
+        <span class="file-size">${this.toFileSize()}</span>
       </span>
       <progress
         class="file-progress"

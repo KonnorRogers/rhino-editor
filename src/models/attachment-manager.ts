@@ -96,20 +96,24 @@ export class AttachmentManager implements AttachmentAttributes {
     this.attributes.src = val;
   }
 
+  get sgid() {
+  	return this.attributes.sgid
+  }
+
   get file(): File {
     return this.attributes.file;
   }
 
-  get contentType(): string {
-    return this.file.type;
+  get contentType(): Maybe<string> {
+    return this.file?.type;
   }
 
-  get fileName(): string {
-    return this.file.name;
+  get fileName(): Maybe<string> {
+    return this.file?.name;
   }
 
-  get fileSize(): number {
-    return this.file.size;
+  get fileSize(): Maybe<number> {
+    return this.file?.size;
   }
 
   get content(): Maybe<string> {
@@ -120,7 +124,11 @@ export class AttachmentManager implements AttachmentAttributes {
   	this.attributes.content = val
   }
 
-  get caption(): string {
-    return `${this.fileName} · ${toMemorySize(this.fileSize)}`;
+  get caption(): Maybe<string> {
+  	if (this.fileName && this.fileSize) {
+    	return `${this.fileName} · ${toMemorySize(this.fileSize)}`;
+    }
+
+		return undefined
   }
 }
