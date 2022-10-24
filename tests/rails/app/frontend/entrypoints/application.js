@@ -2,7 +2,6 @@ import "@hotwired/turbo"
 import * as ActiveStorage from '@rails/activestorage'
 import "@rails/actiontext"
 import * as Trix from "trix"
-import "trix/dist/trix.css"
 import { TipTapElement } from "tip-tap-element"
 import { Application } from "@hotwired/stimulus"
 import EmbedController from "../controllers/embed_controller.js"

@@ -58,7 +58,7 @@ export default css`
 
 
   /* Attachments */
-  figure.has-focus {
+  figure:is(:focus-within, :focus, .has-focus) > img {
     outline: transparent;
     box-shadow: 0 0 0 2px var(--button-border-color);
   }
@@ -67,7 +67,7 @@ export default css`
     display: none;
   }
 
-  :host(:not([readonly])) .trix-content figure.has-focus attachment-editor {
+  :host(:not([readonly])) .trix-content figure:is(:focus-within, :focus, .has-focus) attachment-editor {
     display: flex;
   }
 

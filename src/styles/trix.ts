@@ -38,7 +38,7 @@ export default css`
     height: auto;
   }
   .trix-content .attachment {
-    display: grid;
+    display: block;
     position: relative;
     max-width: 100%;
   }
@@ -81,14 +81,33 @@ export default css`
     flex-wrap: wrap;
     position: relative;
   }
-  .trix-content .attachment-gallery .attachment {
-    flex: 1 0 33%;
-    padding: 0 0.5em;
-    max-width: 33%;
-  }
-  .trix-content .attachment-gallery.attachment-gallery--2 .attachment,
-  .trix-content .attachment-gallery.attachment-gallery--4 .attachment {
-    flex-basis: 50%;
-    max-width: 50%;
-  }
+.trix-content .attachment-gallery > :is(.attachment, action-text-attachment) {
+  flex: 1 0 33%;
+  padding: 0 0.5em;
+  max-width: 33%;
+  white-space: normal;
+}
+
+/* one item */
+.trix-content .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1) ~ :is(.attachment, action-text-attachment),
+.trix-content .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1) {
+	padding: 0;
+  flex-basis: 100%;
+  max-width: 100%;
+}
+
+/* two items */
+.attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2),
+.attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2) ~ :is(.attachment, action-text-attachment),
+.attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(4),
+.attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(4) ~ :is(.attachment, action-text-attachment) {
+  flex-basis: 50%;
+  max-width: 50%;
+}
+
+.trix-content .attachment-gallery.attachment-gallery--2 action-text-attachment > .attachment,
+.trix-content .attachment-gallery.attachment-gallery--4 action-text-attachment > .attachment,
+.trix-content .attachment-gallery action-text-attachment > .attachment {
+	max-width: 100%;
+}
 `;

@@ -1,7 +1,7 @@
 import { AttachmentAttributes, Maybe } from "src/types";
-import { TipTapElement } from "src/elements/trix";
 import { uuidv4 } from "src/models/uuidv4";
 import { toMemorySize } from "src/views/toMemorySize";
+import { EditorView } from "prosemirror-view";
 
 /**
  * An attachment manager that matches the interface of Trix's attachment manager.
@@ -9,10 +9,10 @@ import { toMemorySize } from "src/views/toMemorySize";
  */
 export class AttachmentManager implements AttachmentAttributes {
   attributes: AttachmentAttributes & { attachmentId: string; imageId: string };
-  editor: TipTapElement;
+  editorView: EditorView;
 
-  constructor(obj: AttachmentAttributes, editor: TipTapElement) {
-    this.editor = editor;
+  constructor(obj: AttachmentAttributes, editorView: EditorView) {
+    this.editorView = editorView;
     this.attributes = {
       attachmentId: uuidv4(),
       content: null,
@@ -63,13 +63,12 @@ export class AttachmentManager implements AttachmentAttributes {
    * of the TipTap node to guarantee we're targeting the right one.
    */
   setNodeMarkup(obj: Record<string, unknown>) {
-    const editor = this.editor.editor;
+    const view = this.editorView;
 
-    if (editor == null) return;
+    if (view == null) return;
 
-    editor.state.doc.descendants((descendantNode, position: number) => {
+    view.state.doc.descendants((descendantNode, position: number) => {
       if (descendantNode.attrs.attachmentId === this.attachmentId) {
-        const view = editor.view;
         view.dispatch(
           view.state.tr.setNodeMarkup(position, undefined, {
             ...descendantNode.attrs,

@@ -17,7 +17,8 @@
 
     <h3>Tip Tap Editor</h3>
 
-    <%= tag.input type: :hidden, **post.form_fields(:body), value: post.body.try(:to_trix_html) || post.body %>
+    <%# <%= tag.input type: :hidden, **post.form_fields(:body), value: post.body.try(:to_trix_html) || post.body %1> %>
+    <%= tag.input type: :hidden, **post.form_fields(:body), value: post.body %>
     <tip-tap-element
       input="<%= post.form_id(:body) %>"
       data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
@@ -28,7 +29,6 @@
       <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">Embed</button> %>
       <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">EmbedTwo</button> %>
       <button slot="before-undo" tabindex="-1" type="button" data-role="toolbar-item" data-controller="embed">Embed</button>
-
     </tip-tap-element>
 
     <%# <%= tag.input type: :hidden, id: "tip-tap-input", **post.form_fields(:body).except(:id, :name) %1> %>

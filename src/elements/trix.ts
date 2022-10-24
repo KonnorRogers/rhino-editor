@@ -37,6 +37,8 @@ import { TipTapAddAttachmentEvent } from "src/events/tip-tap-add-attachment-even
 
 import type { Maybe } from "src/types";
 
+const parser = new DOMParser()
+
 /**
  * This is the meat and potatoes. This is the <tip-tap-trix> element you'll
  *   see. This is what wraps everything into 1 coherent element.
@@ -83,6 +85,7 @@ export class TipTapElement extends LitElement {
     );
 
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
+    this.addEventListener("drop", this.handleDropFile)
   }
 
   handleKeyboardDialogToggle = (e: KeyboardEvent) => {
@@ -132,7 +135,6 @@ export class TipTapElement extends LitElement {
   setupEditor(element: Element): Editor {
   	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
   	if (this.inputElement?.value) {
-  		const parser = new DOMParser()
   		const doc = parser.parseFromString(this.inputElement.value, "text/html")
   		const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")]
   		const filtersWithoutChildren = figures.filter((figure) => figure.children.length <= 0)
@@ -190,9 +192,38 @@ export class TipTapElement extends LitElement {
       },
       onUpdate: (_args) => {
         // The content has changed.
-        if (this.inputElement != null && this.editor != null) {
-          this.inputElement.value = this.editor.getHTML();
-        }
+        // if (this.inputElement != null && this.editor != null) {
+        //   this.inputElement.value = this.editor.getHTML();
+
+  				// const doc = parser.parseFromString(this.inputElement.value, "text/html")
+  				// const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")]
+
+  				// figures.forEach((figure) => {
+  					// if (figure == null) return
+
+  					// const caption = figure.querySelector("figcaption")?.innerHTML || ""
+
+						// const attrs = figure.getAttribute("data-trix-attributes")
+						// if (!attrs) return
+
+						// const json = JSON.parse(attrs)
+
+						// const newAttrs = {
+							// ...json,
+							// caption
+						// }
+
+						// console.log(newAttrs)
+						// figure.setAttribute("data-trix-attributes", JSON.stringify(newAttrs))
+						// console.log(figure.getAttribute("data-trix-attributes"))
+  				// })
+
+					// const body = doc.querySelector("body")
+
+					// if (body) {
+  					// this.inputElement.value = body.innerHTML
+					// }
+        // }
         this.requestUpdate();
       },
       onSelectionUpdate: (_args) => {
@@ -275,40 +306,78 @@ export class TipTapElement extends LitElement {
         return;
       }
 
-      const files = input.files;
-      if (files == null || files.length === 0) return;
+      if (this.editor == null) return
 
-      const attachments: AttachmentManager[] = [];
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+      const attachments = this.transformFilesToAttachments(input.files)
 
-        if (file == null) return;
-        const src = URL.createObjectURL(file);
+			if (attachments == null) return
 
-        const attachment: AttachmentManager = new AttachmentManager(
-          {
-            src,
-            file,
-          },
-          this
-        );
+    	this.editor.chain().focus().setAttachment(attachments).run();
 
-        attachments.push(attachment);
-      }
+    	attachments.forEach((attachment) => {
+      	this.dispatchEvent(new TipTapAddAttachmentEvent(attachment));
+    	});
 
-      if (this.editor == null) {
-        resolve();
-        return;
-      }
-
-      this.editor.chain().focus().setAttachment(attachments).run();
-
-      attachments.forEach((attachment) => {
-        this.dispatchEvent(new TipTapAddAttachmentEvent(attachment));
-      });
-
+			// Need to reset the input otherwise you get this fun state where you can't
+			//   insert the same file multiple times.
+			input.value = ""
       resolve();
     });
+  }
+
+  handleDropFile = (event: DragEvent) => {
+    if (this.editor == null) return
+    if (event == null) return
+    if (!(event instanceof DragEvent)) return
+
+		const { dataTransfer } = event
+		if (dataTransfer == null) return
+
+    const hasFiles = dataTransfer.files.length > 0
+
+    if (!hasFiles) return
+
+    const { view } = this.editor
+
+    if (view == null) return
+
+
+    const attachments = this.transformFilesToAttachments.call(this, dataTransfer.files)
+
+		if (attachments == null) return
+
+    event.preventDefault()
+
+    this.editor.chain().focus().setAttachment(attachments).run();
+
+    attachments.forEach((attachment) => {
+      this.dispatchEvent(new TipTapAddAttachmentEvent(attachment));
+    });
+  }
+
+  transformFilesToAttachments (files?: FileList | null) {
+    if (this.editor == null) return
+    if (files == null || files.length === 0) return;
+
+    const attachments: AttachmentManager[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      if (file == null) return;
+      const src = URL.createObjectURL(file);
+
+      const attachment: AttachmentManager = new AttachmentManager(
+        {
+          src,
+          file,
+        },
+        this.editor.view
+      );
+
+      attachments.push(attachment);
+    }
+
+    return attachments
   }
 
   get fileInputEl(): Maybe<HTMLInputElement> {
