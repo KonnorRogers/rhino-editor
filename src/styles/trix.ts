@@ -88,7 +88,7 @@ export default css`
   white-space: normal;
 }
 
-/* one item */
+/* 1 / 3 / n item[s] */
 .trix-content .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1) ~ :is(.attachment, action-text-attachment),
 .trix-content .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1) {
 	padding: 0;
@@ -96,7 +96,7 @@ export default css`
   max-width: 100%;
 }
 
-/* two items */
+/* 2 items / 4 items */
 .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2),
 .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2) ~ :is(.attachment, action-text-attachment),
 .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(4),

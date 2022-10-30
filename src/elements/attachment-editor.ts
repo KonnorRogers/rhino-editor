@@ -106,11 +106,11 @@ export class AttachmentEditor extends LitElement {
         margin: 0;
         width: 90%;
         opacity: 0.9;
-        transition: opacity 200ms ease-in;
+        transition: opacity 200ms ease-out;
       }
 
       .file-progress[value="100"] {
-        opacity: 1;
+        opacity: 0;
       }
     `;
   }
@@ -124,7 +124,8 @@ export class AttachmentEditor extends LitElement {
   render() {
     return html`
       <button
-        class="close-button"
+        class="delete-button"
+        part="delete-button"
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
           this.parentElement?.remove();
@@ -133,12 +134,13 @@ export class AttachmentEditor extends LitElement {
         ${this.close()}
       </button>
 
-      <span class="file-metadata" ?hidden=${!(this.fileName || this.toFileSize())}>
-        <span class="file-name">${this.fileName}</span>
-        <span class="file-size">${this.toFileSize()}</span>
+      <span part="file-metadata" class="file-metadata" ?hidden=${!(this.fileName || this.toFileSize())}>
+        <span class="file-name" part="file-name">${this.fileName}</span>
+        <span class="file-size" part="file-size">${this.toFileSize()}</span>
       </span>
       <progress
         class="file-progress"
+        part="file-progress"
         value=${this.progress || 0}
         min="0"
         max="100"

@@ -33,13 +33,14 @@ export default class EmbedController extends Controller {
   }
 
   async embed() {
-    // let attachment = new Trix.Attachment(await this.fetch())
+  	// const attrs = await this.fetch()
+    // let attachment = new Trix.Attachment({ ...attrs })
     // const trix = document.querySelector("trix-editor")
     // trix.editor.insertAttachment(attachment)
     // trix.focus()
 
 		const attrs = await this.fetch()
-		let attachment = new AttachmentManager(attrs)
+		let attachment = new AttachmentManager({...attrs})
     const tiptap = document.querySelector("tip-tap-element")
     tiptap.editor.chain().focus().setAttachment(attachment).run();
 	}

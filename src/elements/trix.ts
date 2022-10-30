@@ -134,27 +134,7 @@ export class TipTapElement extends LitElement {
 
   setupEditor(element: Element): Editor {
   	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
-  	if (this.inputElement?.value) {
-  		const doc = parser.parseFromString(this.inputElement.value, "text/html")
-  		const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")]
-  		const filtersWithoutChildren = figures.filter((figure) => figure.children.length <= 0)
-
-  		filtersWithoutChildren.forEach((figure) => {
-  			const attrs = figure.getAttribute("data-trix-attributes")
-
-  			if (!attrs) return
-
-  			const { caption } = JSON.parse(attrs)
-  			figure.innerHTML = caption
-  		})
-
-			const body = doc.querySelector("body")
-
-			if (body) {
-  			this.inputElement.value = body.innerHTML
-			}
-  	}
-
+  	normalizeDOM(this.inputElement)
     return new Editor({
       element,
       injectCSS: false,
@@ -169,13 +149,7 @@ export class TipTapElement extends LitElement {
         Placeholder.configure({
           includeChildren: true,
           // Use a placeholder:
-          placeholder: ({ editor, pos }) => {
-            if (
-              editor.state.doc.resolve(pos).parent.type.name ===
-              "attachment-figure"
-            ) {
-              return "Add a caption...";
-            }
+          placeholder: () => {
             return "Write something...";
           },
         }),
@@ -192,38 +166,6 @@ export class TipTapElement extends LitElement {
       },
       onUpdate: (_args) => {
         // The content has changed.
-        // if (this.inputElement != null && this.editor != null) {
-        //   this.inputElement.value = this.editor.getHTML();
-
-  				// const doc = parser.parseFromString(this.inputElement.value, "text/html")
-  				// const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")]
-
-  				// figures.forEach((figure) => {
-  					// if (figure == null) return
-
-  					// const caption = figure.querySelector("figcaption")?.innerHTML || ""
-
-						// const attrs = figure.getAttribute("data-trix-attributes")
-						// if (!attrs) return
-
-						// const json = JSON.parse(attrs)
-
-						// const newAttrs = {
-							// ...json,
-							// caption
-						// }
-
-						// console.log(newAttrs)
-						// figure.setAttribute("data-trix-attributes", JSON.stringify(newAttrs))
-						// console.log(figure.getAttribute("data-trix-attributes"))
-  				// })
-
-					// const body = doc.querySelector("body")
-
-					// if (body) {
-  					// this.inputElement.value = body.innerHTML
-					// }
-        // }
         this.requestUpdate();
       },
       onSelectionUpdate: (_args) => {
@@ -988,6 +930,47 @@ export class TipTapElement extends LitElement {
       </div>
     `;
   }
+}
+
+/**
+ * Due to some inconsistencies in how Trix will render the inputElement based on if its
+ * the HTML representation, or transfromed with `#to_trix_html` this gives
+ * us a consistent DOM structure to parse.
+ */
+function normalizeDOM (inputElement: Maybe<HTMLInputElement>) {
+	if (inputElement == null || inputElement.value == null) return
+
+  const doc = parser.parseFromString(inputElement.value, "text/html")
+  const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")]
+  const filtersWithoutChildren = figures.filter((figure) => figure.querySelector("figcaption") == null)
+
+  doc.querySelectorAll("div > figure:first-child").forEach((el) => {
+  	el.parentElement?.classList.add("attachment-gallery")
+  })
+
+  filtersWithoutChildren.forEach((figure) => {
+  	const attrs = figure.getAttribute("data-trix-attributes")
+
+  	if (!attrs) return
+
+  	const { caption } = JSON.parse(attrs)
+  	if (caption) {
+  		figure.insertAdjacentHTML("beforeend", `<figcaption class="attachment__caption">${caption}</figcaption>`)
+  		return
+  	}
+  })
+
+  doc.querySelectorAll("figure .attachment__name").forEach((el) => {
+  	if (el.textContent?.includes(" · ") === false) return
+
+  	el.insertAdjacentText("beforeend", " · ")
+  })
+
+	const body = doc.querySelector("body")
+
+	if (body) {
+  	inputElement.value = body.innerHTML
+	}
 }
 
 export default TipTapElement;

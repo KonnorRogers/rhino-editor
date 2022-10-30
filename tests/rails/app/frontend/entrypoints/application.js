@@ -9,7 +9,6 @@ window.Stimulus = Application.start()
 window.Stimulus.debug = true
 Stimulus.register("embed", EmbedController)
 
-console.log(Trix)
 window.customElements.define("tip-tap-element", TipTapElement)
 
 ActiveStorage.start()

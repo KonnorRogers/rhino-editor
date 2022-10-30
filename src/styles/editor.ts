@@ -52,23 +52,26 @@ export default css`
     position: relative;
   }
 
-  figure * {
-  	white-space: normal;
+	/* If you use white-space: normal; in firefox you cant add white-space to the end of the figcaption */
+  figcaption {
+  	white-space: pre;
   }
 
 
   /* Attachments */
-  figure:is(:focus-within, :focus, .has-focus) > img {
+  :host(:not([readonly])) figure:is(:focus-within, :focus, .has-focus) img {
     outline: transparent;
     box-shadow: 0 0 0 2px var(--button-border-color);
   }
 
-  attachment-editor {
-    display: none;
+  attachment-editor::part(delete-button),
+  attachment-editor::part(file-metadata) {
+  	display: none;
   }
 
-  :host(:not([readonly])) .trix-content figure:is(:focus-within, :focus, .has-focus) attachment-editor {
-    display: flex;
+  :host(:not([readonly])) .trix-content figure:is(:focus-within, :focus, .has-focus) attachment-editor::part(delete-button),
+  :host(:not([readonly])) .trix-content figure:is(:focus-within, :focus, .has-focus) attachment-editor::part(file-metadata) {
+  	display: flex;
   }
 
   .ProseMirror .placeholder {
@@ -206,18 +209,22 @@ export default css`
     margin-left: 0.5em;
   }
 
+  figure[data-trix-attachment] figcaption {
+  	position: relative;
+  }
+
   .ProseMirror p.is-editor-empty:first-child::before,
-  figcaption p:first-child.is-empty::before {
+  figure[data-trix-attachment] figcaption.is-empty::before {
     color: #adb5bd;
     content: attr(data-placeholder);
   }
 
-  figcaption p:first-child.is-empty::before {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    cursor: text;
+  figure[data-trix-attachment] figcaption.is-empty::before {
+  	position: absolute;
+  	left: 50%;
+  	top: 50%;
+  	transform: translate(-50%, -50%);
+  	pointer-events: none;
   }
 
   .ProseMirror p.is-editor-empty:first-child::before {
