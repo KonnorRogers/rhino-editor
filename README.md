@@ -14,7 +14,7 @@ recommended for production use until a 1.0 is released.
 > This will not give you the proper package, I merely
 created a placeholder.
 
-```console
+```bash
 npm install tip-tap-element
 
 # OR
@@ -45,10 +45,10 @@ into ActionText.
 
 ### Installation
 
-Run the following commands in the console to setup
+Run the following commands in the bash to setup
 dependencies:
 
-```console
+```bash
 git clone https://github.com/paramagicdev/tip-tap-element
 cd tip-tap-element
 pnpm install
@@ -61,7 +61,7 @@ bundle install
 
 The easiest way to run the server is using [Overmind](https://github.com/DarthSim/overmind)
 
-```console
+```bash
 overmind start -f Procfile.dev
 ```
 
@@ -73,7 +73,7 @@ Then navigate to `localhost:5100`
 To run the server without overmind do the following in
 seperate terminals:
 
-```console
+```bash
 bin/vite dev --clobber
 bin/rails s
 docker compose up --build
@@ -86,7 +86,7 @@ Then navigate to `localhost:5100`
 Make sure to have the docker server up and running, the
 test suite will fail without it.
 
-```console
+```bash
 docker compose up --build
 bundle exec rails test:all
 ```
@@ -96,7 +96,7 @@ bundle exec rails test:all
 To listen for changes, keep your rails server running and
 open a new terminal with the following:
 
-```console
+```bash
 pnpm run start
 ```
 
