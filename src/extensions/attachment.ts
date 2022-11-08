@@ -451,7 +451,7 @@ const Attachment = Node.create({
         if (url || src) {
           img.setAttribute("src", url || src);
         }
-        if (width == null || height == null) {
+        if (!width || !height) {
           img.src = url || src;
           img.onload = () => {
             const { naturalHeight: height, naturalWidth: width } = img;
