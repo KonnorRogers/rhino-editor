@@ -378,11 +378,11 @@ const Attachment = Node.create({
       const figure = document.createElement("figure");
       const figcaption = document.createElement("figcaption");
 
-      // if (!caption) {
-      // 	figcaption.classList.add("is-empty")
-      // } else {
-      // 	figcaption.classList.remove("is-empty")
-      // }
+      if (!caption) {
+      	figcaption.classList.add("is-empty")
+      } else {
+      	figcaption.classList.remove("is-empty")
+      }
 
       figcaption.setAttribute("data-placeholder", "Add a caption...")
 
