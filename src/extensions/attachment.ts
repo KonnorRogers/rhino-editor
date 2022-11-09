@@ -5,6 +5,7 @@ import { mergeAttributes, Node } from "@tiptap/core";
 import { Extension } from "@tiptap/core";
 import { selectionToInsertionEnd } from "@tiptap/core/src/helpers/selectionToInsertionEnd";
 import { DOMSerializer, Node as ProseMirrorNode } from "prosemirror-model"
+import { Maybe } from "src/types";
 
 
 export interface AttachmentOptions {
@@ -178,6 +179,31 @@ const AttachmentGallery = Node.create({
 /** https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4 */
 const isPreviewable = /^image(\/(gif|png|jpe?g)|$)/
 
+function canPreview (previewable: Boolean, contentType: Maybe<string>): Boolean {
+	return (previewable || contentType?.match(isPreviewable) != null)
+}
+
+function toExtension (fileName: Maybe<string>): string {
+	if (!fileName) return ""
+
+  return "attachment--" + fileName
+    .match(/\.(\w+)$/)?.[1]
+    .toLowerCase()
+}
+
+function toType (content: Maybe<string>, previewable: Boolean): string {
+	if (content) {
+		return "attachment--content"
+	}
+
+	if (previewable) {
+		return "attachment--preview"
+	}
+
+	return "attachment--file"
+}
+
+
 const Attachment = Node.create({
   name: "attachment-figure",
   group: "block attachmentFigure",
@@ -190,7 +216,7 @@ const Attachment = Node.create({
   addOptions() {
     return {
       HTMLAttributes: {
-        class: "attachment attachment--preview",
+        class: "attachment",
         "data-trix-attributes": JSON.stringify({ presentation: "gallery" }),
       },
     };
@@ -221,6 +247,7 @@ const Attachment = Node.create({
       fileSize,
       caption,
       url,
+      previewable,
 
       // Image
       src,
@@ -244,13 +271,13 @@ const Attachment = Node.create({
     const figure = [
       "figure",
       mergeAttributes(this.options.HTMLAttributes, {
+      	class: this.options.HTMLAttributes.class + " " + toType(content, canPreview(previewable, contentType)) + " " + toExtension(fileName),
         "data-trix-content-type": contentType,
         "data-trix-attachment": JSON.stringify(attachmentAttrs),
         "data-trix-attributes": JSON.stringify({
           caption,
           presentation: "gallery",
         }),
-        draggable: true,
       }),
     ] as const;
 
@@ -266,7 +293,6 @@ const Attachment = Node.create({
         {},
         {
           src: url || src,
-          draggable: false,
           contenteditable: false,
           width,
           height,
@@ -388,7 +414,7 @@ const Attachment = Node.create({
 
       figcaption.classList.add("attachment__caption");
 
-      figure.setAttribute("class", this.options.HTMLAttributes.class);
+      figure.setAttribute("class", this.options.HTMLAttributes.class + " " + toType(content, canPreview(previewable, contentType)) + " " + toExtension(fileName))
       figure.setAttribute("data-trix-content-type", node.attrs.contentType);
 
       // Convenient way to tell us its "final"
@@ -445,9 +471,7 @@ const Attachment = Node.create({
       img.setAttribute("height", height);
 
 
-			const canPreview = (previewable || contentType.match(isPreviewable) != null)
-
-      if (canPreview) {
+      if (canPreview(previewable, contentType)) {
         if (url || src) {
           img.setAttribute("src", url || src);
         }
@@ -470,7 +494,7 @@ const Attachment = Node.create({
         }
       }
 
-      if (content && !canPreview) {
+      if (content && !canPreview(previewable, contentType)) {
         figure.prepend(attachmentEditor);
 				figure.insertAdjacentHTML("beforeend", content)
       } else {
