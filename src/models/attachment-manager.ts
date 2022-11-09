@@ -1,7 +1,7 @@
-import { AttachmentAttributes } from "src/types";
-import { TipTapElement } from "src/elements/trix";
+import { AttachmentAttributes, Maybe } from "src/types";
 import { uuidv4 } from "src/models/uuidv4";
 import { toMemorySize } from "src/views/toMemorySize";
+import { EditorView } from "prosemirror-view";
 
 /**
  * An attachment manager that matches the interface of Trix's attachment manager.
@@ -9,12 +9,13 @@ import { toMemorySize } from "src/views/toMemorySize";
  */
 export class AttachmentManager implements AttachmentAttributes {
   attributes: AttachmentAttributes & { attachmentId: string; imageId: string };
-  editor: TipTapElement;
+  editorView: EditorView;
 
-  constructor(obj: AttachmentAttributes, editor: TipTapElement) {
-    this.editor = editor;
+  constructor(obj: AttachmentAttributes, editorView: EditorView) {
+    this.editorView = editorView;
     this.attributes = {
       attachmentId: uuidv4(),
+      content: null,
       imageId: uuidv4(),
       sgid: null,
       url: null,
@@ -23,27 +24,38 @@ export class AttachmentManager implements AttachmentAttributes {
   }
 
   setUploadProgress(progress: number): void {
-    this.setNodeMarkup({ progress });
+  	if (this.content == null) {
+    	this.setNodeMarkup({ progress });
+    }
   }
 
-  setAttributes(obj: Record<"sgid" | "url", string>) {
+  setAttributes(obj: Omit<AttachmentAttributes, "src" | "file">) {
     this.attributes.sgid = obj.sgid;
-    this.attributes.url = obj.url;
 
-    /** This preloads the image so we don't show a big flash. */
-    const image = new Image();
+		if (obj.content == null && obj.url != null) {
+    	/** This preloads the image so we don't show a big flash. */
+    	const image = new Image();
 
-    image.src = obj.url;
+    	this.attributes.url = obj.url;
 
-    image.onload = () => {
-      this.setNodeMarkup({
-        sgid: this.attributes.sgid,
-        url: this.attributes.url,
-        src: this.attributes.url,
-        href: this.attributes.url + "?content-disposition=attachment",
-      });
-      image.remove();
-    };
+    	image.src = obj.url;
+
+    	image.onload = () => {
+      	this.setNodeMarkup({
+        	sgid: this.attributes.sgid,
+        	url: this.attributes.url,
+        	src: this.attributes.url,
+        	href: this.attributes.url + "?content-disposition=attachment",
+      	});
+      	image.remove();
+    	};
+    	return
+    }
+
+    this.setNodeMarkup({
+      sgid: this.attributes.sgid,
+      content: this.attributes.content
+    })
   }
 
   /**
@@ -51,13 +63,12 @@ export class AttachmentManager implements AttachmentAttributes {
    * of the TipTap node to guarantee we're targeting the right one.
    */
   setNodeMarkup(obj: Record<string, unknown>) {
-    const editor = this.editor.editor;
+    const view = this.editorView;
 
-    if (editor == null) return;
+    if (view == null) return;
 
-    editor.state.doc.descendants((descendantNode, position: number) => {
+    view.state.doc.descendants((descendantNode, position: number) => {
       if (descendantNode.attrs.attachmentId === this.attachmentId) {
-        const view = editor.view;
         view.dispatch(
           view.state.tr.setNodeMarkup(position, undefined, {
             ...descendantNode.attrs,
@@ -84,23 +95,39 @@ export class AttachmentManager implements AttachmentAttributes {
     this.attributes.src = val;
   }
 
+  get sgid() {
+  	return this.attributes.sgid
+  }
+
   get file(): File {
     return this.attributes.file;
   }
 
-  get contentType(): string {
-    return this.file.type;
+  get contentType(): Maybe<string> {
+    return this.file?.type;
   }
 
-  get fileName(): string {
-    return this.file.name;
+  get fileName(): Maybe<string> {
+    return this.file?.name;
   }
 
-  get fileSize(): number {
-    return this.file.size;
+  get fileSize(): Maybe<number> {
+    return this.file?.size;
   }
 
-  get caption(): string {
-    return `${this.fileName} ${toMemorySize(this.fileSize)}`;
+  get content(): Maybe<string> {
+  	return this.attributes.content
+  }
+
+  set content (val: Maybe<string>) {
+  	this.attributes.content = val
+  }
+
+  get caption(): Maybe<string> {
+  	if (this.fileName && this.fileSize) {
+    	return `${this.fileName} · ${toMemorySize(this.fileSize)}`;
+    }
+
+		return undefined
   }
 }

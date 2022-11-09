@@ -11,9 +11,7 @@ export const tipTapCoreStyles = css`
     font-variant-ligatures: none;
     font-feature-settings: "liga" 0;
   }
-  .ProseMirror [contenteditable="false"] {
-    white-space: normal;
-  }
+
   .ProseMirror [contenteditable="false"] [contenteditable="true"] {
     white-space: pre-wrap;
   }

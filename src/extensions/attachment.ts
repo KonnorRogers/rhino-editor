@@ -1,8 +1,12 @@
-import { Node, Extension, mergeAttributes } from "@tiptap/core";
-import { default as TipTapImage } from "@tiptap/extension-image";
 import { AttachmentManager } from "src/models/attachment-manager";
 import type { AttachmentEditor } from "src/elements/attachment-editor";
-import { Plugin } from "prosemirror-state";
+import { EditorState, Plugin, Transaction } from "prosemirror-state";
+import { mergeAttributes, Node } from "@tiptap/core";
+import { Extension } from "@tiptap/core";
+import { selectionToInsertionEnd } from "@tiptap/core/src/helpers/selectionToInsertionEnd";
+import { DOMSerializer, Node as ProseMirrorNode } from "prosemirror-model"
+import { Maybe } from "src/types";
+
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
@@ -21,26 +25,51 @@ declare module "@tiptap/core" {
   }
 }
 
-export const inputRegex = /(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/;
+function findAttribute(element: HTMLElement, attribute: string) {
+  const attr = element
+    .closest("action-text-attachment")
+    ?.getAttribute(attribute);
+  if (attr) return attr;
 
-const AttachmentImage = TipTapImage.extend({
+  const attrs = element
+    .closest("figure[data-trix-attachment]")
+    ?.getAttribute("data-trix-attachment");
+  if (!attrs) return null;
+
+  return JSON.parse(attrs)[attribute];
+}
+
+export interface ImageOptions {
+  HTMLAttributes: Record<string, any>;
+}
+const AttachmentImage = Node.create({
+  name: "attachment-image",
   selectable: false,
   draggable: false,
-});
-
-const Attachment = Node.create({
-  name: "attachment-figure",
-  group: "block attachmentFigure",
-  content: "paragraph*",
-  draggable: true,
-  selectable: true,
-  isolating: true,
+  group: "block",
 
   addOptions() {
     return {
-      HTMLAttributes: {
-        className: "attachment attachment--preview attachment--png",
-        "data-trix-attributes": JSON.stringify({ presentation: "gallery" }),
+      HTMLAttributes: {},
+    };
+  },
+
+  addAttributes() {
+    return {
+      src: {
+        default: "",
+        parseHTML: (element) => findAttribute(element, "url"),
+      },
+      height: {
+        default: "",
+        parseHTML: (element) => findAttribute(element, "height"),
+      },
+      width: {
+        default: "",
+        parseHTML: (element) => findAttribute(element, "width"),
+      },
+      attachmentId: {
+        default: null,
       },
     };
   },
@@ -48,122 +77,361 @@ const Attachment = Node.create({
   parseHTML() {
     return [
       {
-        tag: "action-text-attachment",
-        contentElement: "figcaption",
-      },
-      {
-        tag: "figure",
-        contentElement: "figcaption",
+        tag: "img[src]",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
+    return [
+      "img",
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+    ];
+  },
+});
+
+function handleGallery (node: ProseMirrorNode, tr: Transaction, newState: EditorState, pos: number) {
+	let modified = false
+
+  if (node.type.name != "attachment-gallery") return modified;
+
+  if (node.nodeSize === 2) {
+    tr.replaceWith(pos, pos + node.nodeSize, newState.schema.node("paragraph", null, []));
+    modified = true;
+  }
+
+  return modified
+}
+
+function handleCaptions (node: ProseMirrorNode, tr: Transaction, newState: EditorState, pos: number) {
+	let modified = false
+  if (node.type.name !== "attachment-figure") return modified;
+
+	// @see https://discuss.prosemirror.net/t/saving-content-containing-dom-generated-by-nodeview/2594/5
+	let scratch = document.createElement("div")
+	scratch.appendChild(DOMSerializer.fromSchema(newState.schema).serializeNode(node))
+
+	const figcaption = scratch.querySelector("figcaption")
+
+	if (figcaption == null) return modified
+
+	const caption = figcaption.innerHTML
+	if (node.attrs.caption !== caption) {
+		tr.setNodeMarkup(pos, undefined, {
+    	...node.attrs,
+    	caption,
+  	})
+  	modified = true
+  }
+
+	return modified
+}
+
+const AttachmentGallery = Node.create({
+  name: "attachment-gallery",
+  group: "block",
+  draggable: false,
+  selectable: false,
+  content: "block*",
+
+  parseHTML() {
+    return [
+      {
+        tag: "div.attachment-gallery",
+      },
+    ];
+  },
+
+  renderHTML() {
+    return ["div", mergeAttributes({}, { class: "attachment-gallery" }), 0];
+  },
+
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        appendTransaction: (_transactions, _oldState, newState) => {
+          const tr = newState.tr;
+          let modified = false;
+
+          // @TODO: Iterate through transactions instead of descendants (?).
+          newState.doc.descendants((node, pos, _parent) => {
+            const mutations = [
+            	handleGallery(node, tr, newState, pos),
+            	handleCaptions(node, tr, newState, pos)
+            ]
+
+						const shouldModify = mutations.some((bool) => bool === true)
+
+          	if (shouldModify) {
+          		modified = true
+          	}
+          });
+
+          if (modified) return tr;
+
+          return undefined
+        }
+      }),
+    ];
+  },
+});
+
+/** https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4 */
+const isPreviewable = /^image(\/(gif|png|jpe?g)|$)/
+
+function canPreview (previewable: Boolean, contentType: Maybe<string>): Boolean {
+	return (previewable || contentType?.match(isPreviewable) != null)
+}
+
+function toExtension (fileName: Maybe<string>): string {
+	if (!fileName) return ""
+
+  return "attachment--" + fileName
+    .match(/\.(\w+)$/)?.[1]
+    .toLowerCase()
+}
+
+function toType (content: Maybe<string>, previewable: Boolean): string {
+	if (content) {
+		return "attachment--content"
+	}
+
+	if (previewable) {
+		return "attachment--preview"
+	}
+
+	return "attachment--file"
+}
+
+
+const Attachment = Node.create({
+  name: "attachment-figure",
+  group: "block attachmentFigure",
+  content: "inline*",
+  selectable: true,
+  draggable: true,
+  isolating: true,
+  defining: true,
+
+  addOptions() {
+    return {
+      HTMLAttributes: {
+        class: "attachment",
+        "data-trix-attributes": JSON.stringify({ presentation: "gallery" }),
+      },
+    };
+  },
+
+  parseHTML() {
+    return [
+      // Generated by #to_trix_html
+      {
+        tag: "figure[data-trix-attachment]",
+        // contentElement: "figcaption"
+      },
+      // Generated by the standard output.
+      {
+        tag: "figure.attachment",
+        contentElement: "figcaption"
+      },
+    ];
+  },
+
+  renderHTML({ node }) {
     const {
       // Figure
+      content,
       contentType,
       sgid,
       fileName,
+      fileSize,
+      caption,
+      url,
+      previewable,
 
       // Image
-      imageId,
       src,
       width,
       height,
-    } = HTMLAttributes;
+    } = node.attrs;
 
-    return [
+    const attachmentAttrs: Record<keyof typeof node.attrs, string> = {
+    	caption,
+      contentType,
+      content,
+      filename: fileName,
+      filesize: fileSize,
+      height,
+      width,
+      sgid,
+      url,
+      src
+    };
+
+    const figure = [
       "figure",
       mergeAttributes(this.options.HTMLAttributes, {
+      	class: this.options.HTMLAttributes.class + " " + toType(content, canPreview(previewable, contentType)) + " " + toExtension(fileName),
         "data-trix-content-type": contentType,
-        "data-trix-attachment": JSON.stringify({
-          contentType,
-          filename: fileName,
-          height,
-          width,
-          sgid,
-        }),
+        "data-trix-attachment": JSON.stringify(attachmentAttrs),
         "data-trix-attributes": JSON.stringify({
+          caption,
           presentation: "gallery",
         }),
       }),
-      [
-        "img",
-        mergeAttributes(
-          {},
-          {
-            src,
-            "data-image-id": imageId,
-            draggable: false,
-            contenteditable: false,
-            width,
-            height,
-          }
-        ),
-      ],
-      ["figcaption", 0],
+    ] as const;
+
+		const figcaption = [
+			"figcaption",
+			mergeAttributes({}, {class: "attachment__caption attachment__caption--edited"}),
+      0,
+		] as const
+
+		const image = [
+      "img",
+      mergeAttributes(
+        {},
+        {
+          src: url || src,
+          contenteditable: false,
+          width,
+          height,
+        }
+      ),
+    ]
+
+		if (!content) {
+			return [
+				...figure,
+				image,
+				figcaption
+			]
+		}
+
+    return [
+    	...figure,
+    	figcaption
     ];
   },
 
   addAttributes() {
     return {
       attachmentId: { default: null },
-      progress: { default: null },
-      imageId: { default: null },
-      sgid: { default: null },
+      caption: {
+        default: "",
+        parseHTML: (element) => {
+        	return element.querySelector("figcaption")?.innerHTML || findAttribute(element, "caption")
+        }
+      },
+      progress: {
+        default: 100,
+      },
+      sgid: {
+        default: "",
+        parseHTML: (element) => findAttribute(element, "sgid"),
+      },
       src: {
-        default: null,
-        parseHTML: (element) =>
-          element.querySelector("img")?.getAttribute("src"),
+        default: "",
+        parseHTML: (element) => findAttribute(element, "src"),
       },
-      height: { default: null },
-      width: { default: null },
+      height: {
+        default: "",
+        parseHTML: (element) => findAttribute(element, "height"),
+      },
+      width: {
+        default: "",
+        parseHTML: (element) => {
+        	return findAttribute(element, "width")
+        }
+      },
       contentType: {
-        default: null,
-        parseHTML: (element) => element.getAttribute("content-type"),
+        default: "",
+        parseHTML: (element) => {
+        	// This is a special case where it exists as:
+        	// figure["data-trix-attachment"]["contentType"] and
+        	// action-text-attachment["content-type"]
+          return findAttribute(element, "content-type") || JSON.parse(element.getAttribute("data-trix-attachment") || "").contentType || "application/octet-stream"
+        }
       },
-      fileName: { default: null },
-      fileSize: { default: null },
-      content: { default: null },
-      url: { default: null },
-      href: { default: null },
+      fileName: {
+        default: "",
+        parseHTML: (element) => findAttribute(element, "filename"),
+      },
+      fileSize: {
+        default: "",
+        parseHTML: (element) => findAttribute(element, "filesize"),
+      },
+      content: {
+        default: "",
+        parseHTML: (element) => {
+        	return findAttribute(element, "content") || element.closest("action-text-attachment")?.innerHTML || ""
+        }
+      },
+      url: {
+        default: "",
+        parseHTML: (element) => {
+        	return findAttribute(element, "url")
+        }
+      },
+      previewable: {
+      	default: false,
+				parseHTML: (element) => {
+					const { previewable } = JSON.parse(element.getAttribute("data-trix-attachment") || "{}")
+
+					return previewable
+				}
+      }
     };
   },
 
   addNodeView() {
     return ({ node, getPos, editor }) => {
       const {
+        content,
         contentType,
         sgid,
         fileName,
         progress,
         fileSize,
         url,
-        imageId,
         src,
         width,
         height,
-        href,
+        caption,
+        previewable
       } = node.attrs;
 
       const figure = document.createElement("figure");
+      const figcaption = document.createElement("figcaption");
 
-      figure.setAttribute("class", this.options.HTMLAttributes.className);
+      if (!caption) {
+      	figcaption.classList.add("is-empty")
+      } else {
+      	figcaption.classList.remove("is-empty")
+      }
+
+      figcaption.setAttribute("data-placeholder", "Add a caption...")
+
+      figcaption.classList.add("attachment__caption");
+
+      figure.setAttribute("class", this.options.HTMLAttributes.class + " " + toType(content, canPreview(previewable, contentType)) + " " + toExtension(fileName))
       figure.setAttribute("data-trix-content-type", node.attrs.contentType);
 
-      // // Convenient way to tell us its "final"
-      if (sgid != null) figure.setAttribute("sgid", sgid);
+      // Convenient way to tell us its "final"
+      if (sgid) figure.setAttribute("sgid", sgid);
 
       figure.setAttribute(
         "data-trix-attachment",
         JSON.stringify({
           contentType,
+          content,
           filename: fileName,
           filesize: fileSize,
           height,
           width,
           sgid,
           url,
+          caption,
         })
       );
 
@@ -171,6 +439,7 @@ const Attachment = Node.create({
         "data-trix-attributes",
         JSON.stringify({
           presentation: "gallery",
+          caption,
         })
       );
 
@@ -179,59 +448,55 @@ const Attachment = Node.create({
       ) as AttachmentEditor;
       attachmentEditor.setAttribute("file-name", fileName);
       attachmentEditor.setAttribute("file-size", fileSize);
+      attachmentEditor.setAttribute("contenteditable", "false");
 
-      if (sgid == null) {
-        attachmentEditor.progress = progress;
-      } else {
-        attachmentEditor.progress = 100;
-      }
-
-      const img = document.createElement("img");
-      const image = new Image();
-      image.src = src;
-
-      if (width == null || height == null) {
-        image.onload = () => {
-          const { naturalHeight: height, naturalWidth: width } = image;
-
-          if (typeof getPos === "function") {
-            const view = editor.view;
-            view.dispatch(
-              view.state.tr.setNodeMarkup(getPos(), undefined, {
-                ...node.attrs,
-                height: height,
-                width: width,
-              })
-            );
-          }
-        };
-      }
-
-      img.setAttribute("data-image-id", imageId);
-      img.setAttribute("src", src);
-      img.setAttribute("width", width);
-      img.setAttribute("height", height);
-      img.contentEditable = "false";
-      img.setAttribute("draggable", "false");
-      const figcaption = document.createElement("figcaption");
+      attachmentEditor.setAttribute("progress", progress);
 
       figure.addEventListener("click", (e: Event) => {
-        if (e.composedPath().includes(figcaption)) return;
+        if (e.composedPath().includes(figcaption)) {
+          return;
+        }
 
         if (typeof getPos === "function") {
-          e.preventDefault();
-          const pos = editor.state.doc.resolve(getPos()).pos;
-          editor.chain().setTextSelection(pos).selectTextblockEnd().run();
+          editor
+            .chain()
+            .setTextSelection(getPos() + 1)
+            .run();
         }
       });
 
-      if (href) {
-        const anchor = document.createElement("a");
-        anchor.href = href;
-        anchor.tabIndex = -1;
-        anchor.contentEditable = "false";
-        anchor.append(img);
-        figure.append(attachmentEditor, anchor, figcaption);
+      const img = document.createElement("img");
+      img.setAttribute("contenteditable", "false");
+      img.setAttribute("width", width);
+      img.setAttribute("height", height);
+
+
+      if (canPreview(previewable, contentType)) {
+        if (url || src) {
+          img.setAttribute("src", url || src);
+        }
+        if (!width || !height) {
+          img.src = url || src;
+          img.onload = () => {
+            const { naturalHeight: height, naturalWidth: width } = img;
+
+            if (typeof getPos === "function") {
+              const view = editor.view;
+              view.dispatch(
+                view.state.tr.setNodeMarkup(getPos(), undefined, {
+                  ...node.attrs,
+                  height: height,
+                  width: width,
+                })
+              );
+            }
+          };
+        }
+      }
+
+      if (content && !canPreview(previewable, contentType)) {
+        figure.prepend(attachmentEditor);
+				figure.insertAdjacentHTML("beforeend", content)
       } else {
         figure.append(attachmentEditor, img, figcaption);
       }
@@ -239,7 +504,7 @@ const Attachment = Node.create({
       return {
         dom: figure,
         contentDOM: figcaption,
-      };
+      }
     };
   },
 
@@ -247,73 +512,81 @@ const Attachment = Node.create({
     return {
       setAttachment:
         (options: AttachmentManager | AttachmentManager[]) =>
-        ({ commands }) => {
+        ({ state, tr, dispatch }) => {
+          const currentSelection = state.doc.resolve(state.selection.anchor);
+          const before = state.selection.anchor - 2 < 0 ? 0 : state.selection.anchor - 2
+          const nodeBefore = state.doc.resolve(before)
+
+					// If we're in a paragraph directly following a gallery.
+					const isInGalleryCurrent = currentSelection.node(1).type.name === "attachment-gallery"
+					const isInGalleryAfter = nodeBefore.node(1)?.type.name === "attachment-gallery"
+
+					const isInGallery = isInGalleryCurrent || isInGalleryAfter
+
+					const { schema } = state
           const attachments: AttachmentManager[] = Array.isArray(options)
             ? options
             : ([] as AttachmentManager[]).concat(options);
-          const content: Array<Record<string, unknown>> = [];
 
-          attachments.forEach((attachment) => {
-            let captionContent: { type: "text"; text: string } | undefined;
-
-            if (attachment.caption) {
-              captionContent = {
-                type: "text",
-                text: attachment.caption,
-              };
-            }
-
-            content.push({
-              type: "attachment-figure",
-              attrs: attachment,
-              content: [
-                {
-                  type: "paragraph",
-                  content: [captionContent],
-                },
-              ],
-            });
-            content.push({
-              type: "paragraph",
-            });
-            content.push({
-              type: "paragraph",
-            });
-            content.push({
-              type: "paragraph",
-            });
+          const attachmentNodes = attachments.map((attachment) => {
+          		return schema.nodes["attachment-figure"].create(
+          			attachment,
+          			attachment.caption ? [schema.text(attachment.caption)] : []
+            	);
           });
 
-          return commands.insertContent(content);
+					if (isInGallery) {
+						const end = currentSelection.end()
+						const backtrack = isInGalleryCurrent ? 0 : 2
+						tr.insert(end - backtrack, attachmentNodes);
+					} else {
+          	const gallery = schema.nodes["attachment-gallery"].create({}, attachmentNodes);
+          	const currSelection = state.selection
+						tr.replaceWith(currSelection.from - 1, currSelection.to, [
+							schema.nodes.paragraph.create(),
+							gallery,
+							schema.nodes.paragraph.create(),
+						]);
+						selectionToInsertionEnd(tr, tr.steps.length - 1, -1)
+					}
+
+
+					if (dispatch) dispatch(tr)
+					return true
         },
     };
   },
 });
 
-const Figcaption = Node.create({
-  name: "figcaption",
+export const AttachmentFigcaption = Node.create({
+  name: "attachment-figcaption",
+  group: "block figcaption",
+  content: "inline*",
+  selectable: false,
+  draggable: false,
+  defining: true,
+  isolating: true,
 
   addOptions() {
     return {
-      HTMLAttributes: {},
+      HTMLAttributes: { class: "attachment__caption attachment--edited" },
     };
   },
-
-  content: "paragraph*",
-  isolating: true,
-  selectable: false,
-  draggable: false,
 
   parseHTML() {
     return [
       {
-        tag: "figcaption",
+        tag: `figcaption`,
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["figcaption", mergeAttributes(HTMLAttributes), 0];
+    return [
+      "figcaption",
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+      0,
+    ];
   },
 });
 
@@ -345,9 +618,16 @@ export function FirefoxCaretFixPlugin() {
 
 export default Extension.create({
   addProseMirrorPlugins() {
-    return [FirefoxCaretFixPlugin()];
+    return [
+    	FirefoxCaretFixPlugin()
+    ];
   },
   addExtensions() {
-    return [Attachment, AttachmentImage, Figcaption];
+    return [
+      AttachmentGallery,
+      Attachment,
+      AttachmentImage,
+      AttachmentFigcaption,
+    ];
   },
 });

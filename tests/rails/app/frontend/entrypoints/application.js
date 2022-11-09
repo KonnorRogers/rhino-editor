@@ -1,17 +1,21 @@
 import "@hotwired/turbo"
 import * as ActiveStorage from '@rails/activestorage'
 import "@rails/actiontext"
-import "trix"
-import "trix/dist/trix.css"
+import * as Trix from "trix"
 import { TipTapElement } from "tip-tap-element"
+import { Application } from "@hotwired/stimulus"
+import EmbedController from "../controllers/embed_controller.js"
+window.Stimulus = Application.start()
+window.Stimulus.debug = true
+Stimulus.register("embed", EmbedController)
 
 window.customElements.define("tip-tap-element", TipTapElement)
-console.log('Vite ⚡️ Rails')
 
 ActiveStorage.start()
-addEventListener("trix-attachment-add", (e) => {
-  console.log(e)
-})
+// addEventListener("trix-attachment-add", (e) => {
+//   console.log(e)
+// })
+
 
 // Import all channels.
 // const channels = import.meta.globEager('./**/*_channel.js')

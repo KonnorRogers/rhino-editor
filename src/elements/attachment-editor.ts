@@ -30,7 +30,13 @@ export class AttachmentEditor extends LitElement {
       ${normalize}
 
       :host {
-        display: flex;
+        position: absolute;
+        width: 100%;
+        pointer-events: none;
+        top: 0;
+				left: 0;
+				height: 100%;
+				z-index: 0;
       }
 
       button {
@@ -44,6 +50,7 @@ export class AttachmentEditor extends LitElement {
         top: 0;
         left: 50%;
         transform: translate(0, -50%);
+        pointer-events: all;
       }
 
       button svg {
@@ -95,13 +102,15 @@ export class AttachmentEditor extends LitElement {
         height: 20px;
         top: calc(50% - 10px);
         left: 5%;
+        padding: 0;
+        margin: 0;
         width: 90%;
         opacity: 0.9;
-        transition: opacity 200ms ease-in;
+        transition: opacity 200ms ease-out;
       }
 
       .file-progress[value="100"] {
-        display: none;
+        opacity: 0;
       }
     `;
   }
@@ -115,7 +124,8 @@ export class AttachmentEditor extends LitElement {
   render() {
     return html`
       <button
-        class="close-button"
+        class="delete-button"
+        part="delete-button"
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
           this.parentElement?.remove();
@@ -123,12 +133,14 @@ export class AttachmentEditor extends LitElement {
       >
         ${this.close()}
       </button>
-      <span class="file-metadata">
-        <span class="file-name">${this.fileName}</span
-        ><span class="file-size">${this.toFileSize()}</span>
+
+      <span part="file-metadata" class="file-metadata" ?hidden=${!(this.fileName || this.toFileSize())}>
+        <span class="file-name" part="file-name">${this.fileName}</span>
+        <span class="file-size" part="file-size">${this.toFileSize()}</span>
       </span>
       <progress
         class="file-progress"
+        part="file-progress"
         value=${this.progress || 0}
         min="0"
         max="100"
