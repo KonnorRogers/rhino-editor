@@ -1,7 +1,7 @@
 import { AttachmentAttributes, Maybe } from "src/types";
 import { uuidv4 } from "src/models/uuidv4";
-import { toMemorySize } from "src/views/toMemorySize";
 import { EditorView } from "prosemirror-view";
+import { toDefaultCaption } from "src/views/toDefaultCaption";
 
 /**
  * An attachment manager that matches the interface of Trix's attachment manager.
@@ -32,7 +32,7 @@ export class AttachmentManager implements AttachmentAttributes {
   setAttributes(obj: Omit<AttachmentAttributes, "src" | "file">) {
     this.attributes.sgid = obj.sgid;
 
-		if (obj.content == null && obj.url != null) {
+		if (obj.content == null && obj.url) {
     	/** This preloads the image so we don't show a big flash. */
     	const image = new Image();
 
@@ -123,11 +123,7 @@ export class AttachmentManager implements AttachmentAttributes {
   	this.attributes.content = val
   }
 
-  get caption(): Maybe<string> {
-  	if (this.fileName && this.fileSize) {
-    	return `${this.fileName} · ${toMemorySize(this.fileSize)}`;
-    }
-
-		return undefined
+  get caption(): string {
+  	return toDefaultCaption({ fileName: this.fileName, fileSize: this.fileSize })
   }
 }
