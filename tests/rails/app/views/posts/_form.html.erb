@@ -16,55 +16,53 @@
     <%= form.text_field :title %>
 
 
+    <section>
+      <h3>Tip Tap Editor</h3>
+
+      <% if params[:raw] %>
+        <%= tag.input type: :hidden, **post.form_fields(:tip_tap_body), value: post.tip_tap_body %>
+      <% else %>
+        <%= tag.input type: :hidden, **post.form_fields(:tip_tap_body), value: post.tip_tap_body.try(:to_trix_html) || post.tip_tap_body %>
+      <% end %>
+
+      <tip-tap-element
+        input="<%= post.form_id(:tip_tap_body) %>"
+        id="main-tip-tap-editor"
+        data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
+        data-direct-upload-url="<%= rails_direct_uploads_url %>"
+      >
+        <%# <button type="button" slot="bold-button" data-role="toolbar-item">Bold</button> %>
+        <%# <button type="button" slot="italic-button" data-role="toolbar-item">Italics</button> %>
+        <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">Embed</button> %>
+        <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">EmbedTwo</button> %>
+        <button slot="before-undo-button" tabindex="-1" type="button" data-role="toolbar-item" data-controller="embed">Embed</button>
+      </tip-tap-element>
+    </section>
+
+    <section style="display: grid; gap: 2rem; margin: 0 auto; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);">
       <div>
-        <h3>Tip Tap Editor</h3>
-
-        <% if params[:raw] %>
-          <%= tag.input type: :hidden, **post.form_fields(:tip_tap_body), value: post.tip_tap_body %>
-        <% else %>
-          <%= tag.input type: :hidden, **post.form_fields(:tip_tap_body), value: post.tip_tap_body.try(:to_trix_html) || post.tip_tap_body %>
-        <% end %>
-
+        <h3>Trix Editor</h3>
+        <button type="button" data-controller="embed">Embed</button>
+        <%= form.rich_text_area :trix_body %>
+      </div>
+      <div>
+        <h3>Trix -> TipTap Mirror</h3>
+        <%= tag.input type: :hidden,
+          **post.form_fields(:trix_body),
+          id: "trix-tip-tap-mirror",
+          name: "trix-tip-tap-mirror",
+          value: params[:raw] ? post.trix_body : (post.trix_body.try(:to_trix_html) || post.trix_body)
+        %>
         <tip-tap-element
-          input="<%= post.form_id(:tip_tap_body) %>"
+          style="margin-top: 2rem;"
+          input="trix-tip-tap-mirror"
           data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
           data-direct-upload-url="<%= rails_direct_uploads_url %>"
-        >
-          <%# <button type="button" slot="bold-button" data-role="toolbar-item">Bold</button> %>
-          <%# <button type="button" slot="italic-button" data-role="toolbar-item">Italics</button> %>
-          <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">Embed</button> %>
-          <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">EmbedTwo</button> %>
-          <button slot="before-undo-button" tabindex="-1" type="button" data-role="toolbar-item" data-controller="embed">Embed</button>
-        </tip-tap-element>
+          data-controller="tip-tap-mirror"
+        ></tip-tap-element>
       </div>
-
-      <section style="display: grid; gap: 2rem; margin: 0 auto; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);">
-        <div>
-          <h3>Trix Editor</h3>
-          <button type="button" data-controller="embed">Embed</button>
-          <%= form.rich_text_area :trix_body %>
-        </div>
-        <div>
-          <h3>Trix -> TipTap Mirror</h3>
-          <% if params[:raw] %>
-            <%= tag.input type: :hidden, **post.form_fields(:tip_tap_body), value: post.tip_tap_body %>
-          <% else %>
-            <%= tag.input type: :hidden, **post.form_fields(:trix_body), id: "trix-tip-tap-mirror", name: "trix-tip-tap-mirror", value: post.trix_body.try(:to_trix_html) || post.trix_body %>
-          <% end %>
-          <tip-tap-element
-            style="margin-top: 5rem;"
-            readonly
-            input="trix-tip-tap-mirror"
-            data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
-            data-direct-upload-url="<%= rails_direct_uploads_url %>"
-          ></tip-tap-element>
-        </div>
-      </section>
-
-      <%= post.trix_body.try(:to_trix_html) || post.trix_body %>
-
-    </div>
     </section>
+  </div>
 
   <div>
     <%= form.submit %>

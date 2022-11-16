@@ -15,15 +15,15 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def tip_tap_element
-    page.locator("tip-tap-element")
+    page.locator("#main-tip-tap-editor")
   end
 
   def tip_tap_figure
-    page.locator("tip-tap-element figure.attachment.attachment--preview.attachment--png[sgid]")
+    page.locator("#main-tip-tap-editor figure.attachment.attachment--preview.attachment--png[sgid]")
   end
 
   def tip_tap_image
-    page.locator("tip-tap-element img[width='2880']")
+    page.locator("#main-tip-tap-editor img[width='2880']")
   end
 
   def trix_image
@@ -40,10 +40,10 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
   def tip_tap_attach_images(files)
     # Click something else. The file chooser doesnt like back-to-back clicks.
-    page.locator("tip-tap-element slot[name='bold-button'] .toolbar__button").click
+    page.locator("#main-tip-tap-editor slot[name='bold-button'] .toolbar__button").click
 
     tip_tap = page.expect_file_chooser do
-      page.locator("tip-tap-element .toolbar__button--attach-files").click
+      page.locator("#main-tip-tap-editor .toolbar__button--attach-files").click
     end
 
     tip_tap.set_files(files)
@@ -108,7 +108,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     assert_match(blob_regex, tip_tap_attachment_attrs["url"])
     refute_nil tip_tap_attachment_attrs["sgid"]
 
-    image = page.locator("tip-tap-element img[src*='#{blob_path}']")
+    image = page.locator("#main-tip-tap-editor img[src*='#{blob_path}']")
     assert_match(blob_regex, image["src"])
 
     assert_equal tip_tap_image["width"], trix_image["width"]
