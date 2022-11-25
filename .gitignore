@@ -153,3 +153,5 @@ tests/rails/node_modules
 
 yarn.lock
 package-lock.json
+docs/output
+docs/.bridgetown-cache
