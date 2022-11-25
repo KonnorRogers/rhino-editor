@@ -51,10 +51,7 @@ dependencies:
 ```bash
 git clone https://github.com/paramagicdev/tip-tap-element
 cd tip-tap-element
-pnpm install
-cd test/rails
-pnpm install && npx playwright install --with-deps
-bundle install
+pnpm run setup
 ```
 
 ### Running the server
