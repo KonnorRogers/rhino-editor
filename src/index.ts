@@ -3,10 +3,10 @@ import { AttachmentEditor } from "./elements/attachment-editor";
 import { AttachmentManager } from "./models/attachment-manager";
 
 window.customElements.define(
-  "attachment-editor",
+  "ash-attachment-editor",
   class extends AttachmentEditor {}
 );
-window.customElements.define("tip-tap-trix", class extends TipTapElement {});
+window.customElements.define("ash-editor", class extends TipTapElement {});
 
 export {
 	AttachmentEditor,

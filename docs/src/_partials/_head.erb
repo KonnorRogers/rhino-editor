@@ -1,0 +1,23 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<% resource_title = strip_html(strip_newlines(title)) || site.metadata.title %>
+<title><%= resource_title %></title>
+
+<meta name="description" content="<%= metadata.description %>" />
+
+<link rel="stylesheet" data-turbo-track="reload" href="<%= webpack_path :css %>" />
+<script data-turbo-track="reload" src="<%= webpack_path :js %>" defer></script>
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ec4899">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Social stuff -->
+<%# <meta property="og:image" content="https://mrujs.com/images/mugshot.jpeg"> %>
+<%# <meta property="twitter:card" content="summary_large_image"> %>
+<%# <meta property="twitter:title" content="<%= resource_title %1>"> %>

@@ -1,7 +1,7 @@
 {
-  "name": "tip-tap-element",
+  "name": "ash-editor",
   "version": "1.0.0",
-  "description": "A predefined TipTap Rich Text Editor",
+  "description": "A custom element wrapped rich text editor",
   "type": "module",
   "source": "src/index.ts",
   "main": "dist/bundle/index.common.js",
@@ -30,6 +30,7 @@
   ],
   "keywords": [
     "tiptap",
+    "prosemirror",
     "richtext",
     "editor",
     "wysiwg",

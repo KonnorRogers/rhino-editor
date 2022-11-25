@@ -444,7 +444,7 @@ const Attachment = Node.create({
       );
 
       const attachmentEditor = document.createElement(
-        "attachment-editor"
+        "ash-attachment-editor"
       ) as AttachmentEditor;
       attachmentEditor.setAttribute("file-name", fileName);
       attachmentEditor.setAttribute("file-size", fileSize);
