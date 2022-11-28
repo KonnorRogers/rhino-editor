@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import Trix from "trix"
-import { AttachmentManager } from "tip-tap-element"
+import { AttachmentManager } from "ash-editor"
 
 export default class EmbedController extends Controller {
 	connect () {
@@ -41,7 +41,7 @@ export default class EmbedController extends Controller {
 
 		const attrs = await this.fetch()
 		let attachment = new AttachmentManager({...attrs})
-    const tiptap = document.querySelector("tip-tap-element")
+    const tiptap = document.querySelector("ash-editor")
     tiptap.editor.chain().focus().setAttachment(attachment).run();
 	}
 }
