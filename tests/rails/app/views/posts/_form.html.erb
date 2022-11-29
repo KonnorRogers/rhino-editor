@@ -17,9 +17,18 @@
 
     <h3>Tip Tap Editor</h3>
 
-    <%= tag.input type: :hidden, **post.form_fields(:body), value: post.body.try(:to_trix_html) || post.body %>
-    <%# <%= tag.input type: :hidden, **post.form_fields(:body), value: post.body %1> %>
-    <%= post.body.try(:to_trix_html) || post.body %>
+
+  <%= form.hidden_field :body, value: @post.body.try(:to_trix_html) || @post.body %>
+  <ash-editor
+    input="post_body"
+    data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
+    data-direct-upload-url="<%= rails_direct_uploads_url %>"
+  ></ash-editor>
+    <%# tag.input type: :hidden, **post.form_fields(:body), value: post.body.try(:to_trix_html) || post.body %>
+    <%# tag.input type: :hidden, **post.form_fields(:body), value: post.body %>
+    <%# post.body.try(:to_trix_html) || post.body %>
+
+    <!--
     <ash-editor
       input="<%= post.form_id(:body) %>"
       data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
@@ -31,6 +40,7 @@
       <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">EmbedTwo</button> %>
       <button slot="before-undo-button" tabindex="-1" type="button" data-role="toolbar-item" data-controller="embed">Embed</button>
     </ash-editor>
+    -->
 
     <%# <h3>Trix Editor</h3> %>
     <%# <button type="button" data-controller="embed">Embed</button> %>
