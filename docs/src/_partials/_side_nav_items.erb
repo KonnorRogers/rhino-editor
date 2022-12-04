@@ -1,0 +1,10 @@
+<nav aria-label="Side" class="<%= locals[:classes] %>">
+  <ul class="side-nav__menu">
+    <% ordered_categories_hash_map.each do |hash| %>
+      <ul class="side-nav__category-menu">
+        <a class="side-nav__category-header" href="<%= "/#{hash[:url]}" %>"><%= hash[:text] %></a>
+        <%= render(DocLinks.new(category: hash[:category], list_classes: "side-nav__item", link_classes: "side-nav__link")) %>
+      </ul>
+    <% end %>
+  </ul>
+</nav>

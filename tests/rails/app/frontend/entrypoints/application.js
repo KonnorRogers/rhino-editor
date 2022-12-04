@@ -2,7 +2,7 @@ import "@hotwired/turbo"
 import * as ActiveStorage from '@rails/activestorage'
 import "@rails/actiontext"
 import * as Trix from "trix"
-import { TipTapElement } from "tip-tap-element"
+import "ash-editor"
 import { Application } from "@hotwired/stimulus"
 import EmbedController from "../controllers/embed_controller.js"
 import TipTapMirrorController from "../controllers/tip_tap_mirror_controller.js"
@@ -10,8 +10,6 @@ window.Stimulus = Application.start()
 window.Stimulus.debug = true
 Stimulus.register("embed", EmbedController)
 Stimulus.register("tip-tap-mirror", TipTapMirrorController)
-
-window.customElements.define("tip-tap-element", TipTapElement)
 
 ActiveStorage.start()
 // addEventListener("trix-attachment-add", (e) => {
@@ -24,7 +22,7 @@ ActiveStorage.start()
 
 ;(async function () {
   const Prism = (await import("https://cdn.skypack.dev/prismjs")).default
-  await window.customElements.whenDefined("tip-tap-element");
+  await window.customElements.whenDefined("ash-editor");
 
   const tipTapInput = document.querySelector("#y")
   const tipTapHtmlMirror = document.querySelector("#tip-tap-mirrored-html")

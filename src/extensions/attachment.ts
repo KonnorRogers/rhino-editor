@@ -1,13 +1,10 @@
 import { AttachmentManager } from "src/models/attachment-manager";
 import type { AttachmentEditor } from "src/elements/attachment-editor";
-import { EditorState, Plugin, Transaction } from "prosemirror-state";
 import { mergeAttributes, Node } from "@tiptap/core";
-import { Extension } from "@tiptap/core";
 import { selectionToInsertionEnd } from "@tiptap/core/src/helpers/selectionToInsertionEnd";
-import { DOMSerializer, Node as ProseMirrorNode } from "prosemirror-model"
 import { Maybe } from "src/types";
+import { findAttribute } from "./find-attribute";
 import { toDefaultCaption } from "src/views/toDefaultCaption";
-
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
@@ -25,163 +22,6 @@ declare module "@tiptap/core" {
     };
   }
 }
-
-function findAttribute(element: HTMLElement, attribute: string) {
-  const attr = element
-    .closest("action-text-attachment")
-    ?.getAttribute(attribute);
-  if (attr) return attr;
-
-  const attrs = element
-    .closest("figure[data-trix-attachment]")
-    ?.getAttribute("data-trix-attachment");
-  if (!attrs) return null;
-
-  return JSON.parse(attrs)[attribute];
-}
-
-export interface ImageOptions {
-  HTMLAttributes: Record<string, any>;
-}
-const AttachmentImage = Node.create({
-  name: "attachment-image",
-  selectable: false,
-  draggable: false,
-  group: "block",
-
-  addOptions() {
-    return {
-      HTMLAttributes: {},
-    };
-  },
-
-  addAttributes() {
-    return {
-      src: {
-        default: "",
-        parseHTML: (element) => findAttribute(element, "url"),
-      },
-      height: {
-        default: "",
-        parseHTML: (element) => findAttribute(element, "height"),
-      },
-      width: {
-        default: "",
-        parseHTML: (element) => findAttribute(element, "width"),
-      },
-      attachmentId: {
-        default: null,
-      },
-    };
-  },
-
-  parseHTML() {
-    return [
-      {
-        tag: "img[src]",
-      },
-    ];
-  },
-
-  renderHTML({ HTMLAttributes }) {
-    return [
-      "img",
-      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-    ];
-  },
-});
-
-function handleGallery (node: ProseMirrorNode, tr: Transaction, newState: EditorState, pos: number) {
-	let modified = false
-
-  if (node.type.name != "attachment-gallery") return modified;
-
-  if (node.nodeSize === 2) {
-    tr.replaceWith(pos, pos + node.nodeSize, newState.schema.node("paragraph", null, []));
-    modified = true;
-  }
-
-  return modified
-}
-
-function handleCaptions (node: ProseMirrorNode, tr: Transaction, newState: EditorState, pos: number) {
-	let modified = false
-  if (node.type.name !== "attachment-figure") return modified;
-
-	// @see https://discuss.prosemirror.net/t/saving-content-containing-dom-generated-by-nodeview/2594/5
-	let scratch = document.createElement("div")
-	scratch.appendChild(DOMSerializer.fromSchema(newState.schema).serializeNode(node))
-
-	const figcaption = scratch.querySelector("figcaption")
-
-	if (figcaption == null) return modified
-
-	const caption = figcaption.innerHTML
-	if (node.attrs.caption !== caption) {
-		tr.setNodeMarkup(pos, undefined, {
-    	...node.attrs,
-    	caption,
-  	})
-  	modified = true
-  }
-
-	return modified
-}
-
-const AttachmentGallery = Node.create({
-  name: "attachment-gallery",
-  group: "block",
-  draggable: false,
-  selectable: false,
-
-	// Not sure which combination of these 3 causes enter keys to not attempt to create new galleries.
-  isolating: true,
-  defining: true,
-  topNode: true,
-
-  content: "attachmentFigure*",
-
-  parseHTML() {
-    return [
-      {
-        tag: "div.attachment-gallery",
-      },
-    ];
-  },
-
-  renderHTML() {
-    return ["div", mergeAttributes({}, { class: "attachment-gallery" }), 0];
-  },
-
-  addProseMirrorPlugins() {
-    return [
-      new Plugin({
-        appendTransaction: (_transactions, _oldState, newState) => {
-          const tr = newState.tr;
-          let modified = false;
-
-          // @TODO: Iterate through transactions instead of descendants (?).
-          newState.doc.descendants((node, pos, _parent) => {
-            const mutations = [
-            	handleGallery(node, tr, newState, pos),
-            	handleCaptions(node, tr, newState, pos)
-            ]
-
-						const shouldModify = mutations.some((bool) => bool === true)
-
-          	if (shouldModify) {
-          		modified = true
-          	}
-          });
-
-          if (modified) return tr;
-
-          return undefined
-        }
-      }),
-    ];
-  },
-});
 
 /** https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4 */
 const isPreviewable = /^image(\/(gif|png|jpe?g)|$)/
@@ -211,7 +51,7 @@ function toType (content: Maybe<string>, previewable: Boolean): string {
 }
 
 
-const Attachment = Node.create({
+export const Attachment = Node.create({
   name: "attachment-figure",
   group: "block attachmentFigure",
   content: "inline*",
@@ -453,7 +293,7 @@ const Attachment = Node.create({
       );
 
       const attachmentEditor = document.createElement(
-        "attachment-editor"
+        "ash-attachment-editor"
       ) as AttachmentEditor;
       attachmentEditor.setAttribute("file-name", fileName);
       attachmentEditor.setAttribute("file-size", fileSize);
@@ -566,79 +406,5 @@ const Attachment = Node.create({
 					return true
         },
     };
-  },
-});
-
-export const AttachmentFigcaption = Node.create({
-  name: "attachment-figcaption",
-  group: "block figcaption",
-  content: "inline*",
-  selectable: false,
-  draggable: false,
-  defining: true,
-  isolating: true,
-
-  addOptions() {
-    return {
-      HTMLAttributes: { class: "attachment__caption attachment--edited" },
-    };
-  },
-
-  parseHTML() {
-    return [
-      {
-        tag: `figcaption`,
-      },
-    ];
-  },
-
-  renderHTML({ HTMLAttributes }) {
-    return [
-      "figcaption",
-      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-      0,
-    ];
-  },
-});
-
-/**
- * Plugin to fix firefox cursor disappearing inside contenteditable.
- * https://github.com/ProseMirror/prosemirror/issues/1113#issue-780389225
- */
-export function FirefoxCaretFixPlugin() {
-  let focusing = false;
-  return new Plugin({
-    props: {
-      handleDOMEvents: {
-        focus: (view) => {
-          if (focusing) {
-            focusing = false;
-          } else {
-            focusing = true;
-            setTimeout(() => {
-              view.dom.blur();
-              view.dom.focus();
-            });
-          }
-          return false;
-        },
-      },
-    },
-  });
-}
-
-export default Extension.create({
-  addProseMirrorPlugins() {
-    return [
-    	FirefoxCaretFixPlugin()
-    ];
-  },
-  addExtensions() {
-    return [
-      AttachmentGallery,
-      Attachment,
-      AttachmentImage,
-      AttachmentFigcaption,
-    ];
   },
 });

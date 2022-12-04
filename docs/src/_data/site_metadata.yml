@@ -1,0 +1,16 @@
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.metadata.title }}, {{ site.metadata.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.metadata.myvariable }}.
+
+title: Ash Editor
+logo: "Ash Editor"
+slogan: An ActionText compatible rich text editor.
+email: konnor5456@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  Ash editor is a durable and flexible editor designed to provide an easy to use out of the box
+  experience while providing hooks and plugins to allow for easy extension.
+github_url: https://github.com/konnorrogers/ash-editor
+default_branch: main
+doc_location: docs/src

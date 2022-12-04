@@ -1,13 +1,14 @@
 {
-  "name": "tip-tap-element",
+  "name": "ash-editor",
   "version": "1.0.0",
-  "description": "A predefined TipTap Rich Text Editor",
+  "description": "A custom element wrapped rich text editor",
   "type": "module",
   "source": "src/index.ts",
   "main": "dist/bundle/index.common.js",
   "module": "dist/bundle/index.module.js",
   "scripts": {
-    "setup": "pnpm install && cd tests/rails && pnpm install && bundle install",
+    "setup": "pnpm install && cd tests/rails && pnpm install && npx playwright install --with-deps && bundle install && cd - && cd docs && bundle install && pnpm install",
+    "setup:docs": "pnpm install && pnpm run build && cd docs && bundle install && pnpm install",
     "build": "rm -rf dist && pnpm build:types && node esbuild.config.js",
     "build:types": "tsc",
     "lint": "prettier --check ./src",
@@ -30,6 +31,7 @@
   ],
   "keywords": [
     "tiptap",
+    "prosemirror",
     "richtext",
     "editor",
     "wysiwg",

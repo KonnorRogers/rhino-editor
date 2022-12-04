@@ -6,8 +6,8 @@ specifiers:
   '@rails/actioncable': ^7.0.0
   '@rails/actiontext': ^7.0.0
   '@rails/activestorage': ^7.0.0
+  ash-editor: link:../../
   playwright: '1.27'
-  tip-tap-element: link:../../
   trix: ^1.3
   vite: ^3.1.3
   vite-plugin-ruby: ^3.1.0
@@ -18,7 +18,7 @@ dependencies:
   '@rails/actioncable': 7.0.0
   '@rails/actiontext': 7.0.4_trix@1.3.1
   '@rails/activestorage': 7.0.4
-  tip-tap-element: link:../..
+  ash-editor: link:../..
   trix: 1.3.1
 
 devDependencies:

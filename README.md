@@ -15,15 +15,15 @@ recommended for production use until a 1.0 is released.
 created a placeholder.
 
 ```bash
-npm install tip-tap-element
+npm install ash-editor
 
 # OR
 
-pnpm add tip-tap-element
+pnpm add ash-editor
 
 # OR
 
-yarn add tip-tap-element
+yarn add ash-editor
 ```
 
 ## Local Development
@@ -49,12 +49,9 @@ Run the following commands in the bash to setup
 dependencies:
 
 ```bash
-git clone https://github.com/paramagicdev/tip-tap-element
-cd tip-tap-element
-pnpm install
-cd test/rails
-pnpm install && npx playwright install --with-deps
-bundle install
+git clone https://github.com/konnorrogers/ash-editor
+cd ash-editor
+pnpm run setup
 ```
 
 ### Running the server

@@ -1,11 +1,11 @@
-import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 import { Editor } from "@tiptap/core";
+import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
-import Attachment from "src/extensions/attachment";
+import { AshStarterKit } from "src/extensions/ash-starter-kit";
 import { isiOS, translations } from "src/models/translations";
 import { stringMap } from "src/views/stringMap";
 import CustomStrike from "src/extensions/strike"
@@ -13,7 +13,6 @@ import CustomStrike from "src/extensions/strike"
 import {
   CSSResult,
   html,
-  LitElement,
   PropertyDeclarations,
   PropertyValueMap,
   TemplateResult,
@@ -32,18 +31,17 @@ import * as icons from "src/views/icons";
 import { normalize } from "src/styles/normalize";
 import trixStyles from "src/styles/trix";
 import editorStyles from "src/styles/editor";
+import { BaseElement } from './base-element'
 
 import { TipTapAddAttachmentEvent } from "src/events/tip-tap-add-attachment-event";
 
 import type { Maybe } from "src/types";
 
-const parser = new DOMParser()
-
 /**
  * This is the meat and potatoes. This is the <tip-tap-trix> element you'll
  *   see. This is what wraps everything into 1 coherent element.
  */
-export class TipTapElement extends LitElement {
+export class TrixEditor extends BaseElement {
   readonly: boolean = false;
   linkInputRef: Ref<HTMLInputElement> = createRef();
   linkDialogExpanded: boolean = false;
@@ -51,6 +49,8 @@ export class TipTapElement extends LitElement {
   editor: Maybe<Editor>;
   editorElement: Maybe<Element>;
   translations = translations;
+
+  static baseName = "ash-editor"
 
   static get properties(): PropertyDeclarations {
     return {
@@ -132,11 +132,8 @@ export class TipTapElement extends LitElement {
     this.editorElement?.setAttribute("role", "textbox");
   }
 
-  setupEditor(element: Element): Editor {
-  	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
-  	normalizeDOM(this.inputElement)
-    return new Editor({
-      element,
+  get defaultOptions () {
+    return {
       injectCSS: false,
       extensions: [
         StarterKit.configure({
@@ -144,7 +141,7 @@ export class TipTapElement extends LitElement {
         }),
         CustomStrike,
         Link,
-        Attachment,
+        AshStarterKit,
         Focus,
         Placeholder.configure({
           includeChildren: true,
@@ -154,8 +151,17 @@ export class TipTapElement extends LitElement {
           },
         }),
       ],
-      content: this.inputElement?.value,
       autofocus: true,
+    }
+  }
+
+  setupEditor(element: Element): Editor {
+  	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
+  	this.normalizeDOM(this.inputElement)
+    return new Editor({
+      ...this.defaultOptions,
+      element,
+      content: this.inputElement?.value,
       editable: !this.readonly,
       // onBeforeCreate: ({ editor }) => {
       //   // Before the view is created.
@@ -166,6 +172,7 @@ export class TipTapElement extends LitElement {
       },
       onUpdate: (_args) => {
         // The content has changed.
+        this.updateInputElementValue()
         this.requestUpdate();
       },
       onSelectionUpdate: (_args) => {
@@ -183,15 +190,19 @@ export class TipTapElement extends LitElement {
       },
       onBlur: (_args) => {
         // The editor isn’t focused anymore.
-        if (this.inputElement != null && this.editor != null) {
-          this.inputElement.value = this.editor.getHTML();
-        }
+        this.updateInputElementValue()
         this.requestUpdate();
       },
       // onDestroy: () => {
       //   // The editor is being destroyed.
       // },
     });
+  }
+
+  updateInputElementValue () {
+    if (this.inputElement != null && this.editor != null && !this.readonly) {
+      this.inputElement.value = this.editor.getHTML();
+    }
   }
 
   get inputElement(): Maybe<HTMLInputElement> {
@@ -930,47 +941,47 @@ export class TipTapElement extends LitElement {
       </div>
     `;
   }
+
+  /**
+  * Due to some inconsistencies in how Trix will render the inputElement based on if its
+  * the HTML representation, or transfromed with `#to_trix_html` this gives
+  * us a consistent DOM structure to parse for rich text comments.
+  */
+  normalizeDOM (inputElement: Maybe<HTMLInputElement>, parser = new DOMParser()) {
+	  if (inputElement == null || inputElement.value == null) return
+
+    const doc = parser.parseFromString(inputElement.value, "text/html")
+    const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")]
+    const filtersWithoutChildren = figures.filter((figure) => figure.querySelector("figcaption") == null)
+
+    doc.querySelectorAll("div > figure:first-child").forEach((el) => {
+  	  el.parentElement?.classList.add("attachment-gallery")
+    })
+
+    filtersWithoutChildren.forEach((figure) => {
+  	  const attrs = figure.getAttribute("data-trix-attributes")
+
+  	  if (!attrs) return
+
+  	  const { caption } = JSON.parse(attrs)
+  	  if (caption) {
+  		  figure.insertAdjacentHTML("beforeend", `<figcaption class="attachment__caption">${caption}</figcaption>`)
+  		  return
+  	  }
+    })
+
+    doc.querySelectorAll("figure .attachment__name").forEach((el) => {
+  	  if (el.textContent?.includes(" · ") === false) return
+
+  	  el.insertAdjacentText("beforeend", " · ")
+    })
+
+	  const body = doc.querySelector("body")
+
+	  if (body) {
+  	  inputElement.value = body.innerHTML
+	  }
+  }
 }
 
-/**
- * Due to some inconsistencies in how Trix will render the inputElement based on if its
- * the HTML representation, or transfromed with `#to_trix_html` this gives
- * us a consistent DOM structure to parse.
- */
-function normalizeDOM (inputElement: Maybe<HTMLInputElement>) {
-	if (inputElement == null || inputElement.value == null) return
-
-  const doc = parser.parseFromString(inputElement.value, "text/html")
-  const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")]
-  const filtersWithoutChildren = figures.filter((figure) => figure.querySelector("figcaption") == null)
-
-  doc.querySelectorAll("div > figure:first-child").forEach((el) => {
-  	el.parentElement?.classList.add("attachment-gallery")
-  })
-
-  filtersWithoutChildren.forEach((figure) => {
-  	const attrs = figure.getAttribute("data-trix-attributes")
-
-  	if (!attrs) return
-
-  	const { caption } = JSON.parse(attrs)
-  	if (caption) {
-  		figure.insertAdjacentHTML("beforeend", `<figcaption class="attachment__caption">${caption}</figcaption>`)
-  		return
-  	}
-  })
-
-  doc.querySelectorAll("figure .attachment__name").forEach((el) => {
-  	if (el.textContent?.includes(" · ") === false) return
-
-  	el.insertAdjacentText("beforeend", " · ")
-  })
-
-	const body = doc.querySelector("body")
-
-	if (body) {
-  	inputElement.value = body.innerHTML
-	}
-}
-
-export default TipTapElement;
+export default TrixEditor;

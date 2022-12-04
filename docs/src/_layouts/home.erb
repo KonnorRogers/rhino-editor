@@ -1,0 +1,40 @@
+---
+layout: default
+---
+
+<main style="margin: 0 auto; --main-width: 100ch;">
+  <div class="hero--mobile">
+    <%= render "logo" %>
+  </div>
+
+  <h1 class="slogan">
+    <%= site.metadata.slogan %>
+  </h1>
+
+  <div class="call-to-action__items" role="list">
+    <% resource.data.call_to_action_items.each do |item| %>
+      <a class="call-to-action call-to-action--<%= item[:type] %>" href="<%= item[:href] %>" role="listitem">
+        <%= item[:text].to_s.html_safe %>
+      </a>
+    <% end %>
+  </div>
+
+  <ash-editor></ash-editor>
+
+  <!--
+  <h2 class="reason__header" style="margin-top: 2rem;"><%= resource.data.reason_header %></h2>
+
+  <section class="reason__grid">
+    <% resource.data.reasons.each do |reason| %>
+      <article>
+        <h3><%= reason[:header] %></h3>
+        <p>
+          <%= reason[:text] %>
+        </p>
+      </article>
+    <% end %>
+  </section>
+  -->
+</main>
+
+

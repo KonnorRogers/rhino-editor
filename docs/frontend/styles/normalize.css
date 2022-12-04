@@ -1,0 +1,221 @@
+:root {
+  --color-primary: var(--sl-color-primary-600);
+  --text-color-primary: var(--sl-color-primary-700);
+  --link-color: var(--sl-color-primary-700);
+  --link-color-focus: var(--sl-color-primary-500);
+  --divider-color: var(--sl-color-neutral-300);
+  --code-color: hsl(209, 27%, 26%);
+  --code-background-color: hsl(210, 29%, 97%);
+}
+
+html {
+  box-sizing: border-box;
+  display: grid;
+  min-height: 100vh;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--sl-font-sans);
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 100%;
+  margin: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+body {
+  font-family: var(--sl-font-sans);
+  min-height: 100%;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+button {
+  appearance: none;
+  border: none;
+  background: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+h1,h2,h3,h4 {
+  scroll-margin-top: calc(80px + 2em);
+}
+
+h1 > a,
+h2 > a,
+h3 > a,
+h4 > a {
+  border-color: transparent;
+}
+
+h2,h3,h4 {
+  border-bottom: 1px solid var(--sl-color-gray-700);
+}
+
+h1 {
+  padding: 0.25em var(--sl-spacing-large);
+}
+
+h2 {
+  padding: 0.25em var(--sl-spacing-medium);
+}
+
+h3,h4 {
+  padding: 0.25em var(--sl-spacing-x-small);
+  margin: var(--sl-spacing-xx-small) var(--sl-spacing-small);
+}
+
+h1 {
+  font-size: var(--sl-font-size-x-large);
+}
+
+h2 {
+  font-size: var(--sl-font-size-x-large);
+  margin-top: var(--sl-spacing-xx-large);
+  margin-bottom: var(--sl-spacing-small);
+}
+
+h3 {
+  font-size: var(--sl-font-size-large);
+  margin-top: var(--sl-spacing-x-large);
+}
+
+h4 {
+  margin-top: var(--sl-spacing-large);
+  font-size: var(--sl-font-size-large);
+}
+
+p {
+  margin: var(--sl-spacing-small) var(--sl-spacing-large);
+}
+
+p, li {
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+ul {
+  padding-left: var(--sl-spacing-x-small);
+  line-height: 1.8;
+  list-style: disc inside;
+}
+
+ul ul {
+  list-style: circle inside;
+}
+
+ul ul ul {
+  list-style: square inside;
+}
+
+ul ul ul ul {
+  list-style: disc inside;
+}
+
+ul > li {
+  padding-left: var(--sl-spacing-medium);
+}
+
+/* code blocks */
+/* inline code highlights */
+a,
+a > code,
+a > * > code,
+a > * > code[class*="language-"],
+a {
+  outline: transparent;
+  /* Unable to distinguish identifier, this makes links obvious */
+  text-decoration: none;
+  color: var(--link-color);
+  border-radius: 0;
+  border-bottom: 1px solid var(--link-color);
+  display: inline;
+  padding: 0.05em 0;
+  line-height: 1.2;
+}
+
+a > code,
+a > * > code,
+a > * > code[class*="language-"] {
+  border-color: transparent;
+}
+
+
+a:hover > code, a:focus > code,
+a:hover > * > code, a:focus > * > code[class*="language-"],
+a:hover, a:focus {
+  color: var(--link-color-focus);
+}
+
+a:focus, a:hover {
+  border-bottom: 1px solid var(--link-color-focus);
+}
+
+div[class*="language-"] {
+  margin: var(--sl-spacing-xx-small) 0 var(--sl-spacing-xxx-large) 0 !important;
+}
+
+/* Code block */
+pre {
+  padding: var(--sl-spacing-large);
+  margin: var(--sl-spacing-large) 0;
+  overflow-x: auto;
+}
+
+code > span {
+  line-height: var(--sl-line-height-dense);
+}
+
+.highlight {
+  border-radius: var(--sl-border-radius-large);
+  font-size: 1.1em;
+  line-height: 1.4;
+}
+
+
+code.highlight,
+code.highlighter-rouge {
+  display: inline-block;
+  font-size: 0.9em;
+  padding: var(--sl-spacing-xx-small) var(--sl-spacing-x-small);
+  border-radius: var(--sl-border-radius-base);
+  background-color: var(--code-background-color);
+  color: var(--code-color);
+  word-break: break-all;
+}
+
+code.highlight {
+  margin: var(--sl-spacing-xx-small) 0;
+}
+
+:where(:not(:defined)) {
+  visibility: hidden;
+}
