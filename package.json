@@ -8,6 +8,7 @@
   "module": "dist/bundle/index.module.js",
   "scripts": {
     "setup": "pnpm install && cd tests/rails && pnpm install && npx playwright install --with-deps && bundle install && cd - && cd docs && bundle install && pnpm install",
+    "setup:docs": "pnpm install && cd docs && bundle install && pnpm install",
     "build": "rm -rf dist && pnpm build:types && node esbuild.config.js",
     "build:types": "tsc",
     "lint": "prettier --check ./src",
