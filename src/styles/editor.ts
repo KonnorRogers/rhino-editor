@@ -156,7 +156,7 @@ export default css`
   }
 
   .toolbar__button:is([part~="button__attach-files"]) {
-    maring-inline-end: auto;
+    margin-inline-end: auto;
   }
 
   .link-dialog {

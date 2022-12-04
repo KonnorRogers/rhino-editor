@@ -1,4 +1,4 @@
-import "index.css"
+import "../styles/index.css"
 import { Application } from "@hotwired/stimulus"
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import "@konnorr/bridgetown-quick-search";
