@@ -32,4 +32,8 @@ declare global {
   interface DocumentEventMap {
     [TipTapAddAttachmentEvent.eventName]: TipTapAddAttachmentEvent;
   }
+
+  interface HTMLElementEventMap {
+    [TipTapAddAttachmentEvent.eventName]: TipTapAddAttachmentEvent;
+  }
 }

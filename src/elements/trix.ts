@@ -71,7 +71,7 @@ export class TrixEditor extends BaseElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    document.addEventListener(
+    this.addEventListener(
       TipTapAddAttachmentEvent.eventName,
       (event: TipTapAddAttachmentEvent) => {
         const { attachment, target } = event;
@@ -697,7 +697,7 @@ export class TrixEditor extends BaseElement {
           hidden
           multiple
           @change=${async () => await this.handleFileUpload()}
-        />
+        >
       </button>
     `;
   }

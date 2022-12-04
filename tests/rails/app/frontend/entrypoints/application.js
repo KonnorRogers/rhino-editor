@@ -5,9 +5,11 @@ import * as Trix from "trix"
 import "ash-editor"
 import { Application } from "@hotwired/stimulus"
 import EmbedController from "../controllers/embed_controller.js"
+import TipTapMirrorController from "../controllers/tip_tap_mirror_controller.js"
 window.Stimulus = Application.start()
 window.Stimulus.debug = true
 Stimulus.register("embed", EmbedController)
+Stimulus.register("tip-tap-mirror", TipTapMirrorController)
 
 ActiveStorage.start()
 // addEventListener("trix-attachment-add", (e) => {

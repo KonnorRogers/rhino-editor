@@ -53,6 +53,9 @@ jobs:
     - name: Setup docker
       run: cd tests/rails && docker compose up --build -d
 
+    - name: Install libvips
+      run: sudo apt -y install libvips
+
     - name: Set parallel workers env variable
       run: echo "PARALLEL_WORKERS=$(expr $(nproc) \* 6)" >> $GITHUB_ENV
 

@@ -172,7 +172,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.13.8-x86_64-linux)
       racc (~> 1.4)
-    playwright-ruby-client (1.25.0)
+    playwright-ruby-client (1.27.0)
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
     public_suffix (5.0.0)

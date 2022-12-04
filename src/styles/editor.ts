@@ -53,8 +53,9 @@ export default css`
   }
 
 	/* If you use white-space: normal; in firefox you cant add white-space to the end of the figcaption */
-  figcaption {
+  .trix-content figcaption {
   	white-space: pre;
+  	margin-top: 0.5em;
   }
 
 
@@ -214,10 +215,15 @@ export default css`
   }
 
   .ProseMirror p.is-editor-empty:first-child::before,
-  figure[data-trix-attachment] figcaption.is-empty::before {
+  figure[data-trix-attachment].has-focus figcaption.is-empty::before {
     color: #adb5bd;
     content: attr(data-placeholder);
   }
+
+  figure[data-trix-attachment]:not(.has-focus) figcaption.is-empty::before {
+		content: attr(data-default-caption);
+  }
+
 
   figure[data-trix-attachment] figcaption.is-empty::before {
   	position: absolute;

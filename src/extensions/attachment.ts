@@ -4,6 +4,7 @@ import { mergeAttributes, Node } from "@tiptap/core";
 import { selectionToInsertionEnd } from "@tiptap/core/src/helpers/selectionToInsertionEnd";
 import { Maybe } from "src/types";
 import { findAttribute } from "./find-attribute";
+import { toDefaultCaption } from "src/views/toDefaultCaption";
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
@@ -22,7 +23,6 @@ declare module "@tiptap/core" {
   }
 }
 
-
 /** https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4 */
 const isPreviewable = /^image(\/(gif|png|jpe?g)|$)/
 
@@ -39,12 +39,12 @@ function toExtension (fileName: Maybe<string>): string {
 }
 
 function toType (content: Maybe<string>, previewable: Boolean): string {
-	if (content) {
-		return "attachment--content"
-	}
-
 	if (previewable) {
 		return "attachment--preview"
+	}
+
+	if (content) {
+		return "attachment--content"
 	}
 
 	return "attachment--file"
@@ -251,12 +251,14 @@ export const Attachment = Node.create({
       const figure = document.createElement("figure");
       const figcaption = document.createElement("figcaption");
 
+
       if (!caption) {
       	figcaption.classList.add("is-empty")
       } else {
       	figcaption.classList.remove("is-empty")
       }
 
+      figcaption.setAttribute("data-default-caption", toDefaultCaption({ fileSize, fileName }))
       figcaption.setAttribute("data-placeholder", "Add a caption...")
 
       figcaption.classList.add("attachment__caption");
@@ -342,14 +344,15 @@ export const Attachment = Node.create({
       }
 
       if (content && !canPreview(previewable, contentType)) {
+				figure.innerHTML = content
         figure.prepend(attachmentEditor);
-				figure.insertAdjacentHTML("beforeend", content)
+        figure.append(figcaption)
       } else {
         figure.append(attachmentEditor, img, figcaption);
       }
 
-      return {
-        dom: figure,
+			return {
+				dom: figure,
         contentDOM: figcaption,
       }
     };
@@ -389,6 +392,7 @@ export const Attachment = Node.create({
 					} else {
           	const gallery = schema.nodes["attachment-gallery"].create({}, attachmentNodes);
           	const currSelection = state.selection
+
 						tr.replaceWith(currSelection.from - 1, currSelection.to, [
 							schema.nodes.paragraph.create(),
 							gallery,
