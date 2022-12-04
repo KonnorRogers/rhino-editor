@@ -1,17 +1,20 @@
-import { css, html, LitElement } from "lit";
+import { css, html } from "lit";
 
 import { close } from "src/views/icons";
 import { toMemorySize } from "src/views/toMemorySize";
 import { normalize } from "src/styles/normalize";
+import { BaseElement } from './base-element'
 
 /**
  * An attachment editor element for managing tip-tap attachments. This encompasses the
  *   delete button, tooltip, and progress handler.
  */
-export class AttachmentEditor extends LitElement {
+export class AttachmentEditor extends BaseElement {
   fileName?: string;
   fileSize?: number;
   progress?: number;
+
+  static baseName = "ash-attachment-editor"
 
   close() {
     return html`${close}`;

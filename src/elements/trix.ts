@@ -1,11 +1,11 @@
-import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 import { Editor } from "@tiptap/core";
+import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
-import Attachment from "src/extensions/attachment";
+import { AshStarterKit } from "src/extensions/ash-starter-kit";
 import { isiOS, translations } from "src/models/translations";
 import { stringMap } from "src/views/stringMap";
 import CustomStrike from "src/extensions/strike"
@@ -13,7 +13,6 @@ import CustomStrike from "src/extensions/strike"
 import {
   CSSResult,
   html,
-  LitElement,
   PropertyDeclarations,
   PropertyValueMap,
   TemplateResult,
@@ -32,18 +31,17 @@ import * as icons from "src/views/icons";
 import { normalize } from "src/styles/normalize";
 import trixStyles from "src/styles/trix";
 import editorStyles from "src/styles/editor";
+import { BaseElement } from './base-element'
 
 import { TipTapAddAttachmentEvent } from "src/events/tip-tap-add-attachment-event";
 
 import type { Maybe } from "src/types";
 
-const parser = new DOMParser()
-
 /**
  * This is the meat and potatoes. This is the <tip-tap-trix> element you'll
  *   see. This is what wraps everything into 1 coherent element.
  */
-export class TipTapElement extends LitElement {
+export class TrixEditor extends BaseElement {
   readonly: boolean = false;
   linkInputRef: Ref<HTMLInputElement> = createRef();
   linkDialogExpanded: boolean = false;
@@ -51,6 +49,8 @@ export class TipTapElement extends LitElement {
   editor: Maybe<Editor>;
   editorElement: Maybe<Element>;
   translations = translations;
+
+  static baseName = "ash-editor"
 
   static get properties(): PropertyDeclarations {
     return {
@@ -144,7 +144,7 @@ export class TipTapElement extends LitElement {
         }),
         CustomStrike,
         Link,
-        Attachment,
+        AshStarterKit,
         Focus,
         Placeholder.configure({
           includeChildren: true,
@@ -935,9 +935,9 @@ export class TipTapElement extends LitElement {
 /**
  * Due to some inconsistencies in how Trix will render the inputElement based on if its
  * the HTML representation, or transfromed with `#to_trix_html` this gives
- * us a consistent DOM structure to parse.
+ * us a consistent DOM structure to parse for rich text comments.
  */
-function normalizeDOM (inputElement: Maybe<HTMLInputElement>) {
+function normalizeDOM (inputElement: Maybe<HTMLInputElement>, parser = new DOMParser()) {
 	if (inputElement == null || inputElement.value == null) return
 
   const doc = parser.parseFromString(inputElement.value, "text/html")
@@ -973,4 +973,4 @@ function normalizeDOM (inputElement: Maybe<HTMLInputElement>) {
 	}
 }
 
-export default TipTapElement;
+export default TrixEditor;
