@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Mrujs
+title: Ash Editor
 call_to_action_items:
   - text: Getting Started
     href: /tutorials/getting-started
