@@ -132,11 +132,8 @@ export class TrixEditor extends BaseElement {
     this.editorElement?.setAttribute("role", "textbox");
   }
 
-  setupEditor(element: Element): Editor {
-  	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
-  	normalizeDOM(this.inputElement)
-    return new Editor({
-      element,
+  get defaultOptions () {
+    return {
       injectCSS: false,
       extensions: [
         StarterKit.configure({
@@ -154,8 +151,17 @@ export class TrixEditor extends BaseElement {
           },
         }),
       ],
-      content: this.inputElement?.value,
       autofocus: true,
+    }
+  }
+
+  setupEditor(element: Element): Editor {
+  	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
+  	this.normalizeDOM(this.inputElement)
+    return new Editor({
+      ...this.defaultOptions,
+      element,
+      content: this.inputElement?.value,
       editable: !this.readonly,
       // onBeforeCreate: ({ editor }) => {
       //   // Before the view is created.
@@ -166,6 +172,7 @@ export class TrixEditor extends BaseElement {
       },
       onUpdate: (_args) => {
         // The content has changed.
+        this.updateInputElementValue()
         this.requestUpdate();
       },
       onSelectionUpdate: (_args) => {
@@ -183,15 +190,19 @@ export class TrixEditor extends BaseElement {
       },
       onBlur: (_args) => {
         // The editor isn’t focused anymore.
-        if (this.inputElement != null && this.editor != null) {
-          this.inputElement.value = this.editor.getHTML();
-        }
+        this.updateInputElementValue()
         this.requestUpdate();
       },
       // onDestroy: () => {
       //   // The editor is being destroyed.
       // },
     });
+  }
+
+  updateInputElementValue () {
+    if (this.inputElement != null && this.editor != null && !this.readonly) {
+      this.inputElement.value = this.editor.getHTML();
+    }
   }
 
   get inputElement(): Maybe<HTMLInputElement> {
@@ -930,47 +941,47 @@ export class TrixEditor extends BaseElement {
       </div>
     `;
   }
-}
 
-/**
- * Due to some inconsistencies in how Trix will render the inputElement based on if its
- * the HTML representation, or transfromed with `#to_trix_html` this gives
- * us a consistent DOM structure to parse for rich text comments.
- */
-function normalizeDOM (inputElement: Maybe<HTMLInputElement>, parser = new DOMParser()) {
-	if (inputElement == null || inputElement.value == null) return
+  /**
+  * Due to some inconsistencies in how Trix will render the inputElement based on if its
+  * the HTML representation, or transfromed with `#to_trix_html` this gives
+  * us a consistent DOM structure to parse for rich text comments.
+  */
+  normalizeDOM (inputElement: Maybe<HTMLInputElement>, parser = new DOMParser()) {
+	  if (inputElement == null || inputElement.value == null) return
 
-  const doc = parser.parseFromString(inputElement.value, "text/html")
-  const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")]
-  const filtersWithoutChildren = figures.filter((figure) => figure.querySelector("figcaption") == null)
+    const doc = parser.parseFromString(inputElement.value, "text/html")
+    const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")]
+    const filtersWithoutChildren = figures.filter((figure) => figure.querySelector("figcaption") == null)
 
-  doc.querySelectorAll("div > figure:first-child").forEach((el) => {
-  	el.parentElement?.classList.add("attachment-gallery")
-  })
+    doc.querySelectorAll("div > figure:first-child").forEach((el) => {
+  	  el.parentElement?.classList.add("attachment-gallery")
+    })
 
-  filtersWithoutChildren.forEach((figure) => {
-  	const attrs = figure.getAttribute("data-trix-attributes")
+    filtersWithoutChildren.forEach((figure) => {
+  	  const attrs = figure.getAttribute("data-trix-attributes")
 
-  	if (!attrs) return
+  	  if (!attrs) return
 
-  	const { caption } = JSON.parse(attrs)
-  	if (caption) {
-  		figure.insertAdjacentHTML("beforeend", `<figcaption class="attachment__caption">${caption}</figcaption>`)
-  		return
-  	}
-  })
+  	  const { caption } = JSON.parse(attrs)
+  	  if (caption) {
+  		  figure.insertAdjacentHTML("beforeend", `<figcaption class="attachment__caption">${caption}</figcaption>`)
+  		  return
+  	  }
+    })
 
-  doc.querySelectorAll("figure .attachment__name").forEach((el) => {
-  	if (el.textContent?.includes(" · ") === false) return
+    doc.querySelectorAll("figure .attachment__name").forEach((el) => {
+  	  if (el.textContent?.includes(" · ") === false) return
 
-  	el.insertAdjacentText("beforeend", " · ")
-  })
+  	  el.insertAdjacentText("beforeend", " · ")
+    })
 
-	const body = doc.querySelector("body")
+	  const body = doc.querySelector("body")
 
-	if (body) {
-  	inputElement.value = body.innerHTML
-	}
+	  if (body) {
+  	  inputElement.value = body.innerHTML
+	  }
+  }
 }
 
 export default TrixEditor;
