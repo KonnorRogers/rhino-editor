@@ -10,7 +10,7 @@
 }
 
 main {
-	max-width: var(--main-width);
+	max-width: 100vw;
 	padding: 0 var(--main-padding-x) 2rem;
 	width: 100%;
 	margin: 0 auto;
