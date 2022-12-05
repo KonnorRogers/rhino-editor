@@ -40,13 +40,13 @@ main {
 
 .logo__link:focus,
 .logo__link:hover {
-  border-bottom: 1px solid transparent;
+  text-decoration: underline solid var(--link-color-focus);
 }
 
 .logo__text {
   color: var(--text-color-primary);
   font-size: var(--sl-font-size-x-large);
-  border-bottom: 1px solid transparent;
+  text-decoration: none;
   padding-bottom: var(--sl-spacing-x-small);
   margin-bottom: calc(var(--sl-spacing-x-small) - (var(--sl-spacing-x-small) * 2));
   margin-left: var(--sl-spacing-2x-small);
@@ -55,7 +55,6 @@ main {
 .logo__link:focus > .logo__text,
 .logo__link:hover > .logo__text {
   color: var(--link-color-focus);
-  border-bottom: 1px solid var(--link-color-focus);
 }
 
 .logo__link:focus > .logo__image,
@@ -354,12 +353,12 @@ bridgetown-search-results::part(inner-link):hover {
   color: white;
   font-weight: bold;
   border-radius: 9999px;
-  border-bottom: 1px solid transparent;
+  text-decoration: none;
 }
 
 .call-to-action:is(:hover, :focus) {
   color: white;
-  border-bottom: 1px solid transparent;
+  text-decoration: none;
 }
 
 .call-to-action--primary {
@@ -396,6 +395,7 @@ bridgetown-search-results::part(inner-link):hover {
   margin: 0 auto;
   width: auto;
   flex: 0 0 auto;
+  text-decoration: none;
 }
 
 .hero--mobile .logo__text{
