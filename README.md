@@ -9,24 +9,13 @@ to allow for both Markdown + WYSIWYG editing.
 > Note: This package is still in beta and is currently not
 recommended for production use until a 1.0 is released.
 
-## Getting started
+## Documentation
 
-> This will not give you the proper package, I merely
-created a placeholder.
-
-```bash
-npm install ash-editor
-
-# OR
-
-pnpm add ash-editor
-
-# OR
-
-yarn add ash-editor
-```
+<https://ash-editor.vercel.app>
 
 ## Local Development
+
+> This section is for contributing to Ash-Editor.
 
 Getting up and running locally is hopefully quite painless.
 We have a test suite using Ruby on Rails and is intended to
