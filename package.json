@@ -1,5 +1,5 @@
 {
-  "name": "ash-editor",
+  "name": "rhino-editor",
   "version": "0.0.1",
   "description": "A custom element wrapped rich text editor",
   "type": "module",
@@ -73,11 +73,11 @@
       "prosemirror-view": "^1.29.0"
     }
   },
-  "repository": "git@github.com:KonnorRogers/ash-editor.git",
+  "repository": "git@github.com:KonnorRogers/rhino-editor.git",
   "bugs": {
-    "url": "https://github.com/KonnorRogers/ash-editor/issues"
+    "url": "https://github.com/KonnorRogers/rhino-editor/issues"
   },
-  "homepage": "https://github.com/KonnorRogers/ash-editor",
+  "homepage": "https://github.com/KonnorRogers/rhino-editor",
   "author": "KonnorRogers <konnor5456@gmail.com>",
   "license": "MIT",
   "publishConfig": {

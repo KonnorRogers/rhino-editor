@@ -14,7 +14,7 @@ export class AttachmentEditor extends BaseElement {
   fileSize?: number;
   progress?: number;
 
-  static baseName = "ash-attachment-editor"
+  static baseName = "rhino-attachment-editor"
 
   close() {
     return html`${close}`;

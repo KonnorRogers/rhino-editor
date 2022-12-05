@@ -10,7 +10,7 @@
     "@rails/actioncable": "^7.0.0",
     "@rails/actiontext": "^7.0.0",
     "@rails/activestorage": "^7.0.0",
-    "ash-editor": "link:../../",
+    "rhino-editor": "link:../../",
     "trix": "^1.3"
   },
   "scripts": {

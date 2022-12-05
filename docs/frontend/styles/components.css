@@ -147,7 +147,7 @@ input.top-nav__search__input {
 
 .nav-link {
   color: var(--sl-color-gray-600);
-  border-color: transparent;
+  text-decoration: none;
 }
 
 .side-nav__menu {
@@ -162,7 +162,7 @@ input.top-nav__search__input {
 
 .side-nav__link {
   color: var(--sl-color-gray-500);
-  border-bottom: 1px solid transparent;
+  text-decoration: none;
 }
 
 .side-nav__category-header {

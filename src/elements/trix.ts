@@ -5,7 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
-import { AshStarterKit } from "src/extensions/ash-starter-kit";
+import { RhinoStarterKit } from "src/extensions/rhino-starter-kit";
 import { isiOS, translations } from "src/models/translations";
 import { stringMap } from "src/views/stringMap";
 import CustomStrike from "src/extensions/strike"
@@ -50,7 +50,7 @@ export class TrixEditor extends BaseElement {
   editorElement: Maybe<Element>;
   translations = translations;
 
-  static baseName = "ash-editor"
+  static baseName = "rhino-editor"
 
   static get properties(): PropertyDeclarations {
     return {
@@ -141,7 +141,7 @@ export class TrixEditor extends BaseElement {
         }),
         CustomStrike,
         Link,
-        AshStarterKit,
+        RhinoStarterKit,
         Focus,
         Placeholder.configure({
           includeChildren: true,

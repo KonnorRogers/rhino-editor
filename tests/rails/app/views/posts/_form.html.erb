@@ -25,7 +25,7 @@
         <%= tag.input type: :hidden, **post.form_fields(:tip_tap_body), value: post.tip_tap_body.try(:to_trix_html) || post.tip_tap_body %>
       <% end %>
 
-      <ash-editor
+      <rhino-editor
         input="<%= post.form_id(:tip_tap_body) %>"
         id="main-tip-tap-editor"
         data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
@@ -36,7 +36,7 @@
         <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">Embed</button> %>
         <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">EmbedTwo</button> %>
         <button slot="before-undo-button" tabindex="-1" type="button" data-role="toolbar-item" data-controller="embed">Embed</button>
-      </ash-editor>
+      </rhino-editor>
     </section>
 
     <section style="display: grid; gap: 2rem; margin: 0 auto; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);">
@@ -53,13 +53,13 @@
           name: "trix-tip-tap-mirror",
           value: params[:raw] ? post.trix_body : (post.trix_body.try(:to_trix_html) || post.trix_body)
         %>
-        <ash-editor
+        <rhino-editor
           style="margin-top: 2rem;"
           input="trix-tip-tap-mirror"
           data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
           data-direct-upload-url="<%= rails_direct_uploads_url %>"
           data-controller="tip-tap-mirror"
-        ></ash-editor>
+        ></rhino-editor>
       </div>
     </section>
   </div>

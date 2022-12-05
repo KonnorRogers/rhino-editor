@@ -5,12 +5,12 @@
 <h2>TipTap Editor</h2>
 <form>
   <input id="y" type="hidden" name="content">
-  <ash-editor
+  <rhino-editor
     input="y"
     data-blob-url-template="<%= rails_service_blob_path(":signed_id", ":filename") %>"
     data-direct-upload-url="<%= rails_direct_uploads_url %>"
   >
-  </ash-editor>
+  </rhino-editor>
 </form>
 
 <br><br>

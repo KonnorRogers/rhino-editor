@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import Trix from "trix"
-import { AttachmentManager } from "ash-editor"
+import { AttachmentManager } from "rhino-editor"
 
 export default class EmbedController extends Controller {
 	connect () {
@@ -41,7 +41,7 @@ export default class EmbedController extends Controller {
 
 		const attrs = await this.fetch()
 		let attachment = new AttachmentManager({...attrs})
-    const tiptap = document.querySelector("ash-editor")
+    const tiptap = document.querySelector("rhino-editor")
     tiptap.editor.chain().focus().setAttachment(attachment).run();
 	}
 }

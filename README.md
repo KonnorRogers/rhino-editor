@@ -11,11 +11,11 @@ recommended for production use until a 1.0 is released.
 
 ## Documentation
 
-<https://ash-editor.vercel.app>
+<https://rhino-editor.vercel.app>
 
 ## Local Development
 
-> This section is for contributing to Ash-Editor.
+> This section is for contributing to Rhino Editor.
 
 Getting up and running locally is hopefully quite painless.
 We have a test suite using Ruby on Rails and is intended to
@@ -38,8 +38,8 @@ Run the following commands in the bash to setup
 dependencies:
 
 ```bash
-git clone https://github.com/konnorrogers/ash-editor
-cd ash-editor
+git clone https://github.com/konnorrogers/rhino-editor
+cd rhino-editor
 pnpm run setup
 ```
 

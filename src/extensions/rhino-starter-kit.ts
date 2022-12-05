@@ -6,7 +6,7 @@ import { Gallery } from "./gallery";
 import { Figcaption } from "./figcaption";
 
 
-export const AshStarterKit = Extension.create({
+export const RhinoStarterKit = Extension.create({
   addProseMirrorPlugins() {
     return [
     	FirefoxCaretFixPlugin()

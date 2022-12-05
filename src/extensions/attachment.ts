@@ -293,7 +293,7 @@ export const Attachment = Node.create({
       );
 
       const attachmentEditor = document.createElement(
-        "ash-attachment-editor"
+        "rhino-attachment-editor"
       ) as AttachmentEditor;
       attachmentEditor.setAttribute("file-name", fileName);
       attachmentEditor.setAttribute("file-size", fileSize);

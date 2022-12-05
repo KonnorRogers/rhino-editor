@@ -3,20 +3,20 @@ title: Getting Started
 permalink: /tutorials/getting-started/
 ---
 
-The first step to working with the Ash Editor is installing it!
+The first step to working with the Rhino Editor is installing it!
 
 ```js
-npm install ash-editor
+npm install rhino-editor
 ```
 
 After installing, we can import it in our project.
 
 ```js
 // index.js
-import "ash-editor"
+import "rhino-editor"
 ```
 
-The above will auto-register the `<ash-editor>` element for you.
+The above will auto-register the `<rhino-editor>` element for you.
 For more ways to initialize the editor, checkout the [Setup](/tutorials/setup) page.
 
 <br>
@@ -24,7 +24,7 @@ For more ways to initialize the editor, checkout the [Setup](/tutorials/setup) p
 Finally, to see it appear on a page you can write the following HTML:
 
 ```html
-<ash-editor></ash-editor>
+<rhino-editor></rhino-editor>
 ```
 
 And you're on your way! But you're not done yet!
