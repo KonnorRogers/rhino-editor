@@ -1,9 +1,8 @@
 {
   "name": "ash-editor",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A custom element wrapped rich text editor",
   "type": "module",
-  "source": "src/index.ts",
   "main": "dist/bundle/index.common.js",
   "module": "dist/bundle/index.module.js",
   "scripts": {
@@ -37,8 +36,6 @@
     "wysiwg",
     "webcomponents"
   ],
-  "author": "KonnorRogers",
-  "license": "MIT",
   "devDependencies": {
     "@types/rails__activestorage": "^7.0.1",
     "@typescript-eslint/parser": "^4.33.0",
@@ -75,5 +72,15 @@
       "prosemirror-state": "^1.4.2",
       "prosemirror-view": "^1.29.0"
     }
+  },
+  "repository": "git@github.com:KonnorRogers/ash-editor.git",
+  "bugs": {
+    "url": "https://github.com/KonnorRogers/ash-editor/issues"
+  },
+  "homepage": "https://github.com/KonnorRogers/ash-editor",
+  "author": "KonnorRogers <konnor5456@gmail.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
   }
 }
