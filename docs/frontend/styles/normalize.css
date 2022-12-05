@@ -74,7 +74,7 @@ h1 > a,
 h2 > a,
 h3 > a,
 h4 > a {
-  border-color: transparent;
+  text-decoration: none;
 }
 
 h2,h3,h4 {
@@ -150,11 +150,11 @@ ul > li {
 a,
 a > code,
 a > * > code,
-a > * > code[class*="language-"],
-a {
-  outline: transparent;
+a > * > code[class*="language-"] {
+  word-wrap: anywhere;
+  /* outline: transparent; */
   /* Unable to distinguish identifier, this makes links obvious */
-  text-decoration: none;
+  text-decoration: underline solid var(--link-color);
   color: var(--link-color);
   border-radius: 0;
   border-bottom: 1px solid var(--link-color);
@@ -166,7 +166,7 @@ a {
 a > code,
 a > * > code,
 a > * > code[class*="language-"] {
-  border-color: transparent;
+  text-decoration: none;
 }
 
 
@@ -177,7 +177,7 @@ a:hover, a:focus {
 }
 
 a:focus, a:hover {
-  border-bottom: 1px solid var(--link-color-focus);
+  text-decoration: underline solid var(--link-color-focus);
 }
 
 div[class*="language-"] {
