@@ -124,8 +124,8 @@ export default css`
 
   .toolbar__button svg {
     flex-shrink: 0;
-    height: 24px;
-    width: 24px;
+    min-height: 24px;
+    min-width: 24px;
   }
 
   button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
