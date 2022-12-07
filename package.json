@@ -1,6 +1,6 @@
 {
   "name": "rhino-editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A custom element wrapped rich text editor",
   "type": "module",
   "main": "dist/bundle/index.common.js",
