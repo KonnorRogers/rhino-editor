@@ -56,6 +56,7 @@ export default css`
   .trix-content figcaption {
   	white-space: pre;
   	margin-top: 0.5em;
+  	white-space: break-spaces;
   }
 
 
