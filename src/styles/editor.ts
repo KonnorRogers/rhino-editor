@@ -123,7 +123,6 @@ export default css`
   }
 
   .toolbar__button svg {
-    flex-shrink: 0;
     min-height: 24px;
     min-width: 24px;
   }
