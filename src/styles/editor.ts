@@ -125,6 +125,10 @@ export default css`
   .toolbar__button svg {
     min-height: 24px;
     min-width: 24px;
+
+    /* max-height / max-width needs to be set for safari */
+    max-height: 24px;
+    max-width: 24px;
   }
 
   button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
