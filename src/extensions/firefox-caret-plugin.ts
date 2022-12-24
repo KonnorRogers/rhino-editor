@@ -1,5 +1,8 @@
 import { Plugin } from "prosemirror-state";
 
+export interface FirefoxCaretPluginOptions {
+}
+
 /**
  * Plugin to fix firefox cursor disappearing inside contenteditable.
  * https://github.com/ProseMirror/prosemirror/issues/1113#issue-780389225

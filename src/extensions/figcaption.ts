@@ -1,5 +1,9 @@
 import { Node, mergeAttributes } from "@tiptap/core"
 
+export interface FigcaptionOptions {
+  HTMLAttributes: Record<string, any>;
+}
+
 export const Figcaption = Node.create({
   name: "attachment-figcaption",
   group: "block figcaption",
@@ -18,7 +22,7 @@ export const Figcaption = Node.create({
   parseHTML() {
     return [
       {
-        tag: `figcaption`,
+        tag: `figure[data-trix-attachment] figcaption`,
       },
     ];
   },

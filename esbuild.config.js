@@ -1,12 +1,21 @@
 import * as path from "path";
 import glob from "glob"
 import esbuild from "esbuild"
+import * as fs from "fs"
+
+const pkg = JSON.parse(fs.readFileSync("./package.json"))
+const deps = [
+  ...Object.keys(pkg.dependencies || {}),
+  ...Object.keys(pkg.peerDependencies || {})
+]
 
 ;(async function () {
-  let entries = glob
-    .sync("src/**/*.{ts,js}")
-    .map((file) => {
-      return path.join(path.dirname(file), path.basename(file, path.extname(file)))
+  const entries = {}
+  glob.sync("./src/**/*.{ts,js}")
+    .forEach((file) => {
+      const key = path.relative("src", path.join(path.dirname(file), path.basename(file, path.extname(file))))
+      const value = "." + path.sep + path.join(path.dirname(file), path.basename(file, path.extname(file)))
+      entries[key] = value
     });
 
   const defaultConfig = {
@@ -22,7 +31,7 @@ import esbuild from "esbuild"
 
   const startTime = Number(new Date())
 
-  await Promise.all[
+  await Promise.allSettled[
     esbuild.build({
       ...defaultConfig,
       outfile: "dist/bundle/index.common.js",
@@ -43,7 +52,7 @@ import esbuild from "esbuild"
       outdir: 'dist',
       format: 'esm',
       target: "es2020",
-      external: ['./node_modules/*'],
+      external: deps,
       splitting: true,
       chunkNames: 'chunks/[name]-[hash]'
     })

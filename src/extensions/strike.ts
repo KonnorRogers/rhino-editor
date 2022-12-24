@@ -12,6 +12,3 @@ export const CustomStrike = Strike.extend({
     return ['del', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
   },
 })
-
-export default CustomStrike
-

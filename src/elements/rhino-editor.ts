@@ -1,14 +1,10 @@
-import { Editor } from "@tiptap/core";
+import { Editor, EditorOptions } from "@tiptap/core";
 import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
-import Focus from "@tiptap/extension-focus";
-import Placeholder from "@tiptap/extension-placeholder";
 import { RhinoStarterKit } from "src/extensions/rhino-starter-kit";
 import { isiOS, translations } from "src/models/translations";
 import { stringMap } from "src/views/stringMap";
-import CustomStrike from "src/extensions/strike"
 
 import {
   CSSResult,
@@ -20,7 +16,8 @@ import {
 import { ref, createRef, Ref } from "lit/directives/ref.js";
 
 /** Imports <role-tooltip> and <role-toolbar> */
-import "role-components";
+import { RoleToolbar } from "role-components/dist/toolbar/component";
+import { RoleTooltip } from "role-components/dist/tooltip/component";
 
 import { AttachmentUpload } from "src/models/attachment-upload";
 import { AttachmentManager } from "src/models/attachment-manager";
@@ -36,12 +33,13 @@ import { BaseElement } from './base-element'
 import { TipTapAddAttachmentEvent } from "src/events/tip-tap-add-attachment-event";
 
 import type { Maybe } from "src/types";
+import { AttachmentEditor } from "./attachment-editor";
 
 /**
  * This is the meat and potatoes. This is the <tip-tap-trix> element you'll
  *   see. This is what wraps everything into 1 coherent element.
  */
-export class TrixEditor extends BaseElement {
+export class RhinoEditor extends BaseElement {
   readonly: boolean = false;
   linkInputRef: Ref<HTMLInputElement> = createRef();
   linkDialogExpanded: boolean = false;
@@ -68,8 +66,15 @@ export class TrixEditor extends BaseElement {
     return [normalize, tipTapCoreStyles, editorStyles, trixStyles];
   }
 
+  /** Used for registering things like <role-toolbar>, <role-tooltip>, <rhino-attachment-editor> */
+  registerDependencies () {
+    [AttachmentEditor, RoleTooltip, RoleToolbar].forEach((el) => el.define())
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
+
+    this.registerDependencies()
 
     this.addEventListener(
       TipTapAddAttachmentEvent.eventName,
@@ -132,34 +137,28 @@ export class TrixEditor extends BaseElement {
     this.editorElement?.setAttribute("role", "textbox");
   }
 
-  get defaultOptions () {
-    return {
-      injectCSS: false,
-      extensions: [
-        StarterKit.configure({
-        	strike: false
-        }),
-        CustomStrike,
-        Link,
-        RhinoStarterKit,
-        Focus,
-        Placeholder.configure({
+  extensions () {
+    return [
+      StarterKit.configure({
+        strike: false
+      }),
+      RhinoStarterKit.configure({
+        placeholder: {
           includeChildren: true,
           // Use a placeholder:
           placeholder: () => {
-            return "Write something...";
+            return this.translations.placeholder;
           },
-        }),
-      ],
-      autofocus: true,
-    }
+        }
+      }),
+    ]
   }
 
-  setupEditor(element: Element): Editor {
-  	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
-  	this.normalizeDOM(this.inputElement)
-    return new Editor({
-      ...this.defaultOptions,
+  defaultOptions (element: Element): Partial<EditorOptions> {
+    return {
+      injectCSS: false,
+      extensions: this.extensions(),
+      autofocus: true,
       element,
       content: this.inputElement?.value,
       editable: !this.readonly,
@@ -196,7 +195,13 @@ export class TrixEditor extends BaseElement {
       // onDestroy: () => {
       //   // The editor is being destroyed.
       // },
-    });
+    }
+  }
+
+  setupEditor(element: Element): Editor {
+  	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
+  	this.normalizeDOM(this.inputElement)
+    return new Editor(this.defaultOptions(element));
   }
 
   updateInputElementValue () {
@@ -984,4 +989,4 @@ export class TrixEditor extends BaseElement {
   }
 }
 
-export default TrixEditor;
+export default RhinoEditor;
