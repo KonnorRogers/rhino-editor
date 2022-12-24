@@ -1,12 +1,9 @@
-import { TrixEditor } from "./elements/trix";
-import { AttachmentEditor } from "./elements/attachment-editor";
+import { RhinoEditor } from "./elements/rhino-editor";
 import { AttachmentManager } from "./models/attachment-manager";
 
-AttachmentEditor.define()
-TrixEditor.define()
+RhinoEditor.define()
 
 export {
-  AttachmentEditor,
-  TrixEditor,
+  RhinoEditor,
 	AttachmentManager
 };

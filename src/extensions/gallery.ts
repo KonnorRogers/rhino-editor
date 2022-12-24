@@ -39,6 +39,10 @@ function handleCaptions (node: ProseMirrorNode, tr: Transaction, newState: Edito
 	return modified
 }
 
+export interface GalleryOptions {
+  HTMLAttributes: Record<string, any>
+}
+
 export const Gallery = Node.create({
   name: "attachment-gallery",
   group: "block",

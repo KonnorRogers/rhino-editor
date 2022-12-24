@@ -63,7 +63,7 @@
     "prosemirror-model": "^1.18.1",
     "prosemirror-state": "^1.4.2",
     "prosemirror-view": "^1.29.0",
-    "role-components": "^1.0.10",
+    "role-components": "^1.1.0",
     "tslib": "^2.4.0"
   },
   "pnpm": {

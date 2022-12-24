@@ -19,7 +19,6 @@ export class BaseElement extends LitElement {
   }
 }
 
-
 export type Constructor = new (...args: any[]) => {};
 
 export function toAnonymousClass<T extends Constructor> (klass: T): T {
