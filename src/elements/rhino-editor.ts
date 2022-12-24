@@ -39,7 +39,7 @@ import { AttachmentEditor } from "./attachment-editor";
  * This is the meat and potatoes. This is the <tip-tap-trix> element you'll
  *   see. This is what wraps everything into 1 coherent element.
  */
-export class TrixEditor extends BaseElement {
+export class RhinoEditor extends BaseElement {
   readonly: boolean = false;
   linkInputRef: Ref<HTMLInputElement> = createRef();
   linkDialogExpanded: boolean = false;
@@ -989,4 +989,4 @@ export class TrixEditor extends BaseElement {
   }
 }
 
-export default TrixEditor;
+export default RhinoEditor;
