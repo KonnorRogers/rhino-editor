@@ -5,8 +5,9 @@ permalink: /tutorials/setup/
 
 Generally, the default setup of `rhino-editor` should be
 enough. However, in the interest of leveraging the
-underlying rich text editor, we let's look at how we can
-add, modify, or remove extensions.
+underlying rich text editor, let's look at how we can
+add, modify, or remove extensions and extend the underlying
+web component.
 
 First, we need to change how we import the editor.
 
@@ -19,7 +20,6 @@ You'll notice we don't want to auto-register the
 then register it.
 
 Now let's see how we would add extensions:
-
 
 ```js
 import { RhinoEditor } from "rhino-editor/dist/elements/rhino-editor.js"

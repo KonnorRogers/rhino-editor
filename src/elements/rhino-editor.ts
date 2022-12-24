@@ -16,8 +16,8 @@ import {
 import { ref, createRef, Ref } from "lit/directives/ref.js";
 
 /** Imports <role-tooltip> and <role-toolbar> */
-import { RoleToolbar } from "role-components/src/toolbar/component.js";
-import { RoleTooltip } from "role-components/src/tooltip/component.js";
+import { RoleToolbar } from "role-components/dist/toolbar/component";
+import { RoleTooltip } from "role-components/dist/tooltip/component";
 
 import { AttachmentUpload } from "src/models/attachment-upload";
 import { AttachmentManager } from "src/models/attachment-manager";
