@@ -1,5 +1,7 @@
 import { css } from "lit";
 
+// These all come from Trix / ActionText. This should probably be cleaned up into
+// a regular .css for users to include.
 export default css`
 	.trix-content {
 		box-sizing: border-box;

@@ -28,7 +28,7 @@ specifiers:
   prosemirror-model: ^1.18.1
   prosemirror-state: ^1.4.2
   prosemirror-view: ^1.29.0
-  role-components: ^1.1.3
+  role-components: ^1.1.4
   standard-version: ^9.5.0
   tslib: ^2.4.0
   typescript: ^4.8.4
@@ -48,7 +48,7 @@ dependencies:
   prosemirror-model: 1.18.1
   prosemirror-state: 1.4.2
   prosemirror-view: 1.29.0
-  role-components: 1.1.3
+  role-components: 1.1.4
   tslib: 2.4.0
 
 devDependencies:
@@ -3062,8 +3062,8 @@ packages:
       glob: 7.2.3
     dev: true
 
-  /role-components/1.1.3:
-    resolution: {integrity: sha512-RD35/pr6RAKvIeN+sAlAnR+RnADjMak45wtnHd8ayzFtYaYTKmTTTIscTKW7ehOgjpaFuazkcoSTrc6YzzUU+A==}
+  /role-components/1.1.4:
+    resolution: {integrity: sha512-OsxJJEK+d8kicr3Emk/oYRtyviaX4lYTUiegTgD+RyHnw6Z+3dSQuZDnuvkrNELGMZpOO4WJfFa7822piHmRJQ==}
     dependencies:
       '@floating-ui/dom': 0.5.4
     dev: false
