@@ -3,40 +3,47 @@ import { css } from "lit";
 export default css`
   :host {
     display: block;
-    --border-color: #cecece;
-    --placeholder-text-color: #cecece;
-    --input-focus-ring: 0 0 2px 1px #005a9c;
 
-    --active-button-background-color: rgb(226 239 255);
+    /* General colors */
+    --rhino-focus-ring: 0 0 2px 1px var(--rhino-button-active-border-color);
 
-    --button-text-color: #889;
-    --button-border-color: #005a9c;
-    --button-background-color: hsl(219, 26%, 95%);
+    --rhino-danger-border-color: red;
+    --rhino-danger-background-color: #ffdddd;
 
-    --disabled-button-text-color: #d1d5db;
-    --disabled-button-border-color: #d1d5db;
-    --disabled-button-background-color: #d1d5db;
+    /* Editor colors */
+    --rhino-editor-text-color: #374151;
+    --rhino-editor-border-color: #cecece;
+    --rhino-editor-placeholder-text-color: #cecece;
 
-    --toolbar-text-color: hsl(219, 6%, 43%);
 
-    --link-dialog-border-color: #005a9c;
-    --link-dialog-background-color: hsla(219, 26%, 95%, 0.5);
+    /* Regular buttons */
+    --rhino-button-text-color: #889;
+    --rhino-editor-border-color: #cecece;
+    --rhino-button-background-color: hsl(var(--rhino-button-background-color-hsl));
+    --rhino-button-background-color-hsl: 219 26% 95%;
 
-    --link-dialog-input-invalid-background-color: #ffdddd;
-    --link-dialog-input-invalid-border-color: red;
+    /** Disabled Buttons */
+    --rhino-button-disabled-text-color: #d1d5db;
+    --rhino-button-disabled-border-color: #d1d5db;
+    --rhino-button-disabled-background-color: #d1d5db;
 
-    color: #374151;
+    /** Active buttons */
+    --rhino-button-active-border-color: #005a9c;
+    --rhino-button-active-background-color: rgb(226 239 255);
+
+    --rhino-toolbar-text-color: hsl(219, 6%, 43%);
+    --rhino-toolbar-icon-size: 24px;
+
+    --rhino-dialog-border-color: hsl(var(--rhino-button-background-color-hsl) / 50%);
+
+    color: var(--rhino-text-color);
   }
 
-
-  img,
-  svg {
-    width: 100%;
-  }
 
   img,
   svg,
   figure {
+    width: 100%;
     max-width: 100%;
     height: auto;
     display: block;
@@ -63,7 +70,7 @@ export default css`
   /* Attachments */
   :host(:not([readonly])) figure:is(:focus-within, :focus, .has-focus) img {
     outline: transparent;
-    box-shadow: 0 0 0 2px var(--button-border-color);
+    box-shadow: var(--rhino-focus-ring);
   }
 
   attachment-editor::part(delete-button),
@@ -79,13 +86,13 @@ export default css`
   .ProseMirror .placeholder {
     position: absolute;
     pointer-events: none;
-    color: var(--placeholder-text-color);
+    color: var(--rhino-editor-placeholder-text-color);
     cursor: text;
     content: "";
   }
 
   .ProseMirror {
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--rhino-editor-border-color);
     border-radius: 3px;
     margin: 0;
     padding: 0.4em 0.6em;
@@ -94,7 +101,7 @@ export default css`
   }
 
   .toolbar {
-    color: var(--toolbar-text-color);
+    color: var(--rhino-toolbar-text-color);
   }
 
   .toolbar::part(base) {
@@ -102,57 +109,51 @@ export default css`
   }
 
   .toolbar__button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 32px;
-    margin-right: -3px;
-    min-width: 32px;
-    position: relative;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--rhino-editor-border-color);
     border-radius: 4px;
+    padding: 0.2em 0.4em;
   }
 
   .toolbar__button[aria-disabled="true"] {
-    color: var(--disabled-button-text-color);
-    border-color: var(--disabled-button-border-color);
+    color: var(--rhino-button-disabled-text-color);
+    border-color: var(--rhino-button-disabled-border-color);
   }
 
   .toolbar__button[aria-disabled="true"]:focus {
-    border-color: var(--disabled-button-border-color);
+    border-color: var(--rhino-button-disabled-border-color);
   }
 
   .toolbar__button svg {
-    min-height: 24px;
-    min-width: 24px;
+    min-height: var(--rhino-toolbar-icon-size);
+    min-width: var(--rhino-toolbar-icon-size);
 
     /* max-height / max-width needs to be set for safari */
-    max-height: 24px;
-    max-width: 24px;
+    max-height: var(--rhino-toolbar-icon-size);
+    max-width: var(--rhino-toolbar-icon-size);
   }
 
   button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
     outline: transparent;
-    box-shadow: 0 0 0 1px var(--button-border-color);
-    border-color: var(--button-border-color);
-    background-color: var(--button-background-color);
+    box-shadow: var(--rhino-focus-ring);
+    border-color: var(--rhino-button-active-border-color);
+    background-color: var(--rhino-button-background-color);
   }
 
   .toolbar__button:is([aria-disabled="true"]:not([part~="button--active"])) {
-    color: var(--disabled-button-text-color);
-    border-color: var(--disabled-button-border-color);
+    color: var(--rhino-button-disabled-text-color);
+    border-color: var(--rhino-button-disabled-border-color);
   }
 
   .toolbar__button:is(:focus, :hover):is([aria-disabled="true"]:not([part~="button--active"])) {
     outline: transparent;
-    color: var(--disabled-button-text-color);
-    border-color: var(--disabled-button-border-color);
-    box-shadow: 0 0 0 1px var(--disabled-button-border-color);
+    color: var(--rhino-button-disabled-text-color);
+    border-color: var(--rhino-button-disabled-border-color);
+    box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
   }
 
   .toolbar__button:is([part~="button--active"]),
   .toolbar__button:is([part~="button--active"]):is(:hover, :focus) {
-    background-color: var(--active-button-background-color);
+    background-color: var(--rhino-button-active-background-color);
   }
 
   .toolbar__button:is([part~="button__link"], [part~="button__ordered-list"]) {
@@ -179,11 +180,11 @@ export default css`
     max-width: 600px;
     padding: 0.75rem 0.4rem;
     border-radius: 8px;
-    border-top: 2px solid #ccc;
+    border-top: 2px solid var(--rhino-editor-border-color);
   }
 
   .link-dialog__input {
-    border: 1px solid #374151;
+    border: 1px solid var(--rhino-editor-border-color);
     border-radius: 4px;
     padding: 0.4em 0.6em;
     flex: 1 1 auto;
@@ -191,21 +192,21 @@ export default css`
 
   .link-dialog__input:is(:focus) {
     outline: transparent;
-    box-shadow: var(--input-focus-ring);
-    border-color: var(--link-dialog-border-color);
-    background-color: var(--link-dialog-background-color);
+    box-shadow: var(--rhino-focus-ring);
+    border-color: var(--rhino-button-border-color);
+    background-color: var(--rhino-button-background-color);
   }
 
   .link-validate:invalid {
     outline: transparent;
-    background-color: var(--link-dialog-input-invalid-background-color);
-    border-color: var(--link-dialog-input-invalid-border-color);
+    background-color: var(--rhino-danger-background-color);
+    border-color: var(--rhino-danger-border-color);
     box-shadow: none;
   }
 
   .link-dialog__button {
     padding: 0.4em 0.6em;
-    border: 1px solid var(--button-border-color);
+    border: 1px solid var(--rhino-button-border-color);
     border-radius: 4px;
   }
 
@@ -220,7 +221,7 @@ export default css`
 
   .ProseMirror p.is-editor-empty:first-child::before,
   figure[data-trix-attachment].has-focus figcaption.is-empty::before {
-    color: #adb5bd;
+    color: var(--rhino-editor-placeholder-text-color);
     content: attr(data-placeholder);
   }
 
