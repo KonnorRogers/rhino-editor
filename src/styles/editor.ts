@@ -18,7 +18,7 @@ export default css`
 
     /* Regular buttons */
     --rhino-button-text-color: #889;
-    --rhino-editor-border-color: #cecece;
+    --rhino-button-border-color: #cecece;
     --rhino-button-background-color: hsl(var(--rhino-button-background-color-hsl));
     --rhino-button-background-color-hsl: 219 26% 95%;
 

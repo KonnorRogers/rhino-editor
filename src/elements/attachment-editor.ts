@@ -44,7 +44,7 @@ export class AttachmentEditor extends BaseElement {
 
       button {
         background-color: white;
-        border: 1px solid var(--button-border-color);
+        border: 1px solid var(--rhino-button-active-border-color);
         border-radius: 9999px;
         display: flex;
         align-items: center;
