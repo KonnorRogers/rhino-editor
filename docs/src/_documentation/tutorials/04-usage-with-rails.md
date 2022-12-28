@@ -29,7 +29,7 @@ we can do the following:
 
 ```erb
 <%%= form_with model: @post do |form| %>
-  <%%= form.hidden_field :body, value: @post.body.try(:to_trix_html) || @post.body %>
+  <%%= form.hidden_field :body, value: form.object.body.try(:to_trix_html) || form.object.body %>
   <rhino-editor
     input="post_body"
     data-blob-url-template="<%%= rails_service_blob_url(":signed_id", ":filename") %>"
