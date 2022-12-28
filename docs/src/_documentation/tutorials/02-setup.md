@@ -25,8 +25,7 @@ Now let's see how we would add extensions:
 import { RhinoEditor } from "rhino-editor/dist/elements/rhino-editor.js"
 
 // https://tiptap.dev/api/extensions/character-count
-import CharacterCount from
-"@tip-tap/extension-character-count"
+import CharacterCount from "@tiptap/extension-character-count"
 
 class ExtendedEditor extends RhinoEditor {
   extensions () {
