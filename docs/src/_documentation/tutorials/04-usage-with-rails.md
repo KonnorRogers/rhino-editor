@@ -31,7 +31,7 @@ we can do the following:
 <%%= form_with model: @post do |form| %>
   <%%= form.hidden_field :body, value: @post.body.try(:to_trix_html) || @post.body %>
   <rhino-editor
-    input="post_body"
+    input="<%= form.field_id(:body) %>"
     data-blob-url-template="<%%= rails_service_blob_url(":signed_id", ":filename") %>"
     data-direct-upload-url="<%%= rails_direct_uploads_url %>"
   ></rhino-editor>
