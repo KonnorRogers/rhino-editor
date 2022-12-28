@@ -1,7 +1,7 @@
 import { css, html } from "lit";
 
 import { close } from "src/views/icons";
-import { toMemorySize } from "src/views/toMemorySize";
+import { toMemorySize } from "src/views/to-memory-size";
 import { normalize } from "src/styles/normalize";
 import { BaseElement } from './base-element'
 

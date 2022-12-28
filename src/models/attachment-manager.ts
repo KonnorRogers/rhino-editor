@@ -1,7 +1,7 @@
 import { AttachmentAttributes, Maybe } from "src/types";
 import { uuidv4 } from "src/models/uuidv4";
 import { EditorView } from "prosemirror-view";
-import { toDefaultCaption } from "src/views/toDefaultCaption";
+import { toDefaultCaption } from "src/views/to-default-caption";
 
 /**
  * An attachment manager that matches the interface of Trix's attachment manager.

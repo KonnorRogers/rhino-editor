@@ -1,10 +1,10 @@
 import { AttachmentManager } from "src/models/attachment-manager";
 import type { AttachmentEditor } from "src/elements/attachment-editor";
 import { mergeAttributes, Node } from "@tiptap/core";
-import { selectionToInsertionEnd } from "@tiptap/core/src/helpers/selectionToInsertionEnd";
+import { selectionToInsertionEnd } from "../views/selection-to-insertion-end";
 import { Maybe } from "src/types";
 import { findAttribute } from "./find-attribute";
-import { toDefaultCaption } from "src/views/toDefaultCaption";
+import { toDefaultCaption } from "src/views/to-default-caption";
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
