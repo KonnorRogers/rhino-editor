@@ -1,5 +1,5 @@
 import type { Maybe } from "../types"
-import { toMemorySize } from "./toMemorySize";
+import { toMemorySize } from "./to-memory-size";
 
 interface CaptionParams {
 	fileName?: Maybe<string>

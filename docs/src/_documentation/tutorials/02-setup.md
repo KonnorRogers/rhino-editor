@@ -22,29 +22,25 @@ then register it.
 Now let's see how we would add extensions:
 
 ```js
-import { RhinoEditor } from "rhino-editor/dist/elements/rhino-editor.js"
+<%= File.read("./frontend/javascript/entrypoints/setup.js").html_safe %>
 
-// https://tiptap.dev/api/extensions/character-count
-import CharacterCount from "@tiptap/extension-character-count"
-
-class ExtendedEditor extends RhinoEditor {
-  extensions () {
-    return [
-      // Uses all existing extensions so we're only appending
-      ...super.extensions(),
-
-      // Adds character counter
-      CharacterCount.configure({
-        limit: 240,
-      })
-    ]
-  }
-}
-
-ExtendedEditor.define()
+// index.html
+<extended-rhino-editor></extended-rhino-editor>
 ```
 
 The above will now have a character counter in place for
 the editor! This can be applied to any extensions. You
 could even wipe out all existing extensions and replace
 them all with your own if you wanted!
+
+
+<h3 id='character-count-example'>
+  <a href='#character-count-example'>
+    Character Count Example
+  </a>
+</h3>
+
+<input id="character-counter" type="hidden" value="<p>I'm a rhino editor with a character counter!</p>">
+<extended-rhino-editor input="character-counter"></extended-rhino-editor>
+
+<script data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/setup.js" %>" defer></script>

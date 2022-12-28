@@ -4,7 +4,7 @@ import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 import StarterKit from "@tiptap/starter-kit";
 import { RhinoStarterKit } from "src/extensions/rhino-starter-kit";
 import { isiOS, translations } from "src/models/translations";
-import { stringMap } from "src/views/stringMap";
+import { stringMap } from "src/views/string-map";
 
 import {
   CSSResult,
