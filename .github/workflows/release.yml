@@ -35,6 +35,9 @@ jobs:
           cache-dependency-path: |
             pnpm-lock.yaml
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Publish to NPM
         id: changesets
         uses: changesets/action@v1
