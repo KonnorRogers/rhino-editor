@@ -17,7 +17,7 @@
     "start:example": "web-dev-server",
     "build:example": "pnpm build && rm -rf examples/dist && cp -R dist/ examples/dist",
     "start": "pnpm build -- --watch",
-    "release": "pnpm build && pnpm changeset publish && git push --follow-tags",
+    "release": "pnpm build && changeset version && changeset publish && git push --follow-tags",
     "changeset": "changeset"
   },
   "files": [
