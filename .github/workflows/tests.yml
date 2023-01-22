@@ -1,42 +1,12 @@
-name: Actions
+name: Tests
 on:
-  push:
-    branches:
-      - "main"
   pull_request:
     branches:
       - "*"
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
-  # We don't currently have any tests that onyl run with JS. perhaps in the future.
-  # js-test:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [16.x, 18.x]
-
-    # steps:
-    #   - uses: actions/checkout@v3
-
-    #   # For playwright
-    #   - uses: microsoft/playwright-github-action@v1
-
-    #   - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-    #     with:
-    #       version: 6.22.1
-    #   - name: use node.js ${{ matrix.node-version }}
-    #     uses: actions/setup-node@v3
-    #     with:
-    #       node-version: ${{ matrix.node-version }}
-    #       cache: 'pnpm'
-    #       cache-dependency-path: |
-    #         pnpm-lock.yaml
-    #   - name: Install via pnpm
-    #     run: |
-    #       pnpm install
-    #   - name: lint, and test
-    #     run: |
-    #       pnpm lint
-    #       pnpm test:ci
   rails-test:
     runs-on: ubuntu-latest
     env:
@@ -63,9 +33,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-      with:
-        version: 6.22.1
+
     - name: use node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -74,6 +42,11 @@ jobs:
         cache-dependency-path: |
           pnpm-lock.yaml
           tests/rails/pnpm-lock.yaml
+
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7.x.x
+        run_install: false
 
     - name: Install via pnpm
       run: |

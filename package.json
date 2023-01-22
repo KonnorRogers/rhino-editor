@@ -17,12 +17,8 @@
     "start:example": "web-dev-server",
     "build:example": "pnpm build && rm -rf examples/dist && cp -R dist/ examples/dist",
     "start": "pnpm build -- --watch",
-    "deploy": "pnpm build && standard-version --release-as",
-    "deploy:beta": "pnpm build && standard-version --prerelease beta",
-    "deploy:patch": "pnpm build && standard-version --release-as patch",
-    "deploy:minor": "pnpm build && standard-version --release-as minor",
-    "deploy:major": "pnpm build && standard-version --release-as major",
-    "push": "git push --follow-tags origin main && pnpm publish"
+    "release": "pnpm build && pnpm changeset publish && git push --follow-tags",
+    "changeset": "changeset"
   },
   "files": [
     "src",
@@ -37,6 +33,7 @@
     "webcomponents"
   ],
   "devDependencies": {
+    "@changesets/cli": "^2.26.0",
     "@types/rails__activestorage": "^7.0.1",
     "@typescript-eslint/parser": "^4.33.0",
     "@web/dev-server": "^0.1.35",
