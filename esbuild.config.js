@@ -11,15 +11,15 @@ const deps = [
 
 ;(async function () {
   const entries = {}
-  glob.sync("./src/**/*.{ts,js}")
+  glob.sync("./src/exports/**/*.{ts,js}")
     .forEach((file) => {
-      const key = path.relative("src", path.join(path.dirname(file), path.basename(file, path.extname(file))))
+      const key = path.relative(path.join("src", "exports"), path.join(path.dirname(file), path.basename(file, path.extname(file))))
       const value = "." + path.sep + path.join(path.dirname(file), path.basename(file, path.extname(file)))
       entries[key] = value
     });
 
   const defaultConfig = {
-    entryPoints: ["./src/index.ts"],
+    entryPoints: ["./src/exports/index.ts"],
     sourcemap: true,
     platform: "browser",
     target: "es2018",
@@ -34,14 +34,14 @@ const deps = [
   await Promise.allSettled[
     esbuild.build({
       ...defaultConfig,
-      outfile: "dist/bundle/index.common.js",
+      outfile: "exports/bundle/index.common.js",
       format: "cjs",
       minify: true,
     }),
 
     esbuild.build({
       ...defaultConfig,
-      outfile: "dist/bundle/index.module.js",
+      outfile: "exports/bundle/index.module.js",
       format: "esm",
       minify: true,
     }),
@@ -49,11 +49,12 @@ const deps = [
     esbuild.build({
       ...defaultConfig,
       entryPoints: entries,
-      outdir: 'dist',
+      outdir: 'exports',
       format: 'esm',
       target: "es2020",
       external: deps,
       splitting: true,
+      minify: false,
       chunkNames: 'chunks/[name]-[hash]'
     })
   ]

@@ -2,9 +2,9 @@ import { Editor, EditorOptions } from "@tiptap/core";
 import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from "@tiptap/starter-kit";
-import { RhinoStarterKit } from "src/extensions/rhino-starter-kit";
-import { isiOS, translations } from "src/models/translations";
-import { stringMap } from "src/views/string-map";
+import { RhinoStarterKit } from "src/exports/extensions/rhino-starter-kit";
+import { isiOS, translations } from "src/exports/translations";
+import { stringMap } from "src/internal/string-map";
 
 import {
   CSSResult,
@@ -19,27 +19,27 @@ import { ref, createRef, Ref } from "lit/directives/ref.js";
 import { RoleToolbar } from "role-components/dist/toolbar/component";
 import { RoleTooltip } from "role-components/dist/tooltip/component";
 
-import { AttachmentUpload } from "src/models/attachment-upload";
-import { AttachmentManager } from "src/models/attachment-manager";
+import { AttachmentUpload } from "src/exports/attachment-upload";
+import { AttachmentManager } from "src/exports/attachment-manager";
 
 /** This will go away in favor of lazy loaded SVGs. */
-import * as icons from "src/views/icons";
+import * as icons from "src/internal/icons";
 
-import { normalize } from "src/styles/normalize";
-import trixStyles from "src/styles/trix";
-import editorStyles from "src/styles/editor";
-import { BaseElement } from './base-element'
+import { normalize } from "src/exports/styles/normalize";
+import trixStyles from "src/exports/styles/trix";
+import editorStyles from "src/exports/styles/editor";
+import { BaseElement } from 'src/internal/elements/base-element'
 
-import { TipTapAddAttachmentEvent } from "src/events/tip-tap-add-attachment-event";
+import { AddAttachmentEvent } from "src/internal/events/add-attachment-event";
 
 import type { Maybe } from "src/types";
 import { AttachmentEditor } from "./attachment-editor";
 
 /**
- * This is the meat and potatoes. This is the <tip-tap-trix> element you'll
+ * This is the meat and potatoes. This is the <rhino-editor> element you'll
  *   see. This is what wraps everything into 1 coherent element.
  */
-export class RhinoEditor extends BaseElement {
+export class TipTapEditor extends BaseElement {
   readonly: boolean = false;
   linkInputRef: Ref<HTMLInputElement> = createRef();
   linkDialogExpanded: boolean = false;
@@ -77,8 +77,8 @@ export class RhinoEditor extends BaseElement {
     this.registerDependencies()
 
     this.addEventListener(
-      TipTapAddAttachmentEvent.eventName,
-      (event: TipTapAddAttachmentEvent) => {
+      AddAttachmentEvent.eventName,
+      (event: AddAttachmentEvent) => {
         const { attachment, target } = event;
 
         if (target instanceof HTMLElement && attachment.file) {
@@ -273,7 +273,7 @@ export class RhinoEditor extends BaseElement {
     	this.editor.chain().focus().setAttachment(attachments).run();
 
     	attachments.forEach((attachment) => {
-      	this.dispatchEvent(new TipTapAddAttachmentEvent(attachment));
+      	this.dispatchEvent(new AddAttachmentEvent(attachment));
     	});
 
 			// Need to reset the input otherwise you get this fun state where you can't
@@ -309,7 +309,7 @@ export class RhinoEditor extends BaseElement {
     this.editor.chain().focus().setAttachment(attachments).run();
 
     attachments.forEach((attachment) => {
-      this.dispatchEvent(new TipTapAddAttachmentEvent(attachment));
+      this.dispatchEvent(new AddAttachmentEvent(attachment));
     });
   }
 
@@ -988,5 +988,3 @@ export class RhinoEditor extends BaseElement {
 	  }
   }
 }
-
-export default RhinoEditor;

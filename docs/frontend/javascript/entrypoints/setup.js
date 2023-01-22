@@ -1,4 +1,4 @@
-import { RhinoEditor } from "rhino-editor/dist/elements/rhino-editor.js"
+import { RhinoEditor } from "rhino-editor/exports/elements/tip-tap-editor.js"
 
 // https://tiptap.dev/api/extensions/character-count
 import CharacterCount from "@tiptap/extension-character-count"

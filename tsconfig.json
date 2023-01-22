@@ -1,6 +1,6 @@
 {
   "include": ["./src"],
-  "exclude": ["./dist"],
+  "exclude": ["./exports"],
   "compilerOptions": {
     "baseUrl": ".",
     "esModuleInterop": true,
@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "declarationDir": "dist/",
+    "declarationDir": "exports/",
     "emitDeclarationOnly": true,
 
     "forceConsistentCasingInFileNames": true,

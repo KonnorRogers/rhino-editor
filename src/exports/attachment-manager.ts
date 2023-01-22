@@ -1,11 +1,11 @@
 import { AttachmentAttributes, Maybe } from "src/types";
-import { uuidv4 } from "src/models/uuidv4";
+import { uuidv4 } from "src/internal/uuidv4";
 import { EditorView } from "prosemirror-view";
-import { toDefaultCaption } from "src/views/to-default-caption";
+import { toDefaultCaption } from "src/internal/to-default-caption";
 
 /**
  * An attachment manager that matches the interface of Trix's attachment manager.
- *   This is what gets built on "tip-tap-attachment-add"
+ *   This is what gets built on "rhino-attachment-add"
  */
 export class AttachmentManager implements AttachmentAttributes {
   attributes: AttachmentAttributes & { attachmentId: string; imageId: string };
