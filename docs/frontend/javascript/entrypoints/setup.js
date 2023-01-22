@@ -1,10 +1,10 @@
-import { RhinoEditor } from "rhino-editor/exports/elements/tip-tap-editor.js"
+import { TipTapEditor } from "rhino-editor/exports/elements/tip-tap-editor.js"
 
 // https://tiptap.dev/api/extensions/character-count
 import CharacterCount from "@tiptap/extension-character-count"
 import { html } from "lit"
 
-class ExtendedEditor extends RhinoEditor {
+class ExtendedEditor extends TipTapEditor {
   extensions () {
     this.characterCountLimit = 240
     return [
