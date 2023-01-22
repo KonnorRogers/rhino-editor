@@ -88,3 +88,12 @@ pnpm run start
 
 This will start an ESBuild watcher process. Vite in Rails
 will automatically pick up changes.
+
+## Adding a changelog entry
+
+To add a changelog entry, we use <https://github.com/changesets/changesets>.
+Run the following command and then answer the prompts:
+
+```bash
+pnpm changeset
+```
