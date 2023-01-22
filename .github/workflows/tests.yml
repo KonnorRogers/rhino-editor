@@ -53,11 +53,7 @@ jobs:
 
     - name: Install via pnpm
       run: |
-        pnpm install
-        cd tests/rails
-        pnpm install
-        bundle install
-        cd -
+        pnpm run setup
     - name: Tests
       run: |
         pnpm run build
