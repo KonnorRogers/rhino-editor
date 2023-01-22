@@ -34,6 +34,11 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
 
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7.x.x
+        run_install: false
+
     - name: use node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -42,11 +47,6 @@ jobs:
         cache-dependency-path: |
           pnpm-lock.yaml
           tests/rails/pnpm-lock.yaml
-
-    - uses: pnpm/action-setup@v2
-      with:
-        version: 7.x.x
-        run_install: false
 
     - name: Install via pnpm
       run: |
