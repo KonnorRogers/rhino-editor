@@ -1,9 +1,9 @@
 import { css, html } from "lit";
 
-import { close } from "src/views/icons";
-import { toMemorySize } from "src/views/to-memory-size";
-import { normalize } from "src/styles/normalize";
-import { BaseElement } from './base-element'
+import { close } from "src/internal/icons";
+import { toMemorySize } from "src/internal/to-memory-size";
+import { normalize } from "src/exports/styles/normalize";
+import { BaseElement } from 'src/internal/elements/base-element'
 
 /**
  * An attachment editor element for managing tip-tap attachments. This encompasses the

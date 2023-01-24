@@ -1,6 +1,6 @@
 import { DirectUpload } from "@rails/activestorage";
 import type { Blob, DirectUploadDelegate } from "@rails/activestorage";
-import { AttachmentManager } from "src/models/attachment-manager";
+import { AttachmentManager } from "src/exports/attachment-manager";
 
 /**
  * An extension of DirectUpload. This is what handles uploading to remote sources

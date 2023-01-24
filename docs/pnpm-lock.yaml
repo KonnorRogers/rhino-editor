@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@hotwired/stimulus': ^3.1.1
   '@hotwired/turbo': ^7.2.4
-  '@konnorr/bridgetown-quick-search': ^3.0.2
+  '@konnorr/bridgetown-quick-search': ^3.0.3
   '@shoelace-style/shoelace': 2.0.0-beta.83
   '@tiptap/core': 2.0.0-beta.209
   '@tiptap/extension-character-count': 2.0.0-beta.209
@@ -28,7 +28,7 @@ specifiers:
 dependencies:
   '@hotwired/stimulus': 3.1.1
   '@hotwired/turbo': 7.2.4
-  '@konnorr/bridgetown-quick-search': 3.0.2
+  '@konnorr/bridgetown-quick-search': 3.0.3
   '@shoelace-style/shoelace': 2.0.0-beta.83
   '@tiptap/core': 2.0.0-beta.209_rd5pjtxohzfgv2zee3iufpqkay
   '@tiptap/extension-character-count': 2.0.0-beta.209_kdf7tbeyuz6zzmi7724b5ghupu
@@ -244,8 +244,8 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
-  /@konnorr/bridgetown-quick-search/3.0.2:
-    resolution: {integrity: sha512-bzD8DbDQWj5oTAAdh4pAWj7Tx3iGMQhtk0UbqiSh7S2UmbQ4rjKMAAFdXIrWjY6iBDbA8GJnkh0DRUDt+0YoNg==}
+  /@konnorr/bridgetown-quick-search/3.0.3:
+    resolution: {integrity: sha512-VWCc9iIuaI5cyEGnF39bPBqkCayl9b5xpx+OvkS30IeqMcUmuj9kLSs0/aDoSJoqlphdBnLKASnQ8W2O27jCHw==}
     dependencies:
       lit: 2.4.1
       lunr: 2.3.9

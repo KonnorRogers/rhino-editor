@@ -12,7 +12,7 @@ web component.
 First, we need to change how we import the editor.
 
 ```js
-import { RhinoEditor } from "rhino-editor/dist/elements/rhino-editor.js"
+import { TipTapEditor } from "rhino-editor/exports/elements/tip-tap-editor.js"
 ```
 
 You'll notice we don't want to auto-register the

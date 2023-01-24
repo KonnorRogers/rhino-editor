@@ -3,26 +3,25 @@
   "version": "0.1.1",
   "description": "A custom element wrapped rich text editor",
   "type": "module",
-  "main": "dist/bundle/index.common.js",
-  "module": "dist/bundle/index.module.js",
+  "main": "exports/bundle/index.common.js",
+  "module": "exports/bundle/index.module.js",
   "scripts": {
-    "setup": "pnpm install && cd tests/rails && pnpm install && playwright install --with-deps && bundle install && cd - && cd docs && bundle install && pnpm install",
+    "setup": "pnpm install && cd tests/rails && pnpm install && pnpm playwright install --with-deps && bundle install && cd - && cd docs && bundle install && pnpm install",
     "setup:docs": "pnpm install && pnpm run build && cd docs && bundle install && pnpm install",
-    "build": "rm -rf dist && pnpm build:types && node esbuild.config.js",
+    "build": "rm -rf exports && pnpm build:types && node esbuild.config.js",
     "build:types": "tsc",
     "lint": "prettier --check ./src",
     "fix": "prettier --write ./src",
     "test:ci": "pnpm test",
     "test": "pnpm build && cd tests/rails && bundle exec rails test:all",
     "start:example": "web-dev-server",
-    "build:example": "pnpm build && rm -rf examples/dist && cp -R dist/ examples/dist",
+    "build:example": "pnpm build && rm -rf examples/exports && cp -R exports/ examples/exports",
     "start": "pnpm build -- --watch",
     "release": "pnpm build && changeset version && changeset publish && git push --follow-tags",
     "changeset": "changeset"
   },
   "files": [
-    "src",
-    "dist"
+    "exports"
   ],
   "keywords": [
     "tiptap",
