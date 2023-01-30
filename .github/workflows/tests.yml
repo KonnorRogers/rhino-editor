@@ -15,6 +15,10 @@ jobs:
     env:
       CI: true
       RAILS_ENV: test
+      AWS_S3_BUCKET: my-bucket
+      AWS_S3_ACCESS_KEY: minioadmin
+      AWS_S3_SECRET_KEY: minioadmin
+      AWS_S3_ENDPOINT: http://127.0.0.1:9000
     strategy:
       matrix:
         ruby: ['2.7', '3.0', '3.1']
@@ -23,8 +27,20 @@ jobs:
 
     - uses: actions/checkout@v3
     - uses: microsoft/playwright-github-action@v1
-    - name: Setup docker
-      run: cd tests/rails && docker compose up --build -d && curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
+    - name: Setup minio
+      run: |
+        docker run -d -p 9000:9000 --name minio \
+                    -e "MINIO_ACCESS_KEY=minioadmin" \
+                    -e "MINIO_SECRET_KEY=minioadmin" \
+                    -v /tmp/data:/data \
+                    -v /tmp/config:/root/.minio \
+                    minio/minio server /data
+
+        export AWS_ACCESS_KEY_ID=minioadmin
+        export AWS_SECRET_ACCESS_KEY=minioadmin
+        export AWS_EC2_METADATA_DISABLED=true
+
+        aws --endpoint-url http://127.0.0.1:9000/ s3 mb s3://my-bucket
 
     - name: Install libvips
       run: sudo apt -y install libvips
