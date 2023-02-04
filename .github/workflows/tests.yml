@@ -71,14 +71,17 @@ jobs:
           pnpm-lock.yaml
           tests/rails/pnpm-lock.yaml
 
-    - run: wget https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x ./mc
-    - run: ./mc alias set minio http://127.0.0.1:9000 minioadmin minioadmin
-    - run: ./mc mb --ignore-existing minio/my-bucket
+    # - run: wget https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x ./mc
+    # - run: ./mc alias set minio http://127.0.0.1:9000 minioadmin minioadmin
+    # - run: ./mc mb --ignore-existing minio/my-bucket
 
     - name: Install via pnpm
       run: |
         pnpm run setup
-    - name: Tests
+    - name: Build
       run: |
         pnpm run build
+    - name: Test
+      run: |
+        curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
         pnpm run test:ci
