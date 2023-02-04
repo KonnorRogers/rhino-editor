@@ -61,12 +61,9 @@ jobs:
           pnpm-lock.yaml
           tests/rails/pnpm-lock.yaml
 
-    - name: Fetch mc client
-      run: curl -o ./mc -# https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x ./mc
-    - name: Create the dev bucket
-      run: ./mc mb my-bucket
-    - name: Remove mc client
-      run: rm -v ./mc
+    - run: wget https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x ./mc
+    - run: ./mc alias set minio http://127.0.0.1:9000 minoadmin minioadmin
+    - run: ./mc mb --ignore-existing minio/my-bucket
 
     - name: Install via pnpm
       run: |
