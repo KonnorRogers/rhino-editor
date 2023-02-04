@@ -24,14 +24,24 @@ jobs:
         ruby: ['2.7', '3.0', '3.1']
         node-version: [16.x, 18.x]
     services:
-        s3:
-          # See: https://stackoverflow.com/a/64188150/5155484
-          # https://github.com/minio/minio/discussions/16099
-          image: minio/minio:edge-cicd
-          options: --health-cmd "curl -s http://localhost:9000/minio/health/live"
-          env:
-            MINIO_ROOT_USER: minioadmin
-            MINIO_ROOT_PASSWORD: minioadmin
+      s3:
+      #   # See: https://stackoverflow.com/a/64188150/5155484
+      #   # https://github.com/minio/minio/discussions/16099
+      #   image: minio/minio:edge-cicd
+      #   options: --health-cmd "curl -s http://localhost:9000/minio/health/live"
+      #   env:
+      #     MINIO_ROOT_USER: minioadmin
+      #     MINIO_ROOT_PASSWORD: minioadmin
+      #   ports:
+      #     - "9000:9000"
+        # fixme: let's not depend on external unofficial image
+        image: lazybit/minio
+        ports:
+          - 9000:9000
+        env:
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin
+        options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live"
     steps:
     - uses: actions/checkout@v3
     - uses: microsoft/playwright-github-action@v1
