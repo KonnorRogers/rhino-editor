@@ -26,6 +26,7 @@ jobs:
     services:
         s3:
           # See: https://stackoverflow.com/a/64188150/5155484
+          # https://github.com/minio/minio/discussions/16099
           image: minio/minio:edge-cicd
           options: --health-cmd "curl -s http://localhost:9000/minio/health/live"
           env:
