@@ -64,7 +64,7 @@ jobs:
     - name: Fetch mc client
       run: curl -o ./mc -# https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x ./mc
     - name: Create the dev bucket
-      run: ./mc alias set minio http://s3:9000 minioadmin minioadmin && ./mc mb minio/my-bucket
+      run: ./mc mb minio/my-bucket
     - name: Remove mc client
       run: rm -v ./mc
 
