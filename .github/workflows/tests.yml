@@ -23,12 +23,17 @@ jobs:
       matrix:
         ruby: ['2.7', '3.0', '3.1']
         node-version: [16.x, 18.x]
+    services:
+        s3:
+          # See: https://stackoverflow.com/a/64188150/5155484
+          image: minio/minio:edge-cicd
+          options: --health-cmd "curl -s http://localhost:9000/minio/health/live"
+          env:
+            MINIO_ROOT_USER: minioadmin
+            MINIO_ROOT_PASSWORD: minioadmin
     steps:
-
     - uses: actions/checkout@v3
     - uses: microsoft/playwright-github-action@v1
-    # - name: Setup minio
-    #   run: |
 
     - name: Install libvips
       run: sudo apt -y install libvips
@@ -55,22 +60,17 @@ jobs:
           pnpm-lock.yaml
           tests/rails/pnpm-lock.yaml
 
+    - name: Fetch mc client
+      run: curl -o ./mc -# https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x ./mc
+    - name: Create the dev bucket
+      run: ./mc alias set minio http://s3:9000 minioadmin minioadmin && ./mc mb minio/my-bucket
+    - name: Remove mc client
+      run: rm -v ./mc
+
     - name: Install via pnpm
       run: |
         pnpm run setup
     - name: Tests
       run: |
-        docker run -d -p 9000:9000 --name minio \
-                    -e "MINIO_ACCESS_KEY=minioadmin" \
-                    -e "MINIO_SECRET_KEY=minioadmin" \
-                    -v /tmp/data:/data \
-                    -v /tmp/config:/root/.minio \
-                    minio/minio server /data
-
-        export AWS_ACCESS_KEY_ID=minioadmin
-        export AWS_SECRET_ACCESS_KEY=minioadmin
-        export AWS_EC2_METADATA_DISABLED=true
-        aws --endpoint-url http://127.0.0.1:9000/ s3 mb s3://my-bucket
-        curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
         pnpm run build
         pnpm run test:ci
