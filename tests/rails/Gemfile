@@ -24,5 +24,7 @@ group :test do
   gem "evil_systems", "~> 1.1.5", :group => :test
   gem "minitest-reporters", "~> 1.5", require: false
   gem "minitest-reporters-pride_reporter", "~> 0.0.2", require: false
+  gem "minitest-retry", require: false
+
   gem 'playwright-ruby-client'
 end
