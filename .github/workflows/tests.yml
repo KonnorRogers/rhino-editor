@@ -32,8 +32,8 @@ jobs:
     - name: Install libvips
       run: sudo apt -y install libvips
 
-    - name: Set parallel workers env variable
-      run: echo "PARALLEL_WORKERS=$(expr $(nproc) \* 6)" >> $GITHUB_ENV
+    # - name: Set parallel workers env variable
+    # run: echo "PARALLEL_WORKERS=$(expr $(nproc) \* 6)" >> $GITHUB_ENV
 
     - uses: ruby/setup-ruby@v1
       with:
