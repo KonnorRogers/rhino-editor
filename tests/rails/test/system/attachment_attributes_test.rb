@@ -5,9 +5,10 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     page.goto(root_path)
     assert page.text_content("h2").include?("TipTap Editor")
 
-    system("mkdir -p ~/s3")
     @pid = `(minio server ~/s3 --address :9000 > /dev/null 2>&1 & echo $!) || echo ''`
-    system('mc config host add local "http://0.0.0.0:9000" minioadmin minioadmin || echo ')
+
+    system("mkdir -p ~/s3")
+    system('sudo mc config host add local "http://127.0.0.1:9000" minioadmin minioadmin || echo ')
     system("mc mb local/my-bucket --region=us-east-1 || echo ''")
 
     @file_name = "view-layer-benchmarks.png"
