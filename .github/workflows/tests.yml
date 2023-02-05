@@ -89,5 +89,5 @@ jobs:
         pnpm run build
     - name: Test
       run: |
-        curl -m 10 --retry 10 -I 127.0.0.1:9000/minio/health/live
+        # curl -m 10 --retry 10 -I 127.0.0.1:9000/minio/health/live
         pnpm run test:ci
