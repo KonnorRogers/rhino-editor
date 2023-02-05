@@ -24,7 +24,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: microsoft/playwright-github-action@v1
     - name: Setup docker
-      run: cd tests/rails && docker compose up --build -d && curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
+      run: cd tests/rails && docker compose up --build & curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
 
     - name: Install libvips
       run: sudo apt -y install libvips

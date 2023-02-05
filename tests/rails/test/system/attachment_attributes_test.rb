@@ -34,6 +34,8 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def attach_images(files)
+    assert page.locator("rhino-editor #file-input")
+
     rhino_editor = page.expect_file_chooser do
       # hacky workaround because clicking the button that clicks the input[type="file"] doesnt actually work.
       page.locator("rhino-editor #file-input").evaluate("node => node.click()")
