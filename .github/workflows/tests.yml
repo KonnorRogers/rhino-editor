@@ -39,17 +39,15 @@ jobs:
         minio --version
         mc --version
 
-    - name: Run MinIO S3 server
-      run: |
-        mkdir ~/s3
-        sudo minio server ~/s3 --json > minio-log.json &
-
-    - name: Configure MinIO S3
-      run: |
-        mc config host add local http://127.0.0.1:9000 minioadmin minioadmin
-        # mc admin user add local user password
-        # mc admin policy set local readwrite user=user
-        mc mb local/my-bucket --region=us-east-1
+    # - name: Run MinIO S3 server
+    #   run: |
+    #     mkdir ~/s3
+    #     sudo minio server ~/s3 --json > minio-log.json &
+    #
+    # - name: Configure MinIO S3
+    #   run: |
+    #     mc config host add local http://127.0.0.1:9000 minioadmin minioadmin
+    #     mc mb local/my-bucket --region=us-east-1
 
     # - name: Upload Minio Logs (optional)
     #   if: failure()

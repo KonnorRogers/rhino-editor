@@ -7,6 +7,11 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
     @file_name = "view-layer-benchmarks.png"
     attach_images(file_fixture(@file_name).to_s)
+
+    system("mkdir ~/s3")
+    system("minio server ~/s3 & || echo ''")
+    system("mc config host add local http://127.0.0.1:9000 minioadmin minioadmin || echo ''")
+    system("mc mb local/my-bucket --region=us-east-1 || echo ''")
   end
 
   def rhino_editor_element
