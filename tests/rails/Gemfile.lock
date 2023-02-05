@@ -147,8 +147,6 @@ GEM
     minitest-reporters-pride_reporter (0.0.2)
       minitest (~> 5)
       minitest-reporters (~> 1)
-    minitest-retry (0.2.2)
-      minitest (>= 5.0)
     msgpack (1.5.4)
     net-imap (0.2.3)
       digest
@@ -265,7 +263,6 @@ DEPENDENCIES
   jbuilder
   minitest-reporters (~> 1.5)
   minitest-reporters-pride_reporter (~> 0.0.2)
-  minitest-retry
   playwright-ruby-client
   puma (~> 5.0)
   rails (~> 7.0.2, >= 7.0.2.3)
