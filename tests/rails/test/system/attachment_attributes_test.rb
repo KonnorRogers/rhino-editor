@@ -12,6 +12,11 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     system("minio server ~/s3 & || echo ''")
     system("mc config host add local http://127.0.0.1:9000 minioadmin minioadmin || echo ''")
     system("mc mb local/my-bucket --region=us-east-1 || echo ''")
+    @pid = `minio server ~/s3 --address :9000 > /dev/null 2>&1 & echo $!"`
+  end
+
+  def teardown
+    system("kill #{pid}")
   end
 
   def rhino_editor_element
