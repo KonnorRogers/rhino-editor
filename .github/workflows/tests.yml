@@ -19,6 +19,9 @@ jobs:
       matrix:
         ruby: ['2.7', '3.0', '3.1']
         node-version: [16.x, 18.x]
+      fail-fast: true
+      max-parallel: 1
+
     steps:
 
     - uses: actions/checkout@v3
