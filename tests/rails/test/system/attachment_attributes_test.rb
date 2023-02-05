@@ -16,7 +16,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def teardown
-    system("kill #{pid}")
+    system("kill #{@pid}")
   end
 
   def rhino_editor_element
