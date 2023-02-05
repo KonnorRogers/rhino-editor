@@ -11,14 +11,23 @@ services:
       - "9000:9000"
       - "9001:9001"
     volumes:
-      - minio:/data
-    command: minio server /data --console-address ":9001"
+      - minio1:/mnt/disk1
+      - minio2:/mnt/disk2
+      - minio3:/mnt/disk3
+      - minio4:/mnt/disk4
+      - minio5:/mnt/disk5
+      - minio6:/mnt/disk6
+    command: minio server /mnt/disk{1...6} --console-address ":9001"
+
   runner:
     image: ubuntu:latest
-    command: mkdir -p /data/my-bucket && /bin/sh
-    volumes:
-      - minio:/data
+    command: mkdir -p /mnt/disk{1..6}/my-bucket && /bin/sh
     depends_on:
       - minio
 volumes:
-  minio:
+  minio1:
+  minio2:
+  minio3:
+  minio4:
+  minio5:
+  minio6:
