@@ -47,7 +47,7 @@ jobs:
     - name: Configure MinIO S3
       run: |
         mkdir -p ~/s3
-        mc config host add local http://127.0.0.1:9000 minioadmin minioadmin
+        sudo mc config host add local http://127.0.0.1:9000 minioadmin minioadmin
         mc mb local/my-bucket --region=us-east-1
 
     # - name: Upload Minio Logs (optional)
