@@ -15,8 +15,8 @@ jobs:
     env:
       CI: true
       RAILS_ENV: test
-      AWS_ACCESS_KEY_ID: user
-      AWS_SECRET_ACCESS_KEY: password
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
       AWS_DEFAULT_REGION: us-east-1
       AWS_BUCKET: my-bucket
       AWS_URL: "http://127.0.0.1:9000"
@@ -48,7 +48,7 @@ jobs:
       run: |
         mc config host add local http://127.0.0.1:9000 minioadmin minioadmin
         # mc admin user add local user password
-        mc admin policy set local readwrite user=user
+        # mc admin policy set local readwrite user=user
         mc mb local/my-bucket --region=us-east-1
 
     # - name: Upload Minio Logs (optional)
