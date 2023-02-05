@@ -13,7 +13,7 @@ amazon:
   secret_access_key: <%= ENV.fetch("AWS_S3_SECRET_KEY", "minioadmin") %>
   region: us-east-1
   bucket: <%= ENV.fetch("AWS_S3_BUCKET", "my-bucket") %>
-  endpoint: <%= ENV.fetch("AWS_S3_ENDPOINT", "http://localhost:9000")
+  endpoint: <%= ENV.fetch("AWS_S3_ENDPOINT", "http://localhost:9000") %>
   force_path_style: true
 
 # Remember not to checkin your GCS keyfile to a repository
