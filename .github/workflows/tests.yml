@@ -19,6 +19,7 @@ jobs:
       matrix:
         ruby: ['2.7', '3.0', '3.1']
         node-version: [16.x, 18.x]
+      max-parallel: 1
     steps:
 
     - uses: actions/checkout@v3
@@ -29,8 +30,8 @@ jobs:
     - name: Install libvips
       run: sudo apt -y install libvips
 
-    - name: Set parallel workers env variable
-      run: echo "PARALLEL_WORKERS=$(expr $(nproc) \* 6)" >> $GITHUB_ENV
+    # - name: Set parallel workers env variable
+    #   run: echo "PARALLEL_WORKERS=$(expr $(nproc) \* 6)" >> $GITHUB_ENV
 
     - uses: ruby/setup-ruby@v1
       with:
