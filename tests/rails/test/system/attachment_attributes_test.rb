@@ -1,14 +1,6 @@
 require "application_system_test_case"
 
 class AttachmentAttributesTest < ApplicationSystemTestCase
-  def setup
-    page.goto(root_path)
-    assert page.text_content("h2").include?("TipTap Editor")
-
-    @file_name = "view-layer-benchmarks.png"
-    attach_images(file_fixture(@file_name).to_s)
-  end
-
   def rhino_editor_element
     page.locator("rhino-editor")
   end
@@ -47,6 +39,11 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   test "Attachment Attributes" do
+    page.goto(root_path)
+    assert page.text_content("h2").include?("TipTap Editor")
+
+    @file_name = "view-layer-benchmarks.png"
+    attach_images(file_fixture(@file_name).to_s)
     figure_attributes = ["data-trix-content-type"]
     figure_attributes.each { |str| assert_equal rhino_editor_figure[str], trix_figure[str] }
 
@@ -81,6 +78,11 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   test "Image attributes" do
+    page.goto(root_path)
+    assert page.text_content("h2").include?("TipTap Editor")
+
+    @file_name = "view-layer-benchmarks.png"
+    attach_images(file_fixture(@file_name).to_s)
     assert_equal rhino_editor_image["width"], trix_image["width"]
     assert_equal rhino_editor_image["height"], trix_image["height"]
   end
