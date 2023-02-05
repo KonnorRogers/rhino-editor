@@ -23,8 +23,17 @@ jobs:
 
     - uses: actions/checkout@v3
     - uses: microsoft/playwright-github-action@v1
-    - name: Setup docker
-      run: cd tests/rails && docker compose up --build -d && curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
+    - run: |
+        mkdir -p minio1/disk{1..4}/my-bucket
+        docker run -d \
+          -p 9000:9000 \
+          -p 9001:9001 \
+          -v "$HOME/minio1/disk1:/mnt/disk1" \
+          -v "$HOME/minio1/disk2:/mnt/disk2" \
+          -v "$HOME/minio1/disk3:/mnt/disk3" \
+          -v "$HOME/minio1/disk4:/mnt/disk4" \
+          quay.io/minio/minio server /mnt/disk{1...4} --console-address ":9001"
+
 
     - name: Install libvips
       run: sudo apt -y install libvips
@@ -57,4 +66,5 @@ jobs:
     - name: Tests
       run: |
         pnpm run build
+        curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
         pnpm run test:ci
