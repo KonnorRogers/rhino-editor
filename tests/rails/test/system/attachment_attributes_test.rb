@@ -13,8 +13,12 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     page.locator("rhino-editor")
   end
 
+  def rhino_editor_figure_no_sgid
+    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png", timeout: 5)
+  end
+
   def rhino_editor_figure
-    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png")
+    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]", timeout: 5)
   end
 
   def rhino_editor_image
@@ -38,7 +42,16 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
       # hacky workaround because clicking the button that clicks the input[type="file"] doesnt actually work.
       page.locator("rhino-editor #file-input").evaluate("node => node.click()")
     end
-    rhino_editor.set_files(files)
+
+    5.times do
+      rhino_editor.set_files(files)
+
+      begin
+        break if rhino_editor_figure
+      rescue
+        rhino_editor_figure_no_sgid.evaluate("node => node.remove()")
+      end
+    end
 
     trix = page.expect_file_chooser do
       page.locator(".trix-button--icon-attach").click
