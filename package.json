@@ -7,6 +7,7 @@
   "module": "exports/bundle/index.module.js",
   "scripts": {
     "setup": "pnpm install && cd tests/rails && pnpm install && pnpm playwright install --with-deps && bundle install && cd - && cd docs && bundle install && pnpm install",
+    "setup:ci": "pnpm install --frozen-lockfile && cd test/rails && pnpm install --frozen-lockfile && bundle install",
     "setup:docs": "pnpm install && pnpm run build && cd docs && bundle install && pnpm install",
     "build": "rm -rf exports && pnpm build:types && node esbuild.config.js",
     "build:types": "tsc",

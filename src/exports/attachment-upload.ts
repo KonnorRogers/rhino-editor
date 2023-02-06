@@ -43,8 +43,12 @@ export class AttachmentUpload implements DirectUploadDelegate {
       throw new Error(`Direct upload failed: ${error}`);
     }
 
+    if (!blob.attachable_sgid) {
+      return
+    }
+
     this.attachment.setAttributes({
-      sgid: blob.attachable_sgid ?? "",
+      sgid: blob.attachable_sgid,
       url: this.createBlobUrl(blob.signed_id, blob.filename),
     });
 
