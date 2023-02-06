@@ -14,11 +14,11 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def rhino_editor_figure_no_sgid
-    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png", timeout: 5)
+    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png")
   end
 
   def rhino_editor_figure
-    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]", timeout: 5)
+    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]")
   end
 
   def rhino_editor_image
