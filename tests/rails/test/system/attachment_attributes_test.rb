@@ -38,19 +38,19 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def attach_images(files)
-    rhino_editor = page.expect_file_chooser do
-      # hacky workaround because clicking the button that clicks the input[type="file"] doesnt actually work.
-      page.locator("rhino-editor #file-input").evaluate("node => node.click()")
-    end
-
     5.times do
+      rhino_editor = page.expect_file_chooser do
+        # hacky workaround because clicking the button that clicks the input[type="file"] doesnt actually work.
+        page.locator("rhino-editor #file-input").evaluate("node => node.click()")
+      end
       rhino_editor.set_files(files)
 
-      begin
-        break if rhino_editor_figure
-      rescue
-        rhino_editor_figure_no_sgid.evaluate("node => node.remove()")
-      end
+      figure = rhino_editor_figure
+      figure.wait_for(timeout: 5)
+
+      break if figure
+
+      rhino_editor_figure_no_sgid.evaluate("node => node.remove()")
     end
 
     trix = page.expect_file_chooser do
