@@ -46,7 +46,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
       rhino_editor.set_files(files)
 
       figure = rhino_editor_figure
-      figure.wait_for(state: :all, timeout: 5)
+      figure.wait_for(state: "attached", timeout: 5)
 
       break if figure
 
