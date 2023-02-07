@@ -45,12 +45,14 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
       end
       rhino_editor.set_files(files)
 
-      figure = rhino_editor_figure
-      figure.wait_for(state: "attached", timeout: 5)
+      begin
+        figure = rhino_editor_figure
+        figure.wait_for(state: "attached", timeout: 5)
 
-      break if figure
-
-      rhino_editor_figure_no_sgid.evaluate("node => node.remove()")
+        break if figure
+      rescue
+        rhino_editor_figure_no_sgid.evaluate("node => node.remove()")
+      end
     end
 
     trix = page.expect_file_chooser do
