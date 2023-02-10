@@ -47,7 +47,8 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
       begin
         figure = rhino_editor_figure
-        figure.wait_for(state: "attached", timeout: 5)
+        # timeout in ms
+        figure.wait_for(state: "attached", timeout: 5_000)
 
         break if figure
       rescue
