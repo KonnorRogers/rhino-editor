@@ -1,5 +1,5 @@
-import { mergeAttributes } from "@tiptap/core"
-import Strike from "@tiptap/extension-strike"
+import { mergeAttributes } from "@tiptap/core";
+import Strike from "@tiptap/extension-strike";
 
 /**
  * @TODO: ActiveStorage Gem
@@ -9,6 +9,10 @@ import Strike from "@tiptap/extension-strike"
  */
 export const CustomStrike = Strike.extend({
   renderHTML({ HTMLAttributes }) {
-    return ['del', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
+    return [
+      "del",
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+      0,
+    ];
   },
-})
+});

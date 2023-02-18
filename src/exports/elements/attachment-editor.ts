@@ -3,7 +3,7 @@ import { css, html } from "lit";
 import { close } from "src/internal/icons";
 import { toMemorySize } from "src/internal/to-memory-size";
 import { normalize } from "src/exports/styles/normalize";
-import { BaseElement } from 'src/internal/elements/base-element'
+import { BaseElement } from "src/internal/elements/base-element";
 
 /**
  * An attachment editor element for managing tip-tap attachments. This encompasses the
@@ -14,7 +14,7 @@ export class AttachmentEditor extends BaseElement {
   fileSize?: number;
   progress?: number;
 
-  static baseName = "rhino-attachment-editor"
+  static baseName = "rhino-attachment-editor";
 
   close() {
     return html`${close}`;
@@ -37,9 +37,9 @@ export class AttachmentEditor extends BaseElement {
         width: 100%;
         pointer-events: none;
         top: 0;
-				left: 0;
-				height: 100%;
-				z-index: 0;
+        left: 0;
+        height: 100%;
+        z-index: 0;
       }
 
       button {
@@ -137,7 +137,11 @@ export class AttachmentEditor extends BaseElement {
         ${this.close()}
       </button>
 
-      <span part="file-metadata" class="file-metadata" ?hidden=${!(this.fileName || this.toFileSize())}>
+      <span
+        part="file-metadata"
+        class="file-metadata"
+        ?hidden=${!(this.fileName || this.toFileSize())}
+      >
         <span class="file-name" part="file-name">${this.fileName}</span>
         <span class="file-size" part="file-size">${this.toFileSize()}</span>
       </span>

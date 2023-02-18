@@ -19,5 +19,5 @@ export const translations = {
   redo: `Redo <${modifierKey}+shift+z>`,
   linkDialogLink: "Link",
   linkDialogUnlink: "Unlink",
-  placeholder: "Write something..."
+  placeholder: "Write something...",
 };

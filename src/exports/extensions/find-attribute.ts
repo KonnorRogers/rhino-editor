@@ -11,5 +11,3 @@ export function findAttribute(element: HTMLElement, attribute: string) {
 
   return JSON.parse(attrs)[attribute];
 }
-
-

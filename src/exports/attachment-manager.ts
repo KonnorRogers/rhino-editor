@@ -24,38 +24,38 @@ export class AttachmentManager implements AttachmentAttributes {
   }
 
   setUploadProgress(progress: number): void {
-  	if (this.content == null) {
-    	this.setNodeMarkup({ progress });
+    if (this.content == null) {
+      this.setNodeMarkup({ progress });
     }
   }
 
   setAttributes(obj: Omit<AttachmentAttributes, "src" | "file">) {
     this.attributes.sgid = obj.sgid;
 
-		if (obj.content == null && obj.url) {
-    	/** This preloads the image so we don't show a big flash. */
-    	const image = new Image();
+    if (obj.content == null && obj.url) {
+      /** This preloads the image so we don't show a big flash. */
+      const image = new Image();
 
-    	this.attributes.url = obj.url;
+      this.attributes.url = obj.url;
 
-    	image.src = obj.url;
+      image.src = obj.url;
 
-    	image.onload = () => {
-      	this.setNodeMarkup({
-        	sgid: this.attributes.sgid,
-        	url: this.attributes.url,
-        	src: this.attributes.url,
-        	href: this.attributes.url + "?content-disposition=attachment",
-      	});
-      	image.remove();
-    	};
-    	return
+      image.onload = () => {
+        this.setNodeMarkup({
+          sgid: this.attributes.sgid,
+          url: this.attributes.url,
+          src: this.attributes.url,
+          href: this.attributes.url + "?content-disposition=attachment",
+        });
+        image.remove();
+      };
+      return;
     }
 
     this.setNodeMarkup({
       sgid: this.attributes.sgid,
-      content: this.attributes.content
-    })
+      content: this.attributes.content,
+    });
   }
 
   /**
@@ -96,7 +96,7 @@ export class AttachmentManager implements AttachmentAttributes {
   }
 
   get sgid() {
-  	return this.attributes.sgid
+    return this.attributes.sgid;
   }
 
   get file(): File {
@@ -116,14 +116,17 @@ export class AttachmentManager implements AttachmentAttributes {
   }
 
   get content(): Maybe<string> {
-  	return this.attributes.content
+    return this.attributes.content;
   }
 
-  set content (val: Maybe<string>) {
-  	this.attributes.content = val
+  set content(val: Maybe<string>) {
+    this.attributes.content = val;
   }
 
   get caption(): string {
-  	return toDefaultCaption({ fileName: this.fileName, fileSize: this.fileSize })
+    return toDefaultCaption({
+      fileName: this.fileName,
+      fileSize: this.fileSize,
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Node, mergeAttributes } from "@tiptap/core"
+import { Node, mergeAttributes } from "@tiptap/core";
 import { findAttribute } from "./find-attribute";
 
 export interface ImageOptions {
