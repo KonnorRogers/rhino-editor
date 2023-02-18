@@ -147,7 +147,7 @@ export class TipTapEditor extends BaseElement {
     // light-dom version.
     // const div = document.createElement("div")
     // this.insertAdjacentElement("afterend", div)
-    this.editor = this.setupEditor(element);
+    this.editor = setupEditor.call(this, element);
     bindEditorListeners.call(this, this.editor)
     this.editorElement = element.querySelector(".ProseMirror");
 
@@ -173,14 +173,20 @@ export class TipTapEditor extends BaseElement {
     ]
   }
 
+  /**
+   * Extend this to provide your own options, or override existing options.
+   *   @example
+   *    class ExtendedRhinoEditor extends TipTapEditor {
+   *      editorOptions {
+   *        return {
+   *          autofocus: true
+   *        }
+   *      }
+   *    }
+   *
+   */
   editorOptions (_element: Element): Partial<EditorOptions> {
     return {}
-  }
-
-  setupEditor(element: Element): Editor {
-  	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
-  	this.normalizeDOM(this.inputElement)
-    return new Editor({...defaultOptions.call(this, element), ...this.editorOptions});
   }
 
   updateInputElementValue () {
@@ -1041,5 +1047,12 @@ function unBindEditorListeners (this: TipTapEditor, editor: Editor): void {
   editor.off("selectionUpdate", handleSelectionUpdate)
   editor.off("transaction", handleTransaction)
   editor.off("blur", handleBlur)
+}
+
+
+function setupEditor (this: TipTapEditor, element: Element): Editor {
+  // This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
+  this.normalizeDOM(this.inputElement)
+  return new Editor({...defaultOptions.call(this, element), ...this.editorOptions});
 }
 
