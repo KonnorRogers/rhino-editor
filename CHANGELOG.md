@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- 84ff18b: fix: autofocus is now "false" by default
+  BREAKING_CHANGE: defaultOptions is now editorOptions
+
+  ```diff
+  - class ExtendedRhinoEditor extends TipTapEditor {
+  -   defaultOptions {
+  -     return {
+  -       super.defaultOptions(),
+  -       autofocus: true
+  -     }
+  -   }
+  - }
+
+  + class ExtendedRhinoEditor extends TipTapEditor {
+  +   editorOptions {
+  +     return {
+  +       autofocus: true
+  +     }
+  +   }
+  + }
+  ```
+
+  feat: created a `/cdn/exports` route for CDN users.
+
 ## 0.2.0
 
 ### Minor Changes
