@@ -1,7 +1,10 @@
-import { Extension, Mark, Node } from "@tiptap/core"
-import { FirefoxCaretFixPlugin, FirefoxCaretPluginOptions } from "./firefox-caret-plugin";
+import { Extension, Mark, Node } from "@tiptap/core";
+import {
+  FirefoxCaretFixPlugin,
+  FirefoxCaretPluginOptions,
+} from "./firefox-caret-plugin";
 import { Attachment, AttachmentOptions } from "./attachment";
-import { Image, ImageOptions } from "./image"
+import { Image, ImageOptions } from "./image";
 import { Gallery, GalleryOptions } from "./gallery";
 import { Figcaption, FigcaptionOptions } from "./figcaption";
 import { Plugin } from "prosemirror-state";
@@ -13,48 +16,49 @@ import Link, { LinkOptions } from "@tiptap/extension-link";
 
 export interface RhinoStarterKitOptions {
   /** Funky hack extension for contenteditable in firefox. */
-  firefoxCaretPlugin: Partial<FirefoxCaretPluginOptions> | false
+  firefoxCaretPlugin: Partial<FirefoxCaretPluginOptions> | false;
 
   /** Enables attachment galleries */
-  gallery: Partial<GalleryOptions> | false
+  gallery: Partial<GalleryOptions> | false;
 
   /** Enables attachments */
-  attachment: Partial<AttachmentOptions> | false
+  attachment: Partial<AttachmentOptions> | false;
 
   /** Enables captions in attachments */
-  figcaption: Partial<FigcaptionOptions> | false
+  figcaption: Partial<FigcaptionOptions> | false;
 
   /** Enables images in attachments */
-  image:  Partial<ImageOptions> | false
+  image: Partial<ImageOptions> | false;
 
-  strike: Partial<StrikeOptions> | false
-  focus: Partial<FocusOptions> | false
-  link: Partial<LinkOptions> | false
-  placeholder: Partial<PlaceholderOptions> | false
+  strike: Partial<StrikeOptions> | false;
+  focus: Partial<FocusOptions> | false;
+  link: Partial<LinkOptions> | false;
+  placeholder: Partial<PlaceholderOptions> | false;
 }
 
-export type TipTapPlugin = Node | Extension | Mark
+export type TipTapPlugin = Node | Extension | Mark;
 
 export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
   addProseMirrorPlugins() {
-    const loadedExtensions: (Plugin)[] = []
+    const loadedExtensions: Plugin[] = [];
 
-    const extensions: [keyof RhinoStarterKitOptions, (options: Record<string, unknown>) => Plugin][] = [
-      ["firefoxCaretPlugin", FirefoxCaretFixPlugin],
-    ]
+    const extensions: [
+      keyof RhinoStarterKitOptions,
+      (options: Record<string, unknown>) => Plugin
+    ][] = [["firefoxCaretPlugin", FirefoxCaretFixPlugin]];
 
     extensions.forEach(([string, extension]) => {
-      const options = this.options[string]
+      const options = this.options[string];
       if (options !== false) {
-        loadedExtensions.push(extension(options))
+        loadedExtensions.push(extension(options));
       }
-    })
+    });
 
-    return loadedExtensions
+    return loadedExtensions;
   },
 
   addExtensions() {
-    const loadedExtensions: (TipTapPlugin)[] = []
+    const loadedExtensions: TipTapPlugin[] = [];
 
     const extensions: [keyof RhinoStarterKitOptions, TipTapPlugin][] = [
       ["gallery", Gallery],
@@ -64,16 +68,16 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       ["strike", CustomStrike],
       ["link", Link],
       ["focus", Focus],
-      ["placeholder", Placeholder]
-    ]
+      ["placeholder", Placeholder],
+    ];
 
     extensions.forEach(([string, extension]) => {
-      const options = this.options[string]
+      const options = this.options[string];
       if (options !== false) {
-        loadedExtensions.push(extension.configure(options))
+        loadedExtensions.push(extension.configure(options));
       }
-    })
+    });
 
-    return loadedExtensions
+    return loadedExtensions;
   },
 });

@@ -3,13 +3,13 @@ import { css } from "lit";
 // These all come from Trix / ActionText. This should probably be cleaned up into
 // a regular .css for users to include.
 export default css`
-	.trix-content {
-		box-sizing: border-box;
-	}
+  .trix-content {
+    box-sizing: border-box;
+  }
   .trix-content * {
-  	box-sizing: inherit;
-		margin: 0;
-		padding: 0;
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
   }
   .trix-content h1 {
     font-size: 1.2em;
@@ -83,33 +83,50 @@ export default css`
     flex-wrap: wrap;
     position: relative;
   }
-.trix-content .attachment-gallery > :is(.attachment, action-text-attachment) {
-  flex: 1 0 33%;
-  padding: 0 0.5em;
-  max-width: 33%;
-  white-space: normal;
-}
+  .trix-content .attachment-gallery > :is(.attachment, action-text-attachment) {
+    flex: 1 0 33%;
+    padding: 0 0.5em;
+    max-width: 33%;
+    white-space: normal;
+  }
 
-/* 1 / 3 / n item[s] */
-.trix-content .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1) ~ :is(.attachment, action-text-attachment),
-.trix-content .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1) {
-	padding: 0;
-  flex-basis: 100%;
-  max-width: 100%;
-}
+  /* 1 / 3 / n item[s] */
+  .trix-content
+    .attachment-gallery
+    > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1)
+    ~ :is(.attachment, action-text-attachment),
+  .trix-content
+    .attachment-gallery
+    > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1) {
+    padding: 0;
+    flex-basis: 100%;
+    max-width: 100%;
+  }
 
-/* 2 items / 4 items */
-.attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2),
-.attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2) ~ :is(.attachment, action-text-attachment),
-.attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(4),
-.attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(4) ~ :is(.attachment, action-text-attachment) {
-  flex-basis: 50%;
-  max-width: 50%;
-}
+  /* 2 items / 4 items */
+  .attachment-gallery
+    > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2),
+  .attachment-gallery
+    > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2)
+    ~ :is(.attachment, action-text-attachment),
+  .attachment-gallery
+    > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(4),
+  .attachment-gallery
+    > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(4)
+    ~ :is(.attachment, action-text-attachment) {
+    flex-basis: 50%;
+    max-width: 50%;
+  }
 
-.trix-content .attachment-gallery.attachment-gallery--2 action-text-attachment > .attachment,
-.trix-content .attachment-gallery.attachment-gallery--4 action-text-attachment > .attachment,
-.trix-content .attachment-gallery action-text-attachment > .attachment {
-	max-width: 100%;
-}
+  .trix-content
+    .attachment-gallery.attachment-gallery--2
+    action-text-attachment
+    > .attachment,
+  .trix-content
+    .attachment-gallery.attachment-gallery--4
+    action-text-attachment
+    > .attachment,
+  .trix-content .attachment-gallery action-text-attachment > .attachment {
+    max-width: 100%;
+  }
 `;

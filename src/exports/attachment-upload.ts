@@ -30,8 +30,8 @@ export class AttachmentUpload implements DirectUploadDelegate {
   directUploadWillStoreFileWithXHR(xhr: XMLHttpRequest) {
     xhr.upload.addEventListener("progress", (event) => {
       const progress = (event.loaded / event.total) * 100;
-      this.currentProgress = progress
-      this.setUploadProgress()
+      this.currentProgress = progress;
+      this.setUploadProgress();
     });
   }
 
@@ -48,27 +48,27 @@ export class AttachmentUpload implements DirectUploadDelegate {
       url: this.createBlobUrl(blob.signed_id, blob.filename),
     });
 
-		this.currentProgress = 100
-		this.setUploadProgress()
+    this.currentProgress = 100;
+    this.setUploadProgress();
   }
 
-  setUploadProgress () {
-  	window.requestAnimationFrame(() => {
-  		if (this.animationProgress >= 100) {
-  			this.currentProgress = 100
-  			this.animationProgress = 100
-  			this.attachment.setUploadProgress(100)
-  			return
-  		}
+  setUploadProgress() {
+    window.requestAnimationFrame(() => {
+      if (this.animationProgress >= 100) {
+        this.currentProgress = 100;
+        this.animationProgress = 100;
+        this.attachment.setUploadProgress(100);
+        return;
+      }
 
-  		if (this.animationProgress > this.currentProgress) {
-  			return
-  		}
+      if (this.animationProgress > this.currentProgress) {
+        return;
+      }
 
-  		this.animationProgress += 1
-  		this.attachment.setUploadProgress(this.animationProgress)
-  		this.setUploadProgress()
-  	})
+      this.animationProgress += 1;
+      this.attachment.setUploadProgress(this.animationProgress);
+      this.setUploadProgress();
+    });
   }
 
   createBlobUrl(signedId: string, filename: string) {

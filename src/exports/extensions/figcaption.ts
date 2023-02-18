@@ -1,4 +1,4 @@
-import { Node, mergeAttributes } from "@tiptap/core"
+import { Node, mergeAttributes } from "@tiptap/core";
 
 export interface FigcaptionOptions {
   HTMLAttributes: Record<string, any>;

@@ -15,11 +15,12 @@ export default css`
     --rhino-editor-border-color: #cecece;
     --rhino-editor-placeholder-text-color: #cecece;
 
-
     /* Regular buttons */
     --rhino-button-text-color: #889;
     --rhino-button-border-color: #cecece;
-    --rhino-button-background-color: hsl(var(--rhino-button-background-color-hsl));
+    --rhino-button-background-color: hsl(
+      var(--rhino-button-background-color-hsl)
+    );
     --rhino-button-background-color-hsl: 219 26% 95%;
 
     /** Disabled Buttons */
@@ -34,11 +35,12 @@ export default css`
     --rhino-toolbar-text-color: hsl(219, 6%, 43%);
     --rhino-toolbar-icon-size: 24px;
 
-    --rhino-dialog-border-color: hsl(var(--rhino-button-background-color-hsl) / 50%);
+    --rhino-dialog-border-color: hsl(
+      var(--rhino-button-background-color-hsl) / 50%
+    );
 
     color: var(--rhino-text-color);
   }
-
 
   img,
   svg,
@@ -59,13 +61,12 @@ export default css`
     position: relative;
   }
 
-	/* If you use white-space: normal; in firefox you cant add white-space to the end of the figcaption */
+  /* If you use white-space: normal; in firefox you cant add white-space to the end of the figcaption */
   .trix-content figcaption {
-  	white-space: pre;
-  	margin-top: 0.5em;
-  	white-space: break-spaces;
+    white-space: pre;
+    margin-top: 0.5em;
+    white-space: break-spaces;
   }
-
 
   /* Attachments */
   :host(:not([readonly])) figure:is(:focus-within, :focus, .has-focus) img {
@@ -75,12 +76,18 @@ export default css`
 
   attachment-editor::part(delete-button),
   attachment-editor::part(file-metadata) {
-  	display: none;
+    display: none;
   }
 
-  :host(:not([readonly])) .trix-content figure:is(:focus-within, :focus, .has-focus) attachment-editor::part(delete-button),
-  :host(:not([readonly])) .trix-content figure:is(:focus-within, :focus, .has-focus) attachment-editor::part(file-metadata) {
-  	display: flex;
+  :host(:not([readonly]))
+    .trix-content
+    figure:is(:focus-within, :focus, .has-focus)
+    attachment-editor::part(delete-button),
+  :host(:not([readonly]))
+    .trix-content
+    figure:is(:focus-within, :focus, .has-focus)
+    attachment-editor::part(file-metadata) {
+    display: flex;
   }
 
   .ProseMirror .placeholder {
@@ -105,7 +112,7 @@ export default css`
   }
 
   .toolbar::part(base) {
-  	overflow: auto;
+    overflow: auto;
   }
 
   .toolbar__button {
@@ -216,7 +223,7 @@ export default css`
   }
 
   figure[data-trix-attachment] figcaption {
-  	position: relative;
+    position: relative;
   }
 
   .ProseMirror p.is-editor-empty:first-child::before,
@@ -226,16 +233,15 @@ export default css`
   }
 
   figure[data-trix-attachment]:not(.has-focus) figcaption.is-empty::before {
-		content: attr(data-default-caption);
+    content: attr(data-default-caption);
   }
 
-
   figure[data-trix-attachment] figcaption.is-empty::before {
-  	position: absolute;
-  	left: 50%;
-  	top: 50%;
-  	transform: translate(-50%, -50%);
-  	pointer-events: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
   }
 
   .ProseMirror p.is-editor-empty:first-child::before {
@@ -245,7 +251,6 @@ export default css`
   }
 
   .dialogs-wrapper {
-  	position: relative;
+    position: relative;
   }
 `;
-
