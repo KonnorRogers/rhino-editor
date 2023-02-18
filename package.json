@@ -21,7 +21,8 @@
     "changeset": "changeset"
   },
   "files": [
-    "exports"
+    "exports",
+    "cdn"
   ],
   "keywords": [
     "tiptap",

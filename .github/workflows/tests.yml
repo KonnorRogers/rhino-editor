@@ -54,6 +54,9 @@ jobs:
     - name: Install via pnpm
       run: |
         pnpm run setup
+    - name: Lint
+      run: |
+        pnpm run lint
     - name: Tests
       run: |
         pnpm run build

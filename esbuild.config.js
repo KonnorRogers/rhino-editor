@@ -56,6 +56,18 @@ const deps = [
       splitting: true,
       minify: false,
       chunkNames: 'chunks/[name]-[hash]'
+    }),
+
+    esbuild.build({
+      ...defaultConfig,
+      entryPoints: entries,
+      outdir: 'cdn/exports',
+      format: 'esm',
+      target: "es2020",
+      external: [],
+      splitting: true,
+      minify: false,
+      chunkNames: 'chunks/[name]-[hash]'
     })
   ]
 

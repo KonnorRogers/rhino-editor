@@ -23,3 +23,5 @@ BREAKING_CHANGE: defaultOptions is now editorOptions
 +   }
 + }
 ```
+
+feat: created a `/cdn/exports` route for CDN users.
