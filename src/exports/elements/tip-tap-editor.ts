@@ -78,19 +78,23 @@ export class TipTapEditor extends BaseElement {
 
     this.addEventListener(
       AddAttachmentEvent.eventName,
-      (event: AddAttachmentEvent) => {
-        const { attachment, target } = event;
-
-        if (target instanceof HTMLElement && attachment.file) {
-        	if (attachment.attributes.sgid) return
-          const upload = new AttachmentUpload(attachment, target);
-          upload.start();
-        }
-      }
+      this.handleAttachment
     );
 
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
     this.addEventListener("drop", this.handleDropFile)
+  }
+
+  disconnectedCallback () {
+    super.disconnectedCallback()
+
+    this.removeEventListener(
+      AddAttachmentEvent.eventName,
+      this.handleAttachment
+    );
+
+    this.removeEventListener("keydown", this.handleKeyboardDialogToggle);
+    this.removeEventListener("drop", this.handleDropFile)
   }
 
   handleKeyboardDialogToggle = (e: KeyboardEvent) => {
@@ -112,6 +116,16 @@ export class TipTapEditor extends BaseElement {
     }
   };
 
+  handleAttachment = (event: AddAttachmentEvent) => {
+    const { attachment, target } = event;
+
+    if (target instanceof HTMLElement && attachment.file) {
+      // if (attachment.attributes.sgid) return
+      const upload = new AttachmentUpload(attachment, target);
+      upload.start();
+    }
+  }
+
   get icons(): typeof icons {
     return icons;
   }
@@ -126,10 +140,15 @@ export class TipTapEditor extends BaseElement {
 
   editorElementChanged(element: Element | undefined): void {
     if (element == null) return;
-    // Non-light-dom version.
+
+    if (this.editor) {
+      unBindEditorListeners.call(this, this.editor)
+    }
+    // light-dom version.
     // const div = document.createElement("div")
     // this.insertAdjacentElement("afterend", div)
     this.editor = this.setupEditor(element);
+    bindEditorListeners.call(this, this.editor)
     this.editorElement = element.querySelector(".ProseMirror");
 
     this.editorElement?.classList.add("trix-content");
@@ -154,54 +173,14 @@ export class TipTapEditor extends BaseElement {
     ]
   }
 
-  defaultOptions (element: Element): Partial<EditorOptions> {
-    return {
-      injectCSS: false,
-      extensions: this.extensions(),
-      autofocus: true,
-      element,
-      content: this.inputElement?.value,
-      editable: !this.readonly,
-      // onBeforeCreate: ({ editor }) => {
-      //   // Before the view is created.
-      // },
-      onCreate: (_args) => {
-        // The editor is ready.
-        this.requestUpdate();
-      },
-      onUpdate: (_args) => {
-        // The content has changed.
-        this.updateInputElementValue()
-        this.requestUpdate();
-      },
-      onSelectionUpdate: (_args) => {
-        // The selection has changed.
-        this.requestUpdate();
-      },
-      onTransaction: (_args) => {
-        // The editor state has changed.
-        this.requestUpdate();
-      },
-      onFocus: (_args) => {
-        // The editor is focused.
-        this.closeLinkDialog();
-        this.requestUpdate();
-      },
-      onBlur: (_args) => {
-        // The editor isn’t focused anymore.
-        this.updateInputElementValue()
-        this.requestUpdate();
-      },
-      // onDestroy: () => {
-      //   // The editor is being destroyed.
-      // },
-    }
+  editorOptions (_element: Element): Partial<EditorOptions> {
+    return {}
   }
 
   setupEditor(element: Element): Editor {
   	// This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
   	this.normalizeDOM(this.inputElement)
-    return new Editor(this.defaultOptions(element));
+    return new Editor({...defaultOptions.call(this, element), ...this.editorOptions});
   }
 
   updateInputElementValue () {
@@ -298,7 +277,6 @@ export class TipTapEditor extends BaseElement {
     const { view } = this.editor
 
     if (view == null) return
-
 
     const attachments = this.transformFilesToAttachments.call(this, dataTransfer.files)
 
@@ -988,3 +966,80 @@ export class TipTapEditor extends BaseElement {
 	  }
   }
 }
+
+function defaultOptions (this: TipTapEditor, element: Element): Partial<EditorOptions> {
+  return {
+    injectCSS: false,
+    extensions: this.extensions(),
+    autofocus: false,
+    element,
+    content: this.inputElement?.value,
+    editable: !this.readonly,
+  }
+}
+
+type HandleEvent = { handleEvent: () => void }
+
+function handleCreate (this: TipTapEditor): HandleEvent {
+  return {
+    handleEvent: () => this.requestUpdate()
+  }
+}
+
+function handleUpdate (this: TipTapEditor): HandleEvent {
+  return {
+    handleEvent: () => {
+      this.updateInputElementValue()
+      this.requestUpdate()
+    }
+  }
+}
+
+function handleFocus (this: TipTapEditor): HandleEvent {
+  return {
+    handleEvent: () => {
+      this.closeLinkDialog()
+      this.requestUpdate()
+    }
+  }
+}
+
+function handleBlur (this: TipTapEditor): HandleEvent {
+  return {
+    handleEvent: () => {
+      this.updateInputElementValue()
+      this.requestUpdate()
+    }
+  }
+}
+
+function handleSelectionUpdate (this: TipTapEditor): HandleEvent {
+  return {
+    handleEvent: () => this.requestUpdate()
+  }
+}
+
+function handleTransaction (this: TipTapEditor): HandleEvent {
+  return {
+    handleEvent: () => this.requestUpdate()
+  }
+}
+
+function bindEditorListeners (this: TipTapEditor, editor: Editor): void {
+  editor.on("focus", handleFocus)
+  editor.on("create", handleCreate)
+  editor.on("update", handleUpdate)
+  editor.on("selectionUpdate", handleSelectionUpdate)
+  editor.on("transaction", handleTransaction)
+  editor.on("blur", handleBlur)
+}
+
+function unBindEditorListeners (this: TipTapEditor, editor: Editor): void {
+  editor.off("focus", handleFocus)
+  editor.off("create", handleCreate)
+  editor.off("update", handleUpdate)
+  editor.off("selectionUpdate", handleSelectionUpdate)
+  editor.off("transaction", handleTransaction)
+  editor.off("blur", handleBlur)
+}
+
