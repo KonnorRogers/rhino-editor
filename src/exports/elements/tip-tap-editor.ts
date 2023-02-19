@@ -35,8 +35,6 @@ import { AddAttachmentEvent } from "src/internal/events/add-attachment-event";
 import type { Maybe } from "src/types";
 import { AttachmentEditor } from "./attachment-editor";
 
-type HandleEvent = { handleEvent: () => void };
-
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
  *   see. This is what wraps everything into 1 coherent element.
@@ -1095,49 +1093,31 @@ export class TipTapEditor extends BaseElement {
     };
   }
 
-  #handleCreate(): HandleEvent {
-    return {
-      handleEvent: () => this.requestUpdate(),
-    };
+  #handleCreate = () => {
+    this.requestUpdate()
   }
 
-  #handleUpdate(): HandleEvent {
-    return {
-      handleEvent: () => {
-        this.updateInputElementValue();
-        this.requestUpdate();
-      },
-    };
+  #handleUpdate = () => {
+    this.updateInputElementValue();
+    this.requestUpdate();
   }
 
-  #handleFocus(): HandleEvent {
-    return {
-      handleEvent: () => {
-        this.closeLinkDialog();
-        this.requestUpdate();
-      },
-    };
+  #handleFocus = () => {
+    this.closeLinkDialog();
+    this.requestUpdate();
   }
 
-  #handleBlur(): HandleEvent {
-    return {
-      handleEvent: () => {
-        this.updateInputElementValue();
-        this.requestUpdate();
-      },
-    };
+  #handleBlur = () => {
+    this.updateInputElementValue();
+    this.requestUpdate();
   }
 
-  #handleSelectionUpdate(): HandleEvent {
-    return {
-      handleEvent: () => this.requestUpdate(),
-    };
+  #handleSelectionUpdate = () => {
+    this.requestUpdate()
   }
 
-  #handleTransaction(): HandleEvent {
-    return {
-      handleEvent: () => this.requestUpdate(),
-    };
+  #handleTransaction = () => {
+    this.requestUpdate()
   }
 
   #bindEditorListeners(): void {
