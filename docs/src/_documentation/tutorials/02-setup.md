@@ -22,9 +22,11 @@ then register it.
 Now let's see how we would add extensions:
 
 ```js
-<%= File.read("./frontend/javascript/entrypoints/setup.js").html_safe %>
+<%= File.read("./frontend/javascript/entrypoints/character-counter.js").html_safe %>
+```
 
-// index.html
+```html
+<!-- index.html -->
 <extended-rhino-editor></extended-rhino-editor>
 ```
 
@@ -43,4 +45,4 @@ them all with your own if you wanted!
 <input id="character-counter" type="hidden" value="<p>I'm a rhino editor with a character counter!</p>">
 <extended-rhino-editor input="character-counter"></extended-rhino-editor>
 
-<script data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/setup.js" %>" defer></script>
+<script data-turbo-track="reload" src="<%= asset_path 'javascript/entrypoints/character-counter.js' %>" defer></script>

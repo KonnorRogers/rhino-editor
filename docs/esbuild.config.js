@@ -1,3 +1,5 @@
+const path = require("path")
+const { glob } = require("glob")
 const build = require("./config/esbuild.defaults.js")
 
 // Update this if you need to configure a destination folder other than `output`
@@ -26,11 +28,25 @@ const outputFolder = "output"
 // ```
 // const esbuildOptions = { publicPath: "/my_subfolder/_bridgetown/static" }
 // ```
+
+const entries = {}
+
+glob
+  .sync("./frontend/javascript/entrypoints/**/*.js")
+  .forEach((file) => {
+    const { dir, name } = path.parse(path.relative("frontend", file))
+
+    const shortPath = path.join(".", dir, name)
+    entries[shortPath] = file
+  })
+
+console.log(entries)
+
 const esbuildOptions = {
-  entryPoints: [
-    "frontend/javascript/index.js",
-    "frontend/javascript/entrypoints/setup.js"
-  ]
+  entryPoints: {
+    [path.join(".", "index")]: "frontend/javascript/index.js",
+    ...entries
+  }
 }
 
 build(outputFolder, esbuildOptions)
