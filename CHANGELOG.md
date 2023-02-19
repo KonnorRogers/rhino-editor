@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- 0a59f7a: fix: everything was disabled, tweak some color values
+
 ## 0.3.0
 
 ### Minor Changes
