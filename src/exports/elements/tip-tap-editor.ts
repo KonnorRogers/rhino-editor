@@ -1094,31 +1094,31 @@ export class TipTapEditor extends BaseElement {
   }
 
   #handleCreate = () => {
-    this.requestUpdate()
-  }
+    this.requestUpdate();
+  };
 
   #handleUpdate = () => {
     this.updateInputElementValue();
     this.requestUpdate();
-  }
+  };
 
   #handleFocus = () => {
     this.closeLinkDialog();
     this.requestUpdate();
-  }
+  };
 
   #handleBlur = () => {
     this.updateInputElementValue();
     this.requestUpdate();
-  }
+  };
 
   #handleSelectionUpdate = () => {
-    this.requestUpdate()
-  }
+    this.requestUpdate();
+  };
 
   #handleTransaction = () => {
-    this.requestUpdate()
-  }
+    this.requestUpdate();
+  };
 
   #bindEditorListeners(): void {
     if (this.editor == null) return;
