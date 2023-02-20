@@ -10,6 +10,41 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
+  js-test:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: microsoft/playwright-github-action@v1
+
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 7.x.x
+        run_install: false
+
+    - name: use node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
+        cache-dependency-path: |
+          pnpm-lock.yaml
+          tests/js/pnpm-lock.yaml
+
+    - name: Install via pnpm
+      run: |
+        pnpm run setup
+    - name: Lint
+      run: |
+        pnpm run lint
+    - name: Tests
+      run: |
+        pnpm run build
+        pnpm run test:ci:js
   rails-test:
     runs-on: ubuntu-latest
     env:
@@ -54,10 +89,7 @@ jobs:
     - name: Install via pnpm
       run: |
         pnpm run setup
-    - name: Lint
-      run: |
-        pnpm run lint
     - name: Tests
       run: |
         pnpm run build
-        pnpm run test:ci
+        pnpm run test:ci:rails

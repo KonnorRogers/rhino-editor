@@ -7,14 +7,14 @@
   "module": "exports/index.module.js",
   "unpkg": "exports/bundle/index.module.js",
   "scripts": {
-    "setup": "pnpm install && cd tests/rails && pnpm install && pnpm playwright install --with-deps && bundle install && cd - && cd docs && bundle install && pnpm install",
+    "setup": "pnpm install && pnpm playwright install --with-deps && cd tests/rails && pnpm install && pnpm playwright install --with-deps && bundle install && cd - && cd docs && bundle install && pnpm install",
     "setup:docs": "pnpm install && pnpm run build && cd docs && bundle install && pnpm install",
     "build": "rm -rf exports && pnpm build:types && node esbuild.config.js",
     "build:types": "tsc",
     "lint": "prettier --check ./src",
     "fix": "prettier --write ./src",
-    "test:ci": "pnpm test",
-    "test": "pnpm build && cd tests/rails && bundle exec rails test:all",
+    "test:js": "pnpm build && wtr",
+    "test:rails": "pnpm build && cd tests/rails && bundle exec rails test:all",
     "start:example": "web-dev-server",
     "build:example": "pnpm build && rm -rf examples/exports && cp -R exports/ examples/exports",
     "start": "pnpm build -- --watch",
@@ -36,10 +36,15 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
     "@esm-bundle/chai": "4.3.4-fix.0",
+    "@open-wc/testing": "^3.1.7",
+    "@rollup/plugin-commonjs": "24.0.0",
+    "@testing-library/dom": "^9.0.0",
+    "@types/mocha": "^10.0.1",
     "@types/rails__activestorage": "^7.0.1",
     "@typescript-eslint/parser": "^4.33.0",
     "@web/dev-server": "^0.1.35",
     "@web/dev-server-esbuild": "^0.3.3",
+    "@web/dev-server-rollup": "0.0.0-canary-20230216020153",
     "@web/test-runner": "^0.15.0",
     "@web/test-runner-playwright": "^0.9.0",
     "esbuild": "^0.14.54",
@@ -47,6 +52,8 @@
     "glob": "^8.0.3",
     "playwright": "^1.30.0",
     "prettier": "^2.7.1",
+    "rollup": "^3.17.1",
+    "shadow-dom-testing-library": "^1.10.0",
     "standard-version": "^9.5.0",
     "typescript": "^4.8.4"
   },
@@ -77,6 +84,7 @@
   },
   "pnpm": {
     "overrides": {
+      "aria-query": "link:../aria-query",
       "prosemirror-model": "^1.18.1",
       "prosemirror-state": "^1.4.2",
       "prosemirror-view": "^1.29.0"
