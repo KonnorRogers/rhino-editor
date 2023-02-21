@@ -15,8 +15,8 @@ export default {
   // in a monorepo you need to set the root dir to resolve modules
   rootDir: '.',
   files: [
-    "./tests/js/**/*.test.ts",
-    "./src/**/*.test.ts"
+    "./tests/js/**/*.test.(js|ts)",
+    "./src/**/*.test.(js|ts)"
   ],
   browsers: [
     playwrightLauncher({ product: 'chromium', concurrency: CONCURRENCY / 3 }),
@@ -54,6 +54,6 @@ export default {
       ],
 	    requireReturnsDefault: 'namespace',
     }),
-    esbuildPlugin({ ts: true, target: 'auto' })
+    esbuildPlugin({ target: "auto" })
   ],
 };
