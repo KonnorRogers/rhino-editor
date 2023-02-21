@@ -32,12 +32,12 @@ export default {
   testRunnerHtml: testFramework => `
     <html lang="en-US">
       <head>
+      </head>
+      <body>
         <script>
           window.process = {env: { NODE_ENV: "test" }}
           var global = typeof self !== undefined ? self : this;
         </script>
-      </head>
-      <body>
         <script type="module" src="${testFramework}"></script>
       </body>
     </html>
