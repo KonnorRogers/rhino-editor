@@ -84,7 +84,7 @@
   },
   "pnpm": {
     "overrides": {
-      "aria-query": "link:../aria-query",
+      "aria-query": "npm:@konnorr/aria-query",
       "prosemirror-model": "^1.18.1",
       "prosemirror-state": "^1.4.2",
       "prosemirror-view": "^1.29.0"
