@@ -39,6 +39,7 @@
     "@open-wc/testing": "^3.1.7",
     "@rollup/plugin-commonjs": "24.0.0",
     "@testing-library/dom": "^9.0.0",
+    "@tiptap/extension-character-count": "2.0.0-beta.209",
     "@types/mocha": "^10.0.1",
     "@types/rails__activestorage": "^7.0.1",
     "@typescript-eslint/parser": "^4.33.0",
