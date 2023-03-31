@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+
+### Patch Changes
+
+- b7b335c: fix: bad entrypoint
+
 ## 0.3.1
 
 ### Patch Changes
