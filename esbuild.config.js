@@ -11,7 +11,7 @@ const deps = [
 
 ;(async function () {
   const entries = {}
-  glob.sync("./src/exports/**/*.{ts,js}")
+  glob.sync("./src/exports/**/*.{ts,js,css}")
     .forEach((file) => {
       const key = path.relative(path.join("src", "exports"), path.join(path.dirname(file), path.basename(file, path.extname(file))))
       const value = "." + path.sep + path.join(path.dirname(file), path.basename(file, path.extname(file)))
