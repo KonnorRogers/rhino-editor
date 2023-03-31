@@ -45,71 +45,6 @@ export default css`
     color: var(--rhino-text-color);
   }
 
-  img,
-  svg,
-  figure {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  figure,
-  p {
-    padding: 0;
-    margin: 0;
-  }
-
-  figure {
-    position: relative;
-  }
-
-  /* If you use white-space: normal; in firefox you cant add white-space to the end of the figcaption */
-  .trix-content figcaption {
-    white-space: pre;
-    margin-top: 0.5em;
-    white-space: break-spaces;
-  }
-
-  /* Attachments */
-  :host(:not([readonly])) figure:is(:focus-within, :focus, .has-focus) img {
-    outline: transparent;
-    box-shadow: var(--rhino-focus-ring);
-  }
-
-  attachment-editor::part(delete-button),
-  attachment-editor::part(file-metadata) {
-    display: none;
-  }
-
-  :host(:not([readonly]))
-    .trix-content
-    figure:is(:focus-within, :focus, .has-focus)
-    attachment-editor::part(delete-button),
-  :host(:not([readonly]))
-    .trix-content
-    figure:is(:focus-within, :focus, .has-focus)
-    attachment-editor::part(file-metadata) {
-    display: flex;
-  }
-
-  .ProseMirror .placeholder {
-    position: absolute;
-    pointer-events: none;
-    color: var(--rhino-placeholder-text-color);
-    cursor: text;
-    content: "";
-  }
-
-  .ProseMirror {
-    border: 1px solid var(--rhino-border-color);
-    border-radius: 3px;
-    margin: 0;
-    padding: 0.4em 0.6em;
-    min-height: 200px;
-    outline: transparent;
-  }
-
   .toolbar {
     color: var(--rhino-toolbar-text-color);
   }
@@ -222,34 +157,6 @@ export default css`
   .link-dialog__buttons {
     margin-right: 0.5em;
     margin-left: 0.5em;
-  }
-
-  figure[data-trix-attachment] figcaption {
-    position: relative;
-  }
-
-  .ProseMirror p.is-editor-empty:first-child::before,
-  figure[data-trix-attachment].has-focus figcaption.is-empty::before {
-    color: var(--rhino-placeholder-text-color);
-    content: attr(data-placeholder);
-  }
-
-  figure[data-trix-attachment]:not(.has-focus) figcaption.is-empty::before {
-    content: attr(data-default-caption);
-  }
-
-  figure[data-trix-attachment] figcaption.is-empty::before {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  .ProseMirror p.is-editor-empty:first-child::before {
-    float: left;
-    height: 0;
-    pointer-events: none;
   }
 
   .dialogs-wrapper {

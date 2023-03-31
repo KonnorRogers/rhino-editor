@@ -1,4 +1,5 @@
 import "../styles/index.css"
+import "rhino-editor/exports/styles/trix.css"
 import { Application } from "@hotwired/stimulus"
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import "@konnorr/bridgetown-quick-search";

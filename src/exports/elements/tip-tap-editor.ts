@@ -26,7 +26,6 @@ import { AttachmentManager } from "src/exports/attachment-manager";
 import * as icons from "src/internal/icons";
 
 import { normalize } from "src/exports/styles/normalize";
-import trixStyles from "src/exports/styles/trix";
 import editorStyles from "src/exports/styles/editor";
 import { BaseElement } from "src/internal/elements/base-element";
 
@@ -63,7 +62,7 @@ export class TipTapEditor extends BaseElement {
   }
 
   static get styles(): CSSResult[] {
-    return [normalize, tipTapCoreStyles, editorStyles, trixStyles];
+    return [normalize, tipTapCoreStyles, editorStyles];
   }
 
   /** Used for registering things like <role-toolbar>, <role-tooltip>, <rhino-attachment-editor> */
@@ -142,11 +141,12 @@ export class TipTapEditor extends BaseElement {
       this.#unBindEditorListeners();
     }
     // light-dom version.
-    // const div = document.createElement("div")
-    // this.insertAdjacentElement("afterend", div)
-    this.editor = this.#setupEditor(element);
+    const div = document.createElement("div")
+    this.insertAdjacentElement("beforeend", div)
+    div.setAttribute("slot", "editor")
+    this.editor = this.#setupEditor(div);
     this.#bindEditorListeners();
-    this.editorElement = element.querySelector(".ProseMirror");
+    this.editorElement = div.querySelector(".ProseMirror");
 
     this.editorElement?.classList.add("trix-content");
     this.editorElement?.setAttribute("tabindex", "0");
@@ -1028,6 +1028,7 @@ export class TipTapEditor extends BaseElement {
         class="dialogs-wrapper"
         part="dialogs-wrapper"
       >
+        <slot name="editor"></slot>
         ${this.renderLinkCreationDialog()}
       </div>
     `;

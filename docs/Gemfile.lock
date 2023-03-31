@@ -121,6 +121,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  arm64-darwin-22
 
 DEPENDENCIES
   bridgetown (~> 1.1.0)
