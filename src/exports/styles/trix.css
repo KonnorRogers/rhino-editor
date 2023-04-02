@@ -30,19 +30,17 @@
   box-shadow: var(--rhino-focus-ring);
 }
 
-attachment-editor::part(delete-button),
-attachment-editor::part(file-metadata) {
+.rhino-attachment-editor::part(delete-button),
+.rhino-attachment-editor::part(file-metadata) {
   display: none;
 }
 
 .trix-content:not([readonly])
-  .trix-content
   figure:is(:focus-within, :focus, .has-focus)
-  attachment-editor::part(delete-button),
+  .rhino-attachment-editor::part(delete-button),
 .trix-content:not([readonly])
-  .trix-content
   figure:is(:focus-within, :focus, .has-focus)
-  attachment-editor::part(file-metadata) {
+  .rhino-attachment-editor::part(file-metadata) {
   display: flex;
 }
 

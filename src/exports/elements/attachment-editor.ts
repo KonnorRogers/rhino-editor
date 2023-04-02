@@ -1,4 +1,4 @@
-import { css, html } from "lit";
+import { css, html, PropertyValueMap } from "lit";
 
 import { close } from "src/internal/icons";
 import { toMemorySize } from "src/internal/to-memory-size";
@@ -25,7 +25,13 @@ export class AttachmentEditor extends BaseElement {
       fileName: { attribute: "file-name", type: String },
       fileSize: { attribute: "file-size", type: Number },
       progress: { type: Number },
+      class: { attribute: "class", type: String }
     };
+  }
+
+  connectedCallback () {
+    super.connectedCallback()
+    this.classList.add("rhino-attachment-editor")
   }
 
   static get styles() {
