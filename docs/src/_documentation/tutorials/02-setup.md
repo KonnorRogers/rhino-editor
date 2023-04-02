@@ -12,6 +12,7 @@ web component.
 First, we need to change how we import the editor.
 
 ```js
+import "rhino-editor/exports/styles/trix.css"
 import { TipTapEditor } from "rhino-editor/exports/elements/tip-tap-editor.js"
 ```
 

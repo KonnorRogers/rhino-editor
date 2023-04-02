@@ -14,6 +14,7 @@ After installing, we can import it in our project.
 ```js
 // index.js
 import "rhino-editor"
+import "rhino-editor/exports/styles/trix.css"
 ```
 
 The above will auto-register the `<rhino-editor>` element for you.
