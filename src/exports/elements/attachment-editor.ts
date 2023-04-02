@@ -1,4 +1,4 @@
-import { css, html, PropertyValueMap } from "lit";
+import { css, html } from "lit";
 
 import { close } from "src/internal/icons";
 import { toMemorySize } from "src/internal/to-memory-size";
