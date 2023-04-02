@@ -17,6 +17,7 @@
     "declaration": true,
     "declarationDir": "exports/",
     "emitDeclarationOnly": true,
+    "useDefineForClassFields": false,
 
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,

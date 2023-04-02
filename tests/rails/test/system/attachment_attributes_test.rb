@@ -14,7 +14,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def rhino_editor_figure
-    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]")
+    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]").all[0]
   end
 
   def rhino_editor_image
