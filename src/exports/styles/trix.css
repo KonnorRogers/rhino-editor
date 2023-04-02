@@ -8,7 +8,7 @@
   display: block;
 }
 
-.trix-content :is(figure,p) {
+.trix-content :is(figure, p) {
   padding: 0;
   margin: 0;
 }
@@ -63,18 +63,21 @@ attachment-editor::part(file-metadata) {
   outline: transparent;
 }
 
-
 .trix-content figure[data-trix-attachment] figcaption {
   position: relative;
 }
 
 .trix-content p.is-editor-empty:first-child::before,
-.trix-content figure[data-trix-attachment].has-focus figcaption.is-empty::before {
+.trix-content
+  figure[data-trix-attachment].has-focus
+  figcaption.is-empty::before {
   color: var(--rhino-placeholder-text-color);
   content: attr(data-placeholder);
 }
 
-.trix-content figure[data-trix-attachment]:not(.has-focus) figcaption.is-empty::before {
+.trix-content
+  figure[data-trix-attachment]:not(.has-focus)
+  figcaption.is-empty::before {
   content: attr(data-default-caption);
 }
 

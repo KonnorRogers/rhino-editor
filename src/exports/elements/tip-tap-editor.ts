@@ -141,9 +141,9 @@ export class TipTapEditor extends BaseElement {
       this.#unBindEditorListeners();
     }
     // light-dom version.
-    const div = document.createElement("div")
-    this.insertAdjacentElement("beforeend", div)
-    div.setAttribute("slot", "editor")
+    const div = document.createElement("div");
+    this.insertAdjacentElement("beforeend", div);
+    div.setAttribute("slot", "editor");
     this.editor = this.#setupEditor(div);
     this.#bindEditorListeners();
     this.editorElement = div.querySelector(".ProseMirror");
