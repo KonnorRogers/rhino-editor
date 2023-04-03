@@ -14,9 +14,9 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def rhino_editor_figure
-    figure = page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]")
+    figure = page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid] >> nth=0")
     figure.wait_for(timeout: 5_000)
-    figure.first
+    figure
   end
 
   def rhino_editor_image
