@@ -34,7 +34,7 @@ import { AddAttachmentEvent } from "src/internal/events/add-attachment-event";
 import type { Maybe } from "src/types";
 import { AttachmentEditor } from "./attachment-editor";
 
-export type Serializer = "" | "html" | "json"
+export type Serializer = "" | "html" | "json";
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
  *   see. This is what wraps everything into 1 coherent element.
@@ -47,7 +47,7 @@ export class TipTapEditor extends BaseElement {
   editor: Maybe<Editor>;
   editorElement: Maybe<Element>;
   translations = translations;
-  serializer: Serializer = ""
+  serializer: Serializer = "";
 
   static baseName = "rhino-editor";
 
@@ -194,14 +194,12 @@ export class TipTapEditor extends BaseElement {
     }
   }
 
-  serialize () {
-    if (this.editor == null) return ""
+  serialize() {
+    if (this.editor == null) return "";
 
+    if (this.serializer?.toLowerCase() === "json") return this.editor.getJSON();
 
-    if (this.serializer?.toLowerCase() === "json") return this.editor.getJSON()
-
-    return this.editor.getHTML()
-
+    return this.editor.getHTML();
   }
 
   get inputElement(): Maybe<HTMLInputElement> {
@@ -1040,8 +1038,8 @@ export class TipTapEditor extends BaseElement {
         class="dialogs-wrapper"
         part="dialogs-wrapper"
       >
-        <slot name="editor"></slot>
         ${this.renderLinkCreationDialog()}
+        <slot name="editor"></slot>
       </div>
     `;
   }
@@ -1096,10 +1094,10 @@ export class TipTapEditor extends BaseElement {
   }
 
   #defaultOptions(element: Element): Partial<EditorOptions> {
-    let content = this.inputElement?.value
+    let content = this.inputElement?.value;
 
     if (this.serializer?.toLowerCase() === "json") {
-      content = JSON.parse(content || "{}")
+      content = JSON.parse(content || "{}");
     }
 
     return {
