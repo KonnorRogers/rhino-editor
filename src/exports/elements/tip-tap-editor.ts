@@ -34,6 +34,7 @@ import { AddAttachmentEvent } from "src/internal/events/add-attachment-event";
 import type { Maybe } from "src/types";
 import { AttachmentEditor } from "./attachment-editor";
 
+export type Serializer = "" | "html" | "json"
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
  *   see. This is what wraps everything into 1 coherent element.
@@ -46,6 +47,7 @@ export class TipTapEditor extends BaseElement {
   editor: Maybe<Editor>;
   editorElement: Maybe<Element>;
   translations = translations;
+  serializer: Serializer = ""
 
   static baseName = "rhino-editor";
 
@@ -188,8 +190,18 @@ export class TipTapEditor extends BaseElement {
 
   updateInputElementValue() {
     if (this.inputElement != null && this.editor != null && !this.readonly) {
-      this.inputElement.value = this.editor.getHTML();
+      this.inputElement.value = this.serialize();
     }
+  }
+
+  serialize () {
+    if (this.editor == null) return ""
+
+
+    if (this.serializer?.toLowerCase() === "json") return this.editor.getJSON()
+
+    return this.editor.getHTML()
+
   }
 
   get inputElement(): Maybe<HTMLInputElement> {
@@ -1084,12 +1096,18 @@ export class TipTapEditor extends BaseElement {
   }
 
   #defaultOptions(element: Element): Partial<EditorOptions> {
+    let content = this.inputElement?.value
+
+    if (this.serializer?.toLowerCase() === "json") {
+      content = JSON.parse(content || "{}")
+    }
+
     return {
       injectCSS: false,
       extensions: this.extensions(),
       autofocus: false,
       element,
-      content: this.inputElement?.value,
+      content,
       editable: !this.readonly,
     };
   }
@@ -1144,8 +1162,11 @@ export class TipTapEditor extends BaseElement {
   }
 
   #setupEditor(element: Element): Editor {
-    // This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
-    this.normalizeDOM(this.inputElement);
+    if (!this.serializer || this.serializer === "html") {
+      // This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
+      this.normalizeDOM(this.inputElement);
+    }
+
     return new Editor({
       ...this.#defaultOptions(element),
       ...this.editorOptions,

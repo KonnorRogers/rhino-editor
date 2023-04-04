@@ -1,3 +1,5 @@
+# @example
+#   <%= render Alert.new(type: "warning", title:) %>
 class Alert < Bridgetown::Component
   ICONS = {
     primary: "info-circle",
