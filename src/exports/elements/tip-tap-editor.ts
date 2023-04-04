@@ -1,4 +1,4 @@
-import { Editor, EditorOptions } from "@tiptap/core";
+import { Content, Editor, EditorOptions } from "@tiptap/core";
 import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from "@tiptap/starter-kit";
@@ -1094,10 +1094,10 @@ export class TipTapEditor extends BaseElement {
   }
 
   #defaultOptions(element: Element): Partial<EditorOptions> {
-    let content = this.inputElement?.value;
+    let content: Content = this.inputElement?.value || "";
 
-    if (this.serializer?.toLowerCase() === "json") {
-      content = JSON.parse(content || "{}");
+    if (content && this.serializer?.toLowerCase() === "json") {
+      content = JSON.parse(content);
     }
 
     return {
