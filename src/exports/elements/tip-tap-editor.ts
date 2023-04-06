@@ -789,18 +789,18 @@ export class TipTapEditor extends BaseElement {
           >
         </slot>
         <slot name="attach-files-icon">${this.icons.attachFiles}</slot>
-      </button>
 
-      <!-- @TODO: Write documentation. Hookup onchange to the slotted elements -->
-      <slot name="attach-files-input">
-        <input
-          id="file-input"
-          type="file"
-          hidden
-          multiple
-          @change=${async () => await this.handleFileUpload()}
-        />
-      </slot>
+        <!-- @TODO: Write documentation. Hookup onchange to the slotted elements -->
+        <slot name="attach-files-input">
+          <input
+            id="file-input"
+            type="file"
+            hidden
+            multiple
+            @change=${async () => await this.handleFileUpload()}
+          />
+        </slot>
+      </button>
     `;
   }
 

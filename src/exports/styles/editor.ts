@@ -84,28 +84,28 @@ export default css`
     background-color: var(--rhino-button-focus-background-color);
   }
 
-  .toolbar__button:is([aria-disabled="true"]:not([part~="button--active"])) {
+  .toolbar__button:is([aria-disabled="true"]:not([part~="toolbar__button--active"])) {
     color: var(--rhino-button-disabled-text-color);
     border-color: var(--rhino-button-disabled-border-color);
   }
 
-  .toolbar__button:is(:focus, :hover):is([aria-disabled="true"]:not([part~="button--active"])) {
+  .toolbar__button:is(:focus, :hover):is([aria-disabled="true"]:not([part~="toolbar__button--active"])) {
     outline: transparent;
     color: var(--rhino-button-disabled-text-color);
     border-color: var(--rhino-button-disabled-border-color);
     box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
   }
 
-  .toolbar__button:is([part~="button--active"]),
-  .toolbar__button:is([part~="button--active"]):is(:hover, :focus) {
+  .toolbar__button:is([part~="toolbar__button--active"]),
+  .toolbar__button:is([part~="toolbar__button--active"]):is(:hover, :focus) {
     background-color: var(--rhino-button-active-background-color);
   }
 
-  .toolbar__button:is([part~="button__link"], [part~="button__ordered-list"]) {
+  .toolbar__button:is([part~="toolbar__button--link"], [part~="toolbar__button--ordered-list"]) {
     margin-inline-end: 1rem;
   }
 
-  .toolbar__button:is([part~="button__attach-files"]) {
+  ::part(toolbar__button--attach-files) {
     margin-inline-end: auto;
   }
 

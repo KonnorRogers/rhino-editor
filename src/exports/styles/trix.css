@@ -220,6 +220,7 @@
   max-width: 100%;
 }
 
+/** synchronizing this with the shadow dom styles sucks. Perhaps there's a better way? */
 .rhino-toolbar-button {
   border: 1px solid var(--rhino-border-color);
   border-radius: 4px;
