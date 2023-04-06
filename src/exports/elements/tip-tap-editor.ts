@@ -60,7 +60,15 @@ export class TipTapEditor extends BaseElement {
       input: {},
       linkInputRef: { state: true },
       translations: { state: true },
+      class: {reflect: true}
     };
+  }
+
+
+  protected willUpdate(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+    if (changedProperties.has("class")) {
+      this.classList.add("rhino-editor")
+    }
   }
 
   static get styles(): CSSResult[] {
@@ -74,6 +82,8 @@ export class TipTapEditor extends BaseElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+
+    this.classList.add("rhino-editor")
 
     this.registerDependencies();
 
@@ -386,10 +396,10 @@ export class TipTapEditor extends BaseElement {
         class="toolbar__button"
         type="button"
         part=${stringMap({
-          button: true,
-          button__bold: true,
-          "button--active": Boolean(this.editor?.isActive("bold")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--bold": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("bold")),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBold(),
         })}
         aria-describedby="bold"
@@ -426,10 +436,10 @@ export class TipTapEditor extends BaseElement {
         tabindex="-1"
         type="button"
         part=${stringMap({
-          button: true,
-          button__italic: true,
-          "button--active": Boolean(this.editor?.isActive("italic")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--italic": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("italic")),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleItalic(),
         })}
         aria-describedby="italics"
@@ -467,10 +477,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__strike: true,
-          "button--active": Boolean(this.editor?.isActive("strike")),
-          "button--disabled": !(
+          toolbar__button: true,
+          "toolbar__button--strike": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("strike")),
+          "toolbar__button--disabled": !(
             this.editor && this.editor.can().toggleStrike()
           ),
         })}
@@ -508,10 +518,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__link: true,
-          "button--active": Boolean(this.editor?.isActive("link")),
-          "button--disabled": !(
+          toolbar__button: true,
+          "toolbar__button--link": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("link")),
+          "toolbar__button--disabled": !(
             this.editor && this.editor.can().setLink({ href: "" })
           ),
         })}
@@ -552,10 +562,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__heading: true,
-          "button--active": Boolean(this.editor?.isActive("heading")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--heading": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("heading")),
+          "toolbar__button--disabled":
             this.editor == null ||
             !this.editor.can().toggleHeading({ level: 1 }),
         })}
@@ -595,10 +605,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__blockquote: true,
-          "button--active": Boolean(this.editor?.isActive("blockquote")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--blockquote": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("blockquote")),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBlockquote(),
         })}
         aria-describedby="block-quote"
@@ -637,10 +647,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          "button__code-block": true,
-          "button--active": Boolean(this.editor?.isActive("codeBlock")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--code-block": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("codeBlock")),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleCodeBlock(),
         })}
         aria-describedby="code-block"
@@ -678,10 +688,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          "button__bullet-list": true,
-          "button--active": Boolean(this.editor?.isActive("bulletList")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--bullet-list": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("bulletList")),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBulletList(),
         })}
         aria-describedby="bullet-list"
@@ -719,10 +729,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          "button__ordered-list": true,
-          "button--active": Boolean(this.editor?.isActive("orderedList")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--ordered-list": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("orderedList")),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleOrderedList(),
         })}
         aria-describedby="ordered-list"
@@ -761,9 +771,9 @@ export class TipTapEditor extends BaseElement {
         tabindex="-1"
         type="button"
         part=${stringMap({
-          button: true,
-          "button__attach-files": true,
-          "button--disabled": this.editor == null,
+          toolbar__button: true,
+          "toolbar__button--attach-files": true,
+          "toolbar__button--disabled": this.editor == null,
         })}
         aria-describedby="attach-files"
         aria-disabled=${this.editor == null}
@@ -779,7 +789,10 @@ export class TipTapEditor extends BaseElement {
           >
         </slot>
         <slot name="attach-files-icon">${this.icons.attachFiles}</slot>
+      </button>
 
+      <!-- @TODO: Write documentation. Hookup onchange to the slotted elements -->
+      <slot name="attach-files-input">
         <input
           id="file-input"
           type="file"
@@ -787,7 +800,7 @@ export class TipTapEditor extends BaseElement {
           multiple
           @change=${async () => await this.handleFileUpload()}
         />
-      </button>
+      </slot>
     `;
   }
 
@@ -798,9 +811,9 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__undo: true,
-          "button--disabled": this.editor == null || !this.editor.can().undo(),
+          toolbar__button: true,
+          "toolbar__button--undo": true,
+          "toolbar__button--disabled": this.editor == null || !this.editor.can().undo(),
         })}
         aria-describedby="undo"
         aria-disabled=${this.editor == null || !this.editor.can().undo()}
@@ -835,9 +848,9 @@ export class TipTapEditor extends BaseElement {
         tabindex="-1"
         type="button"
         part=${stringMap({
-          button: true,
-          button__redo: true,
-          "button--disabled": this.editor == null || !this.editor.can().redo(),
+          toolbar__button: true,
+          "toolbar__button--redo": true,
+          "toolbar__button--disabled": this.editor == null || !this.editor.can().redo(),
         })}
         aria-describedby="redo"
         aria-disabled=${this.editor == null || !this.editor.can().redo()}

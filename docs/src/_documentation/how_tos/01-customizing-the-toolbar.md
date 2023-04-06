@@ -10,15 +10,33 @@ Heres an example of "slotting" in an embed button.
 
 ```html
 <rhino-editor>
-  <button type="button">Embed</button>
+  <button
+    type="button"
+    slot="before-undo-button"
+    class="rhino-toolbar-button"
+    data-role="toolbar-item"
+    tabindex="-1"
+  >
+    Embed
+  </button>
 </rhino-editor>
 ```
 
 <rhino-editor>
-  <button type="button">Embed</button>
+  <button
+    type="button"
+    slot="before-undo-button"
+    class="rhino-toolbar-button"
+    data-role="toolbar-item"
+    tabindex="-1"
+  >
+    Embed
+  </button>
 </rhino-editor>
 
-<%= Alert.new(type: :danger, title: "Note") do %>
-  It is up to you to style buttons that you slot in.
-  Rhino Editor will not style them for you.
+
+<br><br>
+
+<%= render Alert.new(type: :warning, title: "Note") do %>
+  Hi
 <% end %>
