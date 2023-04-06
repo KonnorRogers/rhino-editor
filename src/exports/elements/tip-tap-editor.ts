@@ -197,7 +197,8 @@ export class TipTapEditor extends BaseElement {
   serialize() {
     if (this.editor == null) return "";
 
-    if (this.serializer?.toLowerCase() === "json") return JSON.stringify(this.editor.getJSON());
+    if (this.serializer?.toLowerCase() === "json")
+      return JSON.stringify(this.editor.getJSON());
 
     return this.editor.getHTML();
   }
