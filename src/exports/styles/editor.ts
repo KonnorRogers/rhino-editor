@@ -4,13 +4,14 @@ export default css`
   :host {
     display: block;
 
-    /* General colors */
-    --rhino-focus-ring: 0px 0px 4px 1px var(--rhino-button-active-border-color);
+    /* General tokens */
+    --rhino-focus-ring: 0px 0px 3px 0px var(--rhino-button-active-border-color);
+    --rhino-border-radius: 4px;
 
     --rhino-danger-border-color: red;
     --rhino-danger-background-color: #ffdddd;
 
-    /* Editor colors */
+    /* Editor tokens */
     --rhino-text-color: #374151;
     --rhino-border-color: #cecece;
     --rhino-placeholder-text-color: #cecece;
@@ -53,9 +54,21 @@ export default css`
     overflow: auto;
   }
 
+  .toolbar::part(base) {
+    border-color: var(--rhino-border-color);
+    border-width: 1px;
+    border-bottom-color: transparent;
+    border-radius: var(--rhino-border-radius) var(--rhino-border-radius) 0px 0px;
+  }
+
+  .toolbar::part(base):is(:focus-visible, :focus-within) {
+    border-color: var(--rhino-button-active-border-color);
+    outline: transparent;
+  }
+
   .toolbar__button {
     border: 1px solid var(--rhino-border-color);
-    border-radius: 4px;
+    border-radius: var(--rhino-border-radius);
     padding: 0.2em 0.4em;
   }
 
@@ -96,16 +109,17 @@ export default css`
     box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
   }
 
-  .toolbar__button:is([part~="toolbar__button--active"]),
-  .toolbar__button:is([part~="toolbar__button--active"]):is(:hover, :focus) {
+  :host::part(toolbar__button--active),
+  :host::part(toolbar__button--active):is(:hover, :focus) {
     background-color: var(--rhino-button-active-background-color);
   }
 
-  .toolbar__button:is([part~="toolbar__button--link"], [part~="toolbar__button--ordered-list"]) {
+  :host::part(toolbar__button--link),
+  :host::part(toolbar__button--ordered-list) {
     margin-inline-end: 1rem;
   }
 
-  ::part(toolbar__button--attach-files) {
+  :host::part(toolbar__button--attach-files) {
     margin-inline-end: auto;
   }
 
@@ -130,7 +144,7 @@ export default css`
 
   .link-dialog__input {
     border: 1px solid var(--rhino-border-color);
-    border-radius: 4px;
+    border-radius: var(--rhino-border-radius);
     padding: 0.4em 0.6em;
     flex: 1 1 auto;
   }
@@ -151,7 +165,7 @@ export default css`
   .link-dialog__button {
     padding: 0.4em 0.6em;
     border: 1px solid var(--rhino-button-border-color);
-    border-radius: 4px;
+    border-radius: var(--rhino-border-radius);
   }
 
   .link-dialog__buttons {
@@ -159,7 +173,7 @@ export default css`
     margin-left: 0.5em;
   }
 
-  .dialogs-wrapper {
+  .editor-wrapper {
     position: relative;
   }
 `;

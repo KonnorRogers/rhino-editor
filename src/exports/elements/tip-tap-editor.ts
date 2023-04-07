@@ -38,6 +38,69 @@ export type Serializer = "" | "html" | "json";
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
  *   see. This is what wraps everything into 1 coherent element.
+ * @slot toolbar - By replacing this, you're now making your own toolbar.
+ * @slot toolbar-start
+ *
+ * ## bold
+ * @slot before-bold-button
+ * @slot bold-button
+ * @slot after-bold-button
+
+ * ## Italic
+ * @slot before-italic-button
+ * @slot italic-button
+ * @slot after-italic-button
+
+ * ## Strike
+ * @slot before-strike-button
+ * @slot strike-button
+ * @slot after-strike-button
+
+ * ## Link
+ * @slot before-link-button
+ * @slot link-button
+ * @slot after-link-button
+
+ * ## Heading
+ * @slot before-heading-button
+ * @slot heading-button
+ * @slot after-heading-button
+
+ * ## Blockquote
+ * @slot before-block-quote-button
+ * @slot block-quote-button
+ * @slot after-block-quote-button
+
+ * ## Code block
+ * @slot before-code-block-button
+ * @slot code-block-button
+ * @slot after-code-block-button
+
+ * ## Bullet List
+ * @slot before-bullet-list-button
+ * @slot bullet-list-button
+ * @slot after-bullet-list-button
+
+ * ## Ordered list
+ * @slot before-ordered-list-button
+ * @slot ordered-list-button
+ * @slot after-ordered-list-button
+
+ * ## Attachments
+ * @slot before-attach-files-button
+ * @slot attach-files-button
+ * @slot after-attach-files-button
+
+ * ## Undo
+ * @slot before-undo-button
+ * @slot undo-button
+ * @slot after-undo-button
+
+ * ## Redo
+ * @slot before-redo-button
+ * @slot redo-button
+ * @slot after-redo-button
+ * @slot toolbar-end
  */
 export class TipTapEditor extends BaseElement {
   readonly: boolean = false;
@@ -957,9 +1020,9 @@ export class TipTapEditor extends BaseElement {
           <slot name="after-ordered-list-button"></slot>
 
           <!-- Attachments -->
-          <slot name="before-attachment-button"></slot>
-          <slot name="attachment-button">${this.renderAttachmentButton()}</slot>
-          <slot name="after-attachment-button"></slot>
+          <slot name="before-attach-files-button"></slot>
+          <slot name="attach-files-button">${this.renderAttachmentButton()}</slot>
+          <slot name="after-attach-files-button"></slot>
 
           <!-- Undo -->
           <slot name="before-undo-button"></slot>
@@ -1060,11 +1123,11 @@ export class TipTapEditor extends BaseElement {
       ${this.renderToolbar()}
       <div
         ${ref(this.editorElementChanged)}
-        class="dialogs-wrapper"
-        part="dialogs-wrapper"
+        class="editor-wrapper"
+        part="editor-wrapper"
       >
         ${this.renderLinkCreationDialog()}
-        <slot name="editor"></slot>
+        <div class="editor" part="editor"><slot name="editor"></slot></div>
       </div>
     `;
   }

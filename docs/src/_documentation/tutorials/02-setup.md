@@ -28,7 +28,7 @@ Now let's see how we would add extensions:
 ```
 
 ```html
-// index.html
+<!-- index.html -->
 <extended-rhino-editor></extended-rhino-editor>
 ```
 

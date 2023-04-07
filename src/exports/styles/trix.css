@@ -54,11 +54,15 @@
 
 .trix-content {
   border: 1px solid var(--rhino-border-color);
-  border-radius: 3px;
+  border-radius: 0px 0px var(--rhino-border-radius) var(--rhino-border-radius);
   margin: 0;
   padding: 0.4em 0.6em;
   min-height: 200px;
   outline: transparent;
+}
+
+.trix-content:is(:focus, :focus-within) {
+  border-color: var(--rhino-button-active-border-color);
 }
 
 .trix-content figure[data-trix-attachment] figcaption {
@@ -77,6 +81,10 @@
   figure[data-trix-attachment]:not(.has-focus)
   figcaption.is-empty::before {
   content: attr(data-default-caption);
+}
+
+.trix-content ul {
+  list-style: disc;
 }
 
 .trix-content figure[data-trix-attachment] figcaption.is-empty::before {
@@ -166,7 +174,7 @@
   margin: 0 2px 2px 2px;
   padding: 0.4em 1em;
   border: 1px solid #bbb;
-  border-radius: 5px;
+  border-radius: var(--rhino-border-radius);
 }
 .trix-content .attachment-gallery {
   display: flex;
@@ -223,7 +231,7 @@
 /** synchronizing this with the shadow dom styles sucks. Perhaps there's a better way? */
 .rhino-toolbar-button {
   border: 1px solid var(--rhino-border-color);
-  border-radius: 4px;
+  border-radius: var(--rhino-border-radius);
   padding: 0.2em 0.4em;
 }
 
