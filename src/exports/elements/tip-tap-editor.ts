@@ -60,14 +60,15 @@ export class TipTapEditor extends BaseElement {
       input: {},
       linkInputRef: { state: true },
       translations: { state: true },
-      class: {reflect: true}
+      class: { reflect: true },
     };
   }
 
-
-  protected willUpdate(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+  protected willUpdate(
+    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+  ): void {
     if (changedProperties.has("class")) {
-      this.classList.add("rhino-editor")
+      this.classList.add("rhino-editor");
     }
   }
 
@@ -83,7 +84,7 @@ export class TipTapEditor extends BaseElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.classList.add("rhino-editor")
+    this.classList.add("rhino-editor");
 
     this.registerDependencies();
 
@@ -607,7 +608,9 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--blockquote": true,
-          "toolbar__button--active": Boolean(this.editor?.isActive("blockquote")),
+          "toolbar__button--active": Boolean(
+            this.editor?.isActive("blockquote")
+          ),
           "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBlockquote(),
         })}
@@ -649,7 +652,9 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--code-block": true,
-          "toolbar__button--active": Boolean(this.editor?.isActive("codeBlock")),
+          "toolbar__button--active": Boolean(
+            this.editor?.isActive("codeBlock")
+          ),
           "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleCodeBlock(),
         })}
@@ -690,7 +695,9 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--bullet-list": true,
-          "toolbar__button--active": Boolean(this.editor?.isActive("bulletList")),
+          "toolbar__button--active": Boolean(
+            this.editor?.isActive("bulletList")
+          ),
           "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBulletList(),
         })}
@@ -731,7 +738,9 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--ordered-list": true,
-          "toolbar__button--active": Boolean(this.editor?.isActive("orderedList")),
+          "toolbar__button--active": Boolean(
+            this.editor?.isActive("orderedList")
+          ),
           "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleOrderedList(),
         })}
@@ -813,7 +822,8 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--undo": true,
-          "toolbar__button--disabled": this.editor == null || !this.editor.can().undo(),
+          "toolbar__button--disabled":
+            this.editor == null || !this.editor.can().undo(),
         })}
         aria-describedby="undo"
         aria-disabled=${this.editor == null || !this.editor.can().undo()}
@@ -850,7 +860,8 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--redo": true,
-          "toolbar__button--disabled": this.editor == null || !this.editor.can().redo(),
+          "toolbar__button--disabled":
+            this.editor == null || !this.editor.can().redo(),
         })}
         aria-describedby="redo"
         aria-disabled=${this.editor == null || !this.editor.can().redo()}
