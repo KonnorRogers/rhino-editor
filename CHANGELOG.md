@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- 4e293f3: fix: move editor from shadow dom to light dom
+  docs: Updated docs to reflect new CSS import
+
+  BREAKING_CHANGE: The editor has been moved to the light DOM and CSS must now be imported.
+
+- 4e293f3: adjusted styles by reducing focus-ring and comibing editor + toolbar
+- 51fcfa2: Add "accept" attribute for file uploading
+
 ## 0.3.2
 
 ### Patch Changes
