@@ -1021,7 +1021,9 @@ export class TipTapEditor extends BaseElement {
 
           <!-- Attachments -->
           <slot name="before-attach-files-button"></slot>
-          <slot name="attach-files-button">${this.renderAttachmentButton()}</slot>
+          <slot name="attach-files-button"
+            >${this.renderAttachmentButton()}</slot
+          >
           <slot name="after-attach-files-button"></slot>
 
           <!-- Undo -->
