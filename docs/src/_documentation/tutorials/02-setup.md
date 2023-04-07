@@ -25,6 +25,9 @@ Now let's see how we would add extensions:
 ```js
 <%= File.read("./frontend/javascript/entrypoints/setup.js").html_safe %>
 
+```
+
+```html
 // index.html
 <extended-rhino-editor></extended-rhino-editor>
 ```
