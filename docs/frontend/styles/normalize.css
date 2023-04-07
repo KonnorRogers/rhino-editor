@@ -192,9 +192,11 @@ code > span {
   line-height: 1.4;
 }
 
+.highlighter-rouge {
+  position: relative;
+}
 
-code.highlight,
-code.highlighter-rouge {
+code.highlight {
   display: inline-block;
   font-size: 0.9em;
   padding: var(--sl-spacing-xx-small) var(--sl-spacing-x-small);

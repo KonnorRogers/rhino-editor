@@ -1,4 +1,4 @@
 vite: bin/vite dev --clobber
 rails: bin/rails s
-docker: docker compose up --build
+docker: docker compose up --build || docker-compose up --build
 esbuild: cd ../../ && pnpm run start

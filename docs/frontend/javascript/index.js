@@ -12,6 +12,7 @@ import "@shoelace-style/shoelace/dist/components/visually-hidden/visually-hidden
 import * as Turbo from "@hotwired/turbo"
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"
+import '@github/clipboard-copy-element'
 
 // Uncomment the line below to add transition animations when Turbo navigates.
 // We recommend adding <meta name="turbo-cache-control" content="no-preview" />
