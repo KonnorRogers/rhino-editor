@@ -25,7 +25,13 @@ export class AttachmentEditor extends BaseElement {
       fileName: { attribute: "file-name", type: String },
       fileSize: { attribute: "file-size", type: Number },
       progress: { type: Number },
+      class: { attribute: "class", type: String },
     };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.classList.add("rhino-attachment-editor");
   }
 
   static get styles() {

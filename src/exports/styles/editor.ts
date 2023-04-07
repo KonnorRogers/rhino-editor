@@ -4,13 +4,14 @@ export default css`
   :host {
     display: block;
 
-    /* General colors */
-    --rhino-focus-ring: 0px 0px 4px 1px var(--rhino-button-active-border-color);
+    /* General tokens */
+    --rhino-focus-ring: 0px 0px 3px 0px var(--rhino-button-active-border-color);
+    --rhino-border-radius: 4px;
 
     --rhino-danger-border-color: red;
     --rhino-danger-background-color: #ffdddd;
 
-    /* Editor colors */
+    /* Editor tokens */
     --rhino-text-color: #374151;
     --rhino-border-color: #cecece;
     --rhino-placeholder-text-color: #cecece;
@@ -45,71 +46,6 @@ export default css`
     color: var(--rhino-text-color);
   }
 
-  img,
-  svg,
-  figure {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  figure,
-  p {
-    padding: 0;
-    margin: 0;
-  }
-
-  figure {
-    position: relative;
-  }
-
-  /* If you use white-space: normal; in firefox you cant add white-space to the end of the figcaption */
-  .trix-content figcaption {
-    white-space: pre;
-    margin-top: 0.5em;
-    white-space: break-spaces;
-  }
-
-  /* Attachments */
-  :host(:not([readonly])) figure:is(:focus-within, :focus, .has-focus) img {
-    outline: transparent;
-    box-shadow: var(--rhino-focus-ring);
-  }
-
-  attachment-editor::part(delete-button),
-  attachment-editor::part(file-metadata) {
-    display: none;
-  }
-
-  :host(:not([readonly]))
-    .trix-content
-    figure:is(:focus-within, :focus, .has-focus)
-    attachment-editor::part(delete-button),
-  :host(:not([readonly]))
-    .trix-content
-    figure:is(:focus-within, :focus, .has-focus)
-    attachment-editor::part(file-metadata) {
-    display: flex;
-  }
-
-  .ProseMirror .placeholder {
-    position: absolute;
-    pointer-events: none;
-    color: var(--rhino-placeholder-text-color);
-    cursor: text;
-    content: "";
-  }
-
-  .ProseMirror {
-    border: 1px solid var(--rhino-border-color);
-    border-radius: 3px;
-    margin: 0;
-    padding: 0.4em 0.6em;
-    min-height: 200px;
-    outline: transparent;
-  }
-
   .toolbar {
     color: var(--rhino-toolbar-text-color);
   }
@@ -118,9 +54,21 @@ export default css`
     overflow: auto;
   }
 
+  .toolbar::part(base) {
+    border-color: var(--rhino-border-color);
+    border-width: 1px;
+    border-bottom-color: transparent;
+    border-radius: var(--rhino-border-radius) var(--rhino-border-radius) 0px 0px;
+  }
+
+  .toolbar::part(base):is(:focus-visible, :focus-within) {
+    border-color: var(--rhino-button-active-border-color);
+    outline: transparent;
+  }
+
   .toolbar__button {
     border: 1px solid var(--rhino-border-color);
-    border-radius: 4px;
+    border-radius: var(--rhino-border-radius);
     padding: 0.2em 0.4em;
   }
 
@@ -149,28 +97,29 @@ export default css`
     background-color: var(--rhino-button-focus-background-color);
   }
 
-  .toolbar__button:is([aria-disabled="true"]:not([part~="button--active"])) {
+  .toolbar__button:is([aria-disabled="true"]:not([part~="toolbar__button--active"])) {
     color: var(--rhino-button-disabled-text-color);
     border-color: var(--rhino-button-disabled-border-color);
   }
 
-  .toolbar__button:is(:focus, :hover):is([aria-disabled="true"]:not([part~="button--active"])) {
+  .toolbar__button:is(:focus, :hover):is([aria-disabled="true"]:not([part~="toolbar__button--active"])) {
     outline: transparent;
     color: var(--rhino-button-disabled-text-color);
     border-color: var(--rhino-button-disabled-border-color);
     box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
   }
 
-  .toolbar__button:is([part~="button--active"]),
-  .toolbar__button:is([part~="button--active"]):is(:hover, :focus) {
+  :host::part(toolbar__button--active),
+  :host::part(toolbar__button--active):is(:hover, :focus) {
     background-color: var(--rhino-button-active-background-color);
   }
 
-  .toolbar__button:is([part~="button__link"], [part~="button__ordered-list"]) {
+  :host::part(toolbar__button--link),
+  :host::part(toolbar__button--ordered-list) {
     margin-inline-end: 1rem;
   }
 
-  .toolbar__button:is([part~="button__attach-files"]) {
+  :host::part(toolbar__button--attach-files) {
     margin-inline-end: auto;
   }
 
@@ -195,7 +144,7 @@ export default css`
 
   .link-dialog__input {
     border: 1px solid var(--rhino-border-color);
-    border-radius: 4px;
+    border-radius: var(--rhino-border-radius);
     padding: 0.4em 0.6em;
     flex: 1 1 auto;
   }
@@ -216,7 +165,7 @@ export default css`
   .link-dialog__button {
     padding: 0.4em 0.6em;
     border: 1px solid var(--rhino-button-border-color);
-    border-radius: 4px;
+    border-radius: var(--rhino-border-radius);
   }
 
   .link-dialog__buttons {
@@ -224,35 +173,7 @@ export default css`
     margin-left: 0.5em;
   }
 
-  figure[data-trix-attachment] figcaption {
-    position: relative;
-  }
-
-  .ProseMirror p.is-editor-empty:first-child::before,
-  figure[data-trix-attachment].has-focus figcaption.is-empty::before {
-    color: var(--rhino-placeholder-text-color);
-    content: attr(data-placeholder);
-  }
-
-  figure[data-trix-attachment]:not(.has-focus) figcaption.is-empty::before {
-    content: attr(data-default-caption);
-  }
-
-  figure[data-trix-attachment] figcaption.is-empty::before {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  .ProseMirror p.is-editor-empty:first-child::before {
-    float: left;
-    height: 0;
-    pointer-events: none;
-  }
-
-  .dialogs-wrapper {
+  .editor-wrapper {
     position: relative;
   }
 `;

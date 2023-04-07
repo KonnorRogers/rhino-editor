@@ -4,12 +4,15 @@ import "@shoelace-style/shoelace/dist/themes/light.css";
 import "@konnorr/bridgetown-quick-search";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path"
 import "@shoelace-style/shoelace/dist/components/button/button"
+import "@shoelace-style/shoelace/dist/components/alert/alert"
 import "@shoelace-style/shoelace/dist/components/icon/icon"
 import "@shoelace-style/shoelace/dist/components/icon-button/icon-button"
 import "@shoelace-style/shoelace/dist/components/drawer/drawer"
 import "@shoelace-style/shoelace/dist/components/visually-hidden/visually-hidden"
 import * as Turbo from "@hotwired/turbo"
 import "rhino-editor"
+import "rhino-editor/exports/styles/trix.css"
+import '@github/clipboard-copy-element'
 
 // Uncomment the line below to add transition animations when Turbo navigates.
 // We recommend adding <meta name="turbo-cache-control" content="no-preview" />

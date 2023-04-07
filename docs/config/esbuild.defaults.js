@@ -98,7 +98,7 @@ const postCssPlugin = (options, configuration) => ({
         load: async filename => {
           let contents = await readCache(filename, "utf-8")
           const filedir = path.dirname(filename)
-          // We'll want to track any imports later when in watch mode:          
+          // We'll want to track any imports later when in watch mode:
           additionalFilePaths.push(filename)
 
           // We need to transform `url(...)` in imported CSS so the filepaths are properly
@@ -206,6 +206,7 @@ const bridgetownPreset = (outputFolder) => ({
         console.warn("esbuild: build process error, cannot write manifest")
         return
       }
+      await fs.writeFile(path.join(outputFolder, 'meta.json'), JSON.stringify(result.metafile), { encoding: "utf8" })
 
       const manifest = {}
       const entrypoints = []

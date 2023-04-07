@@ -12,6 +12,7 @@ web component.
 First, we need to change how we import the editor.
 
 ```js
+import "rhino-editor/exports/styles/trix.css"
 import { TipTapEditor } from "rhino-editor/exports/elements/tip-tap-editor.js"
 ```
 
@@ -24,7 +25,10 @@ Now let's see how we would add extensions:
 ```js
 <%= File.read("./frontend/javascript/entrypoints/setup.js").html_safe %>
 
-// index.html
+```
+
+```html
+<!-- index.html -->
 <extended-rhino-editor></extended-rhino-editor>
 ```
 

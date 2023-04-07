@@ -1,4 +1,4 @@
-import { Editor, EditorOptions } from "@tiptap/core";
+import { Content, Editor, EditorOptions } from "@tiptap/core";
 import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit from "@tiptap/starter-kit";
@@ -26,7 +26,6 @@ import { AttachmentManager } from "src/exports/attachment-manager";
 import * as icons from "src/internal/icons";
 
 import { normalize } from "src/exports/styles/normalize";
-import trixStyles from "src/exports/styles/trix";
 import editorStyles from "src/exports/styles/editor";
 import { BaseElement } from "src/internal/elements/base-element";
 
@@ -35,9 +34,73 @@ import { AddAttachmentEvent } from "src/internal/events/add-attachment-event";
 import type { Maybe } from "src/types";
 import { AttachmentEditor } from "./attachment-editor";
 
+export type Serializer = "" | "html" | "json";
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
  *   see. This is what wraps everything into 1 coherent element.
+ * @slot toolbar - By replacing this, you're now making your own toolbar.
+ * @slot toolbar-start
+ *
+ * ## bold
+ * @slot before-bold-button
+ * @slot bold-button
+ * @slot after-bold-button
+
+ * ## Italic
+ * @slot before-italic-button
+ * @slot italic-button
+ * @slot after-italic-button
+
+ * ## Strike
+ * @slot before-strike-button
+ * @slot strike-button
+ * @slot after-strike-button
+
+ * ## Link
+ * @slot before-link-button
+ * @slot link-button
+ * @slot after-link-button
+
+ * ## Heading
+ * @slot before-heading-button
+ * @slot heading-button
+ * @slot after-heading-button
+
+ * ## Blockquote
+ * @slot before-block-quote-button
+ * @slot block-quote-button
+ * @slot after-block-quote-button
+
+ * ## Code block
+ * @slot before-code-block-button
+ * @slot code-block-button
+ * @slot after-code-block-button
+
+ * ## Bullet List
+ * @slot before-bullet-list-button
+ * @slot bullet-list-button
+ * @slot after-bullet-list-button
+
+ * ## Ordered list
+ * @slot before-ordered-list-button
+ * @slot ordered-list-button
+ * @slot after-ordered-list-button
+
+ * ## Attachments
+ * @slot before-attach-files-button
+ * @slot attach-files-button
+ * @slot after-attach-files-button
+
+ * ## Undo
+ * @slot before-undo-button
+ * @slot undo-button
+ * @slot after-undo-button
+
+ * ## Redo
+ * @slot before-redo-button
+ * @slot redo-button
+ * @slot after-redo-button
+ * @slot toolbar-end
  */
 export class TipTapEditor extends BaseElement {
   readonly: boolean = false;
@@ -47,6 +110,7 @@ export class TipTapEditor extends BaseElement {
   editor: Maybe<Editor>;
   editorElement: Maybe<Element>;
   translations = translations;
+  serializer: Serializer = "";
 
   static baseName = "rhino-editor";
 
@@ -59,11 +123,20 @@ export class TipTapEditor extends BaseElement {
       input: {},
       linkInputRef: { state: true },
       translations: { state: true },
+      class: { reflect: true },
     };
   }
 
+  protected willUpdate(
+    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+  ): void {
+    if (changedProperties.has("class")) {
+      this.classList.add("rhino-editor");
+    }
+  }
+
   static get styles(): CSSResult[] {
-    return [normalize, tipTapCoreStyles, editorStyles, trixStyles];
+    return [normalize, tipTapCoreStyles, editorStyles];
   }
 
   /** Used for registering things like <role-toolbar>, <role-tooltip>, <rhino-attachment-editor> */
@@ -73,6 +146,8 @@ export class TipTapEditor extends BaseElement {
 
   connectedCallback(): void {
     super.connectedCallback();
+
+    this.classList.add("rhino-editor");
 
     this.registerDependencies();
 
@@ -142,11 +217,12 @@ export class TipTapEditor extends BaseElement {
       this.#unBindEditorListeners();
     }
     // light-dom version.
-    // const div = document.createElement("div")
-    // this.insertAdjacentElement("afterend", div)
-    this.editor = this.#setupEditor(element);
+    const div = document.createElement("div");
+    this.insertAdjacentElement("beforeend", div);
+    div.setAttribute("slot", "editor");
+    this.editor = this.#setupEditor(div);
     this.#bindEditorListeners();
-    this.editorElement = element.querySelector(".ProseMirror");
+    this.editorElement = div.querySelector(".ProseMirror");
 
     this.editorElement?.classList.add("trix-content");
     this.editorElement?.setAttribute("tabindex", "0");
@@ -188,8 +264,17 @@ export class TipTapEditor extends BaseElement {
 
   updateInputElementValue() {
     if (this.inputElement != null && this.editor != null && !this.readonly) {
-      this.inputElement.value = this.editor.getHTML();
+      this.inputElement.value = this.serialize();
     }
+  }
+
+  serialize() {
+    if (this.editor == null) return "";
+
+    if (this.serializer?.toLowerCase() === "json")
+      return JSON.stringify(this.editor.getJSON());
+
+    return this.editor.getHTML();
   }
 
   get inputElement(): Maybe<HTMLInputElement> {
@@ -375,10 +460,10 @@ export class TipTapEditor extends BaseElement {
         class="toolbar__button"
         type="button"
         part=${stringMap({
-          button: true,
-          button__bold: true,
-          "button--active": Boolean(this.editor?.isActive("bold")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--bold": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("bold")),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBold(),
         })}
         aria-describedby="bold"
@@ -415,10 +500,10 @@ export class TipTapEditor extends BaseElement {
         tabindex="-1"
         type="button"
         part=${stringMap({
-          button: true,
-          button__italic: true,
-          "button--active": Boolean(this.editor?.isActive("italic")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--italic": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("italic")),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleItalic(),
         })}
         aria-describedby="italics"
@@ -456,10 +541,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__strike: true,
-          "button--active": Boolean(this.editor?.isActive("strike")),
-          "button--disabled": !(
+          toolbar__button: true,
+          "toolbar__button--strike": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("strike")),
+          "toolbar__button--disabled": !(
             this.editor && this.editor.can().toggleStrike()
           ),
         })}
@@ -497,10 +582,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__link: true,
-          "button--active": Boolean(this.editor?.isActive("link")),
-          "button--disabled": !(
+          toolbar__button: true,
+          "toolbar__button--link": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("link")),
+          "toolbar__button--disabled": !(
             this.editor && this.editor.can().setLink({ href: "" })
           ),
         })}
@@ -541,10 +626,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__heading: true,
-          "button--active": Boolean(this.editor?.isActive("heading")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--heading": true,
+          "toolbar__button--active": Boolean(this.editor?.isActive("heading")),
+          "toolbar__button--disabled":
             this.editor == null ||
             !this.editor.can().toggleHeading({ level: 1 }),
         })}
@@ -584,10 +669,12 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__blockquote: true,
-          "button--active": Boolean(this.editor?.isActive("blockquote")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--blockquote": true,
+          "toolbar__button--active": Boolean(
+            this.editor?.isActive("blockquote")
+          ),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBlockquote(),
         })}
         aria-describedby="block-quote"
@@ -626,10 +713,12 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          "button__code-block": true,
-          "button--active": Boolean(this.editor?.isActive("codeBlock")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--code-block": true,
+          "toolbar__button--active": Boolean(
+            this.editor?.isActive("codeBlock")
+          ),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleCodeBlock(),
         })}
         aria-describedby="code-block"
@@ -667,10 +756,12 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          "button__bullet-list": true,
-          "button--active": Boolean(this.editor?.isActive("bulletList")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--bullet-list": true,
+          "toolbar__button--active": Boolean(
+            this.editor?.isActive("bulletList")
+          ),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBulletList(),
         })}
         aria-describedby="bullet-list"
@@ -708,10 +799,12 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          "button__ordered-list": true,
-          "button--active": Boolean(this.editor?.isActive("orderedList")),
-          "button--disabled":
+          toolbar__button: true,
+          "toolbar__button--ordered-list": true,
+          "toolbar__button--active": Boolean(
+            this.editor?.isActive("orderedList")
+          ),
+          "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleOrderedList(),
         })}
         aria-describedby="ordered-list"
@@ -750,9 +843,9 @@ export class TipTapEditor extends BaseElement {
         tabindex="-1"
         type="button"
         part=${stringMap({
-          button: true,
-          "button__attach-files": true,
-          "button--disabled": this.editor == null,
+          toolbar__button: true,
+          "toolbar__button--attach-files": true,
+          "toolbar__button--disabled": this.editor == null,
         })}
         aria-describedby="attach-files"
         aria-disabled=${this.editor == null}
@@ -769,13 +862,16 @@ export class TipTapEditor extends BaseElement {
         </slot>
         <slot name="attach-files-icon">${this.icons.attachFiles}</slot>
 
-        <input
-          id="file-input"
-          type="file"
-          hidden
-          multiple
-          @change=${async () => await this.handleFileUpload()}
-        />
+        <!-- @TODO: Write documentation. Hookup onchange to the slotted elements -->
+        <slot name="attach-files-input">
+          <input
+            id="file-input"
+            type="file"
+            hidden
+            multiple
+            @change=${async () => await this.handleFileUpload()}
+          />
+        </slot>
       </button>
     `;
   }
@@ -787,9 +883,10 @@ export class TipTapEditor extends BaseElement {
         type="button"
         tabindex="-1"
         part=${stringMap({
-          button: true,
-          button__undo: true,
-          "button--disabled": this.editor == null || !this.editor.can().undo(),
+          toolbar__button: true,
+          "toolbar__button--undo": true,
+          "toolbar__button--disabled":
+            this.editor == null || !this.editor.can().undo(),
         })}
         aria-describedby="undo"
         aria-disabled=${this.editor == null || !this.editor.can().undo()}
@@ -824,9 +921,10 @@ export class TipTapEditor extends BaseElement {
         tabindex="-1"
         type="button"
         part=${stringMap({
-          button: true,
-          button__redo: true,
-          "button--disabled": this.editor == null || !this.editor.can().redo(),
+          toolbar__button: true,
+          "toolbar__button--redo": true,
+          "toolbar__button--disabled":
+            this.editor == null || !this.editor.can().redo(),
         })}
         aria-describedby="redo"
         aria-disabled=${this.editor == null || !this.editor.can().redo()}
@@ -922,9 +1020,11 @@ export class TipTapEditor extends BaseElement {
           <slot name="after-ordered-list-button"></slot>
 
           <!-- Attachments -->
-          <slot name="before-attachment-button"></slot>
-          <slot name="attachment-button">${this.renderAttachmentButton()}</slot>
-          <slot name="after-attachment-button"></slot>
+          <slot name="before-attach-files-button"></slot>
+          <slot name="attach-files-button"
+            >${this.renderAttachmentButton()}</slot
+          >
+          <slot name="after-attach-files-button"></slot>
 
           <!-- Undo -->
           <slot name="before-undo-button"></slot>
@@ -1025,10 +1125,11 @@ export class TipTapEditor extends BaseElement {
       ${this.renderToolbar()}
       <div
         ${ref(this.editorElementChanged)}
-        class="dialogs-wrapper"
-        part="dialogs-wrapper"
+        class="editor-wrapper"
+        part="editor-wrapper"
       >
         ${this.renderLinkCreationDialog()}
+        <div class="editor" part="editor"><slot name="editor"></slot></div>
       </div>
     `;
   }
@@ -1083,12 +1184,18 @@ export class TipTapEditor extends BaseElement {
   }
 
   #defaultOptions(element: Element): Partial<EditorOptions> {
+    let content: Content = this.inputElement?.value || "";
+
+    if (content && this.serializer?.toLowerCase() === "json") {
+      content = JSON.parse(content);
+    }
+
     return {
       injectCSS: false,
       extensions: this.extensions(),
       autofocus: false,
       element,
-      content: this.inputElement?.value,
+      content,
       editable: !this.readonly,
     };
   }
@@ -1143,8 +1250,11 @@ export class TipTapEditor extends BaseElement {
   }
 
   #setupEditor(element: Element): Editor {
-    // This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
-    this.normalizeDOM(this.inputElement);
+    if (!this.serializer || this.serializer === "html") {
+      // This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
+      this.normalizeDOM(this.inputElement);
+    }
+
     return new Editor({
       ...this.#defaultOptions(element),
       ...this.editorOptions,

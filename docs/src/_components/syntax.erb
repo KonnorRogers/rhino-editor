@@ -1,0 +1,14 @@
+<div class="<%= "language-#{@language}" %> highlighter-rouge">
+  <clipboard-copy class="highlight__copy" value="<%= content %> ">
+  </clipboard-copy>
+  <div class="highlight__badge">
+    <%= @language %>
+  </div>
+  <div class="highlight">
+    <pre class="highlight">
+      <code>
+        <%= content %>
+      </code>
+    </pre>
+  </div>
+</div>

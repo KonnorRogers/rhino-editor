@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@github/clipboard-copy-element': ^1.1.2
   '@hotwired/stimulus': ^3.1.1
   '@hotwired/turbo': ^7.2.4
   '@konnorr/bridgetown-quick-search': ^3.0.3
@@ -26,6 +27,7 @@ specifiers:
   rhino-editor: link:../
 
 dependencies:
+  '@github/clipboard-copy-element': 1.1.2
   '@hotwired/stimulus': 3.1.1
   '@hotwired/turbo': 7.2.4
   '@konnorr/bridgetown-quick-search': 3.0.3
@@ -233,6 +235,10 @@ packages:
     resolution: {integrity: sha512-6RsqvCYe0AYWtsGvuWqCm7mZytnXAZCjWtsWu1Kg8dI3INvj/DbKlDsZO+mKSaQdPT12uxIW9W2dAWJkPx4Y5g==}
     dependencies:
       '@floating-ui/core': 1.0.2
+    dev: false
+
+  /@github/clipboard-copy-element/1.1.2:
+    resolution: {integrity: sha512-L6CMrcA5we0udafvoSuRCE/Ci/3xrLWKYRGup2IlhxF771bQYsQ2EB1of182pI8ZWM4oxgwzu37+igMeoZjN/A==}
     dev: false
 
   /@hotwired/stimulus/3.1.1:

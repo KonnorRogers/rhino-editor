@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start": "overmind start -f Procfile.dev",
     "build": "NODE_ENV=\"production\" pnpm run esbuild && BRIDGETOWN_ENV=\"production\" bundle exec bridgetown build",
     "esbuild": "node esbuild.config.js --minify",
     "esbuild-dev": "node esbuild.config.js --watch"
@@ -17,6 +18,7 @@
     "postcss-preset-env": "^7.4.3"
   },
   "dependencies": {
+    "@github/clipboard-copy-element": "^1.1.2",
     "@hotwired/stimulus": "^3.1.1",
     "@hotwired/turbo": "^7.2.4",
     "@konnorr/bridgetown-quick-search": "^3.0.3",

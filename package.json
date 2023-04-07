@@ -17,6 +17,8 @@
     "start:example": "web-dev-server",
     "build:example": "pnpm build && rm -rf examples/exports && cp -R exports/ examples/exports",
     "start": "pnpm build -- --watch",
+    "docs:start": "pnpm --filter \"./docs\" start",
+    "rails:start": "cd tests/rails && overmind start -f Procfile.dev",
     "release": "pnpm build && changeset version && changeset publish && git push --follow-tags",
     "changeset": "changeset"
   },

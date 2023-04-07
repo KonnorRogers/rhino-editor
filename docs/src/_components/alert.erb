@@ -1,5 +1,5 @@
 <sl-alert variant="<%= @type.to_s %>" open>
   <sl-icon slot="icon" name="<%= @icon %>"></sl-icon>
-  <%= title %>
-  <%= content %>
+  <%= markdownify(title) %>
+  <%= markdownify(content) %>
 </sl-alert>
