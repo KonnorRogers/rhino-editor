@@ -112,6 +112,9 @@ export class TipTapEditor extends BaseElement {
   translations = translations;
   serializer: Serializer = "";
 
+  /** Comma separated string passed to the attach-files input. */
+  accept: string = "*"
+
   static baseName = "rhino-editor";
 
   static get properties(): PropertyDeclarations {
@@ -124,6 +127,7 @@ export class TipTapEditor extends BaseElement {
       linkInputRef: { state: true },
       translations: { state: true },
       class: { reflect: true },
+      accept: { reflect: true }
     };
   }
 
@@ -869,6 +873,7 @@ export class TipTapEditor extends BaseElement {
             type="file"
             hidden
             multiple
+            accept=${this.accept || "*"}
             @change=${async () => await this.handleFileUpload()}
           />
         </slot>
