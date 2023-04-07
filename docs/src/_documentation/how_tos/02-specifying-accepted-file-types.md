@@ -13,7 +13,7 @@ This will tell the file choose to default to showing only images.
 <%= markdownify(text) %>
 ```
 
-<%= text %>
+<%= text.html_safe %>
 
 <%= render Alert.new(type: :danger, title: "Caution") do %>
   Users can still override the behavior and upload any file. It is recommended to
