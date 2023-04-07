@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start": "overmind start -f Procfile.dev",
     "build": "NODE_ENV=\"production\" pnpm run esbuild && BRIDGETOWN_ENV=\"production\" bundle exec bridgetown build",
     "esbuild": "node esbuild.config.js --minify",
     "esbuild-dev": "node esbuild.config.js --watch"
