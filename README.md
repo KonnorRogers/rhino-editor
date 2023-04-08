@@ -97,3 +97,15 @@ Run the following command and then answer the prompts:
 ```bash
 pnpm changeset
 ```
+
+## Roadmap to v1
+
+- [ ] - Collaboration Extension. Support collaboration!
+- [ ] - Document slots, CSS properties, Extending ActionText, and show common demo examples
+- [ ] - Create a ProseMirror base for a markdown + rich text editor
+- [ ] - Move the TipTap editor to extend the ProseMirror editor.
+- [ ] - Show how to do table editing
+- [ ] - Show how to do embeds
+- [ ] - Show how to do mentions
+- [ ] - Add testing for the basic operations bold, strike, etc.
+- [ ] - Add testing for ActionText / Trix compatibility.

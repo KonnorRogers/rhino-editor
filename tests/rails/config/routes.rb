@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :collaborations
   resources :posts
   resources :youtube
   root 'home#index'

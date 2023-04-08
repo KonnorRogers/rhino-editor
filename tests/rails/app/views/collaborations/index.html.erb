@@ -1,0 +1,9 @@
+<%= content_for :head do %>
+  <%= vite_javascript_tag 'collaboration', "data-turbo-track": "reload" %>
+  <%= vite_stylesheet_tag 'collaboration', "data-turbo-track": "reload" %>
+<% end %>
+
+<h1>Collaborations#index</h1>
+<p>Find me in app/views/collaborations/index.html.erb</p>
+
+<rhino-collaboration-editor></rhino-collaboration-editor>

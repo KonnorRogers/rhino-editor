@@ -1,8 +1,8 @@
 import { Content, Editor, EditorOptions } from "@tiptap/core";
 import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
-import StarterKit from "@tiptap/starter-kit";
-import { RhinoStarterKit } from "src/exports/extensions/rhino-starter-kit";
+import StarterKit, { StarterKitOptions } from "@tiptap/starter-kit";
+import { RhinoStarterKit, RhinoStarterKitOptions } from "src/exports/extensions/rhino-starter-kit";
 import { isiOS, translations } from "src/exports/translations";
 import { stringMap } from "src/internal/string-map";
 
@@ -116,6 +116,17 @@ export class TipTapEditor extends BaseElement {
   accept: string = "*"
 
   static baseName = "rhino-editor";
+
+
+  starterKit: Partial<StarterKitOptions> = {
+    strike: false
+  }
+  rhinoStarterKit: Partial<RhinoStarterKitOptions> = {
+    placeholder: {
+      placeholder: this.translations.placeholder
+    }
+  }
+
 
   static get properties(): PropertyDeclarations {
     return {
@@ -236,16 +247,10 @@ export class TipTapEditor extends BaseElement {
   extensions() {
     return [
       StarterKit.configure({
-        strike: false,
+        ...this.starterKit
       }),
       RhinoStarterKit.configure({
-        placeholder: {
-          includeChildren: true,
-          // Use a placeholder:
-          placeholder: () => {
-            return this.translations.placeholder;
-          },
-        },
+        ...this.rhinoStarterKit
       }),
     ];
   }

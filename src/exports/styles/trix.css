@@ -59,6 +59,7 @@
   padding: 0.4em 0.6em;
   min-height: 200px;
   outline: transparent;
+  white-space: pre-wrap;
 }
 
 .trix-content:is(:focus, :focus-within) {
