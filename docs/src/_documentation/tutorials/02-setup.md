@@ -33,7 +33,7 @@ Now we need to `extend` the existing editor.
 <%= File.read("./frontend/javascript/entrypoints/starter-kit-setup.js").html_safe %>
 ```
 
-<script type="module" data-turbo-track="reload" src="<%= asset_path "entrypoints/starter-kit-setup" %>" defer></script>
+<script type="module" data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/starter-kit-setup.js" %>" defer></script>
 
 <my-editor></my-editor>
 
@@ -69,4 +69,4 @@ them all with your own if you wanted!
 <input id="character-counter" type="hidden" value="<p>I'm a rhino editor with a character counter!</p>">
 <extended-rhino-editor input="character-counter"></extended-rhino-editor>
 
-<script type="module" data-turbo-track="reload" src="<%= asset_path "entrypoints/character-counter" %>" defer></script>
+<script type="module" data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/character-counter.js" %>" defer></script>

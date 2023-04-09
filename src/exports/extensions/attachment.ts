@@ -383,6 +383,11 @@ export const Attachment = Node.create({
       setAttachment:
         (options: AttachmentManager | AttachmentManager[]) =>
         ({ state, tr, dispatch }) => {
+          const { schema } = state;
+
+          // Attachments disabled, dont pass go.
+          const hasGalleriesDisabled = schema.nodes["attachment-gallery"] == null
+
           const currentSelection = state.doc.resolve(state.selection.anchor);
           const before =
             state.selection.anchor - 2 < 0 ? 0 : state.selection.anchor - 2;
@@ -396,34 +401,45 @@ export const Attachment = Node.create({
 
           const isInGallery = isInGalleryCurrent || isInGalleryAfter;
 
-          const { schema } = state;
           const attachments: AttachmentManager[] = Array.isArray(options)
             ? options
             : ([] as AttachmentManager[]).concat(options);
 
-          const attachmentNodes = attachments.map((attachment) => {
+          let attachmentNodes = attachments.map((attachment) => {
             return schema.nodes["attachment-figure"].create(
               attachment,
               attachment.caption ? [schema.text(attachment.caption)] : []
             );
           });
 
+          const end = currentSelection.end();
+
+          if (hasGalleriesDisabled) {
+            attachmentNodes = attachmentNodes.flatMap((node) => [node, schema.nodes.paragraph.create()])
+            tr.insert(end, attachmentNodes)
+
+            if (dispatch) dispatch(tr);
+            return true;
+          }
+
           if (isInGallery) {
-            const end = currentSelection.end();
             const backtrack = isInGalleryCurrent ? 0 : 2;
             tr.insert(end - backtrack, attachmentNodes);
           } else {
+
+            const currSelection = state.selection;
+
             const gallery = schema.nodes["attachment-gallery"].create(
               {},
               attachmentNodes
             );
-            const currSelection = state.selection;
 
             tr.replaceWith(currSelection.from - 1, currSelection.to, [
               schema.nodes.paragraph.create(),
               gallery,
               schema.nodes.paragraph.create(),
             ]);
+
             selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
           }
 

@@ -6,11 +6,14 @@ class MyEditor extends TipTapEditor {
     super()
     this.starterKit = {
       ...super.starterKit,
-      history: false
+      heading: {
+        // Enable all heading levels
+        levels: [1, 2, 3, 4, 5, 6],
+      },
     }
     this.rhinoStarterKit = {
       ...super.rhinoStarterKit,
-      placeholder: { placeholder: "I'm a different placeholder" }
+      gallery: false
     }
   }
 }
