@@ -29,5 +29,5 @@ end
 
 group :collaboration do
   # gem "y-rb_actioncable", github: "y-crdt/yrb-actioncable", glob: "gems/yrb-actioncable/*.gemspec"
-  gem "y-rb_actioncable", "~> 0.1.5"
+  # gem "y-rb_actioncable", "~> 0.1.5"
 end
