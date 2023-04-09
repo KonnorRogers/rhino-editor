@@ -211,7 +211,6 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
-    rb_sys (0.9.71)
     redis (4.7.1)
     regexp_parser (2.6.0)
     reline (0.3.1)
@@ -246,21 +245,6 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    y-rb (0.5.1)
-      rake (~> 13.0)
-      rb_sys (~> 0.9.71)
-    y-rb (0.5.1-arm64-darwin)
-      rake (~> 13.0)
-      rb_sys (~> 0.9.71)
-    y-rb (0.5.1-x86_64-darwin)
-      rake (~> 13.0)
-      rb_sys (~> 0.9.71)
-    y-rb (0.5.1-x86_64-linux)
-      rake (~> 13.0)
-      rb_sys (~> 0.9.71)
-    y-rb_actioncable (0.1.5)
-      rails (>= 7.0.4)
-      y-rb (>= 0.4.3)
     zeitwerk (2.6.0)
 
 PLATFORMS
@@ -288,7 +272,6 @@ DEPENDENCIES
   tzinfo-data
   vite_rails (~> 3.0)
   web-console
-  y-rb_actioncable (~> 0.1.5)
 
 BUNDLED WITH
    2.3.22
