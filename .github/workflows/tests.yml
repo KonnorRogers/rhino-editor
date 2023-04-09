@@ -15,7 +15,6 @@ jobs:
     env:
       CI: true
       RAILS_ENV: test
-      BUNDLER_WITHOUT: collaboration
 
     strategy:
       matrix:
@@ -35,8 +34,11 @@ jobs:
       run: echo "PARALLEL_WORKERS=$(expr $(nproc) \* 6)" >> $GITHUB_ENV
 
     - uses: ruby/setup-ruby@v1
+      env:
+        BUNDLER_WITHOUT: collaboration
       with:
         ruby-version: ${{ matrix.ruby }}
+        rubygems: latest
         bundler-cache: true
         working-directory: "tests/rails"
 
@@ -55,6 +57,8 @@ jobs:
           tests/rails/pnpm-lock.yaml
 
     - name: Install via pnpm
+      env:
+        BUNDLER_WITHOUT: collaboration
       run: |
         pnpm run setup
     - name: Lint
