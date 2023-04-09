@@ -386,7 +386,8 @@ export const Attachment = Node.create({
           const { schema } = state;
 
           // Attachments disabled, dont pass go.
-          const hasGalleriesDisabled = schema.nodes["attachment-gallery"] == null
+          const hasGalleriesDisabled =
+            schema.nodes["attachment-gallery"] == null;
 
           const currentSelection = state.doc.resolve(state.selection.anchor);
           const before =
@@ -415,8 +416,11 @@ export const Attachment = Node.create({
           const end = currentSelection.end();
 
           if (hasGalleriesDisabled) {
-            attachmentNodes = attachmentNodes.flatMap((node) => [node, schema.nodes.paragraph.create()])
-            tr.insert(end, attachmentNodes)
+            attachmentNodes = attachmentNodes.flatMap((node) => [
+              node,
+              schema.nodes.paragraph.create(),
+            ]);
+            tr.insert(end, attachmentNodes);
 
             if (dispatch) dispatch(tr);
             return true;
@@ -426,7 +430,6 @@ export const Attachment = Node.create({
             const backtrack = isInGalleryCurrent ? 0 : 2;
             tr.insert(end - backtrack, attachmentNodes);
           } else {
-
             const currSelection = state.selection;
 
             const gallery = schema.nodes["attachment-gallery"].create(

@@ -97,12 +97,16 @@ export default css`
     background-color: var(--rhino-button-focus-background-color);
   }
 
-  .toolbar__button:is([aria-disabled="true"]:not([part~="toolbar__button--active"])) {
+  .toolbar__button:is(
+      [aria-disabled="true"]:not([part~="toolbar__button--active"])
+    ) {
     color: var(--rhino-button-disabled-text-color);
     border-color: var(--rhino-button-disabled-border-color);
   }
 
-  .toolbar__button:is(:focus, :hover):is([aria-disabled="true"]:not([part~="toolbar__button--active"])) {
+  .toolbar__button:is(:focus, :hover):is(
+      [aria-disabled="true"]:not([part~="toolbar__button--active"])
+    ) {
     outline: transparent;
     color: var(--rhino-button-disabled-text-color);
     border-color: var(--rhino-button-disabled-border-color);
