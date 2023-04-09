@@ -39,6 +39,7 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         ruby-gems: latest
         bundler-cache: true
+        working-directory: "tests/rails"
 
     - uses: pnpm/action-setup@v2
       with:
