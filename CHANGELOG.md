@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- ed77144: Upgrade prosemirror and tiptap (v2.0.2) dependencies
+
+### Patch Changes
+
+- ed77144: Allow configuring rhino and starterkit options
+- ed77144: fixed a bug where settings galleries: false would crash the editor.
+
 ## 0.4.0
 
 ### Minor Changes
