@@ -20,7 +20,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def rhino_editor_image
-    page.locator("rhino-editor img[width='2880']")
+    page.locator("rhino-editor img[width='2880']").first
   end
 
   def trix_image
