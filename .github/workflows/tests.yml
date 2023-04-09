@@ -37,7 +37,6 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-        ruby-gems: latest
         bundler-cache: true
         working-directory: "tests/rails"
 
