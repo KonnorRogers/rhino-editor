@@ -27,6 +27,7 @@ group :test do
   gem 'playwright-ruby-client'
 end
 
-# gem "y-rb_actioncable", github: "y-crdt/yrb-actioncable", glob: "gems/yrb-actioncable/*.gemspec"
-
-gem "y-rb_actioncable", "~> 0.1.5"
+group :collaboration do
+  gem "y-rb_actioncable", github: "y-crdt/yrb-actioncable", glob: "gems/yrb-actioncable/*.gemspec"
+  gem "y-rb_actioncable", "~> 0.1.5"
+end
