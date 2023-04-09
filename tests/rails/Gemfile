@@ -26,3 +26,8 @@ group :test do
   gem "minitest-reporters-pride_reporter", "~> 0.0.2", require: false
   gem 'playwright-ruby-client'
 end
+
+group :collaboration do
+  # gem "y-rb_actioncable", github: "y-crdt/yrb-actioncable", glob: "gems/yrb-actioncable/*.gemspec"
+  # gem "y-rb_actioncable", "~> 0.1.5"
+end

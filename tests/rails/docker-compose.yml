@@ -2,7 +2,6 @@ version: "3.2"
 
 services:
   minio:
-    restart: always
     environment:
       MINIO_ROOT_USER: "minioadmin"
       MINIO_ROOT_PASSWORD: "minioadmin"
@@ -13,6 +12,13 @@ services:
     volumes:
       - minio:/data
     command: minio server /data --console-address ":9001"
+  redis:
+    image: "redis:7"
+    ports:
+      - 6379
+    volumes:
+      - ./tmp/redis_data:/var/lib/redis/data
+
   runner:
     image: ubuntu:latest
     command: mkdir -p /data/my-bucket && /bin/sh

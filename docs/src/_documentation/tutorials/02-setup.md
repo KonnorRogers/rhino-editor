@@ -9,6 +9,12 @@ underlying rich text editor, let's look at how we can
 add, modify, or remove extensions and extend the underlying
 web component.
 
+<h2 id="configuring-extensions">
+  <a href="#configuring-extensions">
+    Configuring Extensions
+  </a>
+</h2>
+
 First, we need to change how we import the editor.
 
 ```js
@@ -20,11 +26,27 @@ You'll notice we don't want to auto-register the
 `<rhino-editor>` component. Instead, we want to extend it,
 then register it.
 
+
+Now we need to `extend` the existing editor.
+
+```js
+<%= File.read("./frontend/javascript/entrypoints/starter-kit-setup.js").html_safe %>
+```
+
+<script type="module" data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/starter-kit-setup.js" %>" defer></script>
+
+<my-editor></my-editor>
+
+<h2 id="adding-extensions">
+  <a href="#adding-extensions">
+    Adding Extensions
+  </a>
+</h2>
+
 Now let's see how we would add extensions:
 
 ```js
-<%= File.read("./frontend/javascript/entrypoints/setup.js").html_safe %>
-
+<%= File.read("./frontend/javascript/entrypoints/character-counter.js").html_safe %>
 ```
 
 ```html
@@ -47,4 +69,4 @@ them all with your own if you wanted!
 <input id="character-counter" type="hidden" value="<p>I'm a rhino editor with a character counter!</p>">
 <extended-rhino-editor input="character-counter"></extended-rhino-editor>
 
-<script data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/setup.js" %>" defer></script>
+<script type="module" data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/character-counter.js" %>" defer></script>

@@ -15,6 +15,7 @@ jobs:
     env:
       CI: true
       RAILS_ENV: test
+
     strategy:
       matrix:
         ruby: ['2.7', '3.0', '3.1']
@@ -35,7 +36,9 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
+        rubygems: latest
         bundler-cache: true
+        working-directory: "tests/rails"
 
     - uses: pnpm/action-setup@v2
       with:

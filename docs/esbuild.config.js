@@ -29,7 +29,8 @@ const outputFolder = "output"
 const esbuildOptions = {
   entryPoints: [
     "frontend/javascript/index.js",
-    "frontend/javascript/entrypoints/setup.js"
+    "frontend/javascript/entrypoints/character-counter.js",
+    "frontend/javascript/entrypoints/starter-kit-setup.js"
   ]
 }
 
