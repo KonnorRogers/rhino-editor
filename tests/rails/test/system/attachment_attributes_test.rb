@@ -16,7 +16,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   def rhino_editor_figure
     # @TODO: Until we figure out how to get minio working in GH actions, leave this commented.
     # page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]")
-    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png")
+    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png").first
   end
 
   def rhino_editor_image
