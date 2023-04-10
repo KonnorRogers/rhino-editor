@@ -65,7 +65,7 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         rubygems: latest
         bundler-cache: true
-        working-directory: "$GITHUB_WORKSPACE/tests/rails"
+        working-directory: ${{ github.workspace }}/tests/rails"
 
     - uses: pnpm/action-setup@v2
       with:
