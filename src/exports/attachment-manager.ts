@@ -1,6 +1,6 @@
 import { AttachmentAttributes, Maybe } from "src/types";
 import { uuidv4 } from "src/internal/uuidv4";
-import { EditorView } from "prosemirror-view";
+import { EditorView } from "@tiptap/pm/view";
 import { toDefaultCaption } from "src/internal/to-default-caption";
 
 /**

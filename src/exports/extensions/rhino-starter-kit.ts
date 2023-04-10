@@ -7,7 +7,7 @@ import { Attachment, AttachmentOptions } from "./attachment";
 import { Image, ImageOptions } from "./image";
 import { Gallery, GalleryOptions } from "./gallery";
 import { Figcaption, FigcaptionOptions } from "./figcaption";
-import { Plugin } from "prosemirror-state";
+import { Plugin } from "@tiptap/pm/state";
 import { CustomStrike } from "./strike";
 import Placeholder, { PlaceholderOptions } from "@tiptap/extension-placeholder";
 import Focus, { FocusOptions } from "@tiptap/extension-focus";
