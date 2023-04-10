@@ -34,7 +34,7 @@ jobs:
         env:
           MINIO_ROOT_USER: minioadmin
           MINIO_ROOT_PASSWORD: minioadmin
-        options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live" --interval=0.1s --timeout=5s --retries=20
+        options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live" --health-interval=0.1s --health-timeout=5s --health-retries=20
     steps:
     - uses: actions/checkout@v3
     # - uses: microsoft/playwright-github-action@v1
