@@ -105,10 +105,13 @@ export class AttachmentEditor extends BaseElement {
         white-space: nowrap;
       }
 
-      .file-progress {
+      progress {
+        --border-radius: 8px;
+        --progress-value-color: blue;
+        --progress-background-color: #eee;
         position: absolute;
         z-index: 1;
-        height: 20px;
+        height: 10px;
         top: calc(50% - 10px);
         left: 5%;
         padding: 0;
@@ -116,6 +119,23 @@ export class AttachmentEditor extends BaseElement {
         width: 90%;
         opacity: 0.9;
         transition: opacity 200ms ease-out;
+        border-radius: var(--border-radius);
+        background-color: var(--progress-background-color);
+        border: 1px solid gray;
+      }
+
+      progress::-webkit-progress-bar {
+        background-color: var(--progress-background-color);
+        border-radius: var(--border-radius);
+      }
+      progress::-webkit-progress-value {
+        background-color: var(--progress-value-color);
+        border-radius: var(--border-radius);
+      }
+      progress::-moz-progress-bar {
+        /* style rules */
+        border-radius: var(--border-radius);
+        background-color: var(--progress-value-color);
       }
 
       .file-progress[value="100"] {
