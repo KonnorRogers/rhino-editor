@@ -34,11 +34,10 @@ jobs:
         env:
           MINIO_ROOT_USER: minioadmin
           MINIO_ROOT_PASSWORD: minioadmin
-        options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live"
+        options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live" --interval=0.1s --timeout=5s --retries=20
     steps:
-
     - uses: actions/checkout@v3
-    - uses: microsoft/playwright-github-action@v1
+    # - uses: microsoft/playwright-github-action@v1
     - run: wget https://dl.min.io/client/mc/release/linux-amd64/mc
     - run: chmod +x ./mc
     - run: ./mc alias set minio $AWS_S3_ENDPOINT $AWS_S3_ACCESS_KEY $AWS_S3_SECRET_KEY
