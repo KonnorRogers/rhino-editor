@@ -15,6 +15,11 @@ jobs:
     env:
       CI: true
       RAILS_ENV: test
+      AWS_S3_BUCKET: my-bucket
+      AWS_S3_ACCESS_KEY: minioadmin
+      AWS_S3_SECRET_KEY: minioadmin
+      AWS_S3_ENDPOINT: http://127.0.0.1:9000/
+      AWS_S3_REGION: us-east-1
 
     strategy:
       matrix:
@@ -22,10 +27,22 @@ jobs:
         node-version: [16.x, 18.x]
     steps:
 
-    - uses: actions/checkout@v3
-    - uses: microsoft/playwright-github-action@v1
-    - name: Setup docker
-      run: cd tests/rails && docker compose up --build -d && curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
+    # - uses: actions/checkout@v3
+    # - uses: microsoft/playwright-github-action@v1
+    # - name: Setup docker
+    #   run: cd tests/rails && docker compose up --build -d && curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
+    - name: Setup minio
+      run: |
+        docker run -d -p 9000:9000 --name minio
+                    -e "MINIO_ACCESS_KEY=$AWS_S3_ACCESS_KEY"
+                    -e "MINIO_SECRET_KEY=$AWS_S3_ENDPOINT"
+                    -v /tmp/data:/data
+                    -v /tmp/config:/root/.minio
+                    minio/minio server /data
+        export AWS_ACCESS_KEY_ID="$AWS_S3_ACCESS_KEY"
+        export AWS_SECRET_ACCESS_KEY="$AWS_S3_SECRET_KEY"
+        export AWS_EC2_METADATA_DISABLED=true
+        aws --endpoint-url "$AWS_S3_ENDPOINT" s3 mb "s3://$AWS_S3_BUCKET"
 
     - name: Install libvips
       run: sudo apt -y install libvips
