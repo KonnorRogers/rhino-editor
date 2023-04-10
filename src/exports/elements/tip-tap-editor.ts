@@ -347,7 +347,9 @@ export class TipTapEditor extends BaseElement {
 
       if (attachments == null) return;
 
-      this.runThenFocus((editor) => editor.chain().setAttachment(attachments).run());
+      this.runThenFocus((editor) =>
+        editor.chain().setAttachment(attachments).run()
+      );
 
       attachments.forEach((attachment) => {
         this.dispatchEvent(new AddAttachmentEvent(attachment));
@@ -385,7 +387,9 @@ export class TipTapEditor extends BaseElement {
 
     event.preventDefault();
 
-    this.runThenFocus((editor) => editor.chain().setAttachment(attachments).run());
+    this.runThenFocus((editor) =>
+      editor.chain().setAttachment(attachments).run()
+    );
 
     attachments.forEach((attachment) => {
       this.dispatchEvent(new AddAttachmentEvent(attachment));
@@ -488,7 +492,7 @@ export class TipTapEditor extends BaseElement {
           ) {
             return;
           }
-          this.runThenFocus((editor) => editor.chain().toggleBold().run())
+          this.runThenFocus((editor) => editor.chain().toggleBold().run());
         }}
       >
         <slot name="bold-tooltip">
@@ -529,7 +533,7 @@ export class TipTapEditor extends BaseElement {
           ) {
             return;
           }
-          this.runThenFocus((editor) => editor.chain().toggleItalic().run())
+          this.runThenFocus((editor) => editor.chain().toggleItalic().run());
         }}
       >
         <slot name="italics-tooltip">
@@ -570,7 +574,7 @@ export class TipTapEditor extends BaseElement {
           ) {
             return;
           }
-          this.runThenFocus((editor) => editor.chain().toggleStrike().run())
+          this.runThenFocus((editor) => editor.chain().toggleStrike().run());
         }}
       >
         <slot name="strike-tooltip">
@@ -657,7 +661,9 @@ export class TipTapEditor extends BaseElement {
             return;
           }
 
-          this.runThenFocus((editor) => editor.chain().toggleHeading({ level: 1 }).run())
+          this.runThenFocus((editor) =>
+            editor.chain().toggleHeading({ level: 1 }).run()
+          );
         }}
       >
         <slot name="heading-tooltip">
@@ -673,16 +679,16 @@ export class TipTapEditor extends BaseElement {
     `;
   }
 
-  runThenFocus (callback: (editor: Editor) => void): Promise<void> {
+  runThenFocus(callback: (editor: Editor) => void): Promise<void> {
     return new Promise((resolve) => {
-      if (this.editor == null) return resolve()
+      if (this.editor == null) return resolve();
 
-      callback(this.editor)
+      callback(this.editor);
       setTimeout(() => {
-        this.editor?.view.dom.focus()
-        return resolve()
-      })
-    })
+        this.editor?.view.dom.focus();
+        return resolve();
+      });
+    });
   }
 
   renderBlockQuoteButton() {
@@ -713,7 +719,9 @@ export class TipTapEditor extends BaseElement {
             return;
           }
 
-          this.runThenFocus((editor) => editor.chain().toggleBlockquote().run())
+          this.runThenFocus((editor) =>
+            editor.chain().toggleBlockquote().run()
+          );
         }}
       >
         <slot name="block-quote-tooltip">
@@ -799,7 +807,9 @@ export class TipTapEditor extends BaseElement {
           ) {
             return;
           }
-          this.runThenFocus((editor) => editor.chain().toggleBulletList().run());
+          this.runThenFocus((editor) =>
+            editor.chain().toggleBulletList().run()
+          );
         }}
       >
         <slot name="bullet-list-tooltip">
@@ -843,7 +853,9 @@ export class TipTapEditor extends BaseElement {
             return;
           }
 
-          this.runThenFocus((editor) => editor.chain().toggleOrderedList().run());
+          this.runThenFocus((editor) =>
+            editor.chain().toggleOrderedList().run()
+          );
         }}
       >
         <slot name="ordered-list-tooltip">
@@ -922,7 +934,7 @@ export class TipTapEditor extends BaseElement {
           ) {
             return;
           }
-          this.runThenFocus((editor) => editor.chain().undo().run())
+          this.runThenFocus((editor) => editor.chain().undo().run());
         }}
       >
         <slot name="undo-tooltip">
@@ -960,7 +972,7 @@ export class TipTapEditor extends BaseElement {
           ) {
             return;
           }
-          this.runThenFocus((editor) => editor.chain().redo().run())
+          this.runThenFocus((editor) => editor.chain().redo().run());
         }}
       >
         <slot name="redo-tooltip">
@@ -1130,12 +1142,8 @@ export class TipTapEditor extends BaseElement {
             part="link-dialog__button link-dialog__button-unlink"
             @click=${() => {
               this.runThenFocus((editor) => {
-                editor
-                .chain()
-                .extendMarkRange("link")
-                .unsetLink()
-                .run()
-              })
+                editor.chain().extendMarkRange("link").unsetLink().run();
+              });
             }}
           >
             ${this.translations.linkDialogUnlink}
