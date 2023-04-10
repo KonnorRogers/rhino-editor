@@ -1,4 +1,4 @@
-import { ChainedCommands, Content, Editor, EditorOptions } from "@tiptap/core";
+import { Content, Editor, EditorOptions } from "@tiptap/core";
 import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit, { StarterKitOptions } from "@tiptap/starter-kit";
