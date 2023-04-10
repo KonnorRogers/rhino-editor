@@ -33,6 +33,12 @@ jobs:
     #   run: cd tests/rails && docker compose up --build -d && curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
     - name: Setup minio
       run: |
+
+        export AWS_S3_BUCKET=my-bucket
+        export AWS_S3_ACCESS_KEY=minioadmin
+        export AWS_S3_SECRET_KEY=minioadmin
+        export AWS_S3_ENDPOINT=http://127.0.0.1:9000/
+        export AWS_S3_REGION=us-east-1
         mkdir -p /tmp/data /tmp/config
         docker run -d -p 9000:9000 -p 9001:9001 --name minio \
                     -e "MINIO_ACCESS_KEY=$AWS_S3_ACCESS_KEY" \
@@ -40,10 +46,13 @@ jobs:
                     -v /tmp/data:/data \
                     -v /tmp/config:/root/.minio \
                     quay.io/minio/minio server /data --console-address ":9001"
-        export AWS_ACCESS_KEY_ID="$AWS_S3_ACCESS_KEY"
-        export AWS_SECRET_ACCESS_KEY="$AWS_S3_SECRET_KEY"
-        export AWS_EC2_METADATA_DISABLED=true
-        aws --endpoint-url "$AWS_S3_ENDPOINT" s3 mb "s3://$AWS_S3_BUCKET"
+        curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+          --create-dirs \
+          -o $HOME/minio-binaries/mc
+
+        chmod +x $HOME/minio-binaries/mc
+        export PATH=$PATH:$HOME/minio-binaries/
+        mc mb /tmp/data/my-bucket
 
     - name: Install libvips
       run: sudo apt -y install libvips
