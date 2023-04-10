@@ -33,12 +33,13 @@ jobs:
     #   run: cd tests/rails && docker compose up --build -d && curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
     - name: Setup minio
       run: |
-        docker run -d -p 9000:9000 --name minio
-                    -e "MINIO_ACCESS_KEY=$AWS_S3_ACCESS_KEY"
-                    -e "MINIO_SECRET_KEY=$AWS_S3_ENDPOINT"
-                    -v /tmp/data:/data
-                    -v /tmp/config:/root/.minio
-                    minio/minio server /data
+        mkdir -p /tmp/data /tmp/config
+        docker run -d -p 9000:9000 -p 9001:9001 --name minio \
+                    -e "MINIO_ACCESS_KEY=$AWS_S3_ACCESS_KEY" \
+                    -e "MINIO_SECRET_KEY=$AWS_S3_ENDPOINT" \
+                    -v /tmp/data:/data \
+                    -v /tmp/config:/root/.minio \
+                    quay.io/minio/minio server /data --console-address ":9001"
         export AWS_ACCESS_KEY_ID="$AWS_S3_ACCESS_KEY"
         export AWS_SECRET_ACCESS_KEY="$AWS_S3_SECRET_KEY"
         export AWS_EC2_METADATA_DISABLED=true
