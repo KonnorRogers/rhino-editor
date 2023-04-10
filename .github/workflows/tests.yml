@@ -75,10 +75,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
-        cache-dependency-path: |
-          pnpm-lock.yaml
-          tests/rails/pnpm-lock.yaml
+        # cache: 'pnpm'
+        # cache-dependency-path: |
+        #   pnpm-lock.yaml
+        #   tests/rails/pnpm-lock.yaml
 
     - name: Install via pnpm
       run: |
