@@ -6,7 +6,6 @@ import { Maybe } from "src/types";
 import { findAttribute } from "./find-attribute";
 import { toDefaultCaption } from "src/internal/to-default-caption";
 
-
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
 }
