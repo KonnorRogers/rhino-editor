@@ -18,40 +18,57 @@ jobs:
       AWS_S3_BUCKET: my-bucket
       AWS_S3_ACCESS_KEY: minioadmin
       AWS_S3_SECRET_KEY: minioadmin
-      AWS_S3_ENDPOINT: http://127.0.0.1:9000/
+      AWS_S3_ENDPOINT: http://127.0.0.1:9000
       AWS_S3_REGION: us-east-1
 
     strategy:
       matrix:
         ruby: ['2.7', '3.0', '3.1']
         node-version: [16.x, 18.x]
+
+    services:
+      minio:
+        # fixme: let's not depend on external unofficial image
+        image: lazybit/minio
+        ports:
+          - 9000:9000
+        env:
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin
+        options: --name=minio --health-cmd "curl http://localhost:9000/minio/health/live"
     steps:
 
     - uses: actions/checkout@v3
     - uses: microsoft/playwright-github-action@v1
     # - name: Setup docker
     #   run: cd tests/rails && docker compose up --build -d && curl -m 10 --retry 10 -I 0.0.0.0:9000/minio/health/live
-    - name: Setup minio
-      run: |
-        export AWS_S3_BUCKET=my-bucket
-        export AWS_S3_ACCESS_KEY=minioadmin
-        export AWS_S3_SECRET_KEY=minioadmin
-        export AWS_S3_ENDPOINT=http://127.0.0.1:9000/
-        export AWS_S3_REGION=us-east-1
-        mkdir -p /tmp/data /tmp/config
-        docker run -d -p 9000:9000 -p 9001:9001 --name minio \
-                    -e "MINIO_ACCESS_KEY=$AWS_S3_ACCESS_KEY" \
-                    -e "MINIO_SECRET_KEY=$AWS_S3_ENDPOINT" \
-                    -v /tmp/data:/data \
-                    -v /tmp/config:/root/.minio \
-                    quay.io/minio/minio server /data --console-address ":9001"
-        curl https://dl.min.io/client/mc/release/linux-amd64/mc \
-          --create-dirs \
-          -o $HOME/minio-binaries/mc
+    # - name: Setup minio
+    #   run: |
+    #     export AWS_S3_BUCKET=my-bucket
+    #     export AWS_S3_ACCESS_KEY=minioadmin
+    #     export AWS_S3_SECRET_KEY=minioadmin
+    #     export AWS_S3_ENDPOINT=http://127.0.0.1:9000/
+    #     export AWS_S3_REGION=us-east-1
+    #     mkdir -p /tmp/data /tmp/config
+    #     docker run -d -p 9000:9000 -p 9001:9001 --name minio \
+    #                 -e "MINIO_ACCESS_KEY=$AWS_S3_ACCESS_KEY" \
+    #                 -e "MINIO_SECRET_KEY=$AWS_S3_ENDPOINT" \
+    #                 -v /tmp/data:/data \
+    #                 -v /tmp/config:/root/.minio \
+    #                 quay.io/minio/minio server /data --console-address ":9001"
+    #     curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+    #       --create-dirs \
+    #       -o $HOME/minio-binaries/mc
+    #
+    #     chmod +x $HOME/minio-binaries/mc
+    #     export PATH=$PATH:$HOME/minio-binaries/
+    #     mc mb /tmp/data/my-bucket
 
-        chmod +x $HOME/minio-binaries/mc
-        export PATH=$PATH:$HOME/minio-binaries/
-        mc mb /tmp/data/my-bucket
+
+    - run: wget https://dl.min.io/client/mc/release/linux-amd64/mc
+    - run: chmod +x ./mc
+    - run: ./mc alias set minio $AWS_S3_ENDPOINT $AWS_S3_ACCESS_KEY $AWS_S3_SECRET_KEY
+    - run: ./mc mb --ignore-existing minio/$AWS_S3_BUCKET
 
     - name: Install libvips
       run: sudo apt -y install libvips
