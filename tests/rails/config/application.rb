@@ -37,5 +37,7 @@ module TipTapRails
     config.to_prepare do
       ActionText::ContentHelper.allowed_tags << "iframe"
     end
+
+    config.hosts.clear
   end
 end
