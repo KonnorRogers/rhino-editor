@@ -29,7 +29,7 @@ import { AttachmentManager } from "src/exports/attachment-manager";
 import * as icons from "src/internal/icons";
 
 import { normalize } from "src/exports/styles/normalize";
-import editorStyles from "src/exports/styles/editor";
+import editorStyles, { toolbarButtonStyles } from "src/exports/styles/editor";
 import { BaseElement } from "src/internal/elements/base-element";
 
 import { AddAttachmentEvent } from "src/internal/events/add-attachment-event";
@@ -152,7 +152,7 @@ export class TipTapEditor extends BaseElement {
   }
 
   static get styles(): CSSResult[] {
-    return [normalize, tipTapCoreStyles, editorStyles];
+    return [normalize, tipTapCoreStyles, editorStyles, toolbarButtonStyles];
   }
 
   /** Used for registering things like <role-toolbar>, <role-tooltip>, <rhino-attachment-editor> */
@@ -468,7 +468,7 @@ export class TipTapEditor extends BaseElement {
   renderBoldButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         part=${stringMap({
           toolbar__button: true,
@@ -507,7 +507,7 @@ export class TipTapEditor extends BaseElement {
   renderItalicButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         tabindex="-1"
         type="button"
         part=${stringMap({
@@ -548,7 +548,7 @@ export class TipTapEditor extends BaseElement {
   renderStrikeButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -589,7 +589,7 @@ export class TipTapEditor extends BaseElement {
   renderLinkButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -632,7 +632,7 @@ export class TipTapEditor extends BaseElement {
   renderHeadingButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -675,7 +675,7 @@ export class TipTapEditor extends BaseElement {
   renderBlockquoteButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -719,7 +719,7 @@ export class TipTapEditor extends BaseElement {
   renderCodeBlockButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -762,7 +762,7 @@ export class TipTapEditor extends BaseElement {
   renderBulletListButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -805,7 +805,7 @@ export class TipTapEditor extends BaseElement {
   renderOrderedListButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -849,7 +849,7 @@ export class TipTapEditor extends BaseElement {
   renderAttachmentButton() {
     return html`
       <button
-        class="toolbar__button toolbar__button--attach-files"
+        class="toolbar__button rhino-toolbar-button"
         tabindex="-1"
         type="button"
         part=${stringMap({
@@ -890,7 +890,7 @@ export class TipTapEditor extends BaseElement {
   renderUndoButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -928,7 +928,7 @@ export class TipTapEditor extends BaseElement {
   renderDecreaseIndentation() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -966,7 +966,7 @@ export class TipTapEditor extends BaseElement {
   renderIncreaseIndentation() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         type="button"
         tabindex="-1"
         part=${stringMap({
@@ -1004,7 +1004,7 @@ export class TipTapEditor extends BaseElement {
   renderRedoButton() {
     return html`
       <button
-        class="toolbar__button"
+        class="toolbar__button rhino-toolbar-button"
         tabindex="-1"
         type="button"
         part=${stringMap({
