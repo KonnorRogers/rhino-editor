@@ -20,4 +20,6 @@ export const translations = {
   linkDialogLink: "Link",
   linkDialogUnlink: "Unlink",
   placeholder: "Write something...",
-};
+  increaseIndentation: "Increase indentation",
+  decreaseIndentation: "Decrease indentation",
+} as const;

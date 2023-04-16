@@ -12,7 +12,7 @@
     "@rails/activestorage": "^7.0.0",
     "@y-rb/actioncable": "^0.1.5",
     "rhino-editor": "link:../../",
-    "trix": "^1.3"
+    "trix": "^2.0.4"
   },
   "scripts": {
     "playwright": "playwright"

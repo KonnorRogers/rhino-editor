@@ -119,7 +119,7 @@ export default css`
   }
 
   :host::part(toolbar__button--link),
-  :host::part(toolbar__button--ordered-list) {
+  :host::part(toolbar__button--increase-indentation) {
     margin-inline-end: 1rem;
   }
 

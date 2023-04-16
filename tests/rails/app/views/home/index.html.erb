@@ -19,6 +19,7 @@
   <input id="x" type="hidden" name="content">
   <trix-editor
     input="x"
+    class="trix-content"
     data-blob-url-template="<%= rails_service_blob_path(":signed_id", ":filename") %>"
     data-direct-upload-url="<%= rails_direct_uploads_url %>"
   >
