@@ -271,7 +271,7 @@ export class TipTapEditor extends BaseElement {
    * Extend this to provide your own options, or override existing options.
    *   @example
    *    class ExtendedRhinoEditor extends TipTapEditor {
-   *      editorOptions {
+   *      editorOptions () {
    *        return {
    *          autofocus: true
    *        }
@@ -492,20 +492,10 @@ export class TipTapEditor extends BaseElement {
         aria-disabled=${this.editor == null || !this.editor.can().toggleBold()}
         aria-pressed=${this.editor?.isActive("bold")}
         data-role="toolbar-item"
+
         @click=${(e: MouseEvent) => {
-          e.preventDefault()
-          if (this.__useTouch__ === true) return
           if (elementDisabled(e.currentTarget)) return
-          this.editor?.chain().focus().toggleBold().run();
-        }}
-        @touchstart=${(e: TouchEvent) => {
-          if (elementDisabled(e.currentTarget)) return
-          e.preventDefault()
-          this.__useTouch__ = true
-          this.editor?.chain().focus().toggleBold().run();
-        }}
-        @touchend=${(_e: TouchEvent) => {
-          this.__useTouch__ = false
+          this.editor?.chain().toggleBold().run();
         }}
       >
         <slot name="bold-tooltip">
@@ -1310,30 +1300,30 @@ export class TipTapEditor extends BaseElement {
   }
 
   #handleCreate = () => {
-    this.requestUpdate();
+    // this.requestUpdate();
   };
 
   #handleUpdate = () => {
-    this.updateInputElementValue();
-    this.requestUpdate();
+    // this.updateInputElementValue();
+    // this.requestUpdate();
   };
 
   #handleFocus = () => {
-    this.closeLinkDialog();
-    this.requestUpdate();
+    // this.closeLinkDialog();
+    // this.requestUpdate();
   };
 
   #handleBlur = () => {
-    this.updateInputElementValue();
-    this.requestUpdate();
+    // this.updateInputElementValue();
+    // this.requestUpdate();
   };
 
   #handleSelectionUpdate = () => {
-    this.requestUpdate();
+    // this.requestUpdate();
   };
 
   #handleTransaction = () => {
-    this.requestUpdate();
+    // this.requestUpdate();
   };
 
   #bindEditorListeners(): void {
@@ -1366,7 +1356,7 @@ export class TipTapEditor extends BaseElement {
 
     return new Editor({
       ...this.#defaultOptions(element),
-      ...this.editorOptions,
+      ...this.editorOptions(element),
     });
   }
 }

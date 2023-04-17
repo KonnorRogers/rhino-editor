@@ -18,7 +18,7 @@ import {
 } from "./src/exports/styles/editor.js"
 
 
-/** @type {(options: {}) => import("esbuild").Plugin} */
+/** @type {(options: {} = {}) => import("esbuild").Plugin} */
 function AppendCssStyles (options = {}) {
   return {
     name: "append-css-styles",
@@ -42,7 +42,8 @@ function AppendCssStyles (options = {}) {
           ${toolbarButtonStyles.toString()}
         `
 
-        await fsPromises.writeFile(process.cwd(), "src", "exports", "styles", "trix.css", finalString)
+        await fsPromises.writeFile(path.join(process.cwd(), "src", "exports", "styles", "trix.css"), finalString)
+        // await fsPromises.writeFile(path.join(process.cwd(), "exports", "styles", "trix.css"), finalString)
       })
     }
   }
@@ -65,7 +66,10 @@ function AppendCssStyles (options = {}) {
     watch: process.argv.includes("--watch"),
     color: true,
     bundle: true,
-    external: []
+    external: [],
+    plugins: [
+      AppendCssStyles()
+    ]
   }
 
   const startTime = Number(new Date())
