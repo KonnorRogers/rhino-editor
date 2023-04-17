@@ -174,7 +174,7 @@
   line-height: 1;
   margin: 0 2px 2px 2px;
   padding: 0.4em 1em;
-  border: 1px solid #bbb;
+  border: 1px solid var(--rhino-border-color);
   border-radius: var(--rhino-border-radius);
 }
 .trix-content .attachment-gallery {

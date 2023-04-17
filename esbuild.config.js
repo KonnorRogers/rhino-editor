@@ -1,13 +1,52 @@
+// @ts-check
 import * as path from "path";
 import glob from "glob"
 import esbuild from "esbuild"
 import * as fs from "fs"
+import * as fsPromises from "fs/promises"
 
-const pkg = JSON.parse(fs.readFileSync("./package.json"))
+const pkg = JSON.parse(fs.readFileSync("./package.json").toString())
 const deps = [
   ...Object.keys(pkg.dependencies || {}),
   ...Object.keys(pkg.peerDependencies || {})
 ]
+
+
+import {
+  hostStyles,
+  toolbarButtonStyles
+} from "./src/exports/styles/editor.js"
+
+
+/** @type {(options: {}) => import("esbuild").Plugin} */
+function AppendCssStyles (options = {}) {
+  return {
+    name: "append-css-styles",
+    setup(build) {
+      build.onStart(async () => {
+        const styles = await fsPromises.readFile(
+          path.join(process.cwd(), "src", "exports", "styles", "trix-core.css"),
+          { encoding: "utf8" }
+        )
+
+        const finalString = `
+          /* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
+          ${styles.toString()}
+
+          /* src/exports/styles/editor.js:hostStyles */
+          .trix-content {
+            ${hostStyles.toString()}
+          }
+
+          /* src/exports/styles/editor.js:toolbarButtonStyles */
+          ${toolbarButtonStyles.toString()}
+        `
+
+        await fsPromises.writeFile(process.cwd(), "src", "exports", "styles", "trix.css", finalString)
+      })
+    }
+  }
+}
 
 ;(async function () {
   const entries = {}

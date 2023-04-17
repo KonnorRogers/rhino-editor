@@ -89,6 +89,16 @@ export type Serializer = "" | "html" | "json";
  * @slot ordered-list-button
  * @slot after-ordered-list-button
 
+ * ## Decrease Indentation
+ * @slot before-decrease-indentation-button
+ * @slot decrease-indentation-button
+ * @slot after-decrease-indentation-button
+
+ * ## Increase Indentation
+ * @slot before-increase-indentation-button
+ * @slot increase-indentation-button
+ * @slot after-increase-indentation-button
+
  * ## Attachments
  * @slot before-attach-files-button
  * @slot attach-files-button
@@ -114,6 +124,7 @@ export class TipTapEditor extends BaseElement {
   editorElement: Maybe<Element>;
   translations = translations;
   serializer: Serializer = "";
+  __useTouch__: boolean = false
 
   /** Comma separated string passed to the attach-files input. */
   accept: string = "*";
@@ -482,13 +493,19 @@ export class TipTapEditor extends BaseElement {
         aria-pressed=${this.editor?.isActive("bold")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
-            return;
-          }
+          e.preventDefault()
+          if (this.__useTouch__ === true) return
+          if (elementDisabled(e.currentTarget)) return
           this.editor?.chain().focus().toggleBold().run();
+        }}
+        @touchstart=${(e: TouchEvent) => {
+          if (elementDisabled(e.currentTarget)) return
+          e.preventDefault()
+          this.__useTouch__ = true
+          this.editor?.chain().focus().toggleBold().run();
+        }}
+        @touchend=${(_e: TouchEvent) => {
+          this.__useTouch__ = false
         }}
       >
         <slot name="bold-tooltip">
@@ -867,8 +884,9 @@ export class TipTapEditor extends BaseElement {
             id="attach-files"
             hoist
             part="toolbar-tooltip toolbar-tooltip__attach-files"
-            >${this.translations.attachFiles}</role-tooltip
           >
+            ${this.translations.attachFiles}
+          </role-tooltip>
         </slot>
         <slot name="attach-files-icon">${this.icons.attachFiles}</slot>
 
@@ -1031,8 +1049,9 @@ export class TipTapEditor extends BaseElement {
             id="redo"
             hoist
             part="toolbar-tooltip toolbar-tooltip__redo"
-            >${this.translations.redo}</role-tooltip
           >
+            ${this.translations.redo}
+          </role-tooltip>
         </slot>
         <slot name="redo-icon">${this.icons.redo}</slot>
       </button>
@@ -1350,4 +1369,11 @@ export class TipTapEditor extends BaseElement {
       ...this.editorOptions,
     });
   }
+}
+
+function elementDisabled (element: null | EventTarget | Element): boolean {
+  if (element == null) return true
+  if (!("getAttribute" in element)) return true
+
+  return (element.getAttribute("aria-disabled") === "true" || element.hasAttribute("disabled"))
 }
