@@ -14,6 +14,10 @@
     "rhino-editor": "link:../../",
     "trix": "^2.0.4"
   },
+  "pnpm": {
+    "resolutions": {
+    }
+  },
   "scripts": {
     "playwright": "playwright"
   }

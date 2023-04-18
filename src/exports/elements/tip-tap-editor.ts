@@ -237,9 +237,7 @@ export class TipTapEditor extends BaseElement {
     }
   }
 
-  editorElementChanged(element: Element | undefined): void {
-    if (element == null) return;
-
+  firstUpdated(): void {
     if (this.editor) {
       this.#unBindEditorListeners();
     }
@@ -492,10 +490,9 @@ export class TipTapEditor extends BaseElement {
         aria-disabled=${this.editor == null || !this.editor.can().toggleBold()}
         aria-pressed=${this.editor?.isActive("bold")}
         data-role="toolbar-item"
-
-        @click=${(e: MouseEvent) => {
+        @click=${async (e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) return
-          this.editor?.chain().toggleBold().run();
+          this.editor?.chain().focus().toggleBold().run();
         }}
       >
         <slot name="bold-tooltip">
@@ -503,8 +500,9 @@ export class TipTapEditor extends BaseElement {
             id="bold"
             hoist
             part="toolbar-tooltip toolbar-tooltip__bold"
-            >${this.translations.bold}</role-tooltip
           >
+            ${this.translations.bold}
+          </role-tooltip>
         </slot>
         <slot name="bold-icon">${this.icons.bold}</slot>
       </button>
@@ -530,12 +528,10 @@ export class TipTapEditor extends BaseElement {
         aria-pressed=${this.editor?.isActive("italic")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
+
           this.editor?.chain().focus().toggleItalic().run();
         }}
       >
@@ -544,10 +540,13 @@ export class TipTapEditor extends BaseElement {
             id="italics"
             hoist
             part="toolbar-tooltip toolbar-tooltip__italics"
-            >${this.translations.italics}</role-tooltip
           >
+            ${this.translations.italics}
+          </role-tooltip>
         </slot>
-        <slot name="italics-icon">${this.icons.italics}</slot>
+        <slot name="italics-icon">
+          ${this.icons.italics}
+        </slot>
       </button>
     `;
   }
@@ -1223,7 +1222,6 @@ export class TipTapEditor extends BaseElement {
     return html`
       ${this.renderToolbar()}
       <div
-        ${ref(this.editorElementChanged)}
         class="editor-wrapper"
         part="editor-wrapper"
       >
@@ -1300,30 +1298,30 @@ export class TipTapEditor extends BaseElement {
   }
 
   #handleCreate = () => {
-    // this.requestUpdate();
+    this.requestUpdate();
   };
 
   #handleUpdate = () => {
-    // this.updateInputElementValue();
-    // this.requestUpdate();
+    this.updateInputElementValue();
+    this.requestUpdate();
   };
 
   #handleFocus = () => {
-    // this.closeLinkDialog();
-    // this.requestUpdate();
+    this.closeLinkDialog();
+    this.requestUpdate();
   };
 
   #handleBlur = () => {
-    // this.updateInputElementValue();
-    // this.requestUpdate();
+    this.updateInputElementValue();
+    this.requestUpdate();
   };
 
   #handleSelectionUpdate = () => {
-    // this.requestUpdate();
+    this.requestUpdate();
   };
 
   #handleTransaction = () => {
-    // this.requestUpdate();
+    this.requestUpdate();
   };
 
   #bindEditorListeners(): void {
