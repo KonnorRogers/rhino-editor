@@ -13,7 +13,6 @@ class BoldTest < ApplicationSystemTestCase
   test "Should have aria-pressed when pressed" do
     bold_button.click
     locator = bold_button("[aria-pressed='true'][part~='toolbar__button--active']")
-    # locator.wait_for
 
     assert locator.visible?
   end

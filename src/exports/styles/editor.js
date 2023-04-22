@@ -78,15 +78,24 @@ export const toolbarButtonStyles = css`
   outline: transparent;
   box-shadow: var(--rhino-focus-ring);
   border-color: var(--rhino-button-active-border-color);
+}
+
+/* Only change the background color in certain scenarios */
+.rhino-toolbar-button:is(:focus, :hover):not(
+    [aria-disabled="true"],
+    :disabled,
+    [aria-pressed="true"],
+    [part~="toolbar__button--active"]
+  ) {
   background-color: var(--rhino-button-focus-background-color);
 }
 
-.rhino-toolbar-button:is([aria-disabled="true"], :disabled):not([part~="button--active"]) {
+.rhino-toolbar-button:is([aria-disabled="true"], :disabled):not([part~="toolbar__button--active"]) {
   color: var(--rhino-button-disabled-text-color);
   border-color: var(--rhino-button-disabled-border-color);
 }
 
-.rhino-toolbar-button:is(:focus, :hover):is([aria-disabled="true"], :disabled):not([part~="button--active"]) {
+.rhino-toolbar-button:is(:focus, :hover):is([aria-disabled="true"], :disabled):not([part~="toolbar__button--active"]) {
   outline: transparent;
   color: var(--rhino-button-disabled-text-color);
   border-color: var(--rhino-button-disabled-border-color);

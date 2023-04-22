@@ -1,6 +1,5 @@
-
-          /* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
-          /* These all come from Trix / ActionText. This should probably be cleaned up into
+/* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
+/* These all come from Trix / ActionText. This should probably be cleaned up into
    a regular .css for users to include.
 */
 .trix-content :is(img, svg, figure) {
@@ -231,10 +230,9 @@
   max-width: 100%;
 }
 
-
-          /* src/exports/styles/editor.js:hostStyles */
-          .trix-content {
-            
+/* src/exports/styles/editor.js:hostStyles */
+.trix-content {
+  
   /* General tokens */
   --rhino-focus-ring: 0px 0px 3px 0px var(--rhino-button-active-border-color);
   --rhino-border-radius: 4px;
@@ -277,10 +275,10 @@
   display: block;
   color: var(--rhino-text-color);
 
-          }
+}
 
-          /* src/exports/styles/editor.js:toolbarButtonStyles */
-          
+/* src/exports/styles/editor.js:toolbarButtonStyles */
+
 .rhino-toolbar-button {
   border: 1px solid var(--rhino-border-color);
   border-radius: var(--rhino-border-radius);
@@ -315,16 +313,15 @@
   background-color: var(--rhino-button-focus-background-color);
 }
 
-.rhino-toolbar-button:is([aria-disabled="true"], :disabled):not([part~="button--active"]) {
+.rhino-toolbar-button:is([aria-disabled="true"], :disabled):not([part~="toolbar__button--active"]) {
   color: var(--rhino-button-disabled-text-color);
   border-color: var(--rhino-button-disabled-border-color);
 }
 
-.rhino-toolbar-button:is(:focus, :hover):is([aria-disabled="true"], :disabled):not([part~="button--active"]) {
+.rhino-toolbar-button:is(:focus, :hover):is([aria-disabled="true"], :disabled):not([part~="toolbar__button--active"]) {
   outline: transparent;
   color: var(--rhino-button-disabled-text-color);
   border-color: var(--rhino-button-disabled-border-color);
   box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
 }
 
-        

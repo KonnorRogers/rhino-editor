@@ -13,7 +13,6 @@ class CodeBlockTest < ApplicationSystemTestCase
   test "Should have aria-pressed when pressed" do
     code_block_button.click
     locator = code_block_button("[aria-pressed='true'][part~='toolbar__button--active']")
-    # locator.wait_for
 
     assert locator.visible?
   end

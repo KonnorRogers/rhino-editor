@@ -29,18 +29,16 @@ function AppendCssStyles (options = {}) {
           { encoding: "utf8" }
         )
 
-        const finalString = `
-          /* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
-          ${styles.toString()}
+        const finalString = `/* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
+${styles.toString()}
+/* src/exports/styles/editor.js:hostStyles */
+.trix-content {
+  ${hostStyles.toString()}
+}
 
-          /* src/exports/styles/editor.js:hostStyles */
-          .trix-content {
-            ${hostStyles.toString()}
-          }
-
-          /* src/exports/styles/editor.js:toolbarButtonStyles */
-          ${toolbarButtonStyles.toString()}
-        `
+/* src/exports/styles/editor.js:toolbarButtonStyles */
+${toolbarButtonStyles.toString()}
+`
 
         await fsPromises.writeFile(path.join(process.cwd(), "src", "exports", "styles", "trix.css"), finalString)
         // await fsPromises.writeFile(path.join(process.cwd(), "exports", "styles", "trix.css"), finalString)

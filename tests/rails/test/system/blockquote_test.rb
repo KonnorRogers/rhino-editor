@@ -13,7 +13,6 @@ class BlockquoteTest < ApplicationSystemTestCase
   test "Should have aria-pressed when pressed" do
     block_quote_button.click
     locator = block_quote_button("[aria-pressed='true'][part~='toolbar__button--active']")
-    # locator.wait_for
 
     assert locator.visible?
   end
