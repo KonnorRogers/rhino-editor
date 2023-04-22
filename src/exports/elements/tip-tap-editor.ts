@@ -124,7 +124,7 @@ export class TipTapEditor extends BaseElement {
   editorElement: Maybe<Element>;
   translations = translations;
   serializer: Serializer = "";
-  __useTouch__: boolean = false
+  __useTouch__: boolean = false;
 
   /** Comma separated string passed to the attach-files input. */
   accept: string = "*";
@@ -356,7 +356,7 @@ export class TipTapEditor extends BaseElement {
 
       if (attachments == null) return;
 
-      this.editor?.chain().focus().setAttachment(attachments).run()
+      this.editor?.chain().focus().setAttachment(attachments).run();
 
       attachments.forEach((attachment) => {
         this.dispatchEvent(new AddAttachmentEvent(attachment));
@@ -394,7 +394,7 @@ export class TipTapEditor extends BaseElement {
 
     event.preventDefault();
 
-    this.editor?.chain().focus().setAttachment(attachments).run()
+    this.editor?.chain().focus().setAttachment(attachments).run();
 
     attachments.forEach((attachment) => {
       this.dispatchEvent(new AddAttachmentEvent(attachment));
@@ -491,7 +491,7 @@ export class TipTapEditor extends BaseElement {
         aria-pressed=${this.editor?.isActive("bold")}
         data-role="toolbar-item"
         @click=${async (e: MouseEvent) => {
-          if (elementDisabled(e.currentTarget)) return
+          if (elementDisabled(e.currentTarget)) return;
           this.editor?.chain().focus().toggleBold().run();
         }}
       >
@@ -544,9 +544,7 @@ export class TipTapEditor extends BaseElement {
             ${this.translations.italics}
           </role-tooltip>
         </slot>
-        <slot name="italics-icon">
-          ${this.icons.italics}
-        </slot>
+        <slot name="italics-icon"> ${this.icons.italics} </slot>
       </button>
     `;
   }
@@ -560,20 +558,22 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--strike": true,
-          "toolbar__button--active": Boolean(this.editor?.isActive("strike")),
-          "toolbar__button--disabled": (
-            this.editor == null || !this.editor.can().toggleStrike()
+          "toolbar__button--active": Boolean(
+            this.editor?.isActive("rhino-strike")
           ),
+          "toolbar__button--disabled":
+            this.editor == null || !this.editor.can().toggleStrike(),
         })}
         aria-describedby="strike"
-        aria-disabled=${this.editor == null || !this.editor.can().toggleStrike()}
-        aria-pressed=${Boolean(this.editor?.isActive("strike"))}
+        aria-disabled=${this.editor == null ||
+        !this.editor.can().toggleStrike()}
+        aria-pressed=${Boolean(this.editor?.isActive("rhino-strike"))}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
             return;
           }
-          this.editor?.chain().focus().toggleStrike().run()
+          this.editor?.chain().focus().toggleStrike().run();
         }}
       >
         <slot name="strike-tooltip">
@@ -599,12 +599,12 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--link": true,
           "toolbar__button--active": Boolean(this.linkDialogExpanded),
-          "toolbar__button--disabled": this.editor == null || !this.editor.can().setLink({ href: "" })
+          "toolbar__button--disabled":
+            this.editor == null || !this.editor.can().setLink({ href: "" }),
         })}
         aria-describedby="link"
-        aria-disabled=${
-          this.editor == null || !this.editor.can().setLink({ href: "" })
-        }
+        aria-disabled=${this.editor == null ||
+        !this.editor.can().setLink({ href: "" })}
         aria-pressed=${Boolean(this.linkDialogExpanded)}
         aria-controls="link-dialog"
         data-role="toolbar-item"
@@ -917,10 +917,11 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--decrease-indentation": true,
           "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().sinkListItem('listItem')
+            this.editor == null || !this.editor.can().sinkListItem("listItem"),
         })}
         aria-describedby="decrease-indentation"
-        aria-disabled=${this.editor == null || !this.editor.can().sinkListItem('listItem')}
+        aria-disabled=${this.editor == null ||
+        !this.editor.can().sinkListItem("listItem")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -937,7 +938,9 @@ export class TipTapEditor extends BaseElement {
             >${this.translations.decreaseIndentation}</role-tooltip
           >
         </slot>
-        <slot name="decrease-indentation">${this.icons.decreaseIndentation}</slot>
+        <slot name="decrease-indentation"
+          >${this.icons.decreaseIndentation}</slot
+        >
       </button>
     `;
   }
@@ -952,10 +955,11 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--increase-indentation": true,
           "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().sinkListItem('listItem')
+            this.editor == null || !this.editor.can().sinkListItem("listItem"),
         })}
         aria-describedby="increase-indentation"
-        aria-disabled=${this.editor == null || !this.editor.can().sinkListItem('listItem')}
+        aria-disabled=${this.editor == null ||
+        !this.editor.can().sinkListItem("listItem")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -972,7 +976,9 @@ export class TipTapEditor extends BaseElement {
             >${this.translations.increaseIndentation}</role-tooltip
           >
         </slot>
-        <slot name="increase-indentation">${this.icons.increaseIndentation}</slot>
+        <slot name="increase-indentation"
+          >${this.icons.increaseIndentation}</slot
+        >
       </button>
     `;
   }
@@ -1056,9 +1062,7 @@ export class TipTapEditor extends BaseElement {
 
           <!-- Blockquote -->
           <slot name="before-blockquote-button"></slot>
-          <slot name="blockquote-button"
-            >${this.renderBlockquoteButton()}</slot
-          >
+          <slot name="blockquote-button">${this.renderBlockquoteButton()}</slot>
           <slot name="after-blockquote-button"></slot>
 
           <!-- Code block -->
@@ -1081,11 +1085,15 @@ export class TipTapEditor extends BaseElement {
           <slot name="after-ordered-list-button"></slot>
 
           <slot name="before-decrease-indentation-button"></slot>
-          <slot name="decrease-indentation-button">${this.renderDecreaseIndentation()}</slot>
+          <slot name="decrease-indentation-button"
+            >${this.renderDecreaseIndentation()}</slot
+          >
           <slot name="after-decrease-indentation-button"></slot>
 
           <slot name="before-increase-indentation-button"></slot>
-          <slot name="increase-indentation-button">${this.renderIncreaseIndentation()}</slot>
+          <slot name="increase-indentation-button"
+            >${this.renderIncreaseIndentation()}</slot
+          >
           <slot name="after-increase-indentation-button"></slot>
 
           <!-- Attachments -->
@@ -1174,7 +1182,12 @@ export class TipTapEditor extends BaseElement {
             class="link-dialog__button"
             part="link-dialog__button link-dialog__button-unlink"
             @click=${() => {
-              this.editor?.chain().focus().extendMarkRange("link").unsetLink().run();
+              this.editor
+                ?.chain()
+                .focus()
+                .extendMarkRange("link")
+                .unsetLink()
+                .run();
             }}
           >
             ${this.translations.linkDialogUnlink}
@@ -1187,10 +1200,7 @@ export class TipTapEditor extends BaseElement {
   render(): TemplateResult {
     return html`
       ${this.renderToolbar()}
-      <div
-        class="editor-wrapper"
-        part="editor-wrapper"
-      >
+      <div class="editor-wrapper" part="editor-wrapper">
         ${this.renderLinkCreationDialog()}
         <div class="editor" part="editor"><slot name="editor"></slot></div>
       </div>
@@ -1325,9 +1335,12 @@ export class TipTapEditor extends BaseElement {
   }
 }
 
-function elementDisabled (element: null | EventTarget | Element): boolean {
-  if (element == null) return true
-  if (!("getAttribute" in element)) return true
+function elementDisabled(element: null | EventTarget | Element): boolean {
+  if (element == null) return true;
+  if (!("getAttribute" in element)) return true;
 
-  return (element.getAttribute("aria-disabled") === "true" || element.hasAttribute("disabled"))
+  return (
+    element.getAttribute("aria-disabled") === "true" ||
+    element.hasAttribute("disabled")
+  );
 }

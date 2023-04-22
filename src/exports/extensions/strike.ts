@@ -8,7 +8,7 @@ import Strike from "@tiptap/extension-strike";
  * https://github.com/ueberdosis/tiptap/blob/c729810767d374e4324e7f3ea84e2a65df18d622/packages/extension-strike/src/strike.ts#L62-L64
  */
 export const CustomStrike = Strike.extend({
-  name: "strike",
+  name: "rhino-strike",
   renderHTML({ HTMLAttributes }) {
     return [
       "del",
