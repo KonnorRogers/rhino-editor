@@ -35,6 +35,7 @@ class CollaborationEditor extends TipTapEditor {
     super()
 
     this.starterKit = {
+      ...super.starterKit,
       history: false
     }
     this.rhinoStarterKit = {

@@ -1,3 +1,4 @@
+require "y-rb"
 require "y-rb_actioncable"
 class SyncChannel < ApplicationCable::Channel
   include ::Y::Actioncable::Sync

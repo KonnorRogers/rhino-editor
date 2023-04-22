@@ -882,10 +882,10 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--undo": true,
           "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().undo(),
+            this.editor == null || !this.editor.can().undo?.(),
         })}
         aria-describedby="undo"
-        aria-disabled=${this.editor == null || !this.editor.can().undo()}
+        aria-disabled=${this.editor == null || !this.editor?.can().undo?.()}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -993,10 +993,10 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--redo": true,
           "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().redo(),
+            this.editor == null || !this.editor.can().redo?.(),
         })}
         aria-describedby="redo"
-        aria-disabled=${this.editor == null || !this.editor.can().redo()}
+        aria-disabled=${this.editor == null || !this.editor.can().redo?.()}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
