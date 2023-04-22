@@ -570,10 +570,7 @@ export class TipTapEditor extends BaseElement {
         aria-pressed=${Boolean(this.editor?.isActive("strike"))}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
           this.editor?.chain().focus().toggleStrike().run()
@@ -613,11 +610,7 @@ export class TipTapEditor extends BaseElement {
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (this.editor == null) return;
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          )
-            return;
+          if (elementDisabled(e.currentTarget)) return;
 
           this.toggleLinkDialog();
         }}
@@ -655,10 +648,7 @@ export class TipTapEditor extends BaseElement {
         aria-pressed=${this.editor?.isActive("heading")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
 
@@ -699,10 +689,7 @@ export class TipTapEditor extends BaseElement {
         aria-pressed=${this.editor?.isActive("blockquote")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
 
@@ -743,10 +730,7 @@ export class TipTapEditor extends BaseElement {
         aria-pressed=${this.editor?.isActive("codeBlock")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
           this.editor?.chain().focus().toggleCodeBlock().run();
@@ -786,10 +770,7 @@ export class TipTapEditor extends BaseElement {
         aria-pressed=${this.editor?.isActive("bulletList")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
           this.editor?.chain().focus().toggleBulletList().run();
@@ -829,10 +810,7 @@ export class TipTapEditor extends BaseElement {
         aria-pressed=${this.editor?.isActive("orderedList")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
 
@@ -910,10 +888,7 @@ export class TipTapEditor extends BaseElement {
         aria-disabled=${this.editor == null || !this.editor.can().undo()}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
           this.editor?.chain().focus().undo().run();
@@ -948,10 +923,7 @@ export class TipTapEditor extends BaseElement {
         aria-disabled=${this.editor == null || !this.editor.can().sinkListItem('listItem')}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
           this.editor?.chain().focus().sinkListItem("listItem").run();
@@ -986,10 +958,7 @@ export class TipTapEditor extends BaseElement {
         aria-disabled=${this.editor == null || !this.editor.can().sinkListItem('listItem')}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
           this.editor?.chain().focus().sinkListItem("listItem").run();
@@ -1024,10 +993,7 @@ export class TipTapEditor extends BaseElement {
         aria-disabled=${this.editor == null || !this.editor.can().redo()}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
-          if (
-            (e.currentTarget as HTMLElement).getAttribute("aria-disabled") ===
-            "true"
-          ) {
+          if (elementDisabled(e.currentTarget)) {
             return;
           }
           this.editor?.chain().focus().redo().run();
