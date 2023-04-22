@@ -40,7 +40,9 @@ export class AttachmentUpload implements DirectUploadDelegate {
     blob: Blob & { attachable_sgid?: string }
   ) {
     if (error) {
-      throw new Error(`Direct upload failed: ${error}`);
+      this.currentProgress = 0
+      this.setUploadProgress()
+      throw Error(`Direct upload failed: ${error}`);
     }
 
     this.attachment.setAttributes({
