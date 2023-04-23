@@ -312,10 +312,12 @@ export class TipTapEditor extends BaseElement {
   }
 
   get historyIsEnabled(): boolean {
-    if (this.editor == null) return true
+    if (this.editor == null) return true;
 
     // @ts-expect-error
-    return this.editor.extensionManager.plugins.find(({name}) => name === "history")
+    return this.editor.extensionManager.plugins.find(
+      ({ name }) => name === "history"
+    );
   }
 
   closeLinkDialog(): void {
@@ -1113,16 +1115,12 @@ export class TipTapEditor extends BaseElement {
           <!-- Undo -->
           <slot name="before-undo-button"></slot>
           <!-- @ts-expect-error -->
-          <slot name="undo-button">
-            ${this.renderUndoButton()}
-          </slot>
+          <slot name="undo-button"> ${this.renderUndoButton()} </slot>
           <slot name="after-undo-button"></slot>
 
           <!-- Redo -->
           <slot name="before-redo-button"></slot>
-          <slot name="redo-button">
-            ${this.renderRedoButton()}
-          </slot>
+          <slot name="redo-button"> ${this.renderRedoButton()} </slot>
           <slot name="after-redo-button"></slot>
 
           <slot name="toolbar-end">${this.renderEnd()}</slot>

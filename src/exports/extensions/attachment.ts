@@ -1,5 +1,8 @@
 import { AttachmentManager } from "src/exports/attachment-manager";
-import { AttachmentEditor, LOADING_STATES } from "src/exports/elements/attachment-editor";
+import {
+  AttachmentEditor,
+  LOADING_STATES,
+} from "src/exports/elements/attachment-editor";
 import { mergeAttributes, Node } from "@tiptap/core";
 import { selectionToInsertionEnd } from "src/internal/selection-to-insertion-end";
 import { Maybe } from "src/types";
@@ -173,11 +176,14 @@ export const Attachment = Node.create({
       },
       progress: {
         default: 0,
-        parseHTML: (element) => findAttribute(element, "sgid") ? 100 : 0
+        parseHTML: (element) => (findAttribute(element, "sgid") ? 100 : 0),
       },
       loadingState: {
         default: "not-started",
-        parseHTML: (element) => findAttribute(element, "sgid") ? LOADING_STATES.success : LOADING_STATES.notStarted
+        parseHTML: (element) =>
+          findAttribute(element, "sgid")
+            ? LOADING_STATES.success
+            : LOADING_STATES.notStarted,
       },
       sgid: {
         default: "",
@@ -325,7 +331,7 @@ export const Attachment = Node.create({
       attachmentEditor.setAttribute("file-name", fileName);
       attachmentEditor.setAttribute("file-size", fileSize);
       attachmentEditor.setAttribute("contenteditable", "false");
-      attachmentEditor.setAttribute("loading-state", loadingState)
+      attachmentEditor.setAttribute("loading-state", loadingState);
       attachmentEditor.setAttribute("progress", progress);
 
       figure.addEventListener("click", (e: Event) => {

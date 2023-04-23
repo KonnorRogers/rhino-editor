@@ -5,15 +5,14 @@ import { toMemorySize } from "src/internal/to-memory-size";
 import { normalize } from "src/exports/styles/normalize";
 import { BaseElement } from "src/internal/elements/base-element";
 
-
 export const LOADING_STATES = Object.freeze({
   notStarted: "not-started",
   loading: "loading",
   error: "error",
-  success: "success"
-})
+  success: "success",
+});
 
-export type LoadingState = typeof LOADING_STATES[keyof typeof LOADING_STATES]
+export type LoadingState = (typeof LOADING_STATES)[keyof typeof LOADING_STATES];
 /**
  * An attachment editor element for managing tip-tap attachments. This encompasses the
  *   delete button, tooltip, and progress handler.
@@ -22,13 +21,13 @@ export class AttachmentEditor extends BaseElement {
   fileName?: string;
   fileSize?: number;
   progress?: number;
-  loadingState?: LoadingState
-  errorMessage?: TemplateResult | string
+  loadingState?: LoadingState;
+  errorMessage?: TemplateResult | string;
 
-  constructor () {
-    super()
-    this.loadingState = "not-started"
-    this.errorMessage = html`There was an error uploading this file.`
+  constructor() {
+    super();
+    this.loadingState = "not-started";
+    this.errorMessage = html`There was an error uploading this file.`;
   }
 
   static baseName = "rhino-attachment-editor";
@@ -44,7 +43,7 @@ export class AttachmentEditor extends BaseElement {
       progress: { type: Number },
       class: { attribute: "class", type: String },
       loadingState: { attribute: "loading-state" },
-      errorMessage: { state: true }
+      errorMessage: { state: true },
     };
   }
 
@@ -222,7 +221,11 @@ export class AttachmentEditor extends BaseElement {
           min="0"
           max="100"
         ></progress>
-        <label for="file-progress" class="file-progress-error" part="file-progress-error">
+        <label
+          for="file-progress"
+          class="file-progress-error"
+          part="file-progress-error"
+        >
           ${this.loadingState === "error" ? this.errorMessage : null}
         </label>
       </div>

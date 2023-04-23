@@ -40,13 +40,13 @@ export class AttachmentUpload implements DirectUploadDelegate {
     blob: Blob & { attachable_sgid?: string }
   ) {
     if (error) {
-      this.currentProgress = 0
-      this.animationProgress = 0
+      this.currentProgress = 0;
+      this.animationProgress = 0;
       if (this.attachment.content == null) {
         this.attachment.setNodeMarkup({
           progress: 0,
-          loadingState: "error"
-        })
+          loadingState: "error",
+        });
       }
 
       throw Error(`Direct upload failed: ${error}`);
