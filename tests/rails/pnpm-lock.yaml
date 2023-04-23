@@ -8,21 +8,21 @@ specifiers:
   '@rails/activestorage': ^7.0.0
   '@tiptap/core': ^2.0.3
   '@tiptap/extension-collaboration': ^2.0.3
-  '@tiptap/extension-collaboration-cursor': ^2.0.3
+  '@tiptap/extension-collaboration-cursor': 2.0.3
   '@tiptap/pm': ^2.0.3
   '@y-rb/actioncable': ^0.1.5
   playwright: ~1.28.0
   prosemirror-model: ^1.7.1
   prosemirror-state: ^1.2.3
-  prosemirror-view: ^1.9.10
+  prosemirror-view: ~1.30.2
   rhino-editor: link:../../
   trix: ^2.0.4
   vite: ^4.2.0
   vite-plugin-ruby: ^3.2.0
-  y-prosemirror: ^1.0.20
+  y-prosemirror: ^1.2.1
   y-protocols: ^1.0.1
   y-websocket: ^1.5.0
-  yjs: ^13.5.52
+  yjs: ^13.6.0
 
 dependencies:
   '@hotwired/stimulus': 3.2.1
@@ -31,8 +31,8 @@ dependencies:
   '@rails/actiontext': 7.0.4_trix@2.0.4
   '@rails/activestorage': 7.0.4
   '@tiptap/core': 2.0.3_@tiptap+pm@2.0.3
-  '@tiptap/extension-collaboration': 2.0.3_6xxsajb73vh6nh2y4zvu3xmfva
-  '@tiptap/extension-collaboration-cursor': 2.0.3_pbvombqo2siqpb7wohojcl7qai
+  '@tiptap/extension-collaboration': 2.0.3_twj3ehki6ykwvnjuxv53zqk4zq
+  '@tiptap/extension-collaboration-cursor': 2.0.3_5a32j3wq5pjnsuig6twqxyb5zq
   '@tiptap/pm': 2.0.3_@tiptap+core@2.0.3
   '@y-rb/actioncable': 0.1.5
   prosemirror-model: 1.19.0
@@ -40,10 +40,10 @@ dependencies:
   prosemirror-view: 1.30.2
   rhino-editor: link:../..
   trix: 2.0.4
-  y-prosemirror: 1.0.20_ghdp7jxvkzfo2jepx5bfuxqm4m
+  y-prosemirror: 1.2.1_im2pltlmpyak2cqnk63mzf7whm
   y-protocols: 1.0.5
-  y-websocket: 1.5.0_yjs@13.5.52
-  yjs: 13.5.52
+  y-websocket: 1.5.0_yjs@13.6.0
+  yjs: 13.6.0
 
 devDependencies:
   playwright: 1.28.1
@@ -350,17 +350,17 @@ packages:
       '@tiptap/pm': 2.0.3_@tiptap+core@2.0.3
     dev: false
 
-  /@tiptap/extension-collaboration-cursor/2.0.3_pbvombqo2siqpb7wohojcl7qai:
+  /@tiptap/extension-collaboration-cursor/2.0.3_5a32j3wq5pjnsuig6twqxyb5zq:
     resolution: {integrity: sha512-pBcsk3ZkK8IQK6UP/a7Y4rjZRW/anhxFaTCcTxrUvn/azqRI+mcCsRwbc5lNLzcYq5JVOHGROjriNmGGkIr5jA==}
     peerDependencies:
       '@tiptap/core': ^2.0.0
       y-prosemirror: 1.0.20
     dependencies:
       '@tiptap/core': 2.0.3_@tiptap+pm@2.0.3
-      y-prosemirror: 1.0.20_ghdp7jxvkzfo2jepx5bfuxqm4m
+      y-prosemirror: 1.2.1_im2pltlmpyak2cqnk63mzf7whm
     dev: false
 
-  /@tiptap/extension-collaboration/2.0.3_6xxsajb73vh6nh2y4zvu3xmfva:
+  /@tiptap/extension-collaboration/2.0.3_twj3ehki6ykwvnjuxv53zqk4zq:
     resolution: {integrity: sha512-oA+5Dx+L1GfFrP2tUol8lfKNrLitYgHBaBJbAiqh/QPKVuUiEWgFS2W1oYaSGmwYjzdPCVJqXyQLzSJvEdnBWQ==}
     peerDependencies:
       '@tiptap/core': ^2.0.0
@@ -369,7 +369,7 @@ packages:
     dependencies:
       '@tiptap/core': 2.0.3_@tiptap+pm@2.0.3
       '@tiptap/pm': 2.0.3_@tiptap+core@2.0.3
-      y-prosemirror: 1.0.20_ghdp7jxvkzfo2jepx5bfuxqm4m
+      y-prosemirror: 1.2.1_im2pltlmpyak2cqnk63mzf7whm
     dev: false
 
   /@tiptap/pm/2.0.3_@tiptap+core@2.0.3:
@@ -416,7 +416,7 @@ packages:
     dependencies:
       lib0: 0.2.73
       y-protocols: 1.0.5
-      yjs: 13.5.52
+      yjs: 13.6.0
     dev: false
 
   /abstract-leveldown/6.2.3:
@@ -779,6 +779,14 @@ packages:
 
   /lib0/0.2.73:
     resolution: {integrity: sha512-aJJIElCLWnHMcYZPtsM07QoSfHwpxCy4VUzBYGXFYEmh/h2QS5uZNbCCfL0CqnkOE30b7Tp9DVfjXag+3qzZjQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      isomorphic.js: 0.2.5
+    dev: false
+
+  /lib0/0.2.74:
+    resolution: {integrity: sha512-roj9i46/JwG5ik5KNTkxP2IytlnrssAkD/OhlAVtE+GqectrdkfR+pttszVLrOzMDeXNs1MPt6yo66MUolWSiA==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
@@ -1233,7 +1241,7 @@ packages:
     dev: false
     optional: true
 
-  /y-leveldb/0.1.2_yjs@13.5.52:
+  /y-leveldb/0.1.2_yjs@13.6.0:
     resolution: {integrity: sha512-6ulEn5AXfXJYi89rXPEg2mMHAyyw8+ZfeMMdOtBbV8FJpQ1NOrcgi6DTAcXof0dap84NjHPT2+9d0rb6cFsjEg==}
     requiresBuild: true
     peerDependencies:
@@ -1241,25 +1249,25 @@ packages:
     dependencies:
       level: 6.0.1
       lib0: 0.2.73
-      yjs: 13.5.52
+      yjs: 13.6.0
     dev: false
     optional: true
 
-  /y-prosemirror/1.0.20_ghdp7jxvkzfo2jepx5bfuxqm4m:
-    resolution: {integrity: sha512-LVMtu3qWo0emeYiP+0jgNcvZkqhzE/otOoro+87q0iVKxy/sMKuiJZnokfJdR4cn9qKx0Un5fIxXqbAlR2bFkA==}
+  /y-prosemirror/1.2.1_im2pltlmpyak2cqnk63mzf7whm:
+    resolution: {integrity: sha512-czMBfB1eL2awqmOSxQM8cS/fsUOGE6fjvyPLInrh4crPxFiw67wDpwIW+EGBYKRa04sYbS0ScGj7ZgvWuDrmBQ==}
     peerDependencies:
       prosemirror-model: ^1.7.1
       prosemirror-state: ^1.2.3
       prosemirror-view: ^1.9.10
       y-protocols: ^1.0.1
-      yjs: ^13.3.2
+      yjs: ^13.5.38
     dependencies:
-      lib0: 0.2.73
+      lib0: 0.2.74
       prosemirror-model: 1.19.0
       prosemirror-state: 1.4.2
       prosemirror-view: 1.30.2
       y-protocols: 1.0.5
-      yjs: 13.5.52
+      yjs: 13.6.0
     dev: false
 
   /y-protocols/1.0.5:
@@ -1268,7 +1276,7 @@ packages:
       lib0: 0.2.73
     dev: false
 
-  /y-websocket/1.5.0_yjs@13.5.52:
+  /y-websocket/1.5.0_yjs@13.6.0:
     resolution: {integrity: sha512-A8AO6XtnQlYwWFytWdkDCeXg4l8ghRTIw5h2YUgUYDmEC9ugWGIwYNW80yadhSFAF7CvuWTEkQNEpevnH6EiZw==}
     hasBin: true
     peerDependencies:
@@ -1277,18 +1285,18 @@ packages:
       lib0: 0.2.73
       lodash.debounce: 4.0.8
       y-protocols: 1.0.5
-      yjs: 13.5.52
+      yjs: 13.6.0
     optionalDependencies:
       ws: 6.2.2
-      y-leveldb: 0.1.2_yjs@13.5.52
+      y-leveldb: 0.1.2_yjs@13.6.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
     dev: false
 
-  /yjs/13.5.52:
-    resolution: {integrity: sha512-wTajR70VeI6uztpUk4kMcXYHSRzuUlNyJPdBG9NII0EcFf27DwGduZEm3XbP7VSzlGx5n6uenBhOPX+YuPH/tA==}
+  /yjs/13.6.0:
+    resolution: {integrity: sha512-tFZtuQV6XamtDa9SfZhUsxchUcTBWe7fzpo1UWZDLXGejTZ5t9MCswGYzyvq7+BDzfEc9oX54QEbzI/4NyS6+g==}
     engines: {node: '>=16.0.0', npm: '>=8.0.0'}
     dependencies:
-      lib0: 0.2.73
+      lib0: 0.2.74
     dev: false

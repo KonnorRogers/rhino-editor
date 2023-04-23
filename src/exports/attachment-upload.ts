@@ -41,7 +41,14 @@ export class AttachmentUpload implements DirectUploadDelegate {
   ) {
     if (error) {
       this.currentProgress = 0
-      this.setUploadProgress()
+      this.animationProgress = 0
+      if (this.attachment.content == null) {
+        this.attachment.setNodeMarkup({
+          progress: 0,
+          loadingState: "error"
+        })
+      }
+
       throw Error(`Direct upload failed: ${error}`);
     }
 

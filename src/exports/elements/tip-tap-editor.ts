@@ -311,6 +311,13 @@ export class TipTapEditor extends BaseElement {
     this.showLinkDialog();
   }
 
+  get historyIsEnabled(): boolean {
+    if (this.editor == null) return true
+
+    // @ts-expect-error
+    return this.editor.extensionManager.plugins.find(({name}) => name === "history")
+  }
+
   closeLinkDialog(): void {
     if (this.linkDialog == null) return;
 
@@ -882,10 +889,10 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--undo": true,
           "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().undo?.(),
+            this.editor == null || !this.editor.can().undo(),
         })}
         aria-describedby="undo"
-        aria-disabled=${this.editor == null || !this.editor?.can().undo?.()}
+        aria-disabled=${this.editor == null || !this.editor?.can().undo()}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -1105,12 +1112,17 @@ export class TipTapEditor extends BaseElement {
 
           <!-- Undo -->
           <slot name="before-undo-button"></slot>
-          <slot name="undo-button">${this.renderUndoButton()}</slot>
+          <!-- @ts-expect-error -->
+          <slot name="undo-button">
+            ${this.renderUndoButton()}
+          </slot>
           <slot name="after-undo-button"></slot>
 
           <!-- Redo -->
           <slot name="before-redo-button"></slot>
-          <slot name="redo-button">${this.renderRedoButton()}</slot>
+          <slot name="redo-button">
+            ${this.renderRedoButton()}
+          </slot>
           <slot name="after-redo-button"></slot>
 
           <slot name="toolbar-end">${this.renderEnd()}</slot>

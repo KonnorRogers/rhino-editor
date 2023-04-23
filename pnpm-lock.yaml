@@ -3,15 +3,15 @@ lockfileVersion: 5.4
 specifiers:
   '@changesets/cli': ^2.26.1
   '@rails/activestorage': ^7.0.4
-  '@tiptap/core': ^2.0.3
-  '@tiptap/extension-code-block': ^2.0.3
-  '@tiptap/extension-focus': ^2.0.3
-  '@tiptap/extension-image': ^2.0.3
-  '@tiptap/extension-link': ^2.0.3
-  '@tiptap/extension-placeholder': ^2.0.3
-  '@tiptap/extension-strike': ^2.0.3
-  '@tiptap/extension-text-align': ^2.0.3
-  '@tiptap/pm': ^2.0.3
+  '@tiptap/core': ^2.0.2
+  '@tiptap/extension-code-block': ^2.0.2
+  '@tiptap/extension-focus': ^2.0.2
+  '@tiptap/extension-image': ^2.0.2
+  '@tiptap/extension-link': ^2.0.2
+  '@tiptap/extension-placeholder': ^2.0.2
+  '@tiptap/extension-strike': ^2.0.2
+  '@tiptap/extension-text-align': ^2.0.2
+  '@tiptap/pm': ^2.0.2
   '@tiptap/starter-kit': ^2.0.3
   '@types/rails__activestorage': ^7.0.1
   '@typescript-eslint/parser': ^4.33.0
