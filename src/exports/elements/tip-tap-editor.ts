@@ -311,15 +311,6 @@ export class TipTapEditor extends BaseElement {
     this.showLinkDialog();
   }
 
-  get historyIsEnabled(): boolean {
-    if (this.editor == null) return true;
-
-    // @ts-expect-error
-    return this.editor.extensionManager.plugins.find(
-      ({ name }) => name === "history"
-    );
-  }
-
   closeLinkDialog(): void {
     if (this.linkDialog == null) return;
 
