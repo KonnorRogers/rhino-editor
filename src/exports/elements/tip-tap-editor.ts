@@ -138,6 +138,9 @@ export class TipTapEditor extends BaseElement {
     placeholder: {
       placeholder: this.translations.placeholder,
     },
+    attachment: {
+      fileUploadErrorMessage: this.translations.fileUploadErrorMessage
+    }
   };
 
   static get properties(): PropertyDeclarations {

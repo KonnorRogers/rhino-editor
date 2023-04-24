@@ -8,9 +8,11 @@ import { selectionToInsertionEnd } from "src/internal/selection-to-insertion-end
 import { Maybe } from "src/types";
 import { findAttribute } from "./find-attribute";
 import { toDefaultCaption } from "src/internal/to-default-caption";
+import { fileUploadErrorMessage } from "../translations";
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
+  fileUploadErrorMessage: string;
 }
 
 declare module "@tiptap/core" {
@@ -51,7 +53,7 @@ function toType(content: Maybe<string>, previewable: Boolean): string {
   return "attachment--file";
 }
 
-export const Attachment = Node.create({
+export const Attachment = Node.create<AttachmentOptions>({
   name: "attachment-figure",
   group: "block attachmentFigure",
   content: "inline*",
@@ -66,6 +68,7 @@ export const Attachment = Node.create({
         class: "attachment",
         "data-trix-attributes": JSON.stringify({ presentation: "gallery" }),
       },
+      fileUploadErrorMessage: fileUploadErrorMessage
     };
   },
 
@@ -333,6 +336,7 @@ export const Attachment = Node.create({
       attachmentEditor.setAttribute("contenteditable", "false");
       attachmentEditor.setAttribute("loading-state", loadingState);
       attachmentEditor.setAttribute("progress", progress);
+      attachmentEditor.fileUploadErrorMessage = this.options.fileUploadErrorMessage
 
       figure.addEventListener("click", (e: Event) => {
         if (e.composedPath().includes(figcaption)) {
@@ -550,3 +554,4 @@ export const Attachment = Node.create({
 // async function uploadFile (file: File) {
 //   file
 // }
+

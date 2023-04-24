@@ -4,6 +4,7 @@ import { close } from "src/internal/icons";
 import { toMemorySize } from "src/internal/to-memory-size";
 import { normalize } from "src/exports/styles/normalize";
 import { BaseElement } from "src/internal/elements/base-element";
+import { fileUploadErrorMessage } from "../translations";
 
 export const LOADING_STATES = Object.freeze({
   notStarted: "not-started",
@@ -22,12 +23,12 @@ export class AttachmentEditor extends BaseElement {
   fileSize?: number;
   progress?: number;
   loadingState?: LoadingState;
-  errorMessage?: TemplateResult | string;
+  fileUploadErrorMessage?: TemplateResult | string;
 
   constructor() {
     super();
     this.loadingState = "not-started";
-    this.errorMessage = html`There was an error uploading this file.`;
+    this.fileUploadErrorMessage = fileUploadErrorMessage;
   }
 
   static baseName = "rhino-attachment-editor";
@@ -43,7 +44,7 @@ export class AttachmentEditor extends BaseElement {
       progress: { type: Number },
       class: { attribute: "class", type: String },
       loadingState: { attribute: "loading-state" },
-      errorMessage: { state: true },
+      fileUploadErrorMessage: { state: true },
     };
   }
 
@@ -226,7 +227,7 @@ export class AttachmentEditor extends BaseElement {
           class="file-progress-error"
           part="file-progress-error"
         >
-          ${this.loadingState === "error" ? this.errorMessage : null}
+          ${this.loadingState === "error" ? this.fileUploadErrorMessage : null}
         </label>
       </div>
     `;
