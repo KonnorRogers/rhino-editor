@@ -68,7 +68,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         class: "attachment",
         "data-trix-attributes": JSON.stringify({ presentation: "gallery" }),
       },
-      fileUploadErrorMessage: fileUploadErrorMessage
+      fileUploadErrorMessage: fileUploadErrorMessage,
     };
   },
 
@@ -336,7 +336,8 @@ export const Attachment = Node.create<AttachmentOptions>({
       attachmentEditor.setAttribute("contenteditable", "false");
       attachmentEditor.setAttribute("loading-state", loadingState);
       attachmentEditor.setAttribute("progress", progress);
-      attachmentEditor.fileUploadErrorMessage = this.options.fileUploadErrorMessage
+      attachmentEditor.fileUploadErrorMessage =
+        this.options.fileUploadErrorMessage;
 
       figure.addEventListener("click", (e: Event) => {
         if (e.composedPath().includes(figcaption)) {
@@ -554,4 +555,3 @@ export const Attachment = Node.create<AttachmentOptions>({
 // async function uploadFile (file: File) {
 //   file
 // }
-

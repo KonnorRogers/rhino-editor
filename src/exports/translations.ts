@@ -3,7 +3,7 @@ export const isiOS = /Mac|iOS|iPhone|iPad|iPod/i.test(
 );
 
 export const modifierKey = isiOS ? "cmd" : "ctrl";
-export const fileUploadErrorMessage = "Unable to upload this file."
+export const fileUploadErrorMessage = "Unable to upload this file.";
 
 export const translations = {
   attachFiles: "Attach Files",
@@ -23,7 +23,5 @@ export const translations = {
   placeholder: "Write something...",
   increaseIndentation: "Increase indentation",
   decreaseIndentation: "Decrease indentation",
-  fileUploadErrorMessage: fileUploadErrorMessage
+  fileUploadErrorMessage: fileUploadErrorMessage,
 } as const;
-
-
