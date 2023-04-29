@@ -442,6 +442,39 @@ bridgetown-search-results::part(inner-link):hover {
   background-color: var(--sl-color-neutral-50);
 }
 
+/** Pagination */
+sl-button:is(.previous-page, .next-page) {
+  transition: transform 0.15s;
+}
+
+sl-button:is(.previous-page, .next-page)::part(label) {
+  width: 100%;
+}
+
+sl-button:is(.next-page)::part(base) {
+  justify-content: start;
+  justify-content: flex-start;
+}
+
+sl-button:is(.previous-page)::part(base) {
+  justify-content: end;
+  justify-content: flex-end;
+}
+
+sl-button:is(.next-page, .previous-page):is(:hover, :focus) {
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 12px 13px;
+  transform: translateY(-2px);
+}
+
+.pagination-footer {
+  margin-top: auto;
+  padding-top: 4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 @media screen and (min-width: 1024px) {
 	.documentation-grid main {
 		margin: 2rem 0;

@@ -18,6 +18,10 @@ class Builders::Helpers < SiteBuilder
     helper "indexed_docs_by_category", :indexed_docs_by_category
 
     helper "on_github", :on_github
+
+    helper "next_page_in_category", :next_page_in_category
+    helper "previous_page_in_category", :previous_page_in_category
+    helper "current_page_in_category_index", :current_page_in_category_index
   end
 
   def render_svg(filename, options = {})
@@ -75,4 +79,25 @@ class Builders::Helpers < SiteBuilder
     package_json = File.read(package_json_file)
     JSON.parse(package_json)["version"].to_s
   end
+
+  def next_page_in_category(resource, category = resource.data[:category])
+    current_page_index = current_page_in_category_index(resource)
+
+    return nil if current_page_index.nil?
+
+    indexed_docs_by_category(category)[current_page_index + 1]
+  end
+
+  def previous_page_in_category(resource, category = resource.data[:category])
+    current_page_index = current_page_in_category_index(resource)
+
+    return nil if current_page_index.nil? || current_page_index == 0
+
+    indexed_docs_by_category(category)[current_page_index - 1]
+  end
+
+  def current_page_in_category_index(resource, category = resource.data[:category])
+    indexed_docs_by_category(category).index(resource)
+  end
 end
+

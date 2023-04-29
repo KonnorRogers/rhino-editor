@@ -213,3 +213,19 @@ code.highlight {
 :where(:not(:defined)) {
   visibility: hidden;
 }
+
+/** https://github.com/shoelace-style/shoelace/pull/1317 */
+sl-button::part(base) {
+  min-height: var(--sl-input-height-medium);
+  height: auto;
+}
+
+sl-button[size='large']::part(base) {
+  min-height: var(--sl-input-height-large);
+  height: auto;
+}
+
+sl-button[size='small']::part(base) {
+  min-height: var(--sl-input-height-small);
+  height: auto;
+}
