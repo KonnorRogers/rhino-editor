@@ -28,7 +28,7 @@ layout: default
             <span style="display: block; color: var(--sl-color-neutral-500); font-size: 0.85rem;">
               Previous Page
             </span>
-            <span style="font-size: 1.15rem;"><%= previous_page.data.title %></span>
+            <pagination-title><%= previous_page.data.title %></pagination-title>
           </span>
 
         </sl-button>
@@ -40,7 +40,9 @@ layout: default
         <sl-button class="next-page" href="<%= next_page.relative_url %>">
           <span style="text-align: start; display: block;">
             <span style="display: block; color: var(--sl-color-neutral-500); font-size: 0.85rem;">Next Page</span>
-            <span style="font-size: 1.15rem;"><%= next_page.data.title %></span>
+            <pagination-title>
+              <%= next_page.data.title %>
+            </pagination-title>
           </span>
 
           <span slot="suffix">
@@ -48,6 +50,8 @@ layout: default
           </span>
 
         </sl-button>
+      <% else %>
+        <div></div>
       <% end %>
     </footer>
   </main>

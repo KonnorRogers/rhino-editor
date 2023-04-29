@@ -186,33 +186,33 @@ code > span {
   line-height: var(--sl-line-height-dense);
 }
 
+.highlighter-rouge,
 .highlight {
   border-radius: var(--sl-border-radius-large);
   font-size: 1.1em;
   line-height: 1.4;
 }
 
+.highlight,
 .highlighter-rouge {
   position: relative;
 }
 
-code.highlight {
+code.highlight,
+code.highlighter-rouge {
   display: inline-block;
-  font-size: 0.9em;
-  padding: var(--sl-spacing-xx-small) var(--sl-spacing-x-small);
+  font-size: 0.85em;
+  padding: 0.2em 0.4em;
+  margin: var(--sl-spacing-xx-small) 0;
   border-radius: var(--sl-border-radius-base);
   background-color: var(--code-background-color);
   color: var(--code-color);
-  word-break: break-all;
+  white-space: break-spaces;
 }
 
-code.highlight {
-  margin: var(--sl-spacing-xx-small) 0;
-}
-
-:where(:not(:defined)) {
-  visibility: hidden;
-}
+/* :where(:not(:defined)) { */
+/*   visibility: hidden; */
+/* } */
 
 /** https://github.com/shoelace-style/shoelace/pull/1317 */
 sl-button::part(base) {

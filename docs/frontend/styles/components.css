@@ -147,7 +147,8 @@ input.top-nav__search__input {
 
 .nav-link {
   color: var(--sl-color-gray-600);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: var(--sl-color-primary-500);
 }
 
 .side-nav__menu {
@@ -448,7 +449,9 @@ sl-button:is(.previous-page, .next-page) {
 }
 
 sl-button:is(.previous-page, .next-page)::part(label) {
+  max-width: calc(100% - 24px);
   width: 100%;
+  overflow: hidden;
 }
 
 sl-button:is(.next-page)::part(base) {
@@ -470,10 +473,20 @@ sl-button:is(.next-page, .previous-page):is(:hover, :focus) {
   margin-top: auto;
   padding-top: 4rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   justify-content: space-between;
   gap: 1rem;
 }
+
+pagination-title {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 1.15rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 
 @media screen and (min-width: 1024px) {
 	.documentation-grid main {
