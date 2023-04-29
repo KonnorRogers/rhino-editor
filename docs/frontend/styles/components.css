@@ -443,6 +443,11 @@ bridgetown-search-results::part(inner-link):hover {
   background-color: var(--sl-color-neutral-50);
 }
 
+.documentation-content {
+	display: flex;
+	flex-direction: column;
+}
+
 /** Pagination */
 sl-button:is(.previous-page, .next-page) {
   transition: transform 0.15s;
@@ -489,7 +494,7 @@ pagination-title {
 
 
 @media screen and (min-width: 1024px) {
-	.documentation-grid main {
+	.documentation-content {
 		margin: 2rem 0;
 		box-shadow: 0 0 5px 0 rgb(0 0 0 / 10%);
 		background: white;
