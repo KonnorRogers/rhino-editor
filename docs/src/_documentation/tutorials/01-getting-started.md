@@ -5,17 +5,18 @@ permalink: /tutorials/getting-started/
 
 The first step to working with the Rhino Editor is installing it!
 
-```js
+<%= render Syntax.new("bash") do %>
 npm install rhino-editor
-```
+<% end %>
+
 
 After installing, we can import it in our project.
 
-```js
+<%= render Syntax.new("js") do %>
 // index.js
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"
-```
+<% end %>
 
 The above will auto-register the `<rhino-editor>` element for you.
 For more ways to initialize the editor, checkout the [Setup](/tutorials/setup) page.
@@ -24,9 +25,9 @@ For more ways to initialize the editor, checkout the [Setup](/tutorials/setup) p
 
 Finally, to see it appear on a page you can write the following HTML:
 
-```html
+<%= render Syntax.new("html") do %>
 <rhino-editor></rhino-editor>
-```
+<% end %>
 
 And you're on your way! But you're not done yet!
 

@@ -18,16 +18,16 @@ the future to make usage easier, but for now we can mimic how Trix handles it.
 
 Let's imagine we had a model like the following:
 
-```rb
+<%= render Syntax.new("rb") do %>
 class Post < ApplicationRecord
   has_rich_text :body
 end
-```
+<% end %>
 
 To achieve the same interaction as `form.rich_text_area :body` from Trix,
 we can do the following:
 
-```erb
+<%= render Syntax.new("erb") do %>
 <%%= form_with model: @post do |form| %>
   <%%= form.hidden_field :body, value: form.object.body.try(:to_trix_html) || form.object.body %>
   <rhino-editor
@@ -36,11 +36,11 @@ we can do the following:
     data-direct-upload-url="<%%= rails_direct_uploads_url %>"
   ></rhino-editor>
 <%% end %>
-```
+<% end %>
 
 Which should output HTML that looks something like this:
 
-```html
+<%= render Syntax.new("html") do %>
 <form>
   <input value="" autocomplete="off" type="hidden" name="post[body]" id="post_body">
   <rhino-editor
@@ -49,4 +49,4 @@ Which should output HTML that looks something like this:
     data-direct-upload-url="http://localhost:5100/rails/active_storage/direct_uploads"
   ></rhino-editor>
 </form>
-```
+<% end %>
