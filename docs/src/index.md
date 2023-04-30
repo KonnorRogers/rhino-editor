@@ -6,7 +6,7 @@ call_to_action_items:
     href: /tutorials/getting-started
     type: primary
   - text: Compare to Trix
-    href: /references/comparison-to-ujs
+    href: /references/comparison-to-trix
     type: secondary
 reason_header: Why Rhino Editor?
 reasons:
