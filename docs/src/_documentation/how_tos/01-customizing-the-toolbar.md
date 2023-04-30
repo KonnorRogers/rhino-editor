@@ -34,15 +34,10 @@ Heres an example of "slotting" in an embed button.
   </button>
 </rhino-editor>
 
-
-
-<br>
-
 <%= render Alert.new(type: :warning, title: "Note") do %>
   Make sure to add `type="button"` so that the buttons do not submit the form. Also make sure
   to add `data-role="toolbar-item"` to have the toolbar work correctly and `tabindex="-1"`.
 <% end %>
-
 
 <h2 id="understanding-slots">
   <a href="#understanding-slots">

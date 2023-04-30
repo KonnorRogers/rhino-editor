@@ -1,19 +1,21 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class SideNavController extends Controller {
-  open() {
-    this.drawer.show()
+  async open() {
+    this.drawer.removeAttribute("hidden")
+    await this.drawer.show()
   }
 
-  close() {
-    this.drawer.hide()
+  async close() {
+    await this.drawer.hide()
+    setTimeout(() => this.drawer.setAttribute("hidden", ""))
   }
 
-  toggle() {
+  async toggle() {
     if (this.drawer.open) {
-      this.open()
+      await this.open()
     } else {
-      this.close()
+      await this.close()
     }
   }
 
@@ -21,3 +23,4 @@ export default class SideNavController extends Controller {
     return document.querySelector("#side-nav-drawer")
   }
 }
+

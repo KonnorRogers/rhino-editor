@@ -492,6 +492,20 @@ pagination-title {
   white-space: nowrap;
 }
 
+sl-alert {
+  margin: 1rem 0;
+}
+
+sl-alert p {
+  margin: 0;
+  padding: 0;
+}
+
+.highlight,
+sl-alert::part(base) {
+  box-shadow: 3px 3px 6px 1px rgba(0,0,0,0.05)
+}
+
 
 @media screen and (min-width: 1024px) {
 	.documentation-content {
