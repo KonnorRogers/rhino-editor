@@ -621,7 +621,6 @@ sl-alert::part(base) {
   transform: scale(0);
 }
 
-
 @media screen and (min-width: 1024px) {
 	.documentation-content {
 		margin: 2rem 0;
