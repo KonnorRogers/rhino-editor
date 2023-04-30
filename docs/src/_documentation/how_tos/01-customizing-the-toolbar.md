@@ -8,7 +8,7 @@ takes the approach of slotting in HTML.
 
 Heres an example of "slotting" in an embed button.
 
-```html
+<%= render Syntax.new("html") do %>
 <rhino-editor>
   <button
     type="button"
@@ -20,7 +20,7 @@ Heres an example of "slotting" in an embed button.
     Embed
   </button>
 </rhino-editor>
-```
+<% end %>
 
 <rhino-editor>
   <button
@@ -76,8 +76,8 @@ from <https://tabler-icons.io>
 </rhino-editor>
 ) %>
 
-```html
+<%= render Syntax.new("html") do %>
 <%= markdownify(text) %>
-```
+<% end %>
 
 <%= text.html_safe %>

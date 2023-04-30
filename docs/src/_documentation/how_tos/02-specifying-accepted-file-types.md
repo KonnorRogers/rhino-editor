@@ -9,9 +9,9 @@ This will tell the file choose to default to showing only images.
   <rhino-editor accept="image/*"></rhino-editor>
 ) %>
 
-```html
+<%= render Syntax.new("html") do %>
 <%= markdownify(text) %>
-```
+<% end %>
 
 <%= text.html_safe %>
 
