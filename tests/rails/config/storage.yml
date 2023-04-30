@@ -9,13 +9,12 @@ local:
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 amazon:
   service: s3
-  access_key_id: minioadmin
-  secret_access_key: minioadmin
-  region: us-east-1
-  bucket: my-bucket
-  endpoint: "http://localhost:9000"
+  access_key_id: <%= ENV.fetch("AWS_S3_ACCESS_KEY", "minioadmin") %>
+  secret_access_key: <%= ENV.fetch("AWS_S3_SECRET_KEY", "minioadmin") %>
+  region: <%= ENV.fetch("AWS_S3_REGION", "us-east-1") %>
+  bucket: <%= ENV.fetch("AWS_S3_BUCKET", "my-bucket") %>
+  endpoint: <%= ENV.fetch("AWS_S3_ENDPOINT", "http://localhost:9000") %>
   force_path_style: true
-
 # Remember not to checkin your GCS keyfile to a repository
 # google:
 #   service: GCS

@@ -5,8 +5,6 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     page.goto(root_path)
     assert page.text_content("h2").include?("TipTap Editor")
 
-    @file_name = "view-layer-benchmarks.png"
-    attach_images(file_fixture(@file_name).to_s)
   end
 
   def rhino_editor_element
@@ -14,9 +12,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def rhino_editor_figure
-    # @TODO: Until we figure out how to get minio working in GH actions, leave this commented.
-    # page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]")
-    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png").first
+    page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]").first
   end
 
   def rhino_editor_image
@@ -37,8 +33,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
   def attach_images(files)
     rhino_editor = page.expect_file_chooser do
-      # hacky workaround because clicking the button that clicks the input[type="file"] doesnt actually work.
-      page.locator("rhino-editor #file-input").evaluate("node => node.click()")
+      page.locator("rhino-editor [part~='toolbar__button--attach-files']").click
     end
     rhino_editor.set_files(files)
 
@@ -49,7 +44,10 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   test "Attachment Attributes" do
+    @file_name = "view-layer-benchmarks.png"
+    attach_images([file_fixture(@file_name).to_s])
     figure_attributes = ["data-trix-content-type"]
+
     figure_attributes.each { |str| assert_equal rhino_editor_figure[str], trix_figure[str] }
 
     rhino_editor_attachment_attrs = JSON.parse(rhino_editor_figure["data-trix-attachment"])
@@ -69,10 +67,10 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
 
     # @TODO: Until we get minio working in GH actions, punt on this for now.
-    # blob_path = rails_service_blob_path(":signed_id", ":filename")
-    # blob_path = blob_path.split(":signed_id")[0]
-    # assert_match /#{blob_path}\S+\//, rhino_editor_attachment_attrs["url"]
-    # refute_nil rhino_editor_attachment_attrs["sgid"]
+    blob_path = rails_service_blob_path(":signed_id", ":filename")
+    blob_path = blob_path.split(":signed_id")[0]
+    assert_match /#{blob_path}\S+\//, rhino_editor_attachment_attrs["url"]
+    refute_nil rhino_editor_attachment_attrs["sgid"]
 
     # Trix-attributes
     attributes = "data-trix-attributes"
@@ -84,6 +82,8 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   test "Image attributes" do
+    @file_name = "view-layer-benchmarks.png"
+    attach_images([file_fixture(@file_name).to_s])
     assert_equal rhino_editor_image["width"], trix_image["width"]
     assert_equal rhino_editor_image["height"], trix_image["height"]
   end

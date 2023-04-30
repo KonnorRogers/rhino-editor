@@ -1,6 +1,6 @@
 import { mergeAttributes, Node } from "@tiptap/core";
-import { EditorState, Plugin, Transaction } from "prosemirror-state";
-import { DOMSerializer, Node as ProseMirrorNode } from "prosemirror-model";
+import { EditorState, Plugin, Transaction } from "@tiptap/pm/state";
+import { DOMSerializer, Node as ProseMirrorNode } from "@tiptap/pm/model";
 
 function handleGallery(
   node: ProseMirrorNode,

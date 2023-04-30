@@ -3,7 +3,8 @@ import * as ActiveStorage from '@rails/activestorage'
 import "@rails/actiontext"
 import * as Trix from "trix"
 import "rhino-editor"
-import "rhino-editor/exports/styles/trix.css"
+import "trix/dist/trix.css";
+import "rhino-editor/exports/styles/trix.css";
 import { Application } from "@hotwired/stimulus"
 import EmbedController from "../controllers/embed_controller.js"
 import TipTapMirrorController from "../controllers/tip_tap_mirror_controller.js"
