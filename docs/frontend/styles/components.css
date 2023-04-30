@@ -156,7 +156,7 @@ input.top-nav__search__input {
 }
 
 .side-nav__item {
-  margin: var(--sl-spacing-small) 0;
+  margin: var(--sl-spacing-small);
   max-width: 225px;
   line-height: 1.3;
 }
