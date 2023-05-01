@@ -10,8 +10,8 @@
 
 html {
   box-sizing: border-box;
+  min-height: 100%;
   display: grid;
-  min-height: 100vh;
 }
 
 *, *:before, *:after {
