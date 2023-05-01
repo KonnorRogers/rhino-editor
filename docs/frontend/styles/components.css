@@ -16,6 +16,10 @@ main {
 	margin: 0 auto;
 }
 
+.home main {
+  max-width: var(--main-width);
+}
+
 .doc main {
 	background-color: white;
 }
