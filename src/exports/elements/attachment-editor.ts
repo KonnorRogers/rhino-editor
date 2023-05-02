@@ -79,8 +79,8 @@ export class AttachmentEditor extends BaseElement {
         padding: 0.15rem;
         position: absolute;
         top: 0;
-        left: 50%;
-        transform: translate(0, -50%);
+        right: 50%;
+        transform: translate(50%, -20px);
         pointer-events: all;
       }
 
@@ -128,7 +128,8 @@ export class AttachmentEditor extends BaseElement {
       }
 
       .file-progress-container {
-        top: calc(50% - 10px);
+        top: 50%;
+        transform: translate(0px, -50%);
         left: 5%;
         width: 90%;
         position: absolute;
