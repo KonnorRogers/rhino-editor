@@ -11,7 +11,7 @@ services:
       - "9001:9001"
     volumes:
       - minio:/data
-    # command: minio server /data --console-address ":9001"
+    command: minio server /data --console-address ":9001"
   redis:
     image: "redis:7"
     ports:
