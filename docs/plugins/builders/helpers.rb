@@ -73,7 +73,7 @@ class Builders::Helpers < SiteBuilder
   end
 
   def version_number
-    if `git rev-parse --abbrev-ref HEAD`.chomp === "main"
+    if ENV["GITHUB_REF_NAME"] === "main" || `git rev-parse --abbrev-ref HEAD`.chomp === "main"
       return "main"
     end
 
