@@ -22,6 +22,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          rubygems: latest
+          bundler-cache: true
+
       - uses: pnpm/action-setup@v2
         with:
           version: 7
