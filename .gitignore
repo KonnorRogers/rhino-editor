@@ -157,3 +157,4 @@ package-lock.json
 docs/output
 docs/.bridgetown-cache
 /cdn
+.vercel
