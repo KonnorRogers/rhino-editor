@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6.0
+
+### Minor Changes
+
+- f03f155: Add error messages for failed uploads
+- f03f155: Added increase / decrease indentation
+
+### Patch Changes
+
+- f03f155: Upgrade to v2.0.2 of TipTap, fix flaky test suite, improve mobile safari support.
+- 560c5a3: Fix image uploader alignment
+
 ## 0.5.0
 
 ### Minor Changes
