@@ -17,10 +17,10 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Setup Node.js v${{ matrix.node-version }}
+      - name: Setup Node.js v18
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '18.x'
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -49,5 +49,14 @@ jobs:
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERCEL_DEPLOYMENT_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          KEBAB_VERSION=$(echo "$GITHUB_REF_NAME" | sed 's/\./-/g')
+          RELEASE_DOMAIN="rhino-editor-release-$KEBAB_VERSION.vercel.app"
+          RELEASE_URL="https://$RELEASE_DOMAIN"
+          vercel alias "$VERCEL_DEPLOYMENT_URL" "$RELEASE_DOMAIN" --token=${{ secrets.VERCEL_TOKEN }}
+          ./scripts/modify-release-notes
+
 
