@@ -357,10 +357,23 @@ export const Attachment = Node.create<AttachmentOptions>({
       img.setAttribute("width", width);
       img.setAttribute("height", height);
 
+      // Clean up any objects laying around
+      if (url) {
+        try {
+          URL.revokeObjectURL(src)
+        } catch (_e) {}
+      }
+
       if (canPreview(previewable, contentType)) {
         if (url || src) {
           img.setAttribute("src", url || src);
         }
+
+        if (loadingState === LOADING_STATES.error) {
+          img.classList.add("rhino-upload-error")
+        }
+
+
         if (!width || !height) {
           img.src = url || src;
           img.onload = () => {
@@ -469,88 +482,3 @@ export const Attachment = Node.create<AttachmentOptions>({
     };
   },
 });
-
-// This is eventually what the attachment editor should move to.
-//
-import {EditorState, Plugin} from "@tiptap/pm/state"
-import {Decoration, DecorationSet, EditorView} from "@tiptap/pm/view"
-
-let placeholderPlugin = new Plugin({
-  state: {
-    init() { return DecorationSet.empty },
-    apply(tr, set) {
-      // Adjust decoration positions to changes made by the transaction
-      set = set.map(tr.mapping, tr.doc)
-      // See if the transaction adds or removes any placeholders
-      let action = tr.getMeta(this)
-      if (action && action.add) {
-        let widget = document.createElement("placeholder")
-        let deco = Decoration.widget(action.add.pos, widget, {id: action.add.id})
-        set = set.add(tr.doc, [deco])
-      } else if (action && action.remove) {
-        set = set.remove(set.find(undefined, undefined,
-                                  spec => spec.id == action.remove.id))
-      }
-      return set
-    }
-  },
-  props: {
-    decorations(state) { return this.getState(state) }
-  }
-})
-
-function findPlaceholder(state: EditorState, id: {}) {
-  let decos = placeholderPlugin.getState(state)
-
-  if (decos == null) return
-
-  let found = decos.find(undefined, undefined, spec => spec.id == id)
-  return found.length ? found[0].from : null
-}
-
-export function uploadImages (view: EditorView, ...files: File[]) {
-  if (view.state.selection.$from.parent.inlineContent) {
-    if (Array.isArray(files)) {
-      files.forEach((file) => startImageUpload(view, file))
-    } else {
-      startImageUpload(view, files)
-    }
-
-    view.focus()
-  }
-}
-
-function startImageUpload(view: EditorView, file: File) {
-  // A fresh object to act as the ID for this upload
-  let id = {}
-
-  // Replace the selection with a placeholder
-  let tr = view.state.tr
-  if (!tr.selection.empty) tr.deleteSelection()
-  tr.setMeta(placeholderPlugin, {add: {id, pos: tr.selection.from}})
-  view.dispatch(tr)
-
-  uploadFile(file).then(url => {
-    let pos = findPlaceholder(view.state, id)
-    // If the content around the placeholder has been deleted, drop
-    // the image
-    if (pos == null) return
-    // Otherwise, insert it at the placeholder's position, and remove
-    // the placeholder
-    view.dispatch(view.state.tr
-                  .replaceWith(pos, pos, view.state.schema.nodes.image.create({src: url}))
-                  .setMeta(placeholderPlugin, {remove: {id}}))
-  }, () => {
-    // On failure, just clean up the placeholder
-    view.dispatch(tr.setMeta(placeholderPlugin, {remove: {id}}))
-  })
-}
-
-async function uploadFile(file: File) {
-  console.log(file)
-  return "https://localhost:4040"
-}
-
-export {
-  placeholderPlugin
-}
