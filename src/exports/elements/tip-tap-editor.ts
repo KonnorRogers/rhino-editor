@@ -249,14 +249,14 @@ export class TipTapEditor extends BaseElement {
 
   firstUpdated(): void {
     if (this.editor) {
-      this.#unBindEditorListeners();
+      this.__unBindEditorListeners();
     }
     // light-dom version.
     const div = document.createElement("div");
     this.insertAdjacentElement("beforeend", div);
     div.setAttribute("slot", "editor");
-    this.editor = this.#setupEditor(div);
-    this.#bindEditorListeners();
+    this.editor = this.__setupEditor(div);
+    this.__bindEditorListeners();
     this.editorElement = div.querySelector(".ProseMirror");
 
     this.editorElement?.classList.add("trix-content");
@@ -1267,7 +1267,7 @@ export class TipTapEditor extends BaseElement {
     }
   }
 
-  #defaultOptions(element: Element): Partial<EditorOptions> {
+  __defaultOptions(element: Element): Partial<EditorOptions> {
     let content: Content = this.inputElement?.value || "";
 
     if (content && this.serializer?.toLowerCase() === "json") {
@@ -1284,63 +1284,63 @@ export class TipTapEditor extends BaseElement {
     };
   }
 
-  #handleCreate = () => {
+  __handleCreate = () => {
     this.requestUpdate();
   };
 
-  #handleUpdate = () => {
+  __handleUpdate = () => {
     this.updateInputElementValue();
     this.requestUpdate();
   };
 
-  #handleFocus = () => {
+  __handleFocus = () => {
     this.closeLinkDialog();
     this.requestUpdate();
   };
 
-  #handleBlur = () => {
+  __handleBlur = () => {
     this.updateInputElementValue();
     this.requestUpdate();
   };
 
-  #handleSelectionUpdate = () => {
+  __handleSelectionUpdate = () => {
     this.requestUpdate();
   };
 
-  #handleTransaction = () => {
+  __handleTransaction = () => {
     this.requestUpdate();
   };
 
-  #bindEditorListeners(): void {
+  __bindEditorListeners(): void {
     if (this.editor == null) return;
 
-    this.editor.on("focus", this.#handleFocus);
-    this.editor.on("create", this.#handleCreate);
-    this.editor.on("update", this.#handleUpdate);
-    this.editor.on("selectionUpdate", this.#handleSelectionUpdate);
-    this.editor.on("transaction", this.#handleTransaction);
-    this.editor.on("blur", this.#handleBlur);
+    this.editor.on("focus", this.__handleFocus);
+    this.editor.on("create", this.__handleCreate);
+    this.editor.on("update", this.__handleUpdate);
+    this.editor.on("selectionUpdate", this.__handleSelectionUpdate);
+    this.editor.on("transaction", this.__handleTransaction);
+    this.editor.on("blur", this.__handleBlur);
   }
 
-  #unBindEditorListeners(): void {
+  __unBindEditorListeners(): void {
     if (this.editor == null) return;
 
-    this.editor.off("focus", this.#handleFocus);
-    this.editor.off("create", this.#handleCreate);
-    this.editor.off("update", this.#handleUpdate);
-    this.editor.off("selectionUpdate", this.#handleSelectionUpdate);
-    this.editor.off("transaction", this.#handleTransaction);
-    this.editor.off("blur", this.#handleBlur);
+    this.editor.off("focus", this.__handleFocus);
+    this.editor.off("create", this.__handleCreate);
+    this.editor.off("update", this.__handleUpdate);
+    this.editor.off("selectionUpdate", this.__handleSelectionUpdate);
+    this.editor.off("transaction", this.__handleTransaction);
+    this.editor.off("blur", this.__handleBlur);
   }
 
-  #setupEditor(element: Element): Editor {
+  __setupEditor(element: Element): Editor {
     if (!this.serializer || this.serializer === "html") {
-      // This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
+      // This is a super hacky way to get __to_trix_html to support figcaptions without patching it.
       this.normalizeDOM(this.inputElement);
     }
 
     return new Editor({
-      ...this.#defaultOptions(element),
+      ...this.__defaultOptions(element),
       ...this.editorOptions(element),
     });
   }
