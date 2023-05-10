@@ -36,6 +36,7 @@ import { AddAttachmentEvent } from "src/internal/events/add-attachment-event";
 
 import type { Maybe } from "src/types";
 import { AttachmentEditor } from "./attachment-editor";
+import { FileAcceptEvent } from "../events/file-accept-event";
 
 export type Serializer = "" | "html" | "json";
 /**
@@ -191,7 +192,7 @@ export class TipTapEditor extends BaseElement {
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    this.addEventListener(FileAcceptEvent.eventName, this.handleFileAccept)
+    this.removeEventListener(FileAcceptEvent.eventName, this.handleFileAccept)
 
     this.removeEventListener(
       AddAttachmentEvent.eventName,
@@ -234,6 +235,9 @@ export class TipTapEditor extends BaseElement {
       upload.start();
     }
   };
+
+  /** Override this to prevent specific file types from being uploaded. */
+  handleFileAccept = (_event: FileAcceptEvent) => {}
 
   get icons(): typeof icons {
     return icons;
