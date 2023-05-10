@@ -181,6 +181,7 @@ export class TipTapEditor extends BaseElement {
 
     this.registerDependencies();
 
+    this.addEventListener(FileAcceptEvent.eventName, this.handleFileAccept)
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
 
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
@@ -189,6 +190,8 @@ export class TipTapEditor extends BaseElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
+
+    this.addEventListener(FileAcceptEvent.eventName, this.handleFileAccept)
 
     this.removeEventListener(
       AddAttachmentEvent.eventName,
@@ -199,6 +202,7 @@ export class TipTapEditor extends BaseElement {
     this.removeEventListener("drop", this.handleDropFile);
   }
 
+  /** Closes the dialog for link previews */
   handleKeyboardDialogToggle = (e: KeyboardEvent) => {
     let { key, metaKey, ctrlKey } = e;
 
@@ -218,11 +222,14 @@ export class TipTapEditor extends BaseElement {
     }
   };
 
+  /** Used for determining how to handle uploads.
+    *   Override this for substituting your own
+    *   direct upload functionality.
+    */
   handleAttachment = (event: AddAttachmentEvent) => {
     const { attachment, target } = event;
 
     if (target instanceof HTMLElement && attachment.file) {
-      // if (attachment.attributes.sgid) return
       const upload = new AttachmentUpload(attachment, target);
       upload.start();
     }

@@ -14,9 +14,6 @@ Stimulus.register("embed", EmbedController)
 Stimulus.register("tip-tap-mirror", TipTapMirrorController)
 
 ActiveStorage.start()
-// addEventListener("trix-attachment-add", (e) => {
-//   console.log(e)
-// })
 
 
 // Import all channels.
