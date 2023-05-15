@@ -221,12 +221,12 @@ export class TipTapEditor extends BaseElement {
   };
 
   /** Used for determining how to handle uploads.
-    *   Override this for substituting your own
-    *   direct upload functionality.
-    */
+   *   Override this for substituting your own
+   *   direct upload functionality.
+   */
   handleAttachment = (event: AddAttachmentEvent) => {
     if (event.defaultPrevented) {
-      return
+      return;
     }
 
     const { attachment, target } = event;
@@ -238,7 +238,7 @@ export class TipTapEditor extends BaseElement {
   };
 
   /** Override this to prevent specific file types from being uploaded. */
-  handleFileAccept = (_event: FileAcceptEvent) => {}
+  handleFileAccept = (_event: FileAcceptEvent) => {};
 
   get icons(): typeof icons {
     return icons;
@@ -356,26 +356,26 @@ export class TipTapEditor extends BaseElement {
     ) as Maybe<HTMLAnchorElement>;
   }
 
-  async handleFiles (files: File[] | FileList): Promise<void> {
+  async handleFiles(files: File[] | FileList): Promise<void> {
     if (this.editor == null) return;
 
     return new Promise((resolve, _reject) => {
       if (files == null) return;
 
       const fileAcceptEvents = [...files].map((file) => {
-        const event = new FileAcceptEvent(file)
-        this.dispatchEvent(event)
-        return event
-      })
+        const event = new FileAcceptEvent(file);
+        this.dispatchEvent(event);
+        return event;
+      });
 
-      const allowedFiles: File[] = []
+      const allowedFiles: File[] = [];
 
       for (let i = 0; i < fileAcceptEvents.length; i++) {
-        const event = fileAcceptEvents[i]
+        const event = fileAcceptEvents[i];
         if (event.defaultPrevented) {
-          continue
+          continue;
         }
-        allowedFiles.push(event.file)
+        allowedFiles.push(event.file);
       }
 
       const attachments = this.transformFilesToAttachments(allowedFiles);
@@ -396,11 +396,10 @@ export class TipTapEditor extends BaseElement {
 
   async handleFileUpload(): Promise<void> {
     const input = this.fileInputEl;
-    if (input == null) return
-    if (input.files == null) return
+    if (input == null) return;
+    if (input.files == null) return;
 
-    await this.handleFiles(input.files)
-
+    await this.handleFiles(input.files);
 
     input.value = "";
   }
@@ -419,9 +418,9 @@ export class TipTapEditor extends BaseElement {
     const { view } = this.editor;
     if (view == null) return;
 
-    event.preventDefault()
+    event.preventDefault();
 
-    await this.handleFiles(dataTransfer.files)
+    await this.handleFiles(dataTransfer.files);
   };
 
   transformFilesToAttachments(files?: File[] | FileList | null) {

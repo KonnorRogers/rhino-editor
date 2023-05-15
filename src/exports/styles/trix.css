@@ -3,7 +3,7 @@
    a regular .css for users to include.
 */
 .trix-content .rhino-upload-error {
-  background-color: rgba(255,0,0,0.3);
+  background-color: rgba(255, 0, 0, 0.3);
 }
 
 .trix-content :is(img, svg, figure) {

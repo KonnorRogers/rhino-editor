@@ -360,7 +360,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       // Clean up any objects laying around
       if (url) {
         try {
-          URL.revokeObjectURL(src)
+          URL.revokeObjectURL(src);
         } catch (_e) {}
       }
 
@@ -370,9 +370,8 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
 
         if (loadingState === LOADING_STATES.error) {
-          img.classList.add("rhino-upload-error")
+          img.classList.add("rhino-upload-error");
         }
-
 
         if (!width || !height) {
           img.src = url || src;

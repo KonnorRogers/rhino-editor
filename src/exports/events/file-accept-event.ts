@@ -8,12 +8,9 @@ export class FileAcceptEvent extends BaseEvent {
     return "rhino-file-accept";
   }
 
-  constructor(
-    public file: File,
-    options?: EventInit | undefined
-  ) {
+  constructor(public file: File, options?: EventInit | undefined) {
     super(FileAcceptEvent.eventName, options);
-    this.file = file
+    this.file = file;
   }
 }
 
