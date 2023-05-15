@@ -10,8 +10,8 @@ export class FileAcceptEvent extends BaseEvent {
 
   constructor(
     public file: File,
-    options?: EventInit | undefined)
-  {
+    options?: EventInit | undefined
+  ) {
     super(FileAcceptEvent.eventName, options);
     this.file = file
   }

@@ -535,7 +535,7 @@ sl-alert::part(base) {
 }
 
 .syntax-block__badge {
-  font-size: var(--sl-button-font-size-medium);
+  font-size: var(--sl-button-font-size-large);
   color: var(--sl-color-neutral-600);
 }
 

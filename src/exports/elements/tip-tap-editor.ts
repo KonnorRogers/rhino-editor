@@ -32,7 +32,7 @@ import { normalize } from "src/exports/styles/normalize";
 import editorStyles, { toolbarButtonStyles } from "src/exports/styles/editor";
 import { BaseElement } from "src/internal/elements/base-element";
 
-import { AddAttachmentEvent } from "src/internal/events/add-attachment-event";
+import { AddAttachmentEvent } from "src/exports/events/add-attachment-event";
 
 import type { Maybe } from "src/types";
 import { AttachmentEditor } from "./attachment-editor";
@@ -182,7 +182,6 @@ export class TipTapEditor extends BaseElement {
 
     this.registerDependencies();
 
-    this.addEventListener(FileAcceptEvent.eventName, this.handleFileAccept)
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
 
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
@@ -191,8 +190,6 @@ export class TipTapEditor extends BaseElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-
-    this.removeEventListener(FileAcceptEvent.eventName, this.handleFileAccept)
 
     this.removeEventListener(
       AddAttachmentEvent.eventName,
@@ -228,6 +225,10 @@ export class TipTapEditor extends BaseElement {
     *   direct upload functionality.
     */
   handleAttachment = (event: AddAttachmentEvent) => {
+    if (event.defaultPrevented) {
+      return
+    }
+
     const { attachment, target } = event;
 
     if (target instanceof HTMLElement && attachment.file) {
@@ -355,20 +356,31 @@ export class TipTapEditor extends BaseElement {
     ) as Maybe<HTMLAnchorElement>;
   }
 
-  async handleFileUpload(): Promise<void> {
-    const input = this.fileInputEl;
+  async handleFiles (files: File[] | FileList): Promise<void> {
+    if (this.editor == null) return;
 
-    return await new Promise((resolve, _reject) => {
-      if (input == null) {
-        resolve();
-        return;
+    return new Promise((resolve, _reject) => {
+      if (files == null) return;
+
+      const fileAcceptEvents = [...files].map((file) => {
+        const event = new FileAcceptEvent(file)
+        this.dispatchEvent(event)
+        return event
+      })
+
+      const allowedFiles: File[] = []
+
+      for (let i = 0; i < fileAcceptEvents.length; i++) {
+        const event = fileAcceptEvents[i]
+        if (event.defaultPrevented) {
+          continue
+        }
+        allowedFiles.push(event.file)
       }
 
-      if (this.editor == null) return;
+      const attachments = this.transformFilesToAttachments(allowedFiles);
 
-      const attachments = this.transformFilesToAttachments(input.files);
-
-      if (attachments == null) return;
+      if (attachments == null || attachments.length <= 0) return;
 
       this.editor?.chain().focus().setAttachment(attachments).run();
 
@@ -378,12 +390,22 @@ export class TipTapEditor extends BaseElement {
 
       // Need to reset the input otherwise you get this fun state where you can't
       //   insert the same file multiple times.
-      input.value = "";
       resolve();
     });
   }
 
-  handleDropFile = (event: DragEvent) => {
+  async handleFileUpload(): Promise<void> {
+    const input = this.fileInputEl;
+    if (input == null) return
+    if (input.files == null) return
+
+    await this.handleFiles(input.files)
+
+
+    input.value = "";
+  }
+
+  handleDropFile = async (event: DragEvent) => {
     if (this.editor == null) return;
     if (event == null) return;
     if (!(event instanceof DragEvent)) return;
@@ -391,31 +413,18 @@ export class TipTapEditor extends BaseElement {
     const { dataTransfer } = event;
     if (dataTransfer == null) return;
 
-    const hasFiles = dataTransfer.files.length > 0;
-
+    const hasFiles = dataTransfer.files?.length > 0;
     if (!hasFiles) return;
 
     const { view } = this.editor;
-
     if (view == null) return;
 
-    const attachments = this.transformFilesToAttachments.call(
-      this,
-      dataTransfer.files
-    );
+    event.preventDefault()
 
-    if (attachments == null) return;
-
-    event.preventDefault();
-
-    this.editor?.chain().focus().setAttachment(attachments).run();
-
-    attachments.forEach((attachment) => {
-      this.dispatchEvent(new AddAttachmentEvent(attachment));
-    });
+    await this.handleFiles(dataTransfer.files)
   };
 
-  transformFilesToAttachments(files?: FileList | null) {
+  transformFilesToAttachments(files?: File[] | FileList | null) {
     if (this.editor == null) return;
     if (files == null || files.length === 0) return;
 

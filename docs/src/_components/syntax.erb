@@ -1,9 +1,7 @@
-<% require "securerandom"; id = "syntax-#{SecureRandom.uuid}" %>
-
 <div class="syntax-block">
   <div class="syntax-block__actions">
     <div class="syntax-block__badge">
-      <%= full_language_or_filename %>
+      <%= filename_or_language %>
     </div>
 
     <clipboard-copy
@@ -16,9 +14,8 @@
       <sl-icon class="clipboard__icon--idle" name="clipboard"></sl-icon>
     </clipboard-copy>
 
-    <div id="<%= id %>" hidden>
-      <%= content %>
-    </div>
+    <textarea id="<%= id %>" hidden><%= content %></textarea>
+
   </div>
-  <%= markdownify("```#{@language}" + content + "```") %>
+  <%= markdownify("```#{language}" + content + "```") %>
 </div>

@@ -48,3 +48,32 @@ Object.entries(controllers).forEach(([filename, controller]) => {
     Stimulus.register(identifier, controller.default)
   }
 })
+
+function handleAttachment (event) {
+  event.preventDefault()
+
+  let progress = 0
+
+  const attachment = event.attachment
+  attachment.setUploadProgress(progress)
+
+  function simulateProgress () {
+    if (progress >= 100) {
+      progress = 100
+      attachment.setUploadProgress(progress)
+      return
+    }
+
+    window.requestAnimationFrame(() => {
+      progress += 1
+      attachment.setUploadProgress(progress)
+      simulateProgress()
+    })
+  }
+
+  setTimeout(() => {
+    simulateProgress()
+  }, 10)
+}
+
+document.addEventListener("rhino-attachment-add", handleAttachment, { capture: true })
