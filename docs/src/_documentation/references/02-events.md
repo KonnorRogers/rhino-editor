@@ -5,7 +5,7 @@ permalink: /editor-events/
 
 Equivalent Trix Events: https://github.com/basecamp/trix/blob/main/README.md#observing-editor-changes
 
-<%= Alert.new(type: "primary") do %>
+<%= render Alert.new(type: "primary") do %>
   Events marked with checkmarks have been implemented. Events without checkmarks
   have not been implemented yet.
 <% end %>
