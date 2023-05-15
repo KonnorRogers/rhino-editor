@@ -35,7 +35,7 @@
   ],
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
-    "playwright": "~1.28.0",
+    "@playwright/test": "^1.33",
     "@types/rails__activestorage": "^7.0.1",
     "@typescript-eslint/parser": "^4.33.0",
     "@web/dev-server": "^0.1.38",

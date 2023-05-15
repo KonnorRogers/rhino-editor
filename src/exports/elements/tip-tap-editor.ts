@@ -178,8 +178,36 @@ export class TipTapEditor extends BaseElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.classList.add("rhino-editor");
+    if (this.editor) {
+      this.__unBindEditorListeners();
+    }
 
+    setTimeout(() => {
+      // This is a workaround for Turbo's BF-cache.
+      // Havent found a good way to test it...
+      const cachedEditor = this.querySelector("[slot='editor']")
+
+      // light-dom version.
+      const div = document.createElement("div");
+      div.setAttribute("slot", "editor");
+
+      if (cachedEditor) {
+        cachedEditor.replaceWith(div)
+      } else {
+        this.insertAdjacentElement("beforeend", div);
+      }
+
+      this.editor = this.__setupEditor(div);
+
+      this.__bindEditorListeners();
+      this.editorElement = div.querySelector(".ProseMirror");
+
+      this.editorElement?.classList.add("trix-content");
+      this.editorElement?.setAttribute("tabindex", "0");
+      this.editorElement?.setAttribute("role", "textbox");
+    })
+
+    this.classList.add("rhino-editor");
     this.registerDependencies();
 
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
@@ -250,23 +278,6 @@ export class TipTapEditor extends BaseElement {
     if (changedProperties.has("readonly")) {
       this.editor?.setEditable(!this.readonly);
     }
-  }
-
-  firstUpdated(): void {
-    if (this.editor) {
-      this.__unBindEditorListeners();
-    }
-    // light-dom version.
-    const div = document.createElement("div");
-    this.insertAdjacentElement("beforeend", div);
-    div.setAttribute("slot", "editor");
-    this.editor = this.__setupEditor(div);
-    this.__bindEditorListeners();
-    this.editorElement = div.querySelector(".ProseMirror");
-
-    this.editorElement?.classList.add("trix-content");
-    this.editorElement?.setAttribute("tabindex", "0");
-    this.editorElement?.setAttribute("role", "textbox");
   }
 
   extensions() {
@@ -1225,7 +1236,11 @@ export class TipTapEditor extends BaseElement {
       ${this.renderToolbar()}
       <div class="editor-wrapper" part="editor-wrapper">
         ${this.renderLinkCreationDialog()}
-        <div class="editor" part="editor"><slot name="editor"></slot></div>
+        <div class="editor" part="editor">
+          <slot name="editor">
+            <div class="trix-content"></div>
+          </slot>
+        </div>
       </div>
     `;
   }

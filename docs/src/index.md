@@ -5,8 +5,8 @@ call_to_action_items:
   - text: Getting Started
     href: /tutorials/getting-started
     type: primary
-  - text: Compare to Trix
-    href: /references/comparison-to-trix
+  - text: Why Rhino?
+    href: /references/why-rhino
     type: secondary
 reason_header: Why Rhino Editor?
 reasons:
@@ -14,14 +14,12 @@ reasons:
     text: Rhino editor is compatible with your existing ActionText views.
   - header: Extensible.
     text: Rhino editor is built on top of ProseMirror / TipTap allowing for greater customization.
+  - header: Plugins!
+    text: Any and all Prosemirror / TipTap plugins are available to you!
+  - header: A revamped toolbar
+    text: The toolbar is now focusable, and has an API designed to be extended.
+  - header: Table Editing?!
+    text: Table editing is possible by adding a couple of plugins!
+  - header: Real Time Collaboration?!
+    text: Real time collaboration is right at your fingertips!
 ---
-  <!-- - header: Modern. -->
-  <!--   text: Rhino editor is written in TypeScript -->
-  <!-- - header: Maintained. -->
-  <!--   text: We have an active community working on mrujs. -->
-  <!-- - header: Plugins! -->
-  <!--   text: Mrujs has a plugin architecture for expanding its current functionality to suit your needs. -->
-  <!-- - header: Integrations! -->
-  <!--   text: -->
-  <!--     Mrujs integrates harmoniously with CableReady, Turbolinks, and -->
-  <!--     Turbo! -->
