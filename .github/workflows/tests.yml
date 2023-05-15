@@ -84,3 +84,4 @@ jobs:
       run: |
         pnpm run build
         pnpm run test:ci
+        pnpm run test:docs
