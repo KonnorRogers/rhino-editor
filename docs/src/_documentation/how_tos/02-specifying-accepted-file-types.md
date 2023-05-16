@@ -3,11 +3,10 @@ title: Specifying Accepted File Types
 permalink: /how-tos/specifying-accepted-file-types/
 ---
 
-This will tell the file choose to default to showing only images.
+This will tell the file chooser to default to showing only images and will
+get forwarded to a hidden `<input type="file">` in the shadow root.
 
-<% text = %(
-  <rhino-editor accept="image/*"></rhino-editor>
-) %>
+<% text = %(<rhino-editor accept="image/*"></rhino-editor>) %>
 
 <%= render Syntax.new("html") do %>
 <%= markdownify(text) %>
@@ -28,5 +27,28 @@ This will tell the file choose to default to showing only images.
   </a>
 </h2>
 
-Coming soon...
+<% text = capture do %>
+function pngOnly (event) {
+  if (event.file.type !== 'image/png') {
+    event.preventDefault()
+  }
+}
+document.querySelector("#png-only").addEventListener('rhino-file-accept', pngOnly)
+<% end %>
+
+<%= render Syntax.new("js") do %>
+<%= text.html_safe %>
+<% end %>
+
+<script type="module">
+  <%= text.html_safe %>
+</script>
+
+
+<% text = %(<rhino-editor id="png-only"></rhino-editor>) %>
+<%= render Syntax.new("html") do %>
+<%= markdownify(text) %>
+<% end %>
+
+<%= text.html_safe %>
 

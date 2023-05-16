@@ -32,10 +32,11 @@ import { normalize } from "src/exports/styles/normalize";
 import editorStyles, { toolbarButtonStyles } from "src/exports/styles/editor";
 import { BaseElement } from "src/internal/elements/base-element";
 
-import { AddAttachmentEvent } from "src/internal/events/add-attachment-event";
+import { AddAttachmentEvent } from "src/exports/events/add-attachment-event";
 
 import type { Maybe } from "src/types";
 import { AttachmentEditor } from "./attachment-editor";
+import { FileAcceptEvent } from "../events/file-accept-event";
 
 export type Serializer = "" | "html" | "json";
 /**
@@ -177,8 +178,35 @@ export class TipTapEditor extends BaseElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.classList.add("rhino-editor");
+    if (this.editor) {
+      this.__unBindEditorListeners();
+    }
 
+    setTimeout(() => {
+      // Make sure we dont render the editor more than once.
+      const cachedEditor = this.querySelector("[slot='editor']");
+
+      // light-dom version.
+      const div = document.createElement("div");
+      div.setAttribute("slot", "editor");
+
+      if (cachedEditor) {
+        cachedEditor.replaceWith(div);
+      } else {
+        this.insertAdjacentElement("beforeend", div);
+      }
+
+      this.editor = this.__setupEditor(div);
+
+      this.__bindEditorListeners();
+      this.editorElement = div.querySelector(".ProseMirror");
+
+      this.editorElement?.classList.add("trix-content");
+      this.editorElement?.setAttribute("tabindex", "0");
+      this.editorElement?.setAttribute("role", "textbox");
+    });
+
+    this.classList.add("rhino-editor");
     this.registerDependencies();
 
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
@@ -199,6 +227,7 @@ export class TipTapEditor extends BaseElement {
     this.removeEventListener("drop", this.handleDropFile);
   }
 
+  /** Closes the dialog for link previews */
   handleKeyboardDialogToggle = (e: KeyboardEvent) => {
     let { key, metaKey, ctrlKey } = e;
 
@@ -218,15 +247,25 @@ export class TipTapEditor extends BaseElement {
     }
   };
 
+  /** Used for determining how to handle uploads.
+   *   Override this for substituting your own
+   *   direct upload functionality.
+   */
   handleAttachment = (event: AddAttachmentEvent) => {
+    if (event.defaultPrevented) {
+      return;
+    }
+
     const { attachment, target } = event;
 
     if (target instanceof HTMLElement && attachment.file) {
-      // if (attachment.attributes.sgid) return
       const upload = new AttachmentUpload(attachment, target);
       upload.start();
     }
   };
+
+  /** Override this to prevent specific file types from being uploaded. */
+  handleFileAccept = (_event: FileAcceptEvent) => {};
 
   get icons(): typeof icons {
     return icons;
@@ -238,23 +277,6 @@ export class TipTapEditor extends BaseElement {
     if (changedProperties.has("readonly")) {
       this.editor?.setEditable(!this.readonly);
     }
-  }
-
-  firstUpdated(): void {
-    if (this.editor) {
-      this.#unBindEditorListeners();
-    }
-    // light-dom version.
-    const div = document.createElement("div");
-    this.insertAdjacentElement("beforeend", div);
-    div.setAttribute("slot", "editor");
-    this.editor = this.#setupEditor(div);
-    this.#bindEditorListeners();
-    this.editorElement = div.querySelector(".ProseMirror");
-
-    this.editorElement?.classList.add("trix-content");
-    this.editorElement?.setAttribute("tabindex", "0");
-    this.editorElement?.setAttribute("role", "textbox");
   }
 
   extensions() {
@@ -344,20 +366,31 @@ export class TipTapEditor extends BaseElement {
     ) as Maybe<HTMLAnchorElement>;
   }
 
-  async handleFileUpload(): Promise<void> {
-    const input = this.fileInputEl;
+  async handleFiles(files: File[] | FileList): Promise<void> {
+    if (this.editor == null) return;
 
-    return await new Promise((resolve, _reject) => {
-      if (input == null) {
-        resolve();
-        return;
+    return new Promise((resolve, _reject) => {
+      if (files == null) return;
+
+      const fileAcceptEvents = [...files].map((file) => {
+        const event = new FileAcceptEvent(file);
+        this.dispatchEvent(event);
+        return event;
+      });
+
+      const allowedFiles: File[] = [];
+
+      for (let i = 0; i < fileAcceptEvents.length; i++) {
+        const event = fileAcceptEvents[i];
+        if (event.defaultPrevented) {
+          continue;
+        }
+        allowedFiles.push(event.file);
       }
 
-      if (this.editor == null) return;
+      const attachments = this.transformFilesToAttachments(allowedFiles);
 
-      const attachments = this.transformFilesToAttachments(input.files);
-
-      if (attachments == null) return;
+      if (attachments == null || attachments.length <= 0) return;
 
       this.editor?.chain().focus().setAttachment(attachments).run();
 
@@ -367,12 +400,21 @@ export class TipTapEditor extends BaseElement {
 
       // Need to reset the input otherwise you get this fun state where you can't
       //   insert the same file multiple times.
-      input.value = "";
       resolve();
     });
   }
 
-  handleDropFile = (event: DragEvent) => {
+  async handleFileUpload(): Promise<void> {
+    const input = this.fileInputEl;
+    if (input == null) return;
+    if (input.files == null) return;
+
+    await this.handleFiles(input.files);
+
+    input.value = "";
+  }
+
+  handleDropFile = async (event: DragEvent) => {
     if (this.editor == null) return;
     if (event == null) return;
     if (!(event instanceof DragEvent)) return;
@@ -380,31 +422,18 @@ export class TipTapEditor extends BaseElement {
     const { dataTransfer } = event;
     if (dataTransfer == null) return;
 
-    const hasFiles = dataTransfer.files.length > 0;
-
+    const hasFiles = dataTransfer.files?.length > 0;
     if (!hasFiles) return;
 
     const { view } = this.editor;
-
     if (view == null) return;
-
-    const attachments = this.transformFilesToAttachments.call(
-      this,
-      dataTransfer.files
-    );
-
-    if (attachments == null) return;
 
     event.preventDefault();
 
-    this.editor?.chain().focus().setAttachment(attachments).run();
-
-    attachments.forEach((attachment) => {
-      this.dispatchEvent(new AddAttachmentEvent(attachment));
-    });
+    await this.handleFiles(dataTransfer.files);
   };
 
-  transformFilesToAttachments(files?: FileList | null) {
+  transformFilesToAttachments(files?: File[] | FileList | null) {
     if (this.editor == null) return;
     if (files == null || files.length === 0) return;
 
@@ -1206,7 +1235,11 @@ export class TipTapEditor extends BaseElement {
       ${this.renderToolbar()}
       <div class="editor-wrapper" part="editor-wrapper">
         ${this.renderLinkCreationDialog()}
-        <div class="editor" part="editor"><slot name="editor"></slot></div>
+        <div class="editor" part="editor">
+          <slot name="editor">
+            <div class="trix-content"></div>
+          </slot>
+        </div>
       </div>
     `;
   }
@@ -1260,7 +1293,7 @@ export class TipTapEditor extends BaseElement {
     }
   }
 
-  #defaultOptions(element: Element): Partial<EditorOptions> {
+  __defaultOptions(element: Element): Partial<EditorOptions> {
     let content: Content = this.inputElement?.value || "";
 
     if (content && this.serializer?.toLowerCase() === "json") {
@@ -1277,63 +1310,63 @@ export class TipTapEditor extends BaseElement {
     };
   }
 
-  #handleCreate = () => {
+  __handleCreate = () => {
     this.requestUpdate();
   };
 
-  #handleUpdate = () => {
+  __handleUpdate = () => {
     this.updateInputElementValue();
     this.requestUpdate();
   };
 
-  #handleFocus = () => {
+  __handleFocus = () => {
     this.closeLinkDialog();
     this.requestUpdate();
   };
 
-  #handleBlur = () => {
+  __handleBlur = () => {
     this.updateInputElementValue();
     this.requestUpdate();
   };
 
-  #handleSelectionUpdate = () => {
+  __handleSelectionUpdate = () => {
     this.requestUpdate();
   };
 
-  #handleTransaction = () => {
+  __handleTransaction = () => {
     this.requestUpdate();
   };
 
-  #bindEditorListeners(): void {
+  __bindEditorListeners(): void {
     if (this.editor == null) return;
 
-    this.editor.on("focus", this.#handleFocus);
-    this.editor.on("create", this.#handleCreate);
-    this.editor.on("update", this.#handleUpdate);
-    this.editor.on("selectionUpdate", this.#handleSelectionUpdate);
-    this.editor.on("transaction", this.#handleTransaction);
-    this.editor.on("blur", this.#handleBlur);
+    this.editor.on("focus", this.__handleFocus);
+    this.editor.on("create", this.__handleCreate);
+    this.editor.on("update", this.__handleUpdate);
+    this.editor.on("selectionUpdate", this.__handleSelectionUpdate);
+    this.editor.on("transaction", this.__handleTransaction);
+    this.editor.on("blur", this.__handleBlur);
   }
 
-  #unBindEditorListeners(): void {
+  __unBindEditorListeners(): void {
     if (this.editor == null) return;
 
-    this.editor.off("focus", this.#handleFocus);
-    this.editor.off("create", this.#handleCreate);
-    this.editor.off("update", this.#handleUpdate);
-    this.editor.off("selectionUpdate", this.#handleSelectionUpdate);
-    this.editor.off("transaction", this.#handleTransaction);
-    this.editor.off("blur", this.#handleBlur);
+    this.editor.off("focus", this.__handleFocus);
+    this.editor.off("create", this.__handleCreate);
+    this.editor.off("update", this.__handleUpdate);
+    this.editor.off("selectionUpdate", this.__handleSelectionUpdate);
+    this.editor.off("transaction", this.__handleTransaction);
+    this.editor.off("blur", this.__handleBlur);
   }
 
-  #setupEditor(element: Element): Editor {
+  __setupEditor(element: Element): Editor {
     if (!this.serializer || this.serializer === "html") {
-      // This is a super hacky way to get #to_trix_html to support figcaptions without patching it.
+      // This is a super hacky way to get __to_trix_html to support figcaptions without patching it.
       this.normalizeDOM(this.inputElement);
     }
 
     return new Editor({
-      ...this.#defaultOptions(element),
+      ...this.__defaultOptions(element),
       ...this.editorOptions(element),
     });
   }

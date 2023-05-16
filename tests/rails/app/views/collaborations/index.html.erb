@@ -5,5 +5,13 @@
 
 <h1>Collaborations#index</h1>
 <p>Find me in app/views/collaborations/index.html.erb</p>
+<form>
+  <input id="y" type="hidden">
+  <rhino-collaboration-editor
+    input="y"
+    data-blob-url-template="<%= rails_service_blob_path(":signed_id", ":filename") %>"
+    data-direct-upload-url="<%= rails_direct_uploads_url %>"
+  >
+  </rhino-collaboration-editor>
+</form>
 
-<rhino-collaboration-editor></rhino-collaboration-editor>

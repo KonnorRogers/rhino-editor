@@ -11,7 +11,6 @@ export class AttachmentUpload implements DirectUploadDelegate {
   attachment: AttachmentManager;
   element: HTMLElement;
   currentProgress = 0;
-  animationProgress = this.currentProgress;
 
   constructor(attachment: AttachmentManager, element: HTMLElement) {
     this.attachment = attachment;
@@ -41,7 +40,6 @@ export class AttachmentUpload implements DirectUploadDelegate {
   ) {
     if (error) {
       this.currentProgress = 0;
-      this.animationProgress = 0;
       if (this.attachment.content == null) {
         this.attachment.setNodeMarkup({
           progress: 0,
@@ -62,22 +60,14 @@ export class AttachmentUpload implements DirectUploadDelegate {
   }
 
   setUploadProgress() {
-    window.requestAnimationFrame(() => {
-      if (this.animationProgress >= 100) {
-        this.currentProgress = 100;
-        this.animationProgress = 100;
-        this.attachment.setUploadProgress(100);
-        return;
-      }
+    if (this.currentProgress >= 100) {
+      this.currentProgress = 100;
+      this.attachment.setUploadProgress(100);
+      return;
+    }
 
-      if (this.animationProgress > this.currentProgress) {
-        return;
-      }
-
-      this.animationProgress += 1;
-      this.attachment.setUploadProgress(this.animationProgress);
-      this.setUploadProgress();
-    });
+    this.attachment.setUploadProgress(this.currentProgress);
+    this.setUploadProgress();
   }
 
   createBlobUrl(signedId: string, filename: string) {

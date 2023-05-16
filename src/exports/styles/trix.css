@@ -2,6 +2,10 @@
 /* These all come from Trix / ActionText. This should probably be cleaned up into
    a regular .css for users to include.
 */
+.trix-content .rhino-upload-error {
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
 .trix-content :is(img, svg, figure) {
   width: 100%;
   max-width: 100%;

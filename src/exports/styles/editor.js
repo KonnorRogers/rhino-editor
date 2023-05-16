@@ -200,4 +200,14 @@ export default css`
   .editor-wrapper {
     position: relative;
   }
+
+  .trix-content {
+    border: 1px solid var(--rhino-border-color);
+    border-radius: 0px 0px var(--rhino-border-radius) var(--rhino-border-radius);
+    margin: 0;
+    padding: 0.4em 0.6em;
+    min-height: 200px;
+    outline: transparent;
+    white-space: pre-wrap;
+  }
 `;

@@ -78,9 +78,18 @@ jobs:
     - name: Lint
       run: |
         pnpm run lint
-    - name: Tests
+    - name: Build
+      run: pnpm run build
+    - name: Rails Tests
       env:
         AWS_S3_BUCKET: "my-bucket-${{ strategy.job-index }}"
       run: |
-        pnpm run build
-        pnpm run test:ci
+        pnpm run test:rails
+    - name: Doc Tests
+      run: |
+        pnpm exec playwright install --with-deps
+        pnpm run test:docs
+    - name: Unit Tests
+      run: |
+        pnpm run test:unit
+

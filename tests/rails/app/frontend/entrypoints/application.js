@@ -14,9 +14,6 @@ Stimulus.register("embed", EmbedController)
 Stimulus.register("tip-tap-mirror", TipTapMirrorController)
 
 ActiveStorage.start()
-// addEventListener("trix-attachment-add", (e) => {
-//   console.log(e)
-// })
 
 
 // Import all channels.
@@ -41,7 +38,7 @@ ActiveStorage.start()
     return p.innerHTML;
   }
 
-  if (tipTapInput) {
+  if (tipTapInput && tipTapHtmlMirror) {
     replaceWithWrapper(tipTapInput, "value", function(obj, property, value) {
       const html = escapeHTML(value.replace(/<p>/g, "\n<p>").replace(/<blockquote>/g, "\n<blockquote>").replace(/<\/blockquote>/g, "\n</blockquote>"))
 
@@ -51,7 +48,7 @@ ActiveStorage.start()
     });
   }
 
-  if (trixInput) {
+  if (trixInput && trixHtmlMirror) {
     replaceWithWrapper(trixInput, "value", function(obj, property, value) {
       const html = escapeHTML(value.replace(/<p>/g, "\n<p>").replace(/<blockquote>/g, "\n<blockquote>").replace(/<\/blockquote>/g, "\n</blockquote>"))
 
