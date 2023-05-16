@@ -71,7 +71,7 @@ export default defineConfig({
 
   // Run your local dev server before starting the tests
   webServer: {
-    command: 'cd docs && overmind start -f Procfile.dev',
+    command: 'cd docs && bin/bridgetown start',
     url: 'http://127.0.0.1:4000',
     reuseExistingServer: !process.env.CI,
   },
