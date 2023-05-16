@@ -183,16 +183,15 @@ export class TipTapEditor extends BaseElement {
     }
 
     setTimeout(() => {
-      // This is a workaround for Turbo's BF-cache.
-      // Havent found a good way to test it...
-      const cachedEditor = this.querySelector("[slot='editor']")
+      // Make sure we dont render the editor more than once.
+      const cachedEditor = this.querySelector("[slot='editor']");
 
       // light-dom version.
       const div = document.createElement("div");
       div.setAttribute("slot", "editor");
 
       if (cachedEditor) {
-        cachedEditor.replaceWith(div)
+        cachedEditor.replaceWith(div);
       } else {
         this.insertAdjacentElement("beforeend", div);
       }
@@ -205,7 +204,7 @@ export class TipTapEditor extends BaseElement {
       this.editorElement?.classList.add("trix-content");
       this.editorElement?.setAttribute("tabindex", "0");
       this.editorElement?.setAttribute("role", "textbox");
-    })
+    });
 
     this.classList.add("rhino-editor");
     this.registerDependencies();
