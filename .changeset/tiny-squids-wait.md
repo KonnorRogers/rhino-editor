@@ -2,4 +2,4 @@
 "rhino-editor": patch
 ---
 
-fix a bug in Turbo BF-cache with rhino-editor loading multiple times
+fixed a bug causing rhino-editor to load ProseMirror multiple times
