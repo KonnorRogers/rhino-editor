@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.1
+
+### Patch Changes
+
+- 3798f31: fixed a bug causing rhino-editor to load ProseMirror multiple times
+- 3798f31: Added `rhino-file-accept` event to align with `trix-file-accept`
+  Added documentation on preventing file uploads
+
 ## 0.6.0
 
 ### Minor Changes
