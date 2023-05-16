@@ -13,8 +13,8 @@ The goal of Rhino Editor is to provide a drop-in replacement for Trix that allow
 you to continue using ActionText, but be able to provide a more rich text editing
 experience.
 
-Rhino Editor lets you do things like [Real Time Collaboration](references/real-time-collaboration),
-[Code Syntax Highlighting](how-tos/syntax-highlighting), [Table Editing](how-tos/table-editing),
+Rhino Editor lets you do things like [Real Time Collaboration](/references/real-time-collaboration),
+[Code Syntax Highlighting](/how-tos/syntax-highlighting), [Table Editing](/how-tos/table-editing),
 and much much more that isn't possible with Trix without significant wizardry. Rhino Editor uses
 [TipTap](https://tiptap.dev) under the hood which gives powerful hooks into the editor schema allowing
 you to build just about anything into your WYSIWYG.
