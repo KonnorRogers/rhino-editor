@@ -5,8 +5,8 @@ call_to_action_items:
   - text: Getting Started
     href: /tutorials/getting-started
     type: primary
-  - text: Why Rhino?
-    href: /references/why-rhino
+  - text: Why Rhino Editor?
+    href: /references/why-rhino-editor
     type: secondary
 reason_header: Why Rhino Editor?
 reasons:
