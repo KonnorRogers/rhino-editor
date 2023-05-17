@@ -69,17 +69,25 @@ class Builders::Helpers < SiteBuilder
   end
 
   def on_github(resource)
-    site.metadata.github_url + "/tree/#{site.metadata.default_branch}/#{site.metadata.doc_location}/#{resource.relative_path}"
+    branch = ENV["GITHUB_REF_NAME"] || site.metadata.default_branch
+    site.metadata.github_url + "/tree/#{branch}/#{site.metadata.doc_location}/#{resource.relative_path}"
   end
 
   def version_number
-    if ENV["GITHUB_REF_NAME"] === "main" || `git rev-parse --abbrev-ref HEAD`.chomp === "main"
+    is_ci = ENV["GITHUB_REF_NAME"] != ""
+
+    if is_ci && ENV["GITHUB_REF_NAME"] == "main"
+      return "main"
+    end
+
+    if !is_ci && `git rev-parse --abbrev-ref HEAD`.chomp == "main"
       return "main"
     end
 
     package_json_file = File.join(File.expand_path("../../../", __dir__), "package.json")
 
     return unless File.exist?(package_json_file)
+
     package_json = File.read(package_json_file)
     JSON.parse(package_json)["version"].to_s
   end

@@ -8,6 +8,7 @@ overrides:
 specifiers:
   '@hotwired/stimulus': ^3.1.0
   '@hotwired/turbo': ^7.2.0
+  '@playwright/test': ~1.28.0
   '@rails/actioncable': ^7.0.0
   '@rails/actiontext': ^7.0.0
   '@rails/activestorage': ^7.0.0
@@ -41,6 +42,7 @@ dependencies:
   yjs: 13.6.0
 
 devDependencies:
+  '@playwright/test': 1.28.1
   playwright: 1.28.1
   vite: 4.3.4
   vite-plugin-ruby: 3.2.2_vite@4.3.4
@@ -275,6 +277,15 @@ packages:
       fastq: 1.15.0
     dev: true
 
+  /@playwright/test/1.28.1:
+    resolution: {integrity: sha512-xN6spdqrNlwSn9KabIhqfZR7IWjPpFK1835tFNgjrlysaSezuX8PYUwaz38V/yI8TJLG9PkAMEXoHRXYXlpTPQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      '@types/node': 20.1.4
+      playwright-core: 1.28.1
+    dev: true
+
   /@rails/actioncable/7.0.4:
     resolution: {integrity: sha512-tz4oM+Zn9CYsvtyicsa/AwzKZKL+ITHWkhiu7x+xF77clh2b4Rm+s6xnOgY/sGDWoFWZmtKsE95hxBPkgQQNnQ==}
     dev: false
@@ -312,6 +323,10 @@ packages:
     dependencies:
       y-prosemirror: 1.2.1_fsaf5gzr2doe7ocbz4httebmvq
     dev: false
+
+  /@types/node/20.1.4:
+    resolution: {integrity: sha512-At4pvmIOki8yuwLtd7BNHl3CiWNbtclUbNtScGx4OHfBd4/oWoJC8KRCIxXwkdndzhxOsPXihrsOoydxBjlE9Q==}
+    dev: true
 
   /@y-rb/actioncable/0.1.5:
     resolution: {integrity: sha512-uNb4KFrQpE1rxukLIOde/yfHYcr+7hUn2NEg1h1p8VU9vpqH9aq4s2Ite8mSSm9Re2ZFymp13j4yhwE52mdRUA==}

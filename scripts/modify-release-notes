@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require "json"
+
+def run
+  ref_name = ENV["GITHUB_REF_NAME"]
+
+  # We dont wanna modify main releases. They already have a static URL.
+  if ref_name == "main"
+    return
+  end
+
+  # Make sure we're using a release version.
+  unless ref_name.starts_with?("v")
+    return
+  end
+
+  json = `gh api \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    "/repos/konnorrogers/rhino-editor/releases/tags/#{ref_name}"`
+  json = JSON.parse(json)
+  json["body"] = json["body"] + "\n\n" + "## Deployment URL:" + "\n\n" + "<" + ENV["RELEASE_URL"] + ">"
+  puts json
+end
+
+run

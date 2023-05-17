@@ -19,22 +19,21 @@ layout: default
     <% end %>
   </div>
 
-  <rhino-editor data-direct-upload-url=""></rhino-editor>
+  <rhino-editor></rhino-editor>
 
-  <!--
   <h2 class="reason__header" style="margin-top: 2rem;"><%= resource.data.reason_header %></h2>
 
   <section class="reason__grid">
     <% resource.data.reasons.each do |reason| %>
       <article>
         <h3><%= reason[:header] %></h3>
-        <p>
+        <p style="margin: 0; padding: 0.25em var(--sl-spacing-x-small);">
           <%= reason[:text] %>
         </p>
       </article>
     <% end %>
   </section>
-  -->
+
 </main>
 
 
