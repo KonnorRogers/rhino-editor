@@ -11,9 +11,7 @@ def run
   end
 
   # Make sure we're using a release version.
-  unless ref_name.starts_with?("v")
-    return
-  end
+  return unless ref_name.start_with?("v")
 
   json = `gh api \
     -H "Accept: application/vnd.github+json" \
