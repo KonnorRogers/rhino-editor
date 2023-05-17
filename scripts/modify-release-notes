@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "json"
+require "prettyprint"
 
 def run
   ref_name = ENV["GITHUB_REF_NAME"]
@@ -17,9 +18,21 @@ def run
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     "/repos/konnorrogers/rhino-editor/releases/tags/#{ref_name}"`
+
   json = JSON.parse(json)
   json["body"] = json["body"] + "\n\n" + "## Deployment URL:" + "\n\n" + "<" + ENV["RELEASE_URL"] + ">"
-  puts json
+
+  ` gh api \
+  --method PATCH \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  /repos/konnorrogers/rhino-editor/releases/#{json["id"]} \
+  -f tag_name='#{json["tag_name"]}' \
+ -f target_commitish='#{json["target_commitish"]}' \
+ -f name='#{json["name"]}' \
+ -f body='#{json["body"]}' \
+ -F draft=#{json["draft"]} \
+ -F prerelease=#{json["prerelease"]}`
 end
 
 run
