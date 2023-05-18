@@ -52,10 +52,6 @@ body {
   min-height: 100%;
 }
 
-[hidden] {
-  display: none !important;
-}
-
 button {
   appearance: none;
   border: none;
@@ -68,14 +64,6 @@ button:hover {
 
 h1,h2,h3,h4 {
   scroll-margin-top: calc(80px + 2em);
-}
-
-:is(h1, h2, h3, h4) > a {
-  text-decoration: none;
-}
-
-h2,h3,h4 {
-  border-bottom: 1px solid var(--sl-color-gray-700);
 }
 
 h1 {
@@ -154,11 +142,11 @@ a > * > code[class*="language-"] {
   line-height: 1.2;
 }
 
-a > code,
-a > * > code,
-a > * > code[class*="language-"] {
-  text-decoration: none;
-}
+/* a > code, */
+/* a > * > code, */
+/* a > * > code[class*="language-"] { */
+/*   text-decoration: none; */
+/* } */
 
 
 a:hover > code, a:focus > code,

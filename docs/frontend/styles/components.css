@@ -50,7 +50,6 @@ main {
 .logo__text {
   color: var(--text-color-primary);
   font-size: var(--sl-font-size-x-large);
-  text-decoration: none;
   padding-bottom: var(--sl-spacing-x-small);
   margin-bottom: calc(var(--sl-spacing-x-small) - (var(--sl-spacing-x-small) * 2));
   margin-left: var(--sl-spacing-2x-small);
