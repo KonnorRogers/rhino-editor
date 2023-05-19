@@ -44,7 +44,9 @@ main {
 
 .logo__link:focus,
 .logo__link:hover {
-  text-decoration: underline solid var(--link-color-focus);
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-color: var(--link-color);
 }
 
 .logo__text {
@@ -150,7 +152,8 @@ input.top-nav__search__input {
 
 .nav-link {
   color: var(--sl-color-gray-600);
-  text-decoration: underline;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
   text-decoration-color: var(--sl-color-primary-500);
 }
 
@@ -166,7 +169,7 @@ input.top-nav__search__input {
 
 .side-nav__link {
   color: var(--sl-color-gray-500);
-  text-decoration: none;
+  text-decoration-color: currentColor;
 }
 
 .side-nav__category-header {
@@ -278,6 +281,10 @@ bridgetown-search-results::part(inner) {
   background: var(--sl-color-neutral-0);
 }
 
+.search-modal:not([hidden]) ~ * {
+  display: none;
+}
+
 .search-modal__form {
   margin: 1.25em 0;
   position: relative;
@@ -357,12 +364,10 @@ bridgetown-search-results::part(inner-link):hover {
   color: white;
   font-weight: bold;
   border-radius: 9999px;
-  text-decoration: none;
 }
 
 .call-to-action:is(:hover, :focus) {
   color: white;
-  text-decoration: none;
 }
 
 .call-to-action--primary {
@@ -399,7 +404,6 @@ bridgetown-search-results::part(inner-link):hover {
   margin: 0 auto;
   width: auto;
   flex: 0 0 auto;
-  text-decoration: none;
 }
 
 .hero--mobile .logo__text{
@@ -553,7 +557,6 @@ sl-alert::part(base) {
   border-width: var(--sl-input-border-width);
   font-family: var(--sl-input-font-family);
   font-weight: var(--sl-font-weight-semibold);
-  text-decoration: none;
   user-select: none;
   white-space: nowrap;
   transition: var(--sl-transition-x-fast) background-color, var(--sl-transition-x-fast) color,

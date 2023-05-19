@@ -134,12 +134,19 @@ a > * > code[class*="language-"] {
   word-wrap: anywhere;
   /* outline: transparent; */
   /* Unable to distinguish identifier, this makes links obvious */
-  text-decoration: underline solid var(--link-color);
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-color: var(--link-color);
+  text-underline-offset: 0.25em;
   color: var(--link-color);
   border-radius: 0;
   display: inline;
   padding: 0.05em 0;
   line-height: 1.2;
+}
+
+[tabindex="-1"] {
+  outline: transparent;
 }
 
 /* a > code, */
@@ -156,7 +163,9 @@ a:hover, a:focus {
 }
 
 a:focus, a:hover {
-  text-decoration: underline solid var(--link-color-focus);
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-color: var(--link-color-focus);
 }
 
 div[class*="language-"] {
@@ -186,16 +195,18 @@ code > span {
   position: relative;
 }
 
+/* Inline code blocks */
 code.highlight,
 code.highlighter-rouge {
   display: inline-block;
-  font-size: 0.85em;
+  font-size: 0.95em;
   padding: 0.2em 0.4em;
   margin: var(--sl-spacing-xx-small) 0;
   border-radius: var(--sl-border-radius-base);
   background-color: var(--code-background-color);
   color: var(--code-color);
   white-space: break-spaces;
+  vertical-align: middle;
 }
 
 /* :where(:not(:defined)) { */

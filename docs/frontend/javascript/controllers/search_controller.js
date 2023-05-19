@@ -6,6 +6,7 @@ export default class SearchController extends Controller {
 
   show() {
     this.containerTarget.removeAttribute("hidden");
+    this.containerTarget.querySelector("bridgetown-search-form").querySelector("input").focus()
   }
 
   hide() {
