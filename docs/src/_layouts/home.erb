@@ -11,13 +11,15 @@ layout: default
     <%= site.metadata.slogan %>
   </h1>
 
-  <div class="call-to-action__items" role="list">
+  <ul class="call-to-action__items" style="list-style: none;">
     <% resource.data.call_to_action_items.each do |item| %>
-      <a class="call-to-action call-to-action--<%= item[:type] %>" href="<%= item[:href] %>" role="listitem">
-        <%= item[:text].to_s.html_safe %>
-      </a>
+      <li>
+        <sl-button variant="<%= item[:type] %>" href="<%= item[:href] %>" class="call-to-action" pill>
+          <%= item[:text].to_s.html_safe %>
+        </sl-button>
+      </li>
     <% end %>
-  </div>
+  </ul>
 
   <rhino-editor></rhino-editor>
 

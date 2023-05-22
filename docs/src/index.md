@@ -7,7 +7,7 @@ call_to_action_items:
     type: primary
   - text: Why Rhino Editor?
     href: /references/why-rhino-editor
-    type: secondary
+    type: neutral
 reason_header: Why Rhino Editor?
 reasons:
   - header: Compatibility.

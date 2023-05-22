@@ -13,7 +13,7 @@
 
 <header class="nav-header">
   <nav class="top-nav" aria-label="Main">
-    <div style="background: white; width: calc(100vw - env(safe-area-inset-right, 0) - env(safe-area-inset-left, 0)); position: absolute; left: -5vw; top: 0; height: 100%; z-index: -1;"></div>
+    <div style="background: var(--sl-color-neutral-0); width: calc(100vw - env(safe-area-inset-right, 0) - env(safe-area-inset-left, 0)); position: absolute; left: -5vw; top: 0; height: 100%; z-index: -1;"></div>
 
     <sl-icon-button data-controller="side-nav" data-action="click->side-nav#open" class="top-nav__hamburger__button" name="list" label="Navigation"></sl-icon-button>
 
@@ -28,17 +28,57 @@
                       data-action="click->search#show">
       </sl-icon-button>
 
-      <%= liquid_render "bridgetown_quick_search/search", placeholder: "Search...", input_class: "input top-nav__search__input" %>
+      <div class="top-nav__search__wrapper">
+        <%= liquid_render "bridgetown_quick_search/search", placeholder: "Search...", input_class: "input top-nav__search__input" %>
+        <kbd style="position: absolute; right: 0px; top: 50%; transform: translate(-50%, -50%); color: var(--sl-color-neutral-500); display: grid; grid-auto-flow: column; place-items: center; gap: 4px;">
+          <span style="font-size: 1.25em;">⌘</span>
+          <span>K</span>
+        </kbd>
+      </div>
     </div>
 
     <div class="top-nav__links">
       <div class="top-nav__categories">
         <%= render "categories" %>
       </div>
-      <a target="_blank" rel="noreferrer noopener" href="<%= site.metadata.github_url %>" class="nav-link top-nav__github">
+      <a target="_blank" rel="noreferrer noopener" aria-label="Link to GitHub" href="<%= site.metadata.github_url %>" class="nav-link top-nav__github">
         <sl-icon name="github"></sl-icon>
-        <sl-visually-hidden>Link to Github</sl-visually-hidden>
       </a>
+      <sl-dropdown style="margin-inline-start: 1rem; min-width: 48px;" data-controller="theme-switcher" aria-label="Change site theme">
+        <sl-button slot="trigger" caret>
+          <sl-icon id="light-theme__icon" name="sun"></sl-icon>
+          <sl-icon hidden id="dark-theme__icon" name="moon-stars"></sl-icon>
+          <sl-icon hidden id="auto-theme__icon" name="display"></sl-icon>
+        </sl-button>
+        <sl-menu>
+          <sl-menu-label>
+            Toggle <kbd>\</kbd>
+          </sl-menu-label>
+
+          <sl-divider></sl-divider>
+
+          <sl-menu-item id="light-theme__menu-item" checked>
+            <span class="theme-item">
+              <sl-icon name="sun"></sl-icon>
+              <span>Light</span>
+            </span>
+          </sl-menu-item>
+
+          <sl-menu-item id="dark-theme__menu-item">
+            <span class="theme-item">
+              <sl-icon name="moon-stars"></sl-icon>
+              <span>Dark</span>
+            </span>
+          </sl-menu-item>
+
+          <sl-menu-item id="auto-theme__menu-item">
+            <span class="theme-item">
+              <sl-icon name="display"></sl-icon>
+              <span>System</span>
+            </span>
+          </sl-menu-item>
+        </sl-menu>
+      </sl-dropdown>
     </div>
   </nav>
 </header>

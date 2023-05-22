@@ -1,6 +1,5 @@
 import "../styles/index.css"
 import { Application } from "@hotwired/stimulus"
-import "@shoelace-style/shoelace/dist/themes/light.css";
 import "@konnorr/bridgetown-quick-search";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path"
 import "@shoelace-style/shoelace/dist/components/button/button"
@@ -9,6 +8,11 @@ import "@shoelace-style/shoelace/dist/components/icon/icon"
 import "@shoelace-style/shoelace/dist/components/icon-button/icon-button"
 import "@shoelace-style/shoelace/dist/components/drawer/drawer"
 import "@shoelace-style/shoelace/dist/components/visually-hidden/visually-hidden"
+import "@shoelace-style/shoelace/dist/components/menu/menu"
+import "@shoelace-style/shoelace/dist/components/menu-item/menu-item"
+import "@shoelace-style/shoelace/dist/components/menu-label/menu-label"
+import "@shoelace-style/shoelace/dist/components/dropdown/dropdown"
+import "@shoelace-style/shoelace/dist/components/divider/divider"
 import * as Turbo from "@hotwired/turbo"
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"

@@ -1,3 +1,7 @@
+@import "@shoelace-style/shoelace/dist/themes/light.css";
+@import "@shoelace-style/shoelace/dist/themes/dark.css";
 @import "./syntax.css";
 @import "./normalize.css";
 @import "./components.css";
+
+

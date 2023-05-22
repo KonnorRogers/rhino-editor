@@ -6,7 +6,12 @@
   --footer-height: 135px;
   --side-nav-width: 300px;
   --main-width: clamp(75ch, 70vw, 100ch);
-  --main-padding-x: 2rem;
+  --main-padding-x: 1rem;
+}
+
+body {
+	background-color: var(--body-color);
+	color: var(--text-color);
 }
 
 main {
@@ -14,6 +19,18 @@ main {
 	padding: 0 var(--main-padding-x) 2rem;
 	width: 100%;
 	margin: 0 auto;
+	background-color: var(--body-color);
+	color: var(--text-color);
+}
+
+kbd {
+  font-family: var(--sl-font-mono);
+  font-size: 87.5%;
+  background-color: var(--sl-color-neutral-50);
+  border-radius: var(--sl-border-radius-small);
+  border: solid 1px var(--sl-color-neutral-200);
+  box-shadow: inset 0 1px 0 var(--sl-color-neutral-0);
+  padding: 2px 5px;
 }
 
 .home main {
@@ -21,7 +38,7 @@ main {
 }
 
 .doc main {
-	background-color: white;
+	background-color: var(--body-color);
 }
 
 .nav-header {
@@ -34,7 +51,7 @@ main {
   font-size: 1.05rem;
   justify-content: space-between;
   border-bottom: 1px solid var(--sl-color-neutral-200);
-  background: white;
+	background-color: var(--body-color);
 }
 
 .logo__link {
@@ -82,6 +99,7 @@ main {
 }
 
 .top-nav {
+  background-color: var(--body-color);
 }
 
 .top-nav__go-home {
@@ -114,20 +132,24 @@ main {
 .top-nav__search {
   margin: 0;
   margin-inline-start: auto;
-  order: 1;
 }
 
 .top-nav__github {
   font-size: 2rem;
   width: 2rem;
   height: auto;
+
 }
 
 .top-nav__links {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 1 auto;
 }
 
 .top-nav__categories {
+  display: none;
   font-family: var(--sl-font-sans);
   font-weight: bold;
   min-width: fit-content;
@@ -140,9 +162,11 @@ main {
 }
 
 input.top-nav__search__input {
-  padding: 0.15rem 0.75rem;
+  padding: 1.25rem 0.5rem;
   margin-left: var(--sl-spacing-medium);
-  width: clamp(300px, 30vw, 400px);
+  width: 200px;
+  background-color: var(--body-color);
+  border-radius: 4px;
 }
 
 .top-nav__github {
@@ -151,7 +175,7 @@ input.top-nav__search__input {
 }
 
 .nav-link {
-  color: var(--sl-color-gray-600);
+  color: var(--sl-color-neutral-700);
   text-decoration-line: underline;
   text-decoration-style: solid;
   text-decoration-color: var(--sl-color-primary-500);
@@ -168,7 +192,7 @@ input.top-nav__search__input {
 }
 
 .side-nav__link {
-  color: var(--sl-color-gray-500);
+  color: var(--sl-color-neutral-700);
   text-decoration-color: currentColor;
 }
 
@@ -204,10 +228,7 @@ bridgetown-search-form {
   display: block;
   width: 100%;
   padding: 0.15rem 0.75rem;
-}
-
-bridgetown-search-form > .input {
-  border-radius: 9999px;
+  transform: translateX(0px);
 }
 
 bridgetown-search-results {
@@ -218,12 +239,12 @@ bridgetown-search-results {
 
 bridgetown-search-results::part(inner) {
   z-index: var(--z-search);
-  background: white;
+  background-color: var(--body-color);
   border-radius: 10px;
 }
 
 bridgetown-search-results::part(inner) {
-  border: 1px solid gray;
+  border: 1px solid var(--sl-color-neutral-700);
 }
 
 .search-modal__results::part(inner) {
@@ -240,7 +261,7 @@ bridgetown-search-results::part(inner) {
 
   --input-border-width: 1px;
   --input-border-style: solid;
-  --input-border-color: var(--sl-color-primary-500);
+  --input-border-color: var(--divider-color);
   --input-border-radius: 4px;
 
   --input-bg-color: var(--sl-color-neutral-0);
@@ -277,23 +298,26 @@ bridgetown-search-results::part(inner) {
   left: 0;
   top: 0;
   z-index: var(--z-search);
-  height: 100vh;
-  background: var(--sl-color-neutral-0);
+  min-height: 100vh;
+  background-color: rgba(0,0,0,0.25);
 }
 
-.search-modal:not([hidden]) ~ * {
-  display: none;
-}
+/* .search-modal:not([hidden]) ~ * { */
+/*   display: none; */
+/* } */
 
 .search-modal__form {
-  margin: 1.25em 0;
+  margin: 1.25em auto;
   position: relative;
+  width: calc(100% - 2rem);
+  padding: 0;
 }
 
 .search-modal__close {
-  top: 30%;
-  left: 1.25em;
+  top: 50%;
+  left: 24px;
   position: absolute;
+  transform: translate(-50%, -50%);
 }
 
 .search-modal__input {
@@ -302,48 +326,68 @@ bridgetown-search-results::part(inner) {
   appearance: none;
 
   font-size: 1.25rem;
-  width: calc(100% - 3.25em);
+  width: 100%;
   border: 1px solid var(--color-primary);
-  border-radius: 8px;
-  padding: 1em 1em 1em 2.25em;
+  border-radius: 0px;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
   outline: transparent;
-  box-shadow: var(--focus-ring);
+  box-shadow: inset var(--focus-ring);
+  padding: 2rem 2.5rem;
+  padding-inline-start: 3rem;
+  border: none;
+  border-bottom: 1px solid var(--divider-color);
 }
 
+.search-modal__input:is(:hover, :focus) {
+  border: none;
+  border-bottom: 1px solid var(--divider-color);
+  outline: transparent;
+  box-shadow: none;
+}
+
+
 .search-modal__results {
-	border-top: 1px solid var(--light-gray);
-	position: absolute;
-	padding-top: 1em;
-	left: 2.5%;
-	height: 100%;
+	left: 0;
+	min-height: 100%;
 	max-width: unset;
-	width: 95%;
+	width: 100%;
 	margin: 0 auto;
+	border-radius: 0px;
 }
 
 .search-modal__results::part(inner) {
   width: 100%;
   box-shadow: none;
   max-height: unset;
-  height: 85vh;
+  max-height: 85vh;
+  border-radius: 0;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 bridgetown-search-results::part(inner) {
   padding: 0;
+  color: currentColor;
+}
+
+bridgetown-search-results::part(no-results) {
+  margin: 0;
+  padding: 0.75rem;
 }
 
 bridgetown-search-results::part(inner-link) {
+  margin: 0;
   padding: 1em;
 }
 
 bridgetown-search-results::part(inner-link):focus,
 bridgetown-search-results::part(inner-link):hover {
-  background: var(--sl-color-neutral-50);
+  background-color: var(--sl-color-neutral-50);
 }
 
 .top-nav__go-home,
-.top-nav__search__input,
-.top-nav__github {
+.top-nav__search__wrapper {
   display: none;
 }
 
@@ -357,34 +401,12 @@ bridgetown-search-results::part(inner-link):hover {
   border-top: 1px solid var(--sl-color-neutral-200);
 }
 
-.call-to-action {
-  font-family: var(--sl-font-sans);
-  padding: var(--sl-spacing-small) var(--sl-spacing-large);
-  text-align: center;
-  color: white;
+.call-to-action::part(base) {
   font-weight: bold;
-  border-radius: 9999px;
 }
 
-.call-to-action:is(:hover, :focus) {
-  color: white;
-}
-
-.call-to-action--primary {
-  background: var(--sl-color-primary-500);
-}
-
-.call-to-action--primary:is(:hover, :focus) {
-  background: var(--sl-color-primary-600);
-}
-
-.call-to-action--secondary {
-  background: rgba(0,0,0,0.8);
-}
-
-.call-to-action--secondary:hover,
-.call-to-action--secondary:focus {
-  background: #000000;
+.call-to-action::part(base):is(:hover, :focus) {
+  text-decoration: underline;
 }
 
 .reason__grid h3,
@@ -477,7 +499,7 @@ sl-button:is(.previous-page)::part(base) {
 }
 
 sl-button:is(.next-page, .previous-page):is(:hover, :focus) {
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 12px 13px;
+  box-shadow: var(--sl-color-neutral-50) 0px 12px 13px;
   transform: translateY(-2px);
 }
 
@@ -509,9 +531,10 @@ sl-alert p {
 }
 
 sl-alert::part(base) {
-  box-shadow: 3px 3px 6px 1px rgba(0,0,0,0.05);
+  box-shadow: 3px 3px 6px 1px var(--sl-color-neutral-100);
 }
 
+.rhino-editor,
 .syntax-block {
   position: relative;
   margin: 1rem;
@@ -525,7 +548,7 @@ sl-alert::part(base) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid var(--divider-color);
   border-bottom-color: transparent;
   padding: 4px 8px;
   border-top-right-radius: var(--sl-input-border-radius-medium);
@@ -628,10 +651,14 @@ sl-alert::part(base) {
 }
 
 @media screen and (min-width: 1024px) {
+  body {
+    --main-padding-x: 2rem;
+  }
+
 	.documentation-content {
 		margin: 2rem 0;
 		box-shadow: 0 0 5px 0 rgb(0 0 0 / 10%);
-		background: white;
+		background: var(--body-color);
 		border-radius: 4px;
 	}
 
@@ -646,8 +673,12 @@ sl-alert::part(base) {
   }
 
   .top-nav__go-home,
-  .top-nav__search__input {
+  .top-nav__search__wrapper {
     display: flex;
+  }
+
+  .top-nav__search__wrapper {
+    position: relative;
   }
 
   .top-nav__search {
@@ -655,14 +686,7 @@ sl-alert::part(base) {
     order: unset;
   }
 
-  .top-nav__links {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex: 0 1 auto;
-  }
-
-  .top-nav__github {
+  .top-nav__categories {
     display: block;
   }
 
@@ -685,5 +709,12 @@ sl-alert::part(base) {
   .reason__grid {
     grid-template-columns: repeat(3, 1fr);
   }
+
 }
 
+.theme-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
