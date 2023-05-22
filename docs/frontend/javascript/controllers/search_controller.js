@@ -7,8 +7,10 @@ export default class SearchController extends Controller {
   constructor (...args) {
     super(...args)
 
+    this.isShowing = false
+
     /** @param {KeyboardEvent} e */
-    this.handleKeyDown = (e) => {
+    this.showModal = (e) => {
       if (!(e.target === document.documentElement || e.target === document.body)) {
         return
       }
@@ -18,22 +20,59 @@ export default class SearchController extends Controller {
 
       this.show()
     }
+
+    this.handleBackgroundClick = (e) => {
+      if (e.target === this.containerTarget) {
+        this.hide()
+      }
+    }
+
+    this.closeModal = (e) => {
+      if (e.key !== "Escape") return
+
+      const searchInput = this.containerTarget.querySelector("input")
+
+      if (searchInput && e.target === searchInput) {
+        e.preventDefault()
+
+        if (searchInput.value === "") {
+          this.hide()
+          return
+        }
+
+        // Works around a fun firefox bug.
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1055085
+        searchInput.value = ""
+        return
+      }
+
+      if (this.containerTarget.contains(e.target)) {
+        e.preventDefault()
+        this.hide()
+      }
+    }
   }
 
   connect () {
-    document.addEventListener("keydown", this.handleKeyDown)
+    document.addEventListener("keydown", this.showModal)
+    document.addEventListener("keydown", this.closeModal)
+    this.containerTarget.addEventListener("click", this.handleBackgroundClick)
   }
 
   disconnect () {
     document.removeEventListener("keydown", this.handleKeyDown)
+    document.removeEventListener("keydown", this.closeModal)
+    this.containerTarget.removeEventListener("click", this.handleBackgroundClick)
   }
 
   show() {
+    this.isShowing = true
     this.containerTarget.removeAttribute("hidden");
     this.containerTarget.querySelector("bridgetown-search-form").querySelector("input").focus()
   }
 
   hide() {
+    this.isShowing = false
     this.containerTarget.setAttribute("hidden", "")
   }
 }
