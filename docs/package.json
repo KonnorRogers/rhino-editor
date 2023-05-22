@@ -22,7 +22,7 @@
     "@hotwired/stimulus": "^3.1.1",
     "@hotwired/turbo": "^7.2.4",
     "@konnorr/bridgetown-quick-search": "^3.0.3",
-    "@shoelace-style/shoelace": "2.0.0-beta.83",
+    "@shoelace-style/shoelace": "^2.0.0",
     "@tiptap/core": "2.0.0-beta.209",
     "@tiptap/extension-character-count": "2.0.0-beta.209",
     "bridgetown-quick-search": "1.1.3",

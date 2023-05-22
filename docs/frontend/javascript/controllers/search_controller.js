@@ -18,12 +18,19 @@ export default class SearchController extends Controller {
       if (e.key !== "k") return
       if (e.ctrlKey === false) return
 
+      e.preventDefault()
       this.show()
     }
 
     this.handleBackgroundClick = (e) => {
       if (e.target === this.containerTarget) {
         this.hide()
+        return
+      }
+
+      if (e.target === document.documentElement || e.target === document.body) {
+        this.hide()
+        return
       }
     }
 
@@ -69,10 +76,12 @@ export default class SearchController extends Controller {
     this.isShowing = true
     this.containerTarget.removeAttribute("hidden");
     this.containerTarget.querySelector("bridgetown-search-form").querySelector("input").focus()
+    document.body.style.overflow = "hidden"
   }
 
   hide() {
     this.isShowing = false
     this.containerTarget.setAttribute("hidden", "")
+    document.body.style.overflow = "auto"
   }
 }

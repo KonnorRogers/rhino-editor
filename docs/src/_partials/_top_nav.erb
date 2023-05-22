@@ -28,13 +28,13 @@
                       data-action="click->search#show">
       </sl-icon-button>
 
-      <div class="top-nav__search__wrapper">
-        <%= liquid_render "bridgetown_quick_search/search", placeholder: "Search...", input_class: "input top-nav__search__input" %>
-        <kbd style="position: absolute; right: 0px; top: 50%; transform: translate(-50%, -50%); color: var(--sl-color-neutral-500); display: grid; grid-auto-flow: column; place-items: center; gap: 4px;">
-          <span style="font-size: 1.25em;">⌘</span>
-          <span>K</span>
+      <sl-button class="top-nav__command-palette-button" data-action="click->search#show" style="min-width: 100px;" size="medium">
+        <sl-icon slot="prefix" name="search"></sl-icon>
+        <span>Search...</span>
+        <kbd slot="suffix" style="color: var(--sl-color-neutral-500); padding: 8px">
+          Ctrl+K
         </kbd>
-      </div>
+      </sl-button>
     </div>
 
     <div class="top-nav__links">
@@ -57,21 +57,21 @@
 
           <sl-divider></sl-divider>
 
-          <sl-menu-item id="light-theme__menu-item" checked>
+          <sl-menu-item type="checkbox" id="light-theme__menu-item" checked>
             <span class="theme-item">
               <sl-icon name="sun"></sl-icon>
               <span>Light</span>
             </span>
           </sl-menu-item>
 
-          <sl-menu-item id="dark-theme__menu-item">
+          <sl-menu-item type="checkbox" id="dark-theme__menu-item">
             <span class="theme-item">
               <sl-icon name="moon-stars"></sl-icon>
               <span>Dark</span>
             </span>
           </sl-menu-item>
 
-          <sl-menu-item id="auto-theme__menu-item">
+          <sl-menu-item type="checkbox" id="auto-theme__menu-item">
             <span class="theme-item">
               <sl-icon name="display"></sl-icon>
               <span>System</span>
