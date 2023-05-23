@@ -17,6 +17,7 @@ import * as Turbo from "@hotwired/turbo"
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"
 import '@github/clipboard-copy-element'
+import "./turbo_transitions.js"
 
 // Uncomment the line below to add transition animations when Turbo navigates.
 // We recommend adding <meta name="turbo-cache-control" content="no-preview" />

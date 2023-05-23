@@ -22,3 +22,46 @@
 <%# <meta property="twitter:card" content="summary_large_image"> %>
 <%# <meta property="twitter:title" content="<%= resource_title %1>"> %>
 
+<script>
+  function getTheme () {
+    return localStorage.getItem('theme') || 'system';
+  }
+
+  function setTheme (theme) {
+    localStorage.setItem('theme', theme);
+  }
+
+  function themeIsDark() {
+    const theme = getTheme()
+    if (theme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return theme === 'dark';
+  }
+
+  function applyTheme(newTheme) {
+    const noTransitions = Object.assign(document.createElement('style'), {
+      textContent: '* { transition: none !important; }'
+    });
+
+    this.setTheme(newTheme)
+
+    setTimeout(() => {
+      ;[...document.querySelectorAll("[data-controller='theme-switcher'] sl-menu-item")].forEach((el) => {
+        el.toggleAttribute("checked", el.getAttribute("value") === newTheme)
+      })
+    })
+
+
+    // Toggle the dark mode class without transitions
+    document.documentElement.append(noTransitions);
+    requestAnimationFrame(() => {
+      const darkMode = themeIsDark()
+      document.documentElement.classList.toggle("sl-theme-light", !darkMode)
+      document.documentElement.classList.toggle("sl-theme-dark", darkMode)
+      requestAnimationFrame(() => noTransitions.remove());
+    });
+  }
+
+  applyTheme(getTheme())
+</script>

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="<%= site.locale %>">
+<html class="sl-theme-light" lang="<%= site.locale %>">
   <head>
     <%= render "head", metadata: site.metadata, title: resource.data.title %>
   </head>
-  <body class='<%= "#{resource.data.layout} #{resource.data.page_class}" %> sl-theme-light' data-controller="search">
+  <body class='<%= "#{resource.data.layout} #{resource.data.page_class}" %>' data-controller="search">
     <%= render "top_nav", metadata: site.metadata %>
     <%= render "side_nav_mobile" %>
 
