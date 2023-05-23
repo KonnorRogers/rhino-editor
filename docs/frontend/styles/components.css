@@ -732,6 +732,7 @@ sl-alert::part(base) {
   height: unset;
   width: unset;
   visibility: visible;
+  opacity: 1;
   animation: fadeInAnimation ease 500ms;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
