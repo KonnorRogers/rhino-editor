@@ -30,7 +30,7 @@ dependencies:
   '@github/clipboard-copy-element': 1.1.2
   '@hotwired/stimulus': 3.1.1
   '@hotwired/turbo': 7.2.4
-  '@konnorr/bridgetown-quick-search': link:../../bridgetown-quick-search
+  '@konnorr/bridgetown-quick-search': 3.1.0
   '@shoelace-style/shoelace': 2.4.0
   '@tiptap/core': 2.0.0-beta.209_rd5pjtxohzfgv2zee3iufpqkay
   '@tiptap/extension-character-count': 2.0.0-beta.209_kdf7tbeyuz6zzmi7724b5ghupu
@@ -253,6 +253,13 @@ packages:
   /@hotwired/turbo/7.2.4:
     resolution: {integrity: sha512-c3xlOroHp/cCZHDOuLp6uzQYEbvXBUVaal0puXoGJ9M8L/KHwZ3hQozD4dVeSN9msHWLxxtmPT1TlCN7gFhj4w==}
     engines: {node: '>= 14'}
+    dev: false
+
+  /@konnorr/bridgetown-quick-search/3.1.0:
+    resolution: {integrity: sha512-wNgyNGKXq9Rfhcrgz84VlpkAMeXgqr7f/xaK/CiyFa36gGDmUawsUtgj7OpuiZm/UgkNG0lx2YhFql7X35aWWQ==}
+    dependencies:
+      lit: 2.7.4
+      lunr: 2.3.9
     dev: false
 
   /@lit-labs/react/1.1.1:
