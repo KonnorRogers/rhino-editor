@@ -58,6 +58,7 @@ export default class SearchController extends Controller {
         this.hide()
       }
     }
+
   }
 
   connect () {
@@ -77,11 +78,17 @@ export default class SearchController extends Controller {
     this.containerTarget.removeAttribute("hidden");
     this.containerTarget.querySelector("bridgetown-search-form").querySelector("input").focus()
     document.body.style.overflow = "hidden"
+    this.nonModals.forEach((el) => el.setAttribute("inert", ""))
   }
 
   hide() {
     this.isShowing = false
     this.containerTarget.setAttribute("hidden", "")
     document.body.style.overflow = "auto"
+    this.nonModals.forEach((el) => el.removeAttribute("inert"))
+  }
+
+  get nonModals () {
+    return [...document.body.children].filter((el) => el.id !== "search-modal")
   }
 }
