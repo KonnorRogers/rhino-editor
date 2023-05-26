@@ -1,18 +1,8 @@
-<div hidden data-search-target="container" id="search-modal" class="search-modal">
-  <bridgetown-search-form class="search-modal__form">
-    <div slot="input" style="max-width: 100%;">
-      <sl-icon-button class="search-modal__close" name="arrow-left" label="Back"
-                      data-action="click->search#hide"></sl-icon-button>
-
-      <input id="top-nav-search" type="search" class="search-modal__input input">
-      <sl-visually-hidden><label for="top-nav-search">Search for documentation</label></sl-visually-hidden>
-    </div>
-    <bridgetown-search-results class="search-modal__results"></bridgetown-search-results>
-  </bridgetown-search-form>
-</div>
-
 <header class="nav-header">
-  <nav class="top-nav" aria-label="Main">
+  <nav class="top-nav" aria-labelledby="top-nav-label">
+    <sl-visually-hidden id="top-nav-label">
+      Main Navigation
+    </sl-visually-hidden>
     <div style="background: var(--sl-color-neutral-0); width: calc(100vw - env(safe-area-inset-right, 0) - env(safe-area-inset-left, 0)); position: absolute; left: -5vw; top: 0; height: 100%; z-index: -1;"></div>
 
     <sl-icon-button data-controller="side-nav" data-action="click->side-nav#open" class="top-nav__hamburger__button" name="list" label="Navigation"></sl-icon-button>
@@ -24,11 +14,19 @@
     </div>
 
     <div class="top-nav__search">
-      <sl-icon-button class="top-nav__search__button" name="search" label="Search"
-                      data-action="click->search#show">
+      <sl-icon-button
+         class="top-nav__search__button"
+         name="search"
+         label="Search"
+         data-action="click->search#show">
       </sl-icon-button>
 
-      <sl-button class="top-nav__command-palette-button" data-action="click->search#show" style="min-width: 100px;" size="medium">
+      <sl-button
+        class="top-nav__command-palette-button"
+        data-action="click->search#show"
+        style="min-width: 100px;"
+        size="medium"
+      >
         <sl-icon slot="prefix" name="search"></sl-icon>
         <span>Search...</span>
         <kbd slot="suffix" style="color: var(--sl-color-neutral-500); padding: 8px">
