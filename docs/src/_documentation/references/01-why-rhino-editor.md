@@ -33,7 +33,7 @@ TipTap extensions and they'll work with Rhino Editor.
 
 The power and flexibility of Rhino Editor comes at a price.
 Because Rhino Editor is built on top of other packages,
-it is quite a large compared to Trix.
+it is quite large compared to Trix.
 
 Rhino Editor is around `~100kb` gzipped. Trix however is `~40kb` gzipped.
 
