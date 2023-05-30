@@ -18,7 +18,9 @@ import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"
 import '@github/clipboard-copy-element'
 import "./turbo_transitions.js"
-import "@konnorr/bridgetown-quick-search"
+import { BridgetownNinjaKeys } from "@konnorr/bridgetown-quick-search/frontend/javascript/ninja-keys.js"
+
+BridgetownNinjaKeys.define()
 
 // Uncomment the line below to add transition animations when Turbo navigates.
 // We recommend adding <meta name="turbo-cache-control" content="no-preview" />
