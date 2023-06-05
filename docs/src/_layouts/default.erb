@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="<%= site.locale %>">
+<html class="sl-theme-light" lang="<%= site.locale %>">
   <head>
     <%= render "head", metadata: site.metadata, title: resource.data.title %>
   </head>
@@ -10,5 +10,7 @@
     <%= yield %>
 
     <%= render "footer", metadata: site.metadata %>
+
+    <bridgetown-ninja-keys style="z-index: 9999;"></bridgetown-ninja-keys>
   </body>
 </html>

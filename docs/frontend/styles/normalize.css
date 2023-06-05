@@ -1,4 +1,9 @@
-:root {
+:root,
+body,
+.sl-theme-light,
+.sl-theme-dark {
+  --text-color: var(--sl-color-neutral-1000);
+  --body-color: var(--sl-color-neutral-0);
   --color-primary: var(--sl-color-primary-600);
   --text-color-primary: var(--sl-color-primary-700);
   --link-color: var(--sl-color-primary-700);
@@ -15,7 +20,7 @@ html {
 }
 
 *, *:before, *:after {
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 body {
@@ -28,6 +33,8 @@ body {
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 100%;
   margin: 0;
+  background-color: var(--body-color);
+  color: var(--text-color);
 }
 
 [hidden] {
@@ -202,7 +209,7 @@ code.highlighter-rouge {
   font-size: 0.95em;
   padding: 0.2em 0.4em;
   margin: var(--sl-spacing-xx-small) 0;
-  border-radius: var(--sl-border-radius-base);
+  border-radius: 4px;
   background-color: var(--code-background-color);
   color: var(--code-color);
   white-space: break-spaces;
