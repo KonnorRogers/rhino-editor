@@ -27,6 +27,7 @@ const staticData = [
     icon: "<sl-icon name='sun'></sl-icon>",
     title: "Light Mode",
     section: "Theme",
+    keywords: "theme",
     handler () {
       window.applyTheme("light");
     }
@@ -36,6 +37,7 @@ const staticData = [
     icon: "<sl-icon name='moon'></sl-icon>",
     title: "Dark Mode",
     section: "Theme",
+    keywords: "theme",
     handler () {
       window.applyTheme("dark");
     }
@@ -45,6 +47,7 @@ const staticData = [
     icon: "<sl-icon name='display'></sl-icon>",
     title: "System",
     section: "Theme",
+    keywords: "theme",
     handler () {
       window.applyTheme("system");
     }

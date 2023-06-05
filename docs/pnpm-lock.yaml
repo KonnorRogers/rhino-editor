@@ -4,10 +4,11 @@ specifiers:
   '@github/clipboard-copy-element': ^1.1.2
   '@hotwired/stimulus': ^3.1.1
   '@hotwired/turbo': ^7.2.4
-  '@konnorr/bridgetown-quick-search': ^3.2.0
+  '@konnorr/bridgetown-quick-search': ^3.2.2
   '@shoelace-style/shoelace': ^2.0.0
   '@tiptap/core': 2.0.0-beta.209
   '@tiptap/extension-character-count': 2.0.0-beta.209
+  bridgetown-quick-search: 1.1.3
   esbuild: ^0.14.39
   glob: ^8.0.1
   linkifyjs: ^4.1.1
@@ -30,10 +31,11 @@ dependencies:
   '@github/clipboard-copy-element': 1.1.2
   '@hotwired/stimulus': 3.1.1
   '@hotwired/turbo': 7.2.4
-  '@konnorr/bridgetown-quick-search': link:../../bridgetown-quick-search
+  '@konnorr/bridgetown-quick-search': 3.2.2
   '@shoelace-style/shoelace': 2.4.0
   '@tiptap/core': 2.0.0-beta.209_rd5pjtxohzfgv2zee3iufpqkay
   '@tiptap/extension-character-count': 2.0.0-beta.209_kdf7tbeyuz6zzmi7724b5ghupu
+  bridgetown-quick-search: 1.1.3
   linkifyjs: 4.1.1
   prosemirror-commands: 1.5.0
   prosemirror-keymap: 1.2.0
@@ -55,6 +57,13 @@ devDependencies:
   postcss-preset-env: 7.8.3_postcss@8.4.19
 
 packages:
+
+  /@babel/runtime/7.22.3:
+    resolution: {integrity: sha512-XsDuspWKLUsxwCp6r7EhsExHtYfbe5oAGQ19kqngTdCPUoPQzOPdUbD/pB9PJiwb2ptYKQDjSJT3R6dC+EPqfQ==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.13.11
+    dev: false
 
   /@csstools/postcss-cascade-layers/1.1.1_postcss@8.4.19:
     resolution: {integrity: sha512-+KdYrpKC5TgomQr2DlZF4lDEpHcoxnj5IGddYYfBWJAKfj1JtuHUIqMa+E1pJJ+z3kvDViWMqyqPlG4Ja7amQA==}
@@ -248,6 +257,14 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
+  /@konnorr/bridgetown-quick-search/3.2.2:
+    resolution: {integrity: sha512-5o0U2sqk2HKgPMfgE2uwsVeoTYpr26yCOdATSwEsggwBXhi/s7AAfddJHCqqr11NreFm9VfcX6LggPhKjcTmrw==}
+    dependencies:
+      konnors-ninja-keys: 1.8.1
+      lit: 2.7.4
+      lunr: 2.3.9
+    dev: false
+
   /@lit-labs/react/1.1.1:
     resolution: {integrity: sha512-9TC+/ZWb6BJlWCyUr14FKFlaGnyKpeEDorufXozQgke/VoVrslUQNaL7nBmrAWdNrmzx5jWgi8lFmWwrxMjnlA==}
     dev: false
@@ -260,6 +277,24 @@ packages:
     resolution: {integrity: sha512-va15kYZr7KZNNPZdxONGQzpUr+4sxVu7V/VG7a8mRfPPXUyhEYj5RzXCQmGrlP3tAh0L3HHm5AjBMFYRqlM9SA==}
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.1.1
+    dev: false
+
+  /@material/mwc-icon/0.25.3:
+    resolution: {integrity: sha512-36076AWZIRSr8qYOLjuDDkxej/HA0XAosrj7TS1ZeLlUBnLUtbDtvc1S7KSa0hqez7ouzOqGaWK24yoNnTa2OA==}
+    dependencies:
+      lit: 2.7.4
+      tslib: 2.5.3
+    dev: false
+
+  /@open-wc/dedupe-mixin/1.3.1:
+    resolution: {integrity: sha512-ukowSvzpZQDUH0Y3znJTsY88HkiGk3Khc0WGpIPhap1xlerieYi27QBg6wx/nTurpWfU6XXXsx9ocxDYCdtw0Q==}
+    dev: false
+
+  /@open-wc/scoped-elements/2.1.5:
+    resolution: {integrity: sha512-39v61EDXiFp+pBXdYmRCNIAimJU6MxaNwplW+5IqGU+z33hsSp5CVp2mH5lJVbwXGB7hIb5wDiJa+L5pOVypqw==}
+    dependencies:
+      '@lit/reactive-element': 1.6.1
+      '@open-wc/dedupe-mixin': 1.3.1
     dev: false
 
   /@shoelace-style/animations/1.1.0:
@@ -345,6 +380,14 @@ packages:
     dependencies:
       balanced-match: 1.0.2
     dev: true
+
+  /bridgetown-quick-search/1.1.3:
+    resolution: {integrity: sha512-KsRvW3LpLr90YRm/c5z05/dQABSav4haQ2hzHPxc9eixQ6FQVCFVFvHnWhh/WdpBzpgTUG6HiLJHP7oPA7JAfg==}
+    dependencies:
+      '@babel/runtime': 7.22.3
+      lit: 2.7.4
+      lunr: 2.3.9
+    dev: false
 
   /browserslist/4.21.4:
     resolution: {integrity: sha512-CBHJJdDmgjl3daYjN5Cp5kbTf1mUhZoS+beLklHIvkOWscs83YAhLlF3Wsh/lciQYAcbBJgTOD44VtG31ZM4Hw==}
@@ -655,6 +698,10 @@ packages:
       function-bind: 1.1.1
     dev: true
 
+  /hotkeys-js/3.10.2:
+    resolution: {integrity: sha512-Z6vLmJTYzkbZZXlBkhrYB962Q/rZGc/WHQiyEGu9ZZVF7bAeFDjjDa31grWREuw9Ygb4zmlov2bTkPYqj0aFnQ==}
+    dev: false
+
   /inflight/1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
     dependencies:
@@ -671,6 +718,16 @@ packages:
     dependencies:
       has: 1.0.3
     dev: true
+
+  /konnors-ninja-keys/1.8.1:
+    resolution: {integrity: sha512-6JHd2cV2guq3lTjKefZu0EaKPoG0VHCyP3QQTFJPLrqWja/D19UTzjvxtiXDqRk6uITlVlYU0GddkZ8m+EwtBw==}
+    dependencies:
+      '@material/mwc-icon': 0.25.3
+      '@open-wc/scoped-elements': 2.1.5
+      hotkeys-js: 3.10.2
+      lit: 2.7.4
+      web-component-define: 2.0.10
+    dev: false
 
   /lilconfig/2.0.6:
     resolution: {integrity: sha512-9JROoBW7pobfsx+Sq2JsASvCo6Pfo6WWoUW79HuB1BCoBXD4PLWJPqDF6fNj67pqBYTbAHkE57M1kS/+L1neOg==}
@@ -701,6 +758,10 @@ packages:
       '@lit/reactive-element': 1.6.1
       lit-element: 3.3.2
       lit-html: 2.7.4
+    dev: false
+
+  /lunr/2.3.9:
+    resolution: {integrity: sha512-zTU3DaZaF3Rt9rhN3uBMGQD3dD2/vFQqnvZCDv4dl5iOzq2IZQqTxu90r4E5J+nP70J3ilqVCrbho2eWaeW8Ow==}
     dev: false
 
   /minimatch/5.1.0:
@@ -1190,6 +1251,10 @@ packages:
     dependencies:
       pify: 2.3.0
 
+  /regenerator-runtime/0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
+    dev: false
+
   /resolve/1.22.1:
     resolution: {integrity: sha512-nBpuuYuY5jFsli/JIs1oldw6fOQCBioohqWZg/2hiaOybXOft4lonv85uDOKXdf8rhyK159cxU5cDcK/NKk8zw==}
     hasBin: true
@@ -1209,6 +1274,10 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /tslib/2.5.3:
+    resolution: {integrity: sha512-mSxlJJwl3BMEQCUNnxXBU9jP4JBktcEGhURcPR6VQVlnP0FdDEsIaz0C35dXNGLyRfrATNofF0F5p2KPxQgB+w==}
+    dev: false
+
   /update-browserslist-db/1.0.10_browserslist@4.21.4:
     resolution: {integrity: sha512-OztqDenkfFkbSG+tRxBeAnCVPckDBcvibKd35yDONx6OU8N7sqgwc7rCbkJ/WcYtVRZ4ba68d6byhC21GFh7sQ==}
     hasBin: true
@@ -1226,6 +1295,13 @@ packages:
 
   /w3c-keyname/2.2.6:
     resolution: {integrity: sha512-f+fciywl1SJEniZHD6H+kUO8gOnwIr7f4ijKA6+ZvJFjeGi1r4PDLl53Ayud9O/rk64RqgoQine0feoeOU0kXg==}
+    dev: false
+
+  /web-component-define/2.0.10:
+    resolution: {integrity: sha512-gwkjTFdG8eE8fxI4+RZUCQRy06SSSkCyLpQ1YSCsA+z8ZLlnmqLX/3B3WD2ZraVRtyje3hLXS8bxL8CK1/bZYQ==}
+    dependencies:
+      '@lit/reactive-element': 1.6.1
+      '@open-wc/dedupe-mixin': 1.3.1
     dev: false
 
   /wrappy/1.0.2:
