@@ -606,6 +606,24 @@ bridgetown-ninja-keys.dark {
   --ninja-text-color: gray;
 }
 
+.sl-theme-dark .rhino-editor,
+.sl-theme-dark .trix-content {
+  --rhino-button-color: var(--sl-color-neutral-700);
+  --rhino-button-disabled-text-color: var(--sl-color-neutral-300);
+  --rhino-toolbar-text-color: var(--sl-color-neutral-700);
+  --rhino-button-active-border-color: var(--sl-color-primary-700);
+  color: white;
+}
+
+
+.rhino-editor::part(toolbar__button):is(:focus, :hover) {
+  color: black;
+}
+
+.rhino-editor::part(toolbar__button toolbar__button--disabled):is(:focus, :hover) {
+  color: var(--sl-color-neutral-300);
+}
+
 @keyframes fadeInAnimation {
   0% {
       opacity: 0;
