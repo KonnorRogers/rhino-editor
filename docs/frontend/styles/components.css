@@ -624,6 +624,10 @@ bridgetown-ninja-keys.dark {
   color: var(--sl-color-neutral-300);
 }
 
+:where(sl-visually-hidden:not(:defined)) {
+  display: none;
+}
+
 @keyframes fadeInAnimation {
   0% {
       opacity: 0;
