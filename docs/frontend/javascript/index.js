@@ -20,7 +20,56 @@ import '@github/clipboard-copy-element'
 import "./turbo_transitions.js"
 import { BridgetownNinjaKeys } from "@konnorr/bridgetown-quick-search/frontend/javascript/ninja-keys.js"
 
-BridgetownNinjaKeys.define()
+/** @type {import("konnors-ninja-keys").INinjaAction[]} */
+const staticData = [
+  {
+    id: "theme-light",
+    icon: "<sl-icon name='sun'></sl-icon>",
+    title: "Light Mode",
+    section: "Theme",
+    handler () {
+      window.applyTheme("light");
+    }
+  },
+  {
+    id: "theme-dark",
+    icon: "<sl-icon name='moon'></sl-icon>",
+    title: "Dark Mode",
+    section: "Theme",
+    handler () {
+      window.applyTheme("dark");
+    }
+  },
+  {
+    id: "theme-system",
+    icon: "<sl-icon name='display'></sl-icon>",
+    title: "System",
+    section: "Theme",
+    handler () {
+      window.applyTheme("system");
+    }
+  },
+]
+
+;(class extends BridgetownNinjaKeys {
+  constructor (...args) {
+    super(...args)
+    this.staticData = staticData
+  }
+
+  createData() {
+    this.results = this.showResultsForQuery(this._search)
+
+    this.results.forEach((result) => {
+      result.icon = `<sl-icon name="link-45deg"></sl-icon>`
+    })
+
+    return [
+      ...this.staticData,
+      ...this.results,
+    ]
+  }
+}).define("bridgetown-ninja-keys")
 
 // Uncomment the line below to add transition animations when Turbo navigates.
 // We recommend adding <meta name="turbo-cache-control" content="no-preview" />
