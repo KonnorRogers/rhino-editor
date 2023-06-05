@@ -23,6 +23,7 @@ body {
 
   --input-bg-color: var(--sl-color-neutral-0);
   --input-transition: 100ms box-shadow ease-in-out;
+
 }
 
 body {
@@ -598,6 +599,11 @@ sl-alert::part(base) {
   animation: fadeInAnimation ease 500ms;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
+}
+
+bridgetown-ninja-keys.dark {
+  --ninja-modal-background: rgba(35, 35, 35, 1);
+  --ninja-text-color: gray;
 }
 
 @keyframes fadeInAnimation {

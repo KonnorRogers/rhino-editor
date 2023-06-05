@@ -60,6 +60,7 @@
       const darkMode = themeIsDark()
       document.documentElement.classList.toggle("sl-theme-light", !darkMode)
       document.documentElement.classList.toggle("sl-theme-dark", darkMode)
+      document.querySelector("bridgetown-ninja-keys").classList.toggle("dark", darkMode)
       requestAnimationFrame(() => noTransitions.remove());
     });
   }
