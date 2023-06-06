@@ -156,7 +156,7 @@ export class TipTapEditor extends BaseElement {
       translations: { state: true },
       class: { reflect: true },
       accept: { reflect: true },
-      __invalidLink__: { state: true, type: Boolean }
+      __invalidLink__: { state: true, type: Boolean },
     };
   }
 
@@ -354,7 +354,7 @@ export class TipTapEditor extends BaseElement {
       inputElement.value = "";
     }
 
-    this.__invalidLink__ = false
+    this.__invalidLink__ = false;
     this.linkDialogExpanded = true;
     this.linkDialog.removeAttribute("hidden");
     setTimeout(() => {
@@ -466,8 +466,8 @@ export class TipTapEditor extends BaseElement {
     ) as Maybe<HTMLInputElement>;
   }
 
-  private get __tooltipExportParts () {
-    return "base:tooltip-base, arrow:tooltip-arrow"
+  private get __tooltipExportParts() {
+    return "base:tooltip-base, arrow:tooltip-arrow";
   }
 
   attachFiles(): void {
@@ -488,10 +488,10 @@ export class TipTapEditor extends BaseElement {
     try {
       new URL(href);
       inputElement.setCustomValidity("");
-      this.__invalidLink__ = false
+      this.__invalidLink__ = false;
     } catch (error) {
       inputElement.setCustomValidity("Not a valid URL");
-      this.__invalidLink__ = true
+      this.__invalidLink__ = true;
       return;
     }
 
@@ -1204,8 +1204,12 @@ export class TipTapEditor extends BaseElement {
       <div class="link-dialog__container" part="link-dialog__container">
         <input
           id="link-dialog__input"
-          class=${`link-dialog__input ${this.__invalidLink__ ? "link-validate" : ""}`}
-          part=${`link-dialog__input ${this.__invalidLink__ ? "link-dialog__input--invalid" : ""}`}
+          class=${`link-dialog__input ${
+            this.__invalidLink__ ? "link-validate" : ""
+          }`}
+          part=${`link-dialog__input ${
+            this.__invalidLink__ ? "link-dialog__input--invalid" : ""
+          }`}
           type="text"
           placeholder="Enter a URL..."
           aria-label="Enter a URL"
@@ -1217,14 +1221,14 @@ export class TipTapEditor extends BaseElement {
             if (inputElement == null) return;
 
             inputElement.setCustomValidity("");
-            this.__invalidLink__ = false
+            this.__invalidLink__ = false;
           }}
           @blur=${() => {
             const inputElement = this.linkInputRef.value;
 
             if (inputElement == null) return;
 
-            this.__invalidLink__ = false
+            this.__invalidLink__ = false;
             // inputElement.value = ""
           }}
           @keydown=${(e: KeyboardEvent) => {
