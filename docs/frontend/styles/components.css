@@ -429,7 +429,7 @@ sl-alert::part(base) {
 
 .syntax-block__badge {
   font-size: var(--sl-button-font-size-large);
-  color: var(--sl-color-neutral-600);
+  color: var(--sl-color-neutral-700);
 }
 
 /** Button */
@@ -606,24 +606,6 @@ bridgetown-ninja-keys.dark {
   --ninja-text-color: gray;
 }
 
-.sl-theme-dark .rhino-editor,
-.sl-theme-dark .trix-content {
-  --rhino-button-color: var(--sl-color-neutral-700);
-  --rhino-button-disabled-text-color: var(--sl-color-neutral-300);
-  --rhino-toolbar-text-color: var(--sl-color-neutral-700);
-  --rhino-button-active-border-color: var(--sl-color-primary-700);
-  color: white;
-}
-
-
-.rhino-editor::part(toolbar__button):is(:focus, :hover) {
-  color: black;
-}
-
-.rhino-editor::part(toolbar__button toolbar__button--disabled):is(:focus, :hover) {
-  color: var(--sl-color-neutral-300);
-}
-
 :where(sl-visually-hidden:not(:defined)) {
   display: none;
 }
@@ -644,4 +626,67 @@ bridgetown-ninja-keys.dark {
   100% {
       opacity: 0;
     }
+}
+
+.sl-theme-dark .rhino-editor,
+.sl-theme-dark .trix-content {
+  --rhino-button-color: var(--sl-color-neutral-700);
+  --rhino-button-disabled-text-color: var(--sl-color-neutral-300);
+  --rhino-toolbar-text-color: var(--sl-color-neutral-700);
+  --rhino-button-active-border-color: var(--sl-color-primary-700);
+  --rhino-button-active-background-color: var(--sl-color-primary-200);
+  color: white;
+}
+
+
+.rhino-editor::part(toolbar__button):is(:focus, :hover) {
+  color: black;
+}
+
+.rhino-editor::part(toolbar__button toolbar__button--active):is(:focus, :hover) {
+  color: white;
+}
+
+
+.rhino-editor::part(toolbar__button--active) {
+  color: var(--sl-color-primary-800);
+}
+
+.rhino-editor::part(toolbar__button toolbar__button--disabled):is(:focus, :hover) {
+  color: var(--sl-color-neutral-300);
+}
+
+.sl-theme-dark .rhino-editor::part(link-dialog__container) {
+  background-color: black;
+  border: 1px solid white;
+  box-shadow: none;
+}
+
+.sl-theme-dark .rhino-editor::part(link-dialog__input--invalid) {
+  color: var(--sl-color-red-200);
+}
+
+.sl-theme-dark .rhino-editor::part(tooltip-base) {
+  border: 1px solid white;
+}
+
+.sl-theme-dark .rhino-editor::part(tooltip-arrow) {
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+.sl-theme-dark .trix-content .attachment--preview .attachment__caption {
+  color: var(--sl-color-neutral-700);
+}
+
+.sl-theme-dark rhino-attachment-editor::part(delete-button) {
+  color: black;
+}
+
+.sl-theme-dark .trix-content pre {
+  color: black;
+}
+
+.sl-theme-dark .trix-content blockquote {
+  color: var(--sl-color-neutral-700);
 }
