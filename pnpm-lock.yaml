@@ -31,6 +31,7 @@ specifiers:
   esbuild: ^0.14.54
   eslint: ^7.32.0
   glob: ^8.1.0
+  linkifyjs: ^4.1.1
   lit: ^2.7.2
   mocha: ^10.2.0
   prettier: ^2.8.7
@@ -61,6 +62,7 @@ dependencies:
   '@tiptap/extension-text-align': 2.0.3_@tiptap+core@2.0.3
   '@tiptap/pm': 2.0.3_@tiptap+core@2.0.3
   '@tiptap/starter-kit': 2.0.3_@tiptap+pm@2.0.3
+  linkifyjs: 4.1.1
   lit: 2.7.3
   prosemirror-commands: 1.5.1
   prosemirror-dropcursor: 1.5.0

@@ -4,13 +4,14 @@ specifiers:
   '@github/clipboard-copy-element': ^1.1.2
   '@hotwired/stimulus': ^3.1.1
   '@hotwired/turbo': ^7.2.4
-  '@konnorr/bridgetown-quick-search': ^3.0.3
-  '@shoelace-style/shoelace': 2.0.0-beta.83
+  '@konnorr/bridgetown-quick-search': ^3.2.2
+  '@shoelace-style/shoelace': ^2.0.0
   '@tiptap/core': 2.0.0-beta.209
   '@tiptap/extension-character-count': 2.0.0-beta.209
   bridgetown-quick-search: 1.1.3
   esbuild: ^0.14.39
   glob: ^8.0.1
+  linkifyjs: ^4.1.1
   postcss: ^8.4.12
   postcss-flexbugs-fixes: ^5.0.2
   postcss-import: ^14.1.0
@@ -30,11 +31,12 @@ dependencies:
   '@github/clipboard-copy-element': 1.1.2
   '@hotwired/stimulus': 3.1.1
   '@hotwired/turbo': 7.2.4
-  '@konnorr/bridgetown-quick-search': 3.0.3
-  '@shoelace-style/shoelace': 2.0.0-beta.83
+  '@konnorr/bridgetown-quick-search': 3.2.2
+  '@shoelace-style/shoelace': 2.4.0
   '@tiptap/core': 2.0.0-beta.209_rd5pjtxohzfgv2zee3iufpqkay
   '@tiptap/extension-character-count': 2.0.0-beta.209_kdf7tbeyuz6zzmi7724b5ghupu
   bridgetown-quick-search: 1.1.3
+  linkifyjs: 4.1.1
   prosemirror-commands: 1.5.0
   prosemirror-keymap: 1.2.0
   prosemirror-model: 1.18.3
@@ -56,8 +58,8 @@ devDependencies:
 
 packages:
 
-  /@babel/runtime/7.20.1:
-    resolution: {integrity: sha512-mrzLkl6U9YLF8qpqI7TB82PESyEGjm/0Ly91jG575eVxMMlb8fYfOXFZIJ8XfLrJZQbm7dlKry2bJmXBUEkdFg==}
+  /@babel/runtime/7.22.3:
+    resolution: {integrity: sha512-XsDuspWKLUsxwCp6r7EhsExHtYfbe5oAGQ19kqngTdCPUoPQzOPdUbD/pB9PJiwb2ptYKQDjSJT3R6dC+EPqfQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.11
@@ -218,6 +220,11 @@ packages:
       postcss-selector-parser: 6.0.11
     dev: true
 
+  /@ctrl/tinycolor/3.6.0:
+    resolution: {integrity: sha512-/Z3l6pXthq0JvMYdUFyX9j0MaCltlIn6mfh9jLyQwg5aPKxkyNa0PTHtU1AlFXLNk55ZuAeJRcpvq+tmLfKmaQ==}
+    engines: {node: '>=10'}
+    dev: false
+
   /@esbuild/linux-loong64/0.14.54:
     resolution: {integrity: sha512-bZBrLAIX1kpWelV0XemxBZllyRmM6vgFQQG2GdNb+r3Fkp0FOh1NJSvekXDs7jq70k4euu1cryLMfU+mTXlEpw==}
     engines: {node: '>=12'}
@@ -227,14 +234,14 @@ packages:
     dev: true
     optional: true
 
-  /@floating-ui/core/1.0.2:
-    resolution: {integrity: sha512-Skfy0YS3NJ5nV9us0uuPN0HDk1Q4edljaOhRBJGDWs9EBa7ZVMYBHRFlhLvvmwEoaIM9BlH6QJFn9/uZg0bACg==}
+  /@floating-ui/core/1.2.6:
+    resolution: {integrity: sha512-EvYTiXet5XqweYGClEmpu3BoxmsQ4hkj3QaYA6qEnigCWffTP3vNRwBReTdrwDwo7OoJ3wM8Uoe9Uk4n+d4hfg==}
     dev: false
 
-  /@floating-ui/dom/1.0.7:
-    resolution: {integrity: sha512-6RsqvCYe0AYWtsGvuWqCm7mZytnXAZCjWtsWu1Kg8dI3INvj/DbKlDsZO+mKSaQdPT12uxIW9W2dAWJkPx4Y5g==}
+  /@floating-ui/dom/1.2.8:
+    resolution: {integrity: sha512-XLwhYV90MxiHDq6S0rzFZj00fnDM+A1R9jhSioZoMsa7G0Q0i+Q4x40ajR8FHSdYDE1bgjG45mIWe6jtv9UPmg==}
     dependencies:
-      '@floating-ui/core': 1.0.2
+      '@floating-ui/core': 1.2.6
     dev: false
 
   /@github/clipboard-copy-element/1.1.2:
@@ -250,39 +257,65 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
-  /@konnorr/bridgetown-quick-search/3.0.3:
-    resolution: {integrity: sha512-VWCc9iIuaI5cyEGnF39bPBqkCayl9b5xpx+OvkS30IeqMcUmuj9kLSs0/aDoSJoqlphdBnLKASnQ8W2O27jCHw==}
+  /@konnorr/bridgetown-quick-search/3.2.2:
+    resolution: {integrity: sha512-5o0U2sqk2HKgPMfgE2uwsVeoTYpr26yCOdATSwEsggwBXhi/s7AAfddJHCqqr11NreFm9VfcX6LggPhKjcTmrw==}
     dependencies:
-      lit: 2.4.1
+      konnors-ninja-keys: 1.8.1
+      lit: 2.7.4
       lunr: 2.3.9
     dev: false
 
-  /@lit-labs/react/1.1.0:
-    resolution: {integrity: sha512-uvdOtzACm1WzTySpKnqXth62iPL+4yDow7cSZH7m7jHbDr+tZVXn44DJ5IoJuMjEevORRe57lNrOywFW6d4Fyg==}
+  /@lit-labs/react/1.1.1:
+    resolution: {integrity: sha512-9TC+/ZWb6BJlWCyUr14FKFlaGnyKpeEDorufXozQgke/VoVrslUQNaL7nBmrAWdNrmzx5jWgi8lFmWwrxMjnlA==}
     dev: false
 
-  /@lit/reactive-element/1.4.2:
-    resolution: {integrity: sha512-VMOxsWh/QDwrxPsgkSQnuZ+8mfNy1OTjzzUdLBvvZtpahwPTHTeVZ51RZRqO4xfKVrR+btIPA8D01IL3xeG66w==}
+  /@lit-labs/ssr-dom-shim/1.1.1:
+    resolution: {integrity: sha512-kXOeFbfCm4fFf2A3WwVEeQj55tMZa8c8/f9AKHMobQMkzNUfUj+antR3fRPaZJawsa1aZiP/Da3ndpZrwEe4rQ==}
+    dev: false
+
+  /@lit/reactive-element/1.6.1:
+    resolution: {integrity: sha512-va15kYZr7KZNNPZdxONGQzpUr+4sxVu7V/VG7a8mRfPPXUyhEYj5RzXCQmGrlP3tAh0L3HHm5AjBMFYRqlM9SA==}
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.1.1
+    dev: false
+
+  /@material/mwc-icon/0.25.3:
+    resolution: {integrity: sha512-36076AWZIRSr8qYOLjuDDkxej/HA0XAosrj7TS1ZeLlUBnLUtbDtvc1S7KSa0hqez7ouzOqGaWK24yoNnTa2OA==}
+    dependencies:
+      lit: 2.7.4
+      tslib: 2.5.3
+    dev: false
+
+  /@open-wc/dedupe-mixin/1.3.1:
+    resolution: {integrity: sha512-ukowSvzpZQDUH0Y3znJTsY88HkiGk3Khc0WGpIPhap1xlerieYi27QBg6wx/nTurpWfU6XXXsx9ocxDYCdtw0Q==}
+    dev: false
+
+  /@open-wc/scoped-elements/2.1.5:
+    resolution: {integrity: sha512-39v61EDXiFp+pBXdYmRCNIAimJU6MxaNwplW+5IqGU+z33hsSp5CVp2mH5lJVbwXGB7hIb5wDiJa+L5pOVypqw==}
+    dependencies:
+      '@lit/reactive-element': 1.6.1
+      '@open-wc/dedupe-mixin': 1.3.1
     dev: false
 
   /@shoelace-style/animations/1.1.0:
     resolution: {integrity: sha512-Be+cahtZyI2dPKRm8EZSx3YJQ+jLvEcn3xzRP7tM4tqBnvd/eW/64Xh0iOf0t2w5P8iJKfdBbpVNE9naCaOf2g==}
     dev: false
 
-  /@shoelace-style/localize/3.0.3:
-    resolution: {integrity: sha512-BVYDsMTpSCjvC8akhTkcnl4WIgAv7AnRq8fSuNhdGDLjkpmN1ARdAXic5luAozoMVjft85ocOmEdT8z7MbXdmQ==}
+  /@shoelace-style/localize/3.1.0:
+    resolution: {integrity: sha512-evGxn5wIQh1/Ks1RbZm7rY4DxPKAUnXKTixZNgnYV/N2V8Bbbvsi+S14gNa42SQNUJK5WooNtlar2B8cehEwZQ==}
     dev: false
 
-  /@shoelace-style/shoelace/2.0.0-beta.83:
-    resolution: {integrity: sha512-dHVBtapuqxSRu3klBZhf9/LtEtircaLLnDajNbhuiBiY7PVCxjjf/9Kyd/S/BpbhKwMICqJr+PaKoCTd2iWDJA==}
+  /@shoelace-style/shoelace/2.4.0:
+    resolution: {integrity: sha512-R5YEKs3XpttlOuKyBNDfYMcFqY1ZPfL//7aSKYrMNz7rHQWb23QKlAvYtwhMxRNAF3dNr4aGmyPsvPPXOHZYqQ==}
     engines: {node: '>=14.17.0'}
     dependencies:
-      '@floating-ui/dom': 1.0.7
-      '@lit-labs/react': 1.1.0
+      '@ctrl/tinycolor': 3.6.0
+      '@floating-ui/dom': 1.2.8
+      '@lit-labs/react': 1.1.1
       '@shoelace-style/animations': 1.1.0
-      '@shoelace-style/localize': 3.0.3
-      color: 4.2.3
-      lit: 2.4.1
+      '@shoelace-style/localize': 3.1.0
+      composed-offset-position: 0.0.4
+      lit: 2.7.4
       qr-creator: 1.0.0
     dev: false
 
@@ -351,8 +384,8 @@ packages:
   /bridgetown-quick-search/1.1.3:
     resolution: {integrity: sha512-KsRvW3LpLr90YRm/c5z05/dQABSav4haQ2hzHPxc9eixQ6FQVCFVFvHnWhh/WdpBzpgTUG6HiLJHP7oPA7JAfg==}
     dependencies:
-      '@babel/runtime': 7.20.1
-      lit: 2.4.1
+      '@babel/runtime': 7.22.3
+      lit: 2.7.4
       lunr: 2.3.9
     dev: false
 
@@ -371,30 +404,8 @@ packages:
     resolution: {integrity: sha512-aOBHrLmTQw//WFa2rcF1If9fa3ypkC1wzqqiKHgfdrXTWcU8C4gKVZT77eQAPWN1APys3+uQ0Df07rKauXGEYA==}
     dev: true
 
-  /color-convert/2.0.1:
-    resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
-    engines: {node: '>=7.0.0'}
-    dependencies:
-      color-name: 1.1.4
-    dev: false
-
-  /color-name/1.1.4:
-    resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
-    dev: false
-
-  /color-string/1.9.1:
-    resolution: {integrity: sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==}
-    dependencies:
-      color-name: 1.1.4
-      simple-swizzle: 0.2.2
-    dev: false
-
-  /color/4.2.3:
-    resolution: {integrity: sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==}
-    engines: {node: '>=12.5.0'}
-    dependencies:
-      color-convert: 2.0.1
-      color-string: 1.9.1
+  /composed-offset-position/0.0.4:
+    resolution: {integrity: sha512-vMlvu1RuNegVE0YsCDSV/X4X10j56mq7PCIyOKK74FxkXzGLwhOUmdkJLSdOBOMwWycobGUMgft2lp+YgTe8hw==}
     dev: false
 
   /css-blank-pseudo/3.0.3_postcss@8.4.19:
@@ -687,6 +698,10 @@ packages:
       function-bind: 1.1.1
     dev: true
 
+  /hotkeys-js/3.10.2:
+    resolution: {integrity: sha512-Z6vLmJTYzkbZZXlBkhrYB962Q/rZGc/WHQiyEGu9ZZVF7bAeFDjjDa31grWREuw9Ygb4zmlov2bTkPYqj0aFnQ==}
+    dev: false
+
   /inflight/1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
     dependencies:
@@ -698,40 +713,51 @@ packages:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
     dev: true
 
-  /is-arrayish/0.3.2:
-    resolution: {integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==}
-    dev: false
-
   /is-core-module/2.11.0:
     resolution: {integrity: sha512-RRjxlvLDkD1YJwDbroBHMb+cukurkDWNyHx7D3oNB5x9rb5ogcksMC5wHCadcXoo67gVr/+3GFySh3134zi6rw==}
     dependencies:
       has: 1.0.3
     dev: true
 
+  /konnors-ninja-keys/1.8.1:
+    resolution: {integrity: sha512-6JHd2cV2guq3lTjKefZu0EaKPoG0VHCyP3QQTFJPLrqWja/D19UTzjvxtiXDqRk6uITlVlYU0GddkZ8m+EwtBw==}
+    dependencies:
+      '@material/mwc-icon': 0.25.3
+      '@open-wc/scoped-elements': 2.1.5
+      hotkeys-js: 3.10.2
+      lit: 2.7.4
+      web-component-define: 2.0.10
+    dev: false
+
   /lilconfig/2.0.6:
     resolution: {integrity: sha512-9JROoBW7pobfsx+Sq2JsASvCo6Pfo6WWoUW79HuB1BCoBXD4PLWJPqDF6fNj67pqBYTbAHkE57M1kS/+L1neOg==}
     engines: {node: '>=10'}
     dev: true
 
-  /lit-element/3.2.2:
-    resolution: {integrity: sha512-6ZgxBR9KNroqKb6+htkyBwD90XGRiqKDHVrW/Eh0EZ+l+iC+u+v+w3/BA5NGi4nizAVHGYvQBHUDuSmLjPp7NQ==}
-    dependencies:
-      '@lit/reactive-element': 1.4.2
-      lit-html: 2.4.0
+  /linkifyjs/4.1.1:
+    resolution: {integrity: sha512-zFN/CTVmbcVef+WaDXT63dNzzkfRBKT1j464NJQkV7iSgJU0sLBus9W0HBwnXK13/hf168pbrx/V/bjEHOXNHA==}
     dev: false
 
-  /lit-html/2.4.0:
-    resolution: {integrity: sha512-G6qXu4JNUpY6aaF2VMfaszhO9hlWw0hOTRFDmuMheg/nDYGB+2RztUSOyrzALAbr8Nh0Y7qjhYkReh3rPnplVg==}
+  /lit-element/3.3.2:
+    resolution: {integrity: sha512-xXAeVWKGr4/njq0rGC9dethMnYCq5hpKYrgQZYTzawt9YQhMiXfD+T1RgrdY3NamOxwq2aXlb0vOI6e29CKgVQ==}
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.1.1
+      '@lit/reactive-element': 1.6.1
+      lit-html: 2.7.4
+    dev: false
+
+  /lit-html/2.7.4:
+    resolution: {integrity: sha512-/Jw+FBpeEN+z8X6PJva5n7+0MzCVAH2yypN99qHYYkq8bI+j7I39GH+68Z/MZD6rGKDK9RpzBw7CocfmHfq6+g==}
     dependencies:
       '@types/trusted-types': 2.0.2
     dev: false
 
-  /lit/2.4.1:
-    resolution: {integrity: sha512-qohSgLiyN1cFnJG26dIiY03S4F49857A0AHQfnS0zYtnUVnD2MFvx+UT52rtXsIuNFQrnUupX+zyGSATlk1f/A==}
+  /lit/2.7.4:
+    resolution: {integrity: sha512-cgD7xrZoYr21mbrkZIuIrj98YTMw/snJPg52deWVV4A8icLyNHI3bF70xsJeAgwTuiq5Kkd+ZR8gybSJDCPB7g==}
     dependencies:
-      '@lit/reactive-element': 1.4.2
-      lit-element: 3.2.2
-      lit-html: 2.4.0
+      '@lit/reactive-element': 1.6.1
+      lit-element: 3.3.2
+      lit-html: 2.7.4
     dev: false
 
   /lunr/2.3.9:
@@ -1238,12 +1264,6 @@ packages:
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
 
-  /simple-swizzle/0.2.2:
-    resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
-    dependencies:
-      is-arrayish: 0.3.2
-    dev: false
-
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
@@ -1253,6 +1273,10 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
     dev: true
+
+  /tslib/2.5.3:
+    resolution: {integrity: sha512-mSxlJJwl3BMEQCUNnxXBU9jP4JBktcEGhURcPR6VQVlnP0FdDEsIaz0C35dXNGLyRfrATNofF0F5p2KPxQgB+w==}
+    dev: false
 
   /update-browserslist-db/1.0.10_browserslist@4.21.4:
     resolution: {integrity: sha512-OztqDenkfFkbSG+tRxBeAnCVPckDBcvibKd35yDONx6OU8N7sqgwc7rCbkJ/WcYtVRZ4ba68d6byhC21GFh7sQ==}
@@ -1271,6 +1295,13 @@ packages:
 
   /w3c-keyname/2.2.6:
     resolution: {integrity: sha512-f+fciywl1SJEniZHD6H+kUO8gOnwIr7f4ijKA6+ZvJFjeGi1r4PDLl53Ayud9O/rk64RqgoQine0feoeOU0kXg==}
+    dev: false
+
+  /web-component-define/2.0.10:
+    resolution: {integrity: sha512-gwkjTFdG8eE8fxI4+RZUCQRy06SSSkCyLpQ1YSCsA+z8ZLlnmqLX/3B3WD2ZraVRtyje3hLXS8bxL8CK1/bZYQ==}
+    dependencies:
+      '@lit/reactive-element': 1.6.1
+      '@open-wc/dedupe-mixin': 1.3.1
     dev: false
 
   /wrappy/1.0.2:

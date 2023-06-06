@@ -126,6 +126,7 @@ export class TipTapEditor extends BaseElement {
   translations = translations;
   serializer: Serializer = "";
   __useTouch__: boolean = false;
+  __invalidLink__: boolean = false;
 
   /** Comma separated string passed to the attach-files input. */
   accept: string = "*";
@@ -155,6 +156,7 @@ export class TipTapEditor extends BaseElement {
       translations: { state: true },
       class: { reflect: true },
       accept: { reflect: true },
+      __invalidLink__: { state: true, type: Boolean },
     };
   }
 
@@ -349,10 +351,10 @@ export class TipTapEditor extends BaseElement {
     const inputElement = this.linkInputRef.value;
 
     if (inputElement != null) {
-      inputElement.classList.remove("link-validate");
       inputElement.value = "";
     }
 
+    this.__invalidLink__ = false;
     this.linkDialogExpanded = true;
     this.linkDialog.removeAttribute("hidden");
     setTimeout(() => {
@@ -464,6 +466,10 @@ export class TipTapEditor extends BaseElement {
     ) as Maybe<HTMLInputElement>;
   }
 
+  private get __tooltipExportParts() {
+    return "base:tooltip-base, arrow:tooltip-arrow";
+  }
+
   attachFiles(): void {
     const input = this.fileInputEl;
 
@@ -482,9 +488,10 @@ export class TipTapEditor extends BaseElement {
     try {
       new URL(href);
       inputElement.setCustomValidity("");
+      this.__invalidLink__ = false;
     } catch (error) {
       inputElement.setCustomValidity("Not a valid URL");
-      inputElement.classList.add("link-validate");
+      this.__invalidLink__ = true;
       return;
     }
 
@@ -532,6 +539,7 @@ export class TipTapEditor extends BaseElement {
             id="bold"
             hoist
             part="toolbar-tooltip toolbar-tooltip__bold"
+            exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.bold}
           </role-tooltip>
@@ -572,6 +580,7 @@ export class TipTapEditor extends BaseElement {
             id="italics"
             hoist
             part="toolbar-tooltip toolbar-tooltip__italics"
+            exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.italics}
           </role-tooltip>
@@ -613,8 +622,10 @@ export class TipTapEditor extends BaseElement {
             id="strike"
             hoist
             part="toolbar-tooltip toolbar-tooltip__strike"
-            >${this.translations.strike}</role-tooltip
+            exportparts=${this.__tooltipExportParts}
           >
+            ${this.translations.strike}
+          </role-tooltip>
         </slot>
         <slot name="strike-icon">${this.icons.strike}</slot>
       </button>
@@ -652,8 +663,10 @@ export class TipTapEditor extends BaseElement {
             id="link"
             hoist
             part="toolbar-tooltip toolbar-tooltip__link"
-            >${this.translations.link}</role-tooltip
+            exportparts=${this.__tooltipExportParts}
           >
+            ${this.translations.link}
+          </role-tooltip>
         </slot>
         <slot name="link-icon">${this.icons.link}</slot>
       </button>
@@ -692,8 +705,10 @@ export class TipTapEditor extends BaseElement {
             id="heading"
             hoist
             part="toolbar-tooltip toolbar-tooltip__heading"
-            >${this.translations.heading}</role-tooltip
+            exportparts=${this.__tooltipExportParts}
           >
+            ${this.translations.heading}
+          </role-tooltip>
         </slot>
         <slot name="heading-icon">${this.icons.heading}</slot>
       </button>
@@ -733,8 +748,10 @@ export class TipTapEditor extends BaseElement {
             id="blockquote"
             hoist
             part="toolbar-tooltip toolbar-tooltip__blockquote"
-            >${this.translations.blockQuote}</role-tooltip
+            exportparts=${this.__tooltipExportParts}
           >
+            ${this.translations.blockQuote}
+          </role-tooltip>
         </slot>
         <slot name="blockquote-icon">${this.icons.blockQuote}</slot>
       </button>
@@ -773,8 +790,10 @@ export class TipTapEditor extends BaseElement {
             id="code-block"
             hoist
             part="toolbar-tooltip toolbar-tooltip__code-block"
-            >${this.translations.codeBlock}</role-tooltip
+            exportparts=${this.__tooltipExportParts}
           >
+            ${this.translations.codeBlock}
+          </role-tooltip>
         </slot>
         <slot name="code-block-icon">${this.icons.codeBlock}</slot>
       </button>
@@ -813,8 +832,10 @@ export class TipTapEditor extends BaseElement {
             id="bullet-list"
             hoist
             part="toolbar-tooltip toolbar-tooltip__bullet-list"
-            >${this.translations.bulletList}</role-tooltip
+            exportparts=${this.__tooltipExportParts}
           >
+            ${this.translations.bulletList}
+          </role-tooltip>
         </slot>
         <slot name="bullet-list-icon">${this.icons.bulletList}</slot>
       </button>
@@ -854,8 +875,10 @@ export class TipTapEditor extends BaseElement {
             id="ordered-list"
             hoist
             part="toolbar-tooltip toolbar-tooltip__ordered-list"
-            >${this.translations.orderedList}</role-tooltip
+            exportparts=${this.__tooltipExportParts}
           >
+            ${this.translations.orderedList}
+          </role-tooltip>
         </slot>
         <slot name="ordered-list-icon">${this.icons.orderedList}</slot>
       </button>
@@ -883,6 +906,7 @@ export class TipTapEditor extends BaseElement {
             id="attach-files"
             hoist
             part="toolbar-tooltip toolbar-tooltip__attach-files"
+            exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.attachFiles}
           </role-tooltip>
@@ -931,8 +955,10 @@ export class TipTapEditor extends BaseElement {
             id="undo"
             hoist
             part="toolbar-tooltip toolbar-tooltip__undo"
-            >${this.translations.undo}</role-tooltip
+            exportparts=${this.__tooltipExportParts}
           >
+            ${this.translations.undo}
+          </role-tooltip>
         </slot>
         <slot name="undo-icon">${this.icons.undo}</slot>
       </button>
@@ -967,8 +993,9 @@ export class TipTapEditor extends BaseElement {
             id="decrease-indentation"
             hoist
             part="toolbar-tooltip toolbar-tooltip__decrease-indentation"
-            >${this.translations.decreaseIndentation}</role-tooltip
           >
+            ${this.translations.decreaseIndentation}
+          </role-tooltip>
         </slot>
         <slot name="decrease-indentation"
           >${this.icons.decreaseIndentation}</slot
@@ -1005,8 +1032,10 @@ export class TipTapEditor extends BaseElement {
             id="increase-indentation"
             hoist
             part="toolbar-tooltip toolbar-tooltip__increase-indentation"
-            >${this.translations.increaseIndentation}</role-tooltip
+            exportparts=${this.__tooltipExportParts}
           >
+            ${this.translations.increaseIndentation}
+          </role-tooltip>
         </slot>
         <slot name="increase-indentation"
           >${this.icons.increaseIndentation}</slot
@@ -1042,6 +1071,7 @@ export class TipTapEditor extends BaseElement {
             id="redo"
             hoist
             part="toolbar-tooltip toolbar-tooltip__redo"
+            exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.redo}
           </role-tooltip>
@@ -1174,8 +1204,12 @@ export class TipTapEditor extends BaseElement {
       <div class="link-dialog__container" part="link-dialog__container">
         <input
           id="link-dialog__input"
-          class="link-dialog__input"
-          part="link-dialog__input"
+          class=${`link-dialog__input ${
+            this.__invalidLink__ ? "link-validate" : ""
+          }`}
+          part=${`link-dialog__input ${
+            this.__invalidLink__ ? "link-dialog__input--invalid" : ""
+          }`}
           type="text"
           placeholder="Enter a URL..."
           aria-label="Enter a URL"
@@ -1187,13 +1221,14 @@ export class TipTapEditor extends BaseElement {
             if (inputElement == null) return;
 
             inputElement.setCustomValidity("");
+            this.__invalidLink__ = false;
           }}
           @blur=${() => {
             const inputElement = this.linkInputRef.value;
 
             if (inputElement == null) return;
 
-            inputElement.classList.remove("link-validate");
+            this.__invalidLink__ = false;
             // inputElement.value = ""
           }}
           @keydown=${(e: KeyboardEvent) => {
