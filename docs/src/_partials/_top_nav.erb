@@ -3,7 +3,7 @@
     <sl-visually-hidden id="top-nav-label">
       Main Navigation
     </sl-visually-hidden>
-    <div style="background: var(--sl-color-neutral-0); width: calc(100vw - env(safe-area-inset-right, 0) - env(safe-area-inset-left, 0)); position: absolute; left: -5vw; top: 0; height: 100%; z-index: -1;"></div>
+    <div style="background: var(--sl-color-neutral-0); width: calc(100vw - env(safe-area-inset-right, 0) - env(safe-area-inset-left, 0)); position: absolute; left: 0; top: 0; height: 100%; z-index: -1;"></div>
 
     <sl-icon-button data-controller="side-nav" data-action="click->side-nav#open" class="top-nav__hamburger__button" name="list" label="Navigation"></sl-icon-button>
 
@@ -42,7 +42,7 @@
       <a target="_blank" rel="noreferrer noopener" aria-label="Link to GitHub" href="<%= site.metadata.github_url %>" class="nav-link top-nav__github">
         <sl-icon name="github"></sl-icon>
       </a>
-      <sl-dropdown style="margin-inline-start: 1rem; min-width: 48px;" data-controller="theme-switcher" aria-label="Change site theme">
+      <sl-dropdown style="margin-inline-start: 1rem;" data-controller="theme-switcher" aria-label="Change site theme">
         <sl-button slot="trigger" caret>
           <sl-icon id="light-theme__icon" name="sun"></sl-icon>
           <sl-icon hidden id="dark-theme__icon" name="moon-stars"></sl-icon>
