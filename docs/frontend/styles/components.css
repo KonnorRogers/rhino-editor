@@ -164,7 +164,6 @@ kbd {
   align-items: center;
   justify-content: flex-end;
   flex: 0 1 auto;
-  margin-inline-end: 16px;
 }
 
 .top-nav__categories {
