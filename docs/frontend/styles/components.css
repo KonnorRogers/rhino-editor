@@ -27,6 +27,9 @@ body {
 }
 
 body {
+  display: grid;
+  grid-template-rows: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
+  grid-template-columns: 100%;
 	background-color: var(--body-color);
 	color: var(--text-color);
 }
@@ -156,7 +159,6 @@ kbd {
   font-size: 2rem;
   width: 2rem;
   height: auto;
-
 }
 
 .top-nav__links {
@@ -530,6 +532,7 @@ sl-alert::part(base) {
 
   .documentation-grid {
 		grid-template-columns: minmax(250px, 1fr) minmax(0, calc(var(--main-width) + var(--main-padding-x))) minmax(0, 1fr);
+		grid-template-rows: minmax(0, 1fr);
   }
 
   /* .hero--mobile, */
@@ -553,15 +556,13 @@ sl-alert::part(base) {
   }
 
   .side-nav--desktop {
-  	position: sticky;
     display: flex;
     padding-right: 2rem;
     overflow-y: auto;
     flex-direction: column;
     align-items: flex-end;
-    height: calc(100vh - var(--nav-header-height) - var(--footer-height) - 2em);
 		margin-bottom: 1em;
-    top: calc(var(--nav-header-height));
+		position: sticky;
   }
 
   .side-nav__drawer {

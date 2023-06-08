@@ -72,6 +72,24 @@ const staticData = [
       ...this.results,
     ]
   }
+
+  open () {
+    super.open()
+    document.body.style.overflow = "hidden"
+    this.nonModals.forEach((el) => {
+      el.setAttribute("inert", "")
+    })
+  }
+
+  close () {
+    super.close()
+    document.body.style.overflow = "unset"
+    this.nonModals.forEach((el) => el.removeAttribute("inert"))
+  }
+
+  get nonModals () {
+    return [...document.body.children].filter((el) => el.localName !== "bridgetown-ninja-keys")
+  }
 }).define("bridgetown-ninja-keys")
 
 // Uncomment the line below to add transition animations when Turbo navigates.

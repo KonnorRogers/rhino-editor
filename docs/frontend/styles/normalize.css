@@ -29,12 +29,8 @@ body {
   -webkit-font-smoothing: antialiased;
   font-family: var(--sl-font-sans);
   min-height: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  grid-template-columns: 100%;
   margin: 0;
-  background-color: var(--body-color);
-  color: var(--text-color);
+  padding: 0;
 }
 
 [hidden] {
