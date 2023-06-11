@@ -3,6 +3,7 @@ body,
 .sl-theme-light,
 .sl-theme-dark {
   --text-color: var(--sl-color-neutral-1000);
+  --light-text-color: var(--sl-color-neutral-700);
   --body-color: var(--sl-color-neutral-0);
   --color-primary: var(--sl-color-primary-600);
   --text-color-primary: var(--sl-color-primary-700);
@@ -83,7 +84,7 @@ h3,h4 {
 }
 
 h1 {
-  font-size: var(--sl-font-size-x-large);
+  font-size: var(--sl-font-size-2x-large);
 }
 
 h2 {

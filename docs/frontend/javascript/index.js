@@ -19,6 +19,7 @@ import "rhino-editor/exports/styles/trix.css"
 import '@github/clipboard-copy-element'
 import "./turbo_transitions.js"
 import { BridgetownNinjaKeys } from "@konnorr/bridgetown-quick-search/frontend/javascript/ninja-keys.js"
+import "./layout.js"
 
 /** @type {import("konnors-ninja-keys").INinjaAction[]} */
 const staticData = [
@@ -123,6 +124,7 @@ Object.entries(controllers).forEach(([filename, controller]) => {
       .replace("_", "-")
       .replace("/", "--")
 
+    console.log(filename)
     Stimulus.register(identifier, controller.default)
   }
 })
