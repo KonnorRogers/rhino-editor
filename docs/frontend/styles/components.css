@@ -88,7 +88,7 @@ kbd {
   z-index: var(--z-header);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem clamp(1.25rem, 4vw, 2rem);
   font-size: 1.05rem;
   justify-items: space-between;
   border-bottom: 1px solid var(--sl-color-neutral-200);
