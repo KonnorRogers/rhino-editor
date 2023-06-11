@@ -5,7 +5,7 @@ class Builders::Inspectors < SiteBuilder
 
       if table_of_contents
         # This isn't great. but works for my case :shrug:
-        document.css("main").css("h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]").each do |heading|
+        document.css("main").css("h2[id],h3[id],h4[id],h5[id],h6[id]").each do |heading|
           text = heading.inner_text
           heading.content = ""
           anchor = %(

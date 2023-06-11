@@ -130,7 +130,6 @@ kbd {
   width: 100%;
 }
 
-.top-nav,
 .top-nav__search,
 .top-nav__go-home,
 .top-nav__categories,
@@ -140,6 +139,7 @@ kbd {
 }
 
 .top-nav {
+  display: flex;
   max-width: var(--top-nav-max-width);
   justify-content: center;
   margin: 0 auto;
@@ -266,6 +266,7 @@ kbd {
 .side-nav__category-menu {
   list-style: none;
   padding: 0;
+  padding-top: 1rem;
 }
 
 .side-nav__drawer__header {
@@ -660,8 +661,8 @@ kr-layout > [slot='aside'] {
 
 .table-of-contents__header {
   margin: 0;
-  margin-top: 0.5rem;
   padding: 0;
+  padding-top: 1rem;
   font-weight: normal;
   color: var(--sl-color-neutral-800);
   font-size: var(--sl-font-size-x-large);
