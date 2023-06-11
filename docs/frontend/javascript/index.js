@@ -1,18 +1,22 @@
 import "../styles/index.css"
 import { Application } from "@hotwired/stimulus"
-import "@konnorr/bridgetown-quick-search";
+
+// Shoelace
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
-import "@shoelace-style/shoelace/dist/components/button/button.js";
 import "@shoelace-style/shoelace/dist/components/alert/alert.js";
+// import "@shoelace-style/shoelace/dist/components/breadcrumb/breadcrumb.js";
+// import "@shoelace-style/shoelace/dist/components/breadcrumb-item/breadcrumb-item.js";
+import "@shoelace-style/shoelace/dist/components/button/button.js";
+import "@shoelace-style/shoelace/dist/components/divider/divider.js";
+import "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
+import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
 import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
-import "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
-import "@shoelace-style/shoelace/dist/components/visually-hidden/visually-hidden.js";
 import "@shoelace-style/shoelace/dist/components/menu/menu.js";
 import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
 import "@shoelace-style/shoelace/dist/components/menu-label/menu-label.js";
-import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
-import "@shoelace-style/shoelace/dist/components/divider/divider.js";
+import "@shoelace-style/shoelace/dist/components/visually-hidden/visually-hidden.js";
+
 import * as Turbo from "@hotwired/turbo"
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"

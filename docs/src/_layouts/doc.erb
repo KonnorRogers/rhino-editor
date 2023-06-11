@@ -3,6 +3,8 @@ layout: default
 ---
 <%= render "side_nav" %>
 
+
+
 <main class="documentation-content">
   <% title_id = resource.data.title.downcase.split(" ").join("-").gsub(/[\?!]/, "") %>
   <h1 id="<%= title_id %>">
