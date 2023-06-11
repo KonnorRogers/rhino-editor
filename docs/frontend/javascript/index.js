@@ -80,7 +80,7 @@ const staticData = [
 
   open () {
     document.body.style.overflow = "hidden"
-    document.body.style.touchAction = "none"
+    document.documentElement.style.overflow = "hidden"
     this.nonModals.forEach((el) => {
       el.setAttribute("inert", "")
     })
@@ -90,7 +90,7 @@ const staticData = [
   close () {
     super.close()
     document.body.style.overflow = "unset"
-    document.body.style.touchAction = "unset"
+    document.documentElement.style.overflow = "unset"
     this.nonModals.forEach((el) => el.removeAttribute("inert"))
   }
 
