@@ -4,4 +4,3 @@ export default class SearchController extends Controller {
     document.querySelector("bridgetown-ninja-keys").open()
   }
 }
-

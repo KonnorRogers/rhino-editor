@@ -3,6 +3,7 @@ body,
 .sl-theme-light,
 .sl-theme-dark {
   --text-color: var(--sl-color-neutral-1000);
+  --light-text-color: var(--sl-color-neutral-700);
   --body-color: var(--sl-color-neutral-0);
   --color-primary: var(--sl-color-primary-600);
   --text-color-primary: var(--sl-color-primary-700);
@@ -29,12 +30,8 @@ body {
   -webkit-font-smoothing: antialiased;
   font-family: var(--sl-font-sans);
   min-height: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  grid-template-columns: 100%;
   margin: 0;
-  background-color: var(--body-color);
-  color: var(--text-color);
+  padding: 0;
 }
 
 [hidden] {
@@ -87,7 +84,7 @@ h3,h4 {
 }
 
 h1 {
-  font-size: var(--sl-font-size-x-large);
+  font-size: var(--sl-font-size-2x-large);
 }
 
 h2 {

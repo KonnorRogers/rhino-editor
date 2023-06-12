@@ -4,13 +4,16 @@
     <%= render "head", metadata: site.metadata, title: resource.data.title %>
   </head>
   <body class='<%= "#{resource.data.layout} #{resource.data.page_class}" %>' data-controller="search">
-    <%= render "top_nav", metadata: site.metadata %>
+    <kr-layout>
+      <%= render "top_nav", metadata: site.metadata %>
+
+      <%= yield %>
+
+      <%= render "footer", metadata: site.metadata %>
+
+    </kr-layout>
+
     <%= render "side_nav_mobile" %>
-
-    <%= yield %>
-
-    <%= render "footer", metadata: site.metadata %>
-
-    <bridgetown-ninja-keys style="z-index: 9999;"></bridgetown-ninja-keys>
+    <bridgetown-ninja-keys style="z-index: 9999; --ninja-top: 24px;"></bridgetown-ninja-keys>
   </body>
 </html>
