@@ -79,8 +79,12 @@ const staticData = [
   }
 
   open () {
-    document.body.style.overflow = "hidden"
-    document.documentElement.style.overflow = "hidden"
+    this.scrollTop = window.scrollY;
+    document.body.classList.add('fixed-body');
+    // Scroll the wrapper, rather than setting an offset
+    // via `top` or `transform`.
+    document.body.scroll(0, this.scrollTop);
+
     this.nonModals.forEach((el) => {
       el.setAttribute("inert", "")
     })
@@ -88,9 +92,9 @@ const staticData = [
   }
 
   close () {
+    document.body.classList.remove('fixed-body');
+    window.scrollTo(0, this.scrollTop);
     super.close()
-    document.body.style.overflow = "unset"
-    document.documentElement.style.overflow = "unset"
     this.nonModals.forEach((el) => el.removeAttribute("inert"))
   }
 
