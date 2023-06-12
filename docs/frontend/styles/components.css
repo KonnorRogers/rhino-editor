@@ -5,7 +5,8 @@ body {
   --z-header: 2;
   --z-search: 3;
 
-  --nav-header-height: 68px;
+  --top-nav-max-width: 1650px;
+  --body-max-width: 1800px;
   --footer-height: 135px;
   --side-nav-width: 300px;
   --main-width: clamp(75ch, 70vw, 100ch);
@@ -26,9 +27,41 @@ body {
 
 }
 
+/* Janky hack for iOS mobile */
+.fixed-body {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  /* Allow the main content to be scrolled,
+  so we can adjust the scroll position with JS. */
+  overflow: auto;
+}
+
 body {
 	background-color: var(--body-color);
 	color: var(--text-color);
+}
+
+body:is(.home) kr-layout {
+  --menu-width: 0px;
+  --main-width: 1fr;
+  --aside-width: 0px;
+}
+
+kr-layout {
+  --menu-width: auto;
+  --main-width: 105ch;
+  --aside-width: auto;
+}
+
+kr-layout::part(body) {
+  max-width: var(--body-max-width);
+  justify-content: center;
+  margin: 0 auto;
+}
+
+kr-layout::part(main) {
+  background-color: var(--body-color);
 }
 
 main {
@@ -62,12 +95,12 @@ kbd {
 .nav-header {
   position: sticky;
   top: 0;
-  height: var(--nav-header-height);
   z-index: var(--z-header);
-  display: flex;
-  padding: 0 1.5em;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 0.5rem clamp(1.25rem, 4vw, 2rem);
   font-size: 1.05rem;
-  justify-content: space-between;
+  justify-items: space-between;
   border-bottom: 1px solid var(--sl-color-neutral-200);
 	background-color: var(--body-color);
 }
@@ -107,7 +140,6 @@ kbd {
   width: 100%;
 }
 
-.top-nav,
 .top-nav__search,
 .top-nav__go-home,
 .top-nav__categories,
@@ -117,6 +149,10 @@ kbd {
 }
 
 .top-nav {
+  display: flex;
+  max-width: var(--top-nav-max-width);
+  justify-content: center;
+  margin: 0 auto;
   background-color: var(--body-color);
 }
 
@@ -156,7 +192,6 @@ kbd {
   font-size: 2rem;
   width: 2rem;
   height: auto;
-
 }
 
 .top-nav__links {
@@ -192,24 +227,40 @@ kbd {
 }
 
 .side-nav__menu {
-  padding-left: 0;
+  margin: 0;
+  padding-inline-start: 0;
 }
 
 .side-nav__item {
-  margin: var(--sl-spacing-small);
-  max-width: 225px;
+  padding: 8px;
+  max-width: 100%;
   line-height: 1.3;
 }
 
 .side-nav__link {
-  color: var(--sl-color-neutral-700);
+  color: var(--sl-color-neutral-500);
+  text-decoration: none;
   text-decoration-color: currentColor;
 }
 
+.sl-theme-dark .side-nav__link {
+  color: var(--sl-color-neutral-700);
+}
+
+.side-nav__link:is(:hover, :focus) {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
 .side-nav__category-header {
-  margin: var(--sl-spacing-medium) 0 var(--sl-spacing-x-small) 0;
+  display: inline-block;
+  margin: var(--sl-spacing-medium) 0 var(--sl-spacing-small) 0;
   color: var(--link-color);
   font-size: var(--sl-font-size-x-large);
+}
+
+.side-nav__category-header:first-of-type {
+  margin-top: 0;
 }
 
 .side-nav__category-header,
@@ -224,6 +275,8 @@ kbd {
 
 .side-nav__category-menu {
   list-style: none;
+  padding: 0;
+  padding-top: 1rem;
 }
 
 .side-nav__drawer__header {
@@ -331,9 +384,7 @@ kbd {
   height: 100%;
 }
 
-.documentation-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+:is(.index, .doc) kr-layout {
   background-color: var(--sl-color-neutral-50);
 }
 
@@ -369,8 +420,7 @@ sl-button:is(.next-page, .previous-page):is(:hover, :focus) {
 }
 
 .pagination-footer {
-  margin-top: auto;
-  padding-top: 4rem;
+  padding: 2rem 1rem 2rem 1rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   justify-content: space-between;
@@ -516,21 +566,31 @@ sl-alert::part(base) {
   transform: scale(0);
 }
 
+kr-layout > [slot='aside'] {
+  display: none;
+}
+
+@media screen and (min-width: 1360px) {
+  kr-layout > [slot='aside'] {
+    display: block;
+  }
+}
+
 @media screen and (min-width: 1024px) {
   body {
     --main-padding-x: 2rem;
   }
 
-	.documentation-content {
-		margin: 2rem 0;
+
+  body:is(.index, .doc) kr-layout::part(body) {
+    padding-top: 2rem;
+  }
+
+	body:is(.index, .doc) kr-layout::part(main) {
 		box-shadow: 0 0 5px 0 rgb(0 0 0 / 10%);
 		background: var(--body-color);
 		border-radius: 4px;
 	}
-
-  .documentation-grid {
-		grid-template-columns: minmax(250px, 1fr) minmax(0, calc(var(--main-width) + var(--main-padding-x))) minmax(0, 1fr);
-  }
 
   /* .hero--mobile, */
   .top-nav__hamburger__button,
@@ -553,15 +613,14 @@ sl-alert::part(base) {
   }
 
   .side-nav--desktop {
-  	position: sticky;
     display: flex;
-    padding-right: 2rem;
-    overflow-y: auto;
     flex-direction: column;
     align-items: flex-end;
-    height: calc(100vh - var(--nav-header-height) - var(--footer-height) - 2em);
-		margin-bottom: 1em;
-    top: calc(var(--nav-header-height));
+    max-width: 275px;
+  }
+
+  .side-nav__category-menu {
+    padding-inline-start: 40px;
   }
 
   .side-nav__drawer {
@@ -600,6 +659,61 @@ sl-alert::part(base) {
   animation-fill-mode: forwards;
 }
 
+.table-of-contents {
+  margin-inline-start: 1rem;
+  min-width: 275px;
+  max-width: 275px;
+}
+
+.table-of-contents * {
+  max-width: 100%;
+}
+
+.table-of-contents__header {
+  margin: 0;
+  padding: 0;
+  padding-top: 1rem;
+  font-weight: normal;
+  color: var(--sl-color-neutral-800);
+  font-size: var(--sl-font-size-x-large);
+}
+
+.table-of-contents__list {
+  padding: 0;
+  margin: 0;
+  margin-top: 1rem;
+  list-style: none;
+}
+
+.table-of-contents__list a {
+  color: var(--sl-color-neutral-500);
+  text-decoration: none;
+}
+
+.table-of-contents__list li {
+  border-inline-start: 4px solid var(--sl-color-neutral-400);
+  padding-inline-start: 1rem;
+}
+
+.side-nav__item.is-active {
+  border-inline-start: 4px solid var(--sl-color-primary-600);
+  background-color: var(--sl-color-primary-100);
+}
+
+.side-nav__item.is-active,
+.side-nav__item.is-active a {
+  color: var(--sl-color-primary-700);
+}
+
+.table-of-contents__list li {
+  padding: 0.5rem;
+}
+
+
+bridgetown-ninja-keys {
+  --ninja-width: clamp(200px, 96vw, 100ch);
+}
+
 bridgetown-ninja-keys.dark {
   --ninja-modal-background: rgba(35, 35, 35, 1);
   --ninja-text-color: gray;
@@ -626,6 +740,8 @@ bridgetown-ninja-keys.dark {
       opacity: 0;
     }
 }
+
+/* Rhino Editor */
 
 .sl-theme-dark .rhino-editor,
 .sl-theme-dark .trix-content {
