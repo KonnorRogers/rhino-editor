@@ -229,6 +229,8 @@ kbd {
 .side-nav__menu {
   margin: 0;
   padding-inline-start: 0;
+  min-width: 250px;
+  max-width: 250px;
 }
 
 .side-nav__item {
