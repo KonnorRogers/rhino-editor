@@ -230,7 +230,7 @@ kbd {
   margin: 0;
   padding-inline-start: 0;
   min-width: 250px;
-  max-width: 250px;
+  max-width: 100%;
 }
 
 .side-nav__item {
