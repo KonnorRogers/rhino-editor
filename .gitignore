@@ -159,3 +159,5 @@ docs/.bridgetown-cache
 /cdn
 .vercel
 /test-results
+
+.DS_Store

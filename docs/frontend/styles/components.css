@@ -25,6 +25,11 @@ body {
   --input-bg-color: var(--sl-color-neutral-0);
   --input-transition: 100ms box-shadow ease-in-out;
 
+  --logo-color: #1c1a19;
+}
+
+.sl-theme-dark body {
+  --logo-color: var(--sl-color-neutral-1000);
 }
 
 /* Janky hack for iOS mobile */
