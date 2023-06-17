@@ -4,9 +4,10 @@
 <title><%= resource_title %></title>
 
 <meta name="description" content="<%= metadata.description %>" />
+<link rel="modulepreload" href="<%= asset_path :js %>">
 
 <link rel="stylesheet" data-turbo-track="reload" href="<%= asset_path :css %>" />
-<script data-turbo-track="reload" src="<%= asset_path :js %>" defer></script>
+<script data-turbo-track="reload" src="<%= asset_path :js %>" async type="module"></script>
 
 <!-- Favicons -->
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
