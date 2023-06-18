@@ -25,9 +25,10 @@ class Builders::Inspectors < SiteBuilder
 
         table_of_contents << item
 
-        list = document.create_element("ul", "", class: "side-nav__category-menu")
-        list << item
-        mobile_menu.before list
+        
+        # list = document.create_element("ul", "", class: "side-nav__category-menu")
+        # list << item
+        # mobile_menu.before list
 
       end
     end
