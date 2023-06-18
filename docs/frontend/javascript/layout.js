@@ -1,6 +1,10 @@
 import {LitElement, html, css} from "lit"
 
 class KrLayout extends LitElement {
+  static properties = {
+    main_id: { attribute: "main-id" }
+  }
+
   static styles = css`
     :host {
       display: block;
@@ -105,6 +109,20 @@ class KrLayout extends LitElement {
       white-space: nowrap !important;
       padding: 0 !important;
     }
+
+    .skip-links:focus-within {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      background-color: white;
+      color: black;
+    }
   `
 
   connectedCallback () {
@@ -134,7 +152,7 @@ class KrLayout extends LitElement {
     return html`
       <sl-visually-hidden class="skip-links" part="skip-links">
         <slot name="skip-links">
-          <a href=${`${this.main_id}`} part="skip-link">
+          <a href=${`${this.main_id}`} class="skip-link" part="skip-link">
             ${this.skipToMain || "Skip to main"}
           </a>
         </slot>
@@ -155,7 +173,9 @@ class KrLayout extends LitElement {
               <slot name="main-header"></slot>
             </div>
 
-            <slot></slot>
+            <div class="main-content" part="main-content">
+              <slot></slot>
+            </div>
 
             <div class="main-footer" part="main-footer">
               <slot name="main-footer"></slot>

@@ -75,8 +75,14 @@ kr-layout::part(body) {
   margin: 0 auto;
 }
 
-kr-layout::part(main) {
-  background-color: var(--body-color);
+:is(.doc, .index) kr-layout::part(main) {
+	background-color: transparent;
+	margin-inline-end: 16px;
+	margin-inline-start: 16px;
+}
+
+.home .footer {
+  width: 100vw;
 }
 
 main {
@@ -338,9 +344,10 @@ kbd {
 }
 
 .footer {
+  margin-top: 5px;
   padding: var(--sl-spacing-2x-large) var(--sl-spacing-2x-small);
   text-align: center;
-  border-top: 1px solid var(--sl-color-neutral-200);
+  background-color: var(--sl-color-neutral-50);
 }
 
 .reason__grid h3,
@@ -438,6 +445,7 @@ sl-button:is(.next-page, .previous-page):is(:hover, :focus) {
 
 .pagination-footer {
   padding: 2rem 1rem 2rem 1rem;
+  margin-top: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   justify-content: space-between;
@@ -598,15 +606,19 @@ kr-layout > [slot='aside'] {
     --main-padding-x: 2rem;
   }
 
+  .documentation-content {
+    border-radius: 32px;
+  }
+
 
   body:is(.index, .doc) kr-layout::part(body) {
     padding-top: 2rem;
   }
 
-	body:is(.index, .doc) kr-layout::part(main) {
+	body:is(.index, .doc) kr-layout::part(main-content) {
 		box-shadow: 0 0 5px 0 rgb(0 0 0 / 10%);
 		background: var(--body-color);
-		border-radius: 4px;
+		border-radius: 32px;
 	}
 
   /* .hero--mobile, */
