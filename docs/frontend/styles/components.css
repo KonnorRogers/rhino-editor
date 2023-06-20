@@ -77,8 +77,6 @@ kr-layout::part(body) {
 
 :is(.doc, .index) kr-layout::part(main) {
 	background-color: transparent;
-	margin-inline-end: 16px;
-	margin-inline-start: 16px;
 }
 
 .home .footer {
@@ -614,6 +612,12 @@ kr-layout > [slot='aside'] {
   body:is(.index, .doc) kr-layout::part(body) {
     padding-top: 2rem;
   }
+
+  :is(.doc, .index) kr-layout::part(main) {
+	  margin-inline-end: 16px;
+	  margin-inline-start: 16px;
+  }
+
 
 	body:is(.index, .doc) kr-layout::part(main-content) {
 		box-shadow: 0 0 5px 0 rgb(0 0 0 / 10%);
