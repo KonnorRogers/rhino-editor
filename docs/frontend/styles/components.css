@@ -77,8 +77,6 @@ kr-layout::part(body) {
 
 :is(.doc, .index) kr-layout::part(main) {
 	background-color: transparent;
-	margin-inline-end: 16px;
-	margin-inline-start: 16px;
 }
 
 .home .footer {
@@ -119,8 +117,9 @@ kbd {
   z-index: var(--z-header);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  padding: 0.5rem clamp(1.25rem, 4vw, 2rem);
-  font-size: 1.05rem;
+  padding: 0.5rem;
+  padding-inline-end: 1.5rem;
+  font-size: 1rem;
   justify-items: space-between;
   border-bottom: 1px solid var(--sl-color-neutral-200);
 	background-color: var(--body-color);
@@ -444,7 +443,7 @@ sl-button:is(.next-page, .previous-page):is(:hover, :focus) {
 }
 
 .pagination-footer {
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 2rem 1rem 0rem 1rem;
   margin-top: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -502,7 +501,7 @@ sl-alert::part(base) {
 }
 
 .syntax-block__badge {
-  font-size: var(--sl-button-font-size-large);
+  font-size: var(--sl-button-font-size-medium);
   color: var(--sl-color-neutral-700);
 }
 
@@ -571,7 +570,7 @@ sl-alert::part(base) {
 }
 
 .clipboard sl-icon {
-  font-size: 1.25em;
+  font-size: 1em;
 }
 
 .clipboard__icon--success, .clipboard__icon--idle {
@@ -605,6 +604,12 @@ kr-layout > [slot='aside'] {
   body {
     --main-padding-x: 2rem;
   }
+
+  :is(.doc, .index) kr-layout::part(main) {
+	  margin-inline-end: 16px;
+	  margin-inline-start: 16px;
+  }
+
 
   .documentation-content {
     border-radius: 32px;

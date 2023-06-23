@@ -84,22 +84,22 @@ h3,h4 {
 }
 
 h1 {
-  font-size: var(--sl-font-size-2x-large);
+  font-size: var(--sl-font-size-x-large);
 }
 
 h2 {
-  font-size: var(--sl-font-size-x-large);
+  font-size: var(--sl-font-size-large);
   margin-top: var(--sl-spacing-xx-large);
   margin-bottom: var(--sl-spacing-small);
 }
 
 h3 {
-  font-size: var(--sl-font-size-large);
+  font-size: var(--sl-font-size-medium);
   margin-top: var(--sl-spacing-x-large);
 }
 
 h4 {
-  margin-top: var(--sl-spacing-large);
+  margin-top: var(--sl-spacing-medium);
   font-size: var(--sl-font-size-large);
 }
 
@@ -109,7 +109,7 @@ p {
 
 p, li {
   line-height: 1.6;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 ul {
@@ -190,7 +190,7 @@ code > span {
 .highlighter-rouge,
 .highlight {
   border-radius: var(--sl-border-radius-large);
-  font-size: 1.1em;
+  font-size: 1rem;
   line-height: 1.4;
 }
 
