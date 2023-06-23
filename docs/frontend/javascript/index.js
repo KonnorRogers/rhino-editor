@@ -63,6 +63,7 @@ const staticData = [
   constructor (...args) {
     super(...args)
     this.staticData = staticData
+    this.openHotkey = super.openHotkey + ",/"
   }
 
   createData() {
