@@ -70,7 +70,7 @@ kr-layout {
 }
 
 kr-layout::part(body) {
-  max-width: var(--body-max-width);
+  max-width: 100vw;
   justify-content: center;
   margin: 0 auto;
 }
