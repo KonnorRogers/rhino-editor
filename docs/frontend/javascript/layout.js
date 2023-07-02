@@ -10,7 +10,8 @@ class KrLayout extends LitElement {
       display: block;
       box-sizing: border-box;
       min-height: var(--height);
-      --height: calc(100vh - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
+      max-height: var(--height);
+      --height: 100%;
 
       --menu-width: auto;
       --main-width: 1fr;
@@ -18,6 +19,10 @@ class KrLayout extends LitElement {
 
       /** This is a best guess. We'll attempt to calculate this with a resize observer. **/
       --header-height: 48px;
+    }
+
+    * {
+      transition: grid-template-rows 0.5s ease-in-out;
     }
 
     :host([variant="documentation"]) {
@@ -120,7 +125,7 @@ class KrLayout extends LitElement {
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      background-color: white;
+      background-color: inherit;
       color: black;
     }
   `

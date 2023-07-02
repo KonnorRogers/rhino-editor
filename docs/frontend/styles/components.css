@@ -76,7 +76,7 @@ kr-layout::part(body) {
 }
 
 :is(.doc, .index) kr-layout::part(main) {
-	background-color: transparent;
+	background-color: none;
 }
 
 .home .footer {
@@ -344,7 +344,7 @@ kbd {
 
 .footer {
   margin-top: 5px;
-  padding: var(--sl-spacing-2x-large) var(--sl-spacing-2x-small);
+  padding: var(--sl-spacing-large) var(--sl-spacing-2x-small);
   text-align: center;
   background-color: var(--sl-color-neutral-50);
 }
@@ -414,6 +414,7 @@ kbd {
 .documentation-content {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 }
 
 /** Pagination */
@@ -594,6 +595,10 @@ kr-layout > [slot='aside'] {
   display: none;
 }
 
+body:is(.index, .doc) kr-layout::part(main-content) {
+	background-color: var(--body-color);
+}
+
 @media screen and (min-width: 1360px) {
   kr-layout > [slot='aside'] {
     display: block;
@@ -628,7 +633,6 @@ kr-layout > [slot='aside'] {
 
 	body:is(.index, .doc) kr-layout::part(main-content) {
 		box-shadow: 0 0 5px 0 rgb(0 0 0 / 10%);
-		background: var(--body-color);
 		border-radius: 32px;
 	}
 
