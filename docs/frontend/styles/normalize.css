@@ -215,10 +215,10 @@ code > span {
 code.highlight,
 code.highlighter-rouge {
   display: inline-block;
-  font-size: 0.95em;
-  padding: 0.2em 0.4em;
+  font-size: 0.85em;
+  padding: 0.1em 0.4em;
   margin: var(--sl-spacing-xx-small) 0;
-  border-radius: 4px;
+  border-radius: 6px;
   background-color: var(--code-background-color);
   color: var(--code-color);
   white-space: break-spaces;
