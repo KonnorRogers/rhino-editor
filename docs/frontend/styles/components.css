@@ -42,16 +42,6 @@ body {
   overflow: auto;
 }
 
-/* Janky hack for iOS mobile */
-.fixed-body {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  /* Allow the main content to be scrolled,
-  so we can adjust the scroll position with JS. */
-  overflow: auto;
-}
-
 body {
 	background-color: var(--body-color);
 	color: var(--text-color);
@@ -67,7 +57,11 @@ kr-layout {
   --menu-width: auto;
   --main-width: 105ch;
   --aside-width: auto;
-  background-color: var(--body-color)
+}
+
+kr-layout,
+kr-layout::part(skip-links) {
+  background-color: var(--body-color);
 }
 
 kr-layout::part(body) {
