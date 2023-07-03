@@ -31,7 +31,9 @@ const esbuildOptions = {
     "frontend/javascript/index.js",
     "frontend/javascript/entrypoints/character-counter.js",
     "frontend/javascript/entrypoints/starter-kit-setup.js"
-  ]
+  ],
+  splitting: true,
+  format: "esm"
 }
 
 build(outputFolder, esbuildOptions)
