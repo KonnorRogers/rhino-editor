@@ -67,6 +67,7 @@ kr-layout {
   --menu-width: auto;
   --main-width: 105ch;
   --aside-width: auto;
+  background-color: var(--body-color)
 }
 
 kr-layout::part(body) {
@@ -210,8 +211,8 @@ kbd {
 
 .top-nav__github {
   font-size: 2rem;
-  width: 2rem;
   height: auto;
+  margin-inline-start: 4px;
 }
 
 .top-nav__links {
@@ -235,8 +236,7 @@ kbd {
 }
 
 .top-nav__github {
-  padding-top: var(--sl-spacing-2x-small);
-  margin-left: var(--sl-spacing-medium);
+  padding-bottom: 0;
 }
 
 .nav-link {
@@ -254,7 +254,7 @@ kbd {
 }
 
 .side-nav__item {
-  padding: 8px;
+  padding: 4px;
   max-width: 100%;
   line-height: 1.3;
 }
@@ -615,6 +615,9 @@ body:is(.index, .doc) kr-layout::part(main-content) {
 	  margin-inline-start: 16px;
   }
 
+  .top-nav__github {
+    margin-inline-start: 0px;
+  }
 
   .documentation-content {
     border-radius: 32px;
