@@ -130,15 +130,12 @@ ul ul ul ul {
   list-style: disc outside;
 }
 
-/* code blocks */
-/* inline code highlights */
-/* code blocks */
-/* inline code highlights */
+[tabindex="-1"] {
+  outline: transparent;
+}
+
 a,
-kr-layout::part(skip-link),
-a > code,
-a > * > code,
-a > * > code[class*="language-"] {
+kr-layout::part(skip-link) {
   word-wrap: anywhere;
   /* outline: transparent; */
   /* Unable to distinguish identifier, this makes links obvious */
@@ -154,35 +151,32 @@ a > * > code[class*="language-"] {
   transition: all 0.2s;
 }
 
-[tabindex="-1"] {
-  outline: transparent;
-}
-
-/* a > code, */
-/* a > * > code, */
-/* a > * > code[class*="language-"] { */
-/*   text-decoration: none; */
-/* } */
-
-
 kr-layout::part(skip-link):is(:hover),
-a:is(:hover) > code,
-a:is(:hover) > * > code, a:is(:hover) > * > code[class*="language-"],
 a:is(:hover) {
   color: var(--link-color-focus);
 }
 
 
-kr-layout::part(skip-link):is(:focus),
-a:is(:focus) > code,
-a:is(:focus) > * > code, a:is(:focus) > * > code[class*="language-"],
-a:is(:focus) {
+kr-layout::part(skip-link):is(:focus-visible),
+a:is(:focus-visible) {
   box-shadow: 0px 0px 3px 3px var(--sl-color-primary-600);
   outline: transparent;
   /* for when Safari supports border-radius */
   /* outline: 3px solid var(--sl-color-primary-600); */
   /* outline-offset: 4px; */
 }
+
+@supports not selector(:focus-visible) {
+  kr-layout::part(skip-link):is(:focus),
+  a:is(:focus) {
+    box-shadow: 0px 0px 3px 3px var(--sl-color-primary-600);
+    outline: transparent;
+    /* for when Safari supports border-radius */
+    /* outline: 3px solid var(--sl-color-primary-600); */
+    /* outline-offset: 4px; */
+  }
+}
+
 
 div[class*="language-"] {
   margin: var(--sl-spacing-xx-small) 0 var(--sl-spacing-xxx-large) 0 !important;
