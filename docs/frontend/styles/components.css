@@ -42,16 +42,6 @@ body {
   overflow: auto;
 }
 
-/* Janky hack for iOS mobile */
-.fixed-body {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  /* Allow the main content to be scrolled,
-  so we can adjust the scroll position with JS. */
-  overflow: auto;
-}
-
 body {
 	background-color: var(--body-color);
 	color: var(--text-color);
@@ -69,14 +59,23 @@ kr-layout {
   --aside-width: auto;
 }
 
+kr-layout,
+kr-layout::part(skip-links) {
+  background-color: var(--body-color);
+}
+
 kr-layout::part(body) {
-  max-width: var(--body-max-width);
+  max-width: 100vw;
   justify-content: center;
   margin: 0 auto;
 }
 
-kr-layout::part(main) {
-  background-color: var(--body-color);
+:is(.doc, .index) kr-layout::part(main) {
+	background-color: none;
+}
+
+.home .footer {
+  width: 100vw;
 }
 
 main {
@@ -113,8 +112,9 @@ kbd {
   z-index: var(--z-header);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  padding: 0.5rem clamp(1.25rem, 4vw, 2rem);
-  font-size: 1.05rem;
+  padding: 0.5rem;
+  padding-inline-end: 1.5rem;
+  font-size: 1rem;
   justify-items: space-between;
   border-bottom: 1px solid var(--sl-color-neutral-200);
 	background-color: var(--body-color);
@@ -205,8 +205,8 @@ kbd {
 
 .top-nav__github {
   font-size: 2rem;
-  width: 2rem;
   height: auto;
+  margin-inline-start: 4px;
 }
 
 .top-nav__links {
@@ -230,8 +230,7 @@ kbd {
 }
 
 .top-nav__github {
-  padding-top: var(--sl-spacing-2x-small);
-  margin-left: var(--sl-spacing-medium);
+  padding-bottom: 0;
 }
 
 .nav-link {
@@ -249,7 +248,7 @@ kbd {
 }
 
 .side-nav__item {
-  padding: 8px;
+  padding: 4px;
   max-width: 100%;
   line-height: 1.3;
 }
@@ -338,9 +337,10 @@ kbd {
 }
 
 .footer {
-  padding: var(--sl-spacing-2x-large) var(--sl-spacing-2x-small);
+  margin-top: 5px;
+  padding: var(--sl-spacing-large) var(--sl-spacing-2x-small);
   text-align: center;
-  border-top: 1px solid var(--sl-color-neutral-200);
+  background-color: var(--sl-color-neutral-50);
 }
 
 .reason__grid h3,
@@ -408,6 +408,7 @@ kbd {
 .documentation-content {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 }
 
 /** Pagination */
@@ -437,7 +438,8 @@ sl-button:is(.next-page, .previous-page):is(:hover, :focus) {
 }
 
 .pagination-footer {
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 2rem 1rem 0rem 1rem;
+  margin-top: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   justify-content: space-between;
@@ -494,7 +496,7 @@ sl-alert::part(base) {
 }
 
 .syntax-block__badge {
-  font-size: var(--sl-button-font-size-large);
+  font-size: var(--sl-button-font-size-medium);
   color: var(--sl-color-neutral-700);
 }
 
@@ -563,7 +565,7 @@ sl-alert::part(base) {
 }
 
 .clipboard sl-icon {
-  font-size: 1.25em;
+  font-size: 1em;
 }
 
 .clipboard__icon--success, .clipboard__icon--idle {
@@ -587,6 +589,10 @@ kr-layout > [slot='aside'] {
   display: none;
 }
 
+body:is(.index, .doc) kr-layout::part(main-content) {
+	background-color: var(--body-color);
+}
+
 @media screen and (min-width: 1360px) {
   kr-layout > [slot='aside'] {
     display: block;
@@ -598,15 +604,33 @@ kr-layout > [slot='aside'] {
     --main-padding-x: 2rem;
   }
 
+  :is(.doc, .index) kr-layout::part(main) {
+	  margin-inline-end: 16px;
+	  margin-inline-start: 16px;
+  }
+
+  .top-nav__github {
+    margin-inline-start: 0px;
+  }
+
+  .documentation-content {
+    border-radius: 32px;
+  }
+
 
   body:is(.index, .doc) kr-layout::part(body) {
     padding-top: 2rem;
   }
 
-	body:is(.index, .doc) kr-layout::part(main) {
+  :is(.doc, .index) kr-layout::part(main) {
+	  margin-inline-end: 16px;
+	  margin-inline-start: 16px;
+  }
+
+
+	body:is(.index, .doc) kr-layout::part(main-content) {
 		box-shadow: 0 0 5px 0 rgb(0 0 0 / 10%);
-		background: var(--body-color);
-		border-radius: 4px;
+		border-radius: 32px;
 	}
 
   /* .hero--mobile, */

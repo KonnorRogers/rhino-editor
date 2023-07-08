@@ -21,7 +21,6 @@ import * as Turbo from "@hotwired/turbo"
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"
 import '@github/clipboard-copy-element'
-import "./turbo_transitions.js"
 import { BridgetownNinjaKeys } from "@konnorr/bridgetown-quick-search/frontend/javascript/ninja-keys.js"
 import "./layout.js"
 
@@ -63,6 +62,7 @@ const staticData = [
   constructor (...args) {
     super(...args)
     this.staticData = staticData
+    this.openHotkey = super.openHotkey + ",/"
   }
 
   createData() {

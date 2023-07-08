@@ -4,7 +4,7 @@
     <%= render "head", metadata: site.metadata, title: resource.data.title %>
   </head>
   <body class='<%= "#{resource.data.layout} #{resource.data.page_class}" %>' data-controller="search">
-    <kr-layout>
+    <kr-layout main-id="main">
       <%= render "top_nav", metadata: site.metadata %>
 
       <%= yield %>

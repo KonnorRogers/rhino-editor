@@ -5,8 +5,8 @@ class KrLayout extends LitElement {
     :host {
       display: block;
       box-sizing: border-box;
-      min-height: var(--height);
-      --height: calc(100vh - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
+      min-height: clamp(0px, 100vh, 100%);
+      --height: 100vh;
 
       --menu-width: auto;
       --main-width: 1fr;
@@ -105,7 +105,30 @@ class KrLayout extends LitElement {
       white-space: nowrap !important;
       padding: 0 !important;
     }
+
+    .skip-links {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: calc(var(--header-height, 48px) - 2px);
+      width: 100vw;
+      z-index: 4;
+      background-color: inherit;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      place-items: center;
+      text-align: center;
+    }
   `
+
+  static properties = {
+    main_id: { attribute: "main-id", reflect: true }
+  }
+
+  constructor () {
+    super()
+    this.main_id = "main"
+  }
 
   connectedCallback () {
     super.connectedCallback?.()
@@ -134,7 +157,7 @@ class KrLayout extends LitElement {
     return html`
       <sl-visually-hidden class="skip-links" part="skip-links">
         <slot name="skip-links">
-          <a href=${`${this.main_id}`} part="skip-link">
+          <a href=${`#${this.main_id}`} part="skip-link">
             ${this.skipToMain || "Skip to main"}
           </a>
         </slot>
@@ -155,7 +178,7 @@ class KrLayout extends LitElement {
               <slot name="main-header"></slot>
             </div>
 
-            <slot></slot>
+            <div class="main-content" part="main-content"><slot></slot></div>
 
             <div class="main-footer" part="main-footer">
               <slot name="main-footer"></slot>
@@ -180,4 +203,5 @@ class KrLayout extends LitElement {
 }
 
 window.customElements.define("kr-layout", KrLayout)
+
 

@@ -16,8 +16,7 @@ body,
 
 html {
   box-sizing: border-box;
-  min-height: 100%;
-  display: grid;
+  height: 100%;
 }
 
 *, *:before, *:after {
@@ -30,6 +29,8 @@ body {
   -webkit-font-smoothing: antialiased;
   font-family: var(--sl-font-sans);
   min-height: 100%;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
   margin: 0;
   padding: 0;
 }
@@ -84,22 +85,22 @@ h3,h4 {
 }
 
 h1 {
-  font-size: var(--sl-font-size-2x-large);
+  font-size: var(--sl-font-size-x-large);
 }
 
 h2 {
-  font-size: var(--sl-font-size-x-large);
+  font-size: var(--sl-font-size-large);
   margin-top: var(--sl-spacing-xx-large);
   margin-bottom: var(--sl-spacing-small);
 }
 
 h3 {
-  font-size: var(--sl-font-size-large);
+  font-size: var(--sl-font-size-medium);
   margin-top: var(--sl-spacing-x-large);
 }
 
 h4 {
-  margin-top: var(--sl-spacing-large);
+  margin-top: var(--sl-spacing-medium);
   font-size: var(--sl-font-size-large);
 }
 
@@ -109,7 +110,7 @@ p {
 
 p, li {
   line-height: 1.6;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 ul {
@@ -129,12 +130,12 @@ ul ul ul ul {
   list-style: disc outside;
 }
 
-/* code blocks */
-/* inline code highlights */
+[tabindex="-1"] {
+  outline: transparent;
+}
+
 a,
-a > code,
-a > * > code,
-a > * > code[class*="language-"] {
+kr-layout::part(skip-link) {
   word-wrap: anywhere;
   /* outline: transparent; */
   /* Unable to distinguish identifier, this makes links obvious */
@@ -143,34 +144,39 @@ a > * > code[class*="language-"] {
   text-decoration-color: var(--link-color);
   text-underline-offset: 0.25em;
   color: var(--link-color);
-  border-radius: 0;
-  display: inline;
-  padding: 0.05em 0;
+  border-radius: 2px;
+  display: inline-block;
+  padding: 0.25em;
   line-height: 1.2;
+  transition: all 0.2s;
 }
 
-[tabindex="-1"] {
-  outline: transparent;
-}
-
-/* a > code, */
-/* a > * > code, */
-/* a > * > code[class*="language-"] { */
-/*   text-decoration: none; */
-/* } */
-
-
-a:hover > code, a:focus > code,
-a:hover > * > code, a:focus > * > code[class*="language-"],
-a:hover, a:focus {
+kr-layout::part(skip-link):is(:hover),
+a:is(:hover) {
   color: var(--link-color-focus);
 }
 
-a:focus, a:hover {
-  text-decoration-line: underline;
-  text-decoration-style: solid;
-  text-decoration-color: var(--link-color-focus);
+
+kr-layout::part(skip-link):is(:focus-visible),
+a:is(:focus-visible) {
+  box-shadow: 0px 0px 3px 3px var(--sl-color-primary-600);
+  outline: transparent;
+  /* for when Safari supports border-radius */
+  /* outline: 3px solid var(--sl-color-primary-600); */
+  /* outline-offset: 4px; */
 }
+
+@supports not selector(:focus-visible) {
+  kr-layout::part(skip-link):is(:focus),
+  a:is(:focus) {
+    box-shadow: 0px 0px 3px 3px var(--sl-color-primary-600);
+    outline: transparent;
+    /* for when Safari supports border-radius */
+    /* outline: 3px solid var(--sl-color-primary-600); */
+    /* outline-offset: 4px; */
+  }
+}
+
 
 div[class*="language-"] {
   margin: var(--sl-spacing-xx-small) 0 var(--sl-spacing-xxx-large) 0 !important;
@@ -190,7 +196,7 @@ code > span {
 .highlighter-rouge,
 .highlight {
   border-radius: var(--sl-border-radius-large);
-  font-size: 1.1em;
+  font-size: 1rem;
   line-height: 1.4;
 }
 
@@ -203,10 +209,10 @@ code > span {
 code.highlight,
 code.highlighter-rouge {
   display: inline-block;
-  font-size: 0.95em;
-  padding: 0.2em 0.4em;
+  font-size: 0.85em;
+  padding: 0.1em 0.4em;
   margin: var(--sl-spacing-xx-small) 0;
-  border-radius: 4px;
+  border-radius: 6px;
   background-color: var(--code-background-color);
   color: var(--code-color);
   white-space: break-spaces;
