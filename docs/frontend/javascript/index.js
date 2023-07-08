@@ -21,7 +21,7 @@ import * as Turbo from "@hotwired/turbo"
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"
 import '@github/clipboard-copy-element'
-import { BridgetownNinjaKeys } from "@konnorr/bridgetown-quick-search/frontend/javascript/ninja-keys.js"
+import { BridgetownNinjaKeys } from "@konnorr/bridgetown-quick-search/ninja-keys.js"
 import "./layout.js"
 
 /** @type {import("konnors-ninja-keys").INinjaAction[]} */
