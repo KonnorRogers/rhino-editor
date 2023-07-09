@@ -15,6 +15,7 @@
     </div>
     <sl-icon-button name="x-lg" label="Close" data-action="click->side-nav#close"></sl-icon-button>
   </div>
-  <%= render "side_nav_items", classes: "side-nav side-nav--mobile", tabindex: "-1" %>
+
+  <%= render "side_nav_items", id: "side-nav--mobile", classes: "side-nav side-nav--mobile", tabindex: "-1" %>
   <sl-button slot="footer" type="primary" data-action="click->side-nav#close">Close</sl-button>
 </sl-drawer>

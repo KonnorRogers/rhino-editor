@@ -18,6 +18,7 @@ import "@shoelace-style/shoelace/dist/components/menu-label/menu-label.js";
 import "@shoelace-style/shoelace/dist/components/visually-hidden/visually-hidden.js";
 
 import * as Turbo from "@hotwired/turbo"
+window.Turbo = Turbo
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"
 import '@github/clipboard-copy-element'
@@ -125,32 +126,33 @@ Object.entries(controllers).forEach(([filename, controller]) => {
   }
 })
 
-// if (!window.scrollPositions) {
-//   window.scrollPositions = {};
-// }
-//
-// function preserveScroll () {
-//   document.querySelectorAll("[data-preserve-scroll]").forEach((element) => {
-//     scrollPositions[element.id] = element.scrollTop;
-//   })
-// }
-//
-// function restoreScroll (event) {
-//   document.querySelectorAll("[data-preserve-scroll]").forEach((element) => {
-//     element.scrollTop = scrollPositions[element.id];
-//   })
-//
-//   if (!event.detail.newBody) return
-//   // event.detail.newBody is the body element to be swapped in.
-//   // https://turbo.hotwired.dev/reference/events
-//   event.detail.newBody.querySelectorAll("[data-preserve-scroll]").forEach((element) => {
-//     element.scrollTop = scrollPositions[element.id];
-//   })
-// }
-//
-// window.addEventListener("turbo:before-cache", preserveScroll)
-// window.addEventListener("turbo:before-render", restoreScroll)
-// window.addEventListener("turbo:render", restoreScroll)
+;(() => {
+  if (!window.scrollPositions) {
+    window.scrollPositions = {};
+  }
+
+  function preserveScroll() {
+    document.querySelectorAll('[data-preserve-scroll').forEach(element => {
+      scrollPositions[element.id] = element.scrollTop;
+    });
+  }
+
+  function restoreScroll(event) {
+    document.querySelectorAll('[data-preserve-scroll').forEach(element => {
+      element.scrollTop = scrollPositions[element.id];
+    });
+
+    if (event.detail && event.detail.newBody) {
+      event.detail.newBody.querySelectorAll('[data-preserve-scroll').forEach(element => {
+        element.scrollTop = scrollPositions[element.id];
+      });
+    }
+  }
+
+  window.addEventListener('turbo:before-cache', preserveScroll);
+  window.addEventListener('turbo:before-render', restoreScroll);
+  window.addEventListener('turbo:render', restoreScroll);
+})();
 
 function handleAttachment (event) {
   event.preventDefault()
