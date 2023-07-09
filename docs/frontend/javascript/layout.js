@@ -5,7 +5,7 @@ class KrLayout extends LitElement {
     :host {
       display: block;
       box-sizing: border-box;
-      min-height: clamp(0px, 100vh, 100%);
+      min-height: var(--height);
       --height: 100vh;
 
       --menu-width: auto;
@@ -65,19 +65,11 @@ class KrLayout extends LitElement {
       grid-template-rows: minmax(0, 1fr);
     }
 
-    :host::part(menu) {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    :host::part(aside) {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-    }
-
     :host::part(aside),
     :host::part(menu) {
-      max-height: calc(var(--height) - var(--header-height));
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      max-height: calc(var(--height) - var(--header-height) - var(--footer-height));
       overflow: auto;
       position: sticky;
       top: var(--header-height);
@@ -130,27 +122,36 @@ class KrLayout extends LitElement {
     this.main_id = "main"
   }
 
-  connectedCallback () {
-    super.connectedCallback?.()
-
-    this.resizeObserver = new ResizeObserver((entries) => {
+  createResizeObserver (slot) {
+    return new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentBoxSize) {
           const contentBoxSize = entry.borderBoxSize[0];
-          this.style.setProperty("--header-height", `${contentBoxSize.blockSize}px`)
+          this.style.setProperty(`--${slot}-height`, `${contentBoxSize.blockSize}px`)
         }
       }
-    });
+    })
+  }
+
+  connectedCallback () {
+    super.connectedCallback?.()
+
+    this.headerResizeObserver = this.createResizeObserver("header");
+    this.footerResizeObserver = this.createResizeObserver("footer");
 
     setTimeout(() => {
       this.header = this.shadowRoot.querySelector("[part~='header']")
-      this.resizeObserver.observe(this.header)
+      this.headerResizeObserver.observe(this.header)
+
+      // this.footer = this.shadowRoot.querySelector("[part~='main-footer']")
+      // this.footerResizeObserver.observe(this.footer)
     })
   }
 
   disconnectedCallback () {
     super.disconnectedCallback?.()
-    this.resizeObserver.unobserve(this.header);
+    this.headerResizeObserver.unobserve(this.header)
+    // this.footerResizeObserver.unobserve(this.footer)
   }
 
   render () {

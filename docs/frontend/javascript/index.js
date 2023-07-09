@@ -138,15 +138,16 @@ Object.entries(controllers).forEach(([filename, controller]) => {
   }
 
   function restoreScroll(event) {
-    document.querySelectorAll('[data-preserve-scroll').forEach(element => {
-      element.scrollTop = scrollPositions[element.id];
-    });
-
     if (event.detail && event.detail.newBody) {
       event.detail.newBody.querySelectorAll('[data-preserve-scroll').forEach(element => {
         element.scrollTop = scrollPositions[element.id];
       });
     }
+
+    document.querySelectorAll('[data-preserve-scroll').forEach(element => {
+      element.scrollTop = scrollPositions[element.id];
+    });
+
   }
 
   window.addEventListener('turbo:before-cache', preserveScroll);
