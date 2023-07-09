@@ -15,8 +15,8 @@ dependencies:
     specifier: ^7.3.0
     version: 7.3.0
   '@konnorr/bridgetown-quick-search':
-    specifier: ^3.6.0
-    version: 3.6.0
+    specifier: ^3.7.0
+    version: 3.7.0
   '@shoelace-style/shoelace':
     specifier: ^2.5.2
     version: 2.5.2
@@ -26,9 +26,6 @@ dependencies:
   '@tiptap/extension-character-count':
     specifier: 2.0.0-beta.209
     version: 2.0.0-beta.209(@tiptap/core@2.0.0-beta.209)(prosemirror-model@1.18.3)(prosemirror-state@1.4.2)
-  bridgetown-quick-search:
-    specifier: 1.1.3
-    version: 1.1.3
   linkifyjs:
     specifier: ^4.1.1
     version: 4.1.1
@@ -84,13 +81,6 @@ devDependencies:
     version: 7.8.3(postcss@8.4.19)
 
 packages:
-
-  /@babel/runtime@7.22.3:
-    resolution: {integrity: sha512-XsDuspWKLUsxwCp6r7EhsExHtYfbe5oAGQ19kqngTdCPUoPQzOPdUbD/pB9PJiwb2ptYKQDjSJT3R6dC+EPqfQ==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      regenerator-runtime: 0.13.11
-    dev: false
 
   /@csstools/postcss-cascade-layers@1.1.1(postcss@8.4.19):
     resolution: {integrity: sha512-+KdYrpKC5TgomQr2DlZF4lDEpHcoxnj5IGddYYfBWJAKfj1JtuHUIqMa+E1pJJ+z3kvDViWMqyqPlG4Ja7amQA==}
@@ -284,8 +274,8 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
-  /@konnorr/bridgetown-quick-search@3.6.0:
-    resolution: {integrity: sha512-Wdp8MPx2B0Q591CUpYmpHrqJvitiVMbBWNcb1SZlvz7tD1R8J5FV/tey4bH0Iaiys8LyMpjMvuFPW1nC+7UHmg==}
+  /@konnorr/bridgetown-quick-search@3.7.0:
+    resolution: {integrity: sha512-JWXOhOM6eAtuKm1ZxAO3sZ+WpBCWZTO1Y/qeDIUraN/PkBQvNn+h8SWYhUuq6jqnH68IU7vjgRy3vOftvAOyQg==}
     dependencies:
       konnors-ninja-keys: 1.9.1
       lit: 2.7.6
@@ -417,14 +407,6 @@ packages:
     dependencies:
       balanced-match: 1.0.2
     dev: true
-
-  /bridgetown-quick-search@1.1.3:
-    resolution: {integrity: sha512-KsRvW3LpLr90YRm/c5z05/dQABSav4haQ2hzHPxc9eixQ6FQVCFVFvHnWhh/WdpBzpgTUG6HiLJHP7oPA7JAfg==}
-    dependencies:
-      '@babel/runtime': 7.22.3
-      lit: 2.7.4
-      lunr: 2.3.9
-    dev: false
 
   /browserslist@4.21.4:
     resolution: {integrity: sha512-CBHJJdDmgjl3daYjN5Cp5kbTf1mUhZoS+beLklHIvkOWscs83YAhLlF3Wsh/lciQYAcbBJgTOD44VtG31ZM4Hw==}
@@ -793,14 +775,6 @@ packages:
     resolution: {integrity: sha512-YqUzpisJodwKIlbMFCtyrp58oLloKGnnPLMJ1t23cbfIJjg/H9pvLWK4XS69YeubK5HUs1UE4ys9w5dP1zg6IA==}
     dependencies:
       '@types/trusted-types': 2.0.3
-    dev: false
-
-  /lit@2.7.4:
-    resolution: {integrity: sha512-cgD7xrZoYr21mbrkZIuIrj98YTMw/snJPg52deWVV4A8icLyNHI3bF70xsJeAgwTuiq5Kkd+ZR8gybSJDCPB7g==}
-    dependencies:
-      '@lit/reactive-element': 1.6.1
-      lit-element: 3.3.2
-      lit-html: 2.7.4
     dev: false
 
   /lit@2.7.6:
@@ -1301,10 +1275,6 @@ packages:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}
     dependencies:
       pify: 2.3.0
-
-  /regenerator-runtime@0.13.11:
-    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
-    dev: false
 
   /resolve@1.22.1:
     resolution: {integrity: sha512-nBpuuYuY5jFsli/JIs1oldw6fOQCBioohqWZg/2hiaOybXOft4lonv85uDOKXdf8rhyK159cxU5cDcK/NKk8zw==}
