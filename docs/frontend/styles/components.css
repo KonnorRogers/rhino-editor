@@ -658,6 +658,9 @@ body:is(.index, .doc) kr-layout::part(main-content) {
     flex-direction: column;
     align-items: flex-end;
     max-width: 275px;
+    overflow: auto;
+    max-height: 100%;
+    padding-bottom: 1rem;
   }
 
   .side-nav__category-menu {
@@ -698,6 +701,10 @@ body:is(.index, .doc) kr-layout::part(main-content) {
   animation: fadeInAnimation ease 500ms;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
+}
+
+.index .table-of-contents {
+  visibility: hidden;
 }
 
 .table-of-contents {
