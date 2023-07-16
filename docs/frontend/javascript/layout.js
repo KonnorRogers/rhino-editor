@@ -7,6 +7,7 @@ class KrLayout extends LitElement {
       box-sizing: border-box;
       min-height: var(--height);
       --height: 100vh;
+      --height: 100dvh;
 
       --menu-width: auto;
       --main-width: 1fr;

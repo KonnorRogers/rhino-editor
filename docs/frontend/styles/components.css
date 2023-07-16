@@ -622,6 +622,10 @@ body:is(.index, .doc) kr-layout::part(main-content) {
     padding-top: 2rem;
   }
 
+  body:is(.index, .doc) kr-layout::part(menu) {
+    max-height: calc(var(--height) - var(--header-height) - 2rem);
+  }
+
   :is(.doc, .index) kr-layout::part(main) {
 	  margin-inline-end: 16px;
 	  margin-inline-start: 16px;
@@ -665,6 +669,10 @@ body:is(.index, .doc) kr-layout::part(main-content) {
 
   .side-nav__category-menu {
     padding-inline-start: 40px;
+  }
+
+  .side-nav__category-menu:first-of-type {
+    padding-top: 0;
   }
 
   .side-nav__drawer {
