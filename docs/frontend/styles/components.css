@@ -622,7 +622,8 @@ body:is(.index, .doc) kr-layout::part(main-content) {
     padding-top: 2rem;
   }
 
-  body:is(.index, .doc) kr-layout::part(menu) {
+  body:is(.index, .doc) kr-layout::part(menu),
+  body:is(.index, .doc) kr-layout::part(aside) {
     max-height: calc(var(--height) - var(--header-height) - 2rem);
   }
 

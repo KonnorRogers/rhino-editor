@@ -2,10 +2,7 @@
  * Base class to be extended.
  */
 export class BaseEvent extends Event {
-  static get eventName(): string {
-    throw Error("Not implemented");
-  }
-
+  static eventName: string
   constructor(name: string, options?: EventInit | undefined) {
     if (options == null) options = {};
     if (options.bubbles == null) options.bubbles = true;

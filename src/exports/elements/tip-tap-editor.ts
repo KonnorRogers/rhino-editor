@@ -37,6 +37,8 @@ import { AddAttachmentEvent } from "src/exports/events/add-attachment-event";
 import type { Maybe } from "src/types";
 import { AttachmentEditor } from "./attachment-editor";
 import { FileAcceptEvent } from "../events/file-accept-event";
+import { BeforeInitializeEvent } from "../events/before-initialize-event";
+import { InitializeEvent } from "../events/initialize-event";
 
 export type Serializer = "" | "html" | "json";
 /**
@@ -184,6 +186,8 @@ export class TipTapEditor extends BaseElement {
       this.__unBindEditorListeners();
     }
 
+    this.dispatchEvent(new BeforeInitializeEvent())
+
     setTimeout(() => {
       // Make sure we dont render the editor more than once.
       const cachedEditor = this.querySelector("[slot='editor']");
@@ -206,6 +210,8 @@ export class TipTapEditor extends BaseElement {
       this.editorElement?.classList.add("trix-content");
       this.editorElement?.setAttribute("tabindex", "0");
       this.editorElement?.setAttribute("role", "textbox");
+
+      this.dispatchEvent(new InitializeEvent())
     });
 
     this.classList.add("rhino-editor");

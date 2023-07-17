@@ -4,9 +4,7 @@ import { BaseEvent } from "./base-event";
  * A mapping of the "trix-attachment-add" for rhino that follows the same construct.
  */
 export class FileAcceptEvent extends BaseEvent {
-  static get eventName(): "rhino-file-accept" {
-    return "rhino-file-accept";
-  }
+  static eventName = "rhino-file-accept" as const
 
   constructor(public file: File, options?: EventInit | undefined) {
     super(FileAcceptEvent.eventName, options);
@@ -14,12 +12,8 @@ export class FileAcceptEvent extends BaseEvent {
   }
 }
 
-/**
- * Tell typescript this is an "offical" event and what params to expect on
- * document.addEventListener() / window.addEventListener()
- */
 declare global {
-  interface HTMLElementEventMap {
+  interface GlobalEventHandlersEventMap {
     [FileAcceptEvent.eventName]: FileAcceptEvent;
   }
 }
