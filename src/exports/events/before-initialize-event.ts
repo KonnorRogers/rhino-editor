@@ -1,5 +1,8 @@
 import { BaseEvent } from "./base-event";
 
+/**
+ * Fires before the editor has been created
+ */
 export class BeforeInitializeEvent extends BaseEvent {
   static eventName = "rhino-before-initialize" as const
 
