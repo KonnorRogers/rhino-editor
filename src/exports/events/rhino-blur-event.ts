@@ -3,16 +3,16 @@ import { BaseEvent } from "./base-event";
 /**
  * Fires any time a user pastes into the editor
  */
-export class PasteEvent extends BaseEvent {
-  static eventName = "rhino-paste" as const
+export class RhinoBlurEvent extends BaseEvent {
+  static eventName = "rhino-blur" as const
 
   constructor(options?: EventInit | undefined) {
-    super(PasteEvent.eventName, options);
+    super(RhinoBlurEvent.eventName, options);
   }
 }
 
 declare global {
   interface GlobalEventHandlersEventMap {
-    [PasteEvent.eventName]: PasteEvent;
+    [RhinoBlurEvent.eventName]: RhinoBlurEvent;
   }
 }

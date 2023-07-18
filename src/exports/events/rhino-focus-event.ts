@@ -3,16 +3,16 @@ import { BaseEvent } from "./base-event";
 /**
  * Fires any time a user pastes into the editor
  */
-export class FocusEvent extends BaseEvent {
+export class RhinoFocusEvent extends BaseEvent {
   static eventName = "rhino-focus" as const
 
   constructor(options?: EventInit | undefined) {
-    super(FocusEvent.eventName, options);
+    super(RhinoFocusEvent.eventName, options);
   }
 }
 
 declare global {
   interface GlobalEventHandlersEventMap {
-    [FocusEvent.eventName]: FocusEvent;
+    [RhinoFocusEvent.eventName]: RhinoFocusEvent;
   }
 }

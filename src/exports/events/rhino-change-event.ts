@@ -3,16 +3,16 @@ import { BaseEvent } from "./base-event";
 /**
  * Fires any time the editor changes
  */
-export class ChangeEvent extends BaseEvent {
+export class RhinoChangeEvent extends BaseEvent {
   static eventName = "rhino-change" as const
 
   constructor(options?: EventInit | undefined) {
-    super(ChangeEvent.eventName, options);
+    super(RhinoChangeEvent.eventName, options);
   }
 }
 
 declare global {
   interface GlobalEventHandlersEventMap {
-    [ChangeEvent.eventName]: ChangeEvent;
+    [RhinoChangeEvent.eventName]: RhinoChangeEvent;
   }
 }

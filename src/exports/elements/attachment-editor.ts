@@ -5,6 +5,7 @@ import { toMemorySize } from "src/internal/to-memory-size";
 import { normalize } from "src/exports/styles/normalize";
 import { BaseElement } from "src/internal/elements/base-element";
 import { fileUploadErrorMessage } from "../translations";
+import { AttachmentRemoveEvent } from "../events/attachment-remove-event";
 
 export const LOADING_STATES = Object.freeze({
   notStarted: "not-started",
@@ -200,6 +201,8 @@ export class AttachmentEditor extends BaseElement {
         part="delete-button"
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
+          // Need to find the attachment it points to.
+          this.dispatchEvent(new AttachmentRemoveEvent())
           this.parentElement?.remove();
         }}
       >

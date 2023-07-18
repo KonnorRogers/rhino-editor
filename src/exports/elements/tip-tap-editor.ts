@@ -39,6 +39,11 @@ import { AttachmentEditor } from "./attachment-editor";
 import { FileAcceptEvent } from "../events/file-accept-event";
 import { BeforeInitializeEvent } from "../events/before-initialize-event";
 import { InitializeEvent } from "../events/initialize-event";
+import { RhinoPasteEvent } from "../events/rhino-paste-event";
+import { RhinoFocusEvent } from "../events/rhino-focus-event";
+import { RhinoBlurEvent } from "../events/rhino-blur-event";
+import { RhinoChangeEvent } from "../events/rhino-change-event";
+import { SelectionChangeEvent } from "../events/selection-change-event";
 
 export type Serializer = "" | "html" | "json";
 /**
@@ -311,7 +316,7 @@ export class TipTapEditor extends BaseElement {
    *
    */
   editorOptions(_element: Element): Partial<EditorOptions> {
-    return {};
+    return {}
   }
 
   updateInputElementValue() {
@@ -1358,9 +1363,11 @@ export class TipTapEditor extends BaseElement {
   __handleUpdate = () => {
     this.updateInputElementValue();
     this.requestUpdate();
+    this.dispatchEvent(new RhinoChangeEvent())
   };
 
   __handleFocus = () => {
+    this.dispatchEvent(new RhinoFocusEvent())
     this.closeLinkDialog();
     this.requestUpdate();
   };
@@ -1368,10 +1375,12 @@ export class TipTapEditor extends BaseElement {
   __handleBlur = () => {
     this.updateInputElementValue();
     this.requestUpdate();
+    this.dispatchEvent(new RhinoBlurEvent())
   };
 
   __handleSelectionUpdate = () => {
     this.requestUpdate();
+    this.dispatchEvent(new SelectionChangeEvent())
   };
 
   __handleTransaction = () => {
@@ -1406,10 +1415,35 @@ export class TipTapEditor extends BaseElement {
       this.normalizeDOM(this.inputElement);
     }
 
-    return new Editor({
+    const editor = new Editor({
       ...this.__defaultOptions(element),
       ...this.editorOptions(element),
     });
+
+    const originalPaste = editor.options.editorProps.handlePaste
+    let handlePaste
+
+    // I dont know how `editor.setOptions({})` works, so this is me being safe
+    // to not override a users `handlePaste` function.
+    if (typeof originalPaste === "function") {
+      type HandlePaste = typeof originalPaste extends Function ? typeof originalPaste : never
+
+      const el = this
+
+      handlePaste = function handlePaste (...args: Parameters<HandlePaste>) {
+        if (originalPaste) {
+          originalPaste(...args)
+        }
+
+        el.dispatchEvent(new RhinoPasteEvent())
+      }
+
+      editor.setOptions({
+        editorProps: Object.assign(editor.options.editorProps, { handlePaste })
+      })
+    }
+
+    return editor
   }
 }
 

@@ -113,6 +113,11 @@ p, li {
   font-size: 1rem;
 }
 
+li > p {
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+
 ul {
   line-height: 1.8;
   list-style: disc outside;
@@ -136,6 +141,7 @@ ul ul ul ul {
 
 a,
 kr-layout::part(skip-link) {
+  word-break: break-all;
   word-wrap: anywhere;
   /* outline: transparent; */
   /* Unable to distinguish identifier, this makes links obvious */
@@ -145,7 +151,7 @@ kr-layout::part(skip-link) {
   text-underline-offset: 0.25em;
   color: var(--link-color);
   border-radius: 2px;
-  display: inline-block;
+  display: inline;
   padding: 0.25em;
   line-height: 1.2;
   transition: all 0.2s;
