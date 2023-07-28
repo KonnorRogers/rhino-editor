@@ -202,21 +202,23 @@ export class AttachmentEditor extends BaseElement {
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
           // Need to find the attachment it points to.
-          const attachment = this.parentElement?.rhinoAttachment
+          // This needs to move to a plugin to listen for when the node is deleted.
+          // https://discuss.prosemirror.net/t/callback-on-delete-specific-node/2817
+          // const attachment = this.parentElement?.rhinoAttachment
 
-          let cancelled = false
+          // let cancelled = false
 
-          if (attachment) {
-            const evt = new AttachmentRemoveEvent(attachment)
-            this.dispatchEvent(evt)
-            if (evt.defaultPrevented) {
-              cancelled = true
-            }
-          }
+          // if (attachment) {
+          //   const evt = new AttachmentRemoveEvent(attachment)
+          //   this.dispatchEvent(evt)
+          //   if (evt.defaultPrevented) {
+          //     cancelled = true
+          //   }
+          // }
 
-          if (cancelled) {
-            return
-          }
+          // if (cancelled) {
+          //   return
+          // }
 
           this.parentElement?.remove();
         }}
