@@ -182,4 +182,4 @@ function handleAttachment (event) {
   }, 10)
 }
 
-document.addEventListener("rhino-attachment-add", handleAttachment, { capture: true })
+document.addEventListener("rhino-attachment-add", handleAttachment)

@@ -265,16 +265,20 @@ export class TipTapEditor extends BaseElement {
    *   direct upload functionality.
    */
   handleAttachment = (event: AddAttachmentEvent) => {
-    if (event.defaultPrevented) {
-      return;
-    }
+    // use setTimeout(() => {}) so we wait until the next event loop so higher level
+    // listeners dont need to use capture.
+    setTimeout(() => {
+      if (event.defaultPrevented) {
+        return;
+      }
 
-    const { attachment, target } = event;
+      const { attachment, target } = event;
 
-    if (target instanceof HTMLElement && attachment.file) {
-      const upload = new AttachmentUpload(attachment, target);
-      upload.start();
-    }
+      if (target instanceof HTMLElement && attachment.file) {
+        const upload = new AttachmentUpload(attachment, target);
+        upload.start();
+      }
+    })
   };
 
   /** Override this to prevent specific file types from being uploaded. */

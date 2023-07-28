@@ -202,7 +202,22 @@ export class AttachmentEditor extends BaseElement {
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
           // Need to find the attachment it points to.
-          this.dispatchEvent(new AttachmentRemoveEvent())
+          const attachment = this.parentElement?.rhinoAttachment
+
+          let cancelled = false
+
+          if (attachment) {
+            const evt = new AttachmentRemoveEvent(attachment)
+            this.dispatchEvent(evt)
+            if (evt.defaultPrevented) {
+              cancelled = true
+            }
+          }
+
+          if (cancelled) {
+            return
+          }
+
           this.parentElement?.remove();
         }}
       >

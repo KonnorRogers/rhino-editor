@@ -5,10 +5,33 @@ import {
 } from "src/exports/elements/attachment-editor";
 import { mergeAttributes, Node } from "@tiptap/core";
 import { selectionToInsertionEnd } from "src/internal/selection-to-insertion-end";
-import { Maybe } from "src/types";
+import { AttachmentAttributes, Maybe } from "src/types";
 import { findAttribute } from "./find-attribute";
 import { toDefaultCaption } from "src/internal/to-default-caption";
 import { fileUploadErrorMessage } from "../translations";
+
+declare global {
+  interface HTMLElement {
+    rhinoAttachment?: AttachmentManager
+  }
+}
+
+// @TODO: Use this for node.attrs.
+// interface AttachmentAttrs {
+//   content?: Maybe<string>
+//   contentType?: Maybe<string>
+//   sgid?: Maybe<string>
+//   fileName?: Maybe<string>
+//   fileSize?: Maybe<string>
+//   caption?: Maybe<string>
+//   url?: Maybe<string>
+//   previewable: boolean
+//
+//   // Image
+//   src?: Maybe<string>
+//   width?: Maybe<number>
+//   height?: Maybe<number>
+// }
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
@@ -278,6 +301,9 @@ export const Attachment = Node.create<AttachmentOptions>({
       const figure = document.createElement("figure");
       const figcaption = document.createElement("figcaption");
 
+      const attachment = new AttachmentManager(node.attrs as AttachmentAttributes, editor.view)
+      figure.rhinoAttachment = attachment
+
       if (!caption) {
         figcaption.classList.add("is-empty");
       } else {
@@ -331,6 +357,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       const attachmentEditor = document.createElement(
         "rhino-attachment-editor"
       ) as AttachmentEditor;
+
       attachmentEditor.setAttribute("file-name", fileName);
       attachmentEditor.setAttribute("file-size", fileSize);
       attachmentEditor.setAttribute("contenteditable", "false");
