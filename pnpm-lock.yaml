@@ -114,6 +114,9 @@ devDependencies:
   '@web/test-runner':
     specifier: ^0.16.1
     version: 0.16.1(typescript@4.9.5)
+  '@web/test-runner-commands':
+    specifier: ^0.8.0
+    version: 0.8.0
   '@web/test-runner-playwright':
     specifier: ^0.10.0
     version: 0.10.0
@@ -1998,6 +2001,18 @@ packages:
 
   /@web/test-runner-commands@0.7.0:
     resolution: {integrity: sha512-3aXeGrkynOdJ5jgZu5ZslcWmWuPVY9/HNdWDUqPyNePG08PKmLV9Ij342ODDL6OVsxF5dvYn1312PhDqu5AQNw==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      '@web/test-runner-core': 0.11.2
+      mkdirp: 1.0.4
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: true
+
+  /@web/test-runner-commands@0.8.0:
+    resolution: {integrity: sha512-R40Rz+Tf3Y3Z4Ka9ey0DQcwYz3BflkyaoL2TNc7CR33iN6zv9pzRkRrtt4M/cSQfOPBTEsLlVAi1FsbvXsCKuQ==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@web/test-runner-core': 0.11.2

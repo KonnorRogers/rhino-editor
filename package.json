@@ -44,6 +44,7 @@
     "@web/dev-server": "^0.1.38",
     "@web/dev-server-esbuild": "^0.3.6",
     "@web/test-runner": "^0.16.1",
+    "@web/test-runner-commands": "^0.8.0",
     "@web/test-runner-playwright": "^0.10.0",
     "concurrently": "^8.0.1",
     "esbuild": "^0.14.54",
