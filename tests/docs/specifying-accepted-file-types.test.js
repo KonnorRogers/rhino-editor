@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test"
 import * as path from "path"
-import { readFile } from "node:fs/promises";
+import { createDataTransfer } from "./create-data-transfer.js"
 
 const pagePath = "/how-tos/specifying-accepted-file-types/"
 
@@ -62,28 +62,4 @@ test("Should not allow non-png files to be added via drag and drop", async ({ pa
   await page.dispatchEvent('rhino-editor#png-only .ProseMirror', 'drop', { dataTransfer });
   await expect(page.locator("rhino-editor#png-only figure")).not.toBeAttached()
 })
-
-async function createDataTransfer ({
-  page,
-  filePath,
-  fileName,
-  fileType,
-}) {
-  return await page.evaluateHandle(
-    async ({ fileHex, localFileName, localFileType }) => {
-      const dataTransfer = new DataTransfer();
-
-      dataTransfer.items.add(
-        new File([fileHex], localFileName, { type: localFileType })
-      );
-
-      return dataTransfer;
-    },
-    {
-      fileHex: (await readFile(filePath)).toString("hex"),
-      localFileName: fileName,
-      localFileType: fileType,
-    }
-  );
-};
 

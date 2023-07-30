@@ -19,8 +19,8 @@ async function createEditor () {
   tiptap = () => rhinoEditor.querySelector(".ProseMirror[role='textbox']")
 }
 
-// "rhino-file-accept", "rhino-attachment-add" and "rhino-attachment-remove" are handled in the "specifying-accepted-file-types" tests
-// due to it requiring an actual attachment
+// "rhino-file-accept", "rhino-attachment-add", "rhino-attachment-remove", "rhino-paste", and "rhino-selection-change" are handled in the "specifying-accepted-file-types" / "index" tests
+// due to it requiring playwright APIs.
 
 test("rhino-before-initialize", async () => {
   let called = false
@@ -91,26 +91,39 @@ test("rhino-blur", async () => {
   document.removeEventListener("rhino-blur", handleEvent)
 })
 test("rhino-change", async () => {
-  // let called = false
-  //
-  // function handleEvent () {
-  //   called = true
-  // }
-  //
-  // document.addEventListener("rhino-change", handleEvent)
-  // await createEditor()
-  // await aTimeout(1)
-  //
-  // tiptap().focus()
-  // assert.equal(called, false)
-  //
-  // await sendKeys({})
-  //
-  // assert.equal(called, true)
-  //
-  // document.removeEventListener("rhino-change", handleEvent)
+  let called = false
+
+  function handleEvent () {
+    called = true
+  }
+
+  document.addEventListener("rhino-change", handleEvent)
+  await createEditor()
+  await aTimeout(1)
+
+  tiptap().focus()
+
+  assert.equal(called, false)
+
+  await sendKeys({
+    type: "abcd"
+  })
+
+  assert.equal(called, true)
+
+  document.removeEventListener("rhino-change", handleEvent)
 })
-test("rhino-paste", async () => {
+
+// TODO: write test for these
+test("rhino-attachment-add", async () => {
 })
+
 test("rhino-selection-change", async () => {
 })
+
+test("rhino-attachment-remove", async () => {
+})
+
+test("rhino-file-accept", async () => {
+})
+

@@ -9,6 +9,7 @@ import { AttachmentAttributes, Maybe } from "src/types";
 import { findAttribute } from "./find-attribute";
 import { toDefaultCaption } from "src/internal/to-default-caption";
 import { fileUploadErrorMessage } from "../translations";
+// import { AttachmentRemoveEvent } from "../events/attachment-remove-event";
 
 declare global {
   interface HTMLElement {
@@ -84,6 +85,28 @@ export const Attachment = Node.create<AttachmentOptions>({
   draggable: true,
   isolating: true,
   defining: true,
+
+  onTransaction (_props) {
+    // Need to find the attachment it points to.
+    // This needs to move to a plugin to listen for when the node is deleted.
+    // https://discuss.prosemirror.net/t/callback-on-delete-specific-node/2817
+    // console.log("Transaction: ", this.editor.view.dom)
+    // const attachment = this.parentElement?.rhinoAttachment
+    //
+    // let cancelled = false
+    //
+    // if (attachment) {
+    //   const evt = new AttachmentRemoveEvent(attachment)
+    //   this.dispatchEvent(evt)
+    //   if (evt.defaultPrevented) {
+    //     cancelled = true
+    //   }
+    // }
+    //
+    // if (cancelled) {
+    //   return
+    // }
+  },
 
   addOptions() {
     return {

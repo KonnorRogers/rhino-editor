@@ -5,7 +5,6 @@ import { toMemorySize } from "src/internal/to-memory-size";
 import { normalize } from "src/exports/styles/normalize";
 import { BaseElement } from "src/internal/elements/base-element";
 import { fileUploadErrorMessage } from "../translations";
-import { AttachmentRemoveEvent } from "../events/attachment-remove-event";
 
 export const LOADING_STATES = Object.freeze({
   notStarted: "not-started",
@@ -201,25 +200,6 @@ export class AttachmentEditor extends BaseElement {
         part="delete-button"
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
-          // Need to find the attachment it points to.
-          // This needs to move to a plugin to listen for when the node is deleted.
-          // https://discuss.prosemirror.net/t/callback-on-delete-specific-node/2817
-          // const attachment = this.parentElement?.rhinoAttachment
-
-          // let cancelled = false
-
-          // if (attachment) {
-          //   const evt = new AttachmentRemoveEvent(attachment)
-          //   this.dispatchEvent(evt)
-          //   if (evt.defaultPrevented) {
-          //     cancelled = true
-          //   }
-          // }
-
-          // if (cancelled) {
-          //   return
-          // }
-
           this.parentElement?.remove();
         }}
       >
