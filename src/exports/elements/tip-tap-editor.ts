@@ -169,7 +169,7 @@ export class TipTapEditor extends BaseElement {
   }
 
   protected willUpdate(
-    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (changedProperties.has("class")) {
       this.classList.add("rhino-editor");
@@ -192,7 +192,7 @@ export class TipTapEditor extends BaseElement {
       this.__unBindEditorListeners();
     }
 
-    this.dispatchEvent(new BeforeInitializeEvent())
+    this.dispatchEvent(new BeforeInitializeEvent());
 
     setTimeout(() => {
       // Make sure we dont render the editor more than once.
@@ -217,7 +217,7 @@ export class TipTapEditor extends BaseElement {
       this.editorElement?.setAttribute("tabindex", "0");
       this.editorElement?.setAttribute("role", "textbox");
 
-      this.dispatchEvent(new InitializeEvent())
+      this.dispatchEvent(new InitializeEvent());
     });
 
     this.classList.add("rhino-editor");
@@ -235,7 +235,7 @@ export class TipTapEditor extends BaseElement {
 
     this.removeEventListener(
       AddAttachmentEvent.eventName,
-      this.handleAttachment
+      this.handleAttachment,
     );
 
     this.removeEventListener("keydown", this.handleKeyboardDialogToggle);
@@ -280,7 +280,7 @@ export class TipTapEditor extends BaseElement {
         const upload = new AttachmentUpload(attachment, target);
         upload.start();
       }
-    })
+    });
   };
 
   /** Override this to prevent specific file types from being uploaded. */
@@ -291,7 +291,7 @@ export class TipTapEditor extends BaseElement {
   }
 
   updated(
-    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (changedProperties.has("readonly")) {
       this.editor?.setEditable(!this.readonly);
@@ -322,7 +322,7 @@ export class TipTapEditor extends BaseElement {
    *
    */
   editorOptions(_element: Element): Partial<EditorOptions> {
-    return {}
+    return {};
   }
 
   updateInputElementValue() {
@@ -381,7 +381,7 @@ export class TipTapEditor extends BaseElement {
 
   get linkDialog(): Maybe<HTMLAnchorElement> {
     return this.shadowRoot?.querySelector(
-      ".link-dialog"
+      ".link-dialog",
     ) as Maybe<HTMLAnchorElement>;
   }
 
@@ -462,9 +462,9 @@ export class TipTapEditor extends BaseElement {
 
     event.preventDefault();
 
-    this.editor.commands.insertContent(clipboardData.items)
+    this.editor.commands.insertContent(clipboardData.items);
     await this.handleFiles(clipboardData.files);
-  }
+  };
 
   transformFilesToAttachments(files?: File[] | FileList | null) {
     if (this.editor == null) return;
@@ -482,7 +482,7 @@ export class TipTapEditor extends BaseElement {
           src,
           file,
         },
-        this.editor.view
+        this.editor.view,
       );
 
       attachments.push(attachment);
@@ -493,7 +493,7 @@ export class TipTapEditor extends BaseElement {
 
   get fileInputEl(): Maybe<HTMLInputElement> {
     return this.shadowRoot?.getElementById(
-      "file-input"
+      "file-input",
     ) as Maybe<HTMLInputElement>;
   }
 
@@ -631,7 +631,7 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--strike": true,
           "toolbar__button--active": Boolean(
-            this.editor?.isActive("rhino-strike")
+            this.editor?.isActive("rhino-strike"),
           ),
           "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleStrike(),
@@ -756,7 +756,7 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--blockquote": true,
           "toolbar__button--active": Boolean(
-            this.editor?.isActive("blockquote")
+            this.editor?.isActive("blockquote"),
           ),
           "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBlockquote(),
@@ -799,7 +799,7 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--code-block": true,
           "toolbar__button--active": Boolean(
-            this.editor?.isActive("codeBlock")
+            this.editor?.isActive("codeBlock"),
           ),
           "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleCodeBlock(),
@@ -841,7 +841,7 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--bullet-list": true,
           "toolbar__button--active": Boolean(
-            this.editor?.isActive("bulletList")
+            this.editor?.isActive("bulletList"),
           ),
           "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleBulletList(),
@@ -883,7 +883,7 @@ export class TipTapEditor extends BaseElement {
           toolbar__button: true,
           "toolbar__button--ordered-list": true,
           "toolbar__button--active": Boolean(
-            this.editor?.isActive("orderedList")
+            this.editor?.isActive("orderedList"),
           ),
           "toolbar__button--disabled":
             this.editor == null || !this.editor.can().toggleOrderedList(),
@@ -1317,14 +1317,14 @@ export class TipTapEditor extends BaseElement {
    */
   normalizeDOM(
     inputElement: Maybe<HTMLInputElement>,
-    parser = new DOMParser()
+    parser = new DOMParser(),
   ) {
     if (inputElement == null || inputElement.value == null) return;
 
     const doc = parser.parseFromString(inputElement.value, "text/html");
     const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")];
     const filtersWithoutChildren = figures.filter(
-      (figure) => figure.querySelector("figcaption") == null
+      (figure) => figure.querySelector("figcaption") == null,
     );
 
     doc.querySelectorAll("div > figure:first-child").forEach((el) => {
@@ -1340,7 +1340,7 @@ export class TipTapEditor extends BaseElement {
       if (caption) {
         figure.insertAdjacentHTML(
           "beforeend",
-          `<figcaption class="attachment__caption">${caption}</figcaption>`
+          `<figcaption class="attachment__caption">${caption}</figcaption>`,
         );
         return;
       }
@@ -1383,11 +1383,11 @@ export class TipTapEditor extends BaseElement {
   __handleUpdate: EditorOptions["onUpdate"] = () => {
     this.updateInputElementValue();
     this.requestUpdate();
-    this.dispatchEvent(new RhinoChangeEvent())
+    this.dispatchEvent(new RhinoChangeEvent());
   };
 
   __handleFocus: EditorOptions["onFocus"] = () => {
-    this.dispatchEvent(new RhinoFocusEvent())
+    this.dispatchEvent(new RhinoFocusEvent());
     this.closeLinkDialog();
     this.requestUpdate();
   };
@@ -1395,15 +1395,17 @@ export class TipTapEditor extends BaseElement {
   __handleBlur: EditorOptions["onBlur"] = () => {
     this.updateInputElementValue();
     this.requestUpdate();
-    this.dispatchEvent(new RhinoBlurEvent())
+    this.dispatchEvent(new RhinoBlurEvent());
   };
 
-  __handleSelectionUpdate: EditorOptions["onSelectionUpdate"] = ({transaction}) => {
+  __handleSelectionUpdate: EditorOptions["onSelectionUpdate"] = ({
+    transaction,
+  }) => {
     this.requestUpdate();
-    this.dispatchEvent(new SelectionChangeEvent({ transaction }))
+    this.dispatchEvent(new SelectionChangeEvent({ transaction }));
   };
 
-  __handleTransaction: EditorOptions["onTransaction"]  = () => {
+  __handleTransaction: EditorOptions["onTransaction"] = () => {
     this.requestUpdate();
   };
 
@@ -1440,7 +1442,7 @@ export class TipTapEditor extends BaseElement {
       ...this.editorOptions(element),
     });
 
-    return editor
+    return editor;
   }
 }
 

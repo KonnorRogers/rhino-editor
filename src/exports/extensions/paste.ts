@@ -4,24 +4,24 @@ import { RhinoPasteEvent } from "../events/rhino-paste-event";
 export interface PasteOptions {}
 
 // Super simple plugin that dispatches a paste event. This is convenient way to make this hard to override.
-export function Paste () {
+export function Paste() {
   return new Plugin({
-    key: new PluginKey('rhino-paste-event'),
+    key: new PluginKey("rhino-paste-event"),
     props: {
-      handlePaste (view, event) {
-        const { clipboardData } = event
+      handlePaste(view, event) {
+        const { clipboardData } = event;
 
-        const rhinoPasteEvent = new RhinoPasteEvent(clipboardData)
-        view.dom.dispatchEvent(rhinoPasteEvent)
+        const rhinoPasteEvent = new RhinoPasteEvent(clipboardData);
+        view.dom.dispatchEvent(rhinoPasteEvent);
 
         if (rhinoPasteEvent.defaultPrevented) {
-          return
+          return;
         }
 
-          // @TODO: Future enhancements for pasting
-          // https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/controllers/level_0_input_controller.js#L39
-          // https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/controllers/level_2_input_controller.js#L39
+        // @TODO: Future enhancements for pasting
+        // https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/controllers/level_0_input_controller.js#L39
+        // https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/controllers/level_2_input_controller.js#L39
       },
-    }
-  })
+    },
+  });
 }

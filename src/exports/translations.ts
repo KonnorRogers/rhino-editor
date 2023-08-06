@@ -1,5 +1,5 @@
 export const isiOS = /Mac|iOS|iPhone|iPad|iPod/i.test(
-  window.navigator.platform
+  window.navigator.platform,
 );
 
 export const modifierKey = isiOS ? "cmd" : "ctrl";

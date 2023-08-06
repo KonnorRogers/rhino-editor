@@ -5,9 +5,12 @@ import { BaseEvent } from "./base-event";
  *   Use this to prevent uploading a file by calling `event.preventDefault()`
  */
 export class FileAcceptEvent extends BaseEvent {
-  static eventName = "rhino-file-accept" as const
+  static eventName = "rhino-file-accept" as const;
 
-  constructor(public file: File, options?: EventInit | undefined) {
+  constructor(
+    public file: File,
+    options?: EventInit | undefined,
+  ) {
     super(FileAcceptEvent.eventName, options);
     this.file = file;
   }

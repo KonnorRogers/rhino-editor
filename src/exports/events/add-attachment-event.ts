@@ -6,9 +6,12 @@ import { BaseEvent } from "./base-event";
  *   Fires after an attachment has been added.
  */
 export class AddAttachmentEvent extends BaseEvent {
-  static eventName = "rhino-attachment-add" as const
+  static eventName = "rhino-attachment-add" as const;
 
-  constructor(public attachment: AttachmentManager, options: Partial<EventInit> = {}) {
+  constructor(
+    public attachment: AttachmentManager,
+    options: Partial<EventInit> = {},
+  ) {
     super(AddAttachmentEvent.eventName, options);
     this.attachment = attachment;
   }

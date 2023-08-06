@@ -4,19 +4,19 @@ import { EditorView } from "@tiptap/pm/view";
 import { toDefaultCaption } from "src/internal/to-default-caption";
 
 export interface AttachmentManagerAttributes {
-  src: string
+  src: string;
 
-  file?: Maybe<File>
+  file?: Maybe<File>;
 
-  attachmentId?: Maybe<string>
-  imageId?: Maybe<string>
-  sgid?: Maybe<string>
-  contentType?: Maybe<string>
-  fileName?: Maybe<string>
-  fileSize?: Maybe<number>
-  content?: Maybe<string>
-  caption?: Maybe<string>
-  url?: Maybe<string>
+  attachmentId?: Maybe<string>;
+  imageId?: Maybe<string>;
+  sgid?: Maybe<string>;
+  contentType?: Maybe<string>;
+  fileName?: Maybe<string>;
+  fileSize?: Maybe<number>;
+  content?: Maybe<string>;
+  caption?: Maybe<string>;
+  url?: Maybe<string>;
 }
 
 /**
@@ -89,7 +89,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
           view.state.tr.setNodeMarkup(position, undefined, {
             ...descendantNode.attrs,
             ...obj,
-          })
+          }),
         );
       }
     });

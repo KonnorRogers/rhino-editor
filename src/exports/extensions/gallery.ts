@@ -6,7 +6,7 @@ function handleGallery(
   node: ProseMirrorNode,
   tr: Transaction,
   newState: EditorState,
-  pos: number
+  pos: number,
 ) {
   let modified = false;
 
@@ -16,7 +16,7 @@ function handleGallery(
     tr.replaceWith(
       pos,
       pos + node.nodeSize,
-      newState.schema.node("paragraph", null, [])
+      newState.schema.node("paragraph", null, []),
     );
     modified = true;
   }
@@ -28,7 +28,7 @@ function handleCaptions(
   node: ProseMirrorNode,
   tr: Transaction,
   newState: EditorState,
-  pos: number
+  pos: number,
 ) {
   let modified = false;
   if (node.type.name !== "attachment-figure") return modified;
@@ -36,7 +36,7 @@ function handleCaptions(
   // @see https://discuss.prosemirror.net/t/saving-content-containing-dom-generated-by-nodeview/2594/5
   let scratch = document.createElement("div");
   scratch.appendChild(
-    DOMSerializer.fromSchema(newState.schema).serializeNode(node)
+    DOMSerializer.fromSchema(newState.schema).serializeNode(node),
   );
 
   const figcaption = scratch.querySelector("figcaption");

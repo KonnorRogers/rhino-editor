@@ -1,5 +1,5 @@
 import { Extension, Mark, Node } from "@tiptap/core";
-import { Plugin } from "@tiptap/pm/state"
+import { Plugin } from "@tiptap/pm/state";
 // import {
 //   FirefoxCaretFixPlugin,
 //   FirefoxCaretPluginOptions,
@@ -47,11 +47,11 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
 
     const extensions: [
       keyof RhinoStarterKitOptions,
-      (options: Record<string, unknown>) => Plugin
+      (options: Record<string, unknown>) => Plugin,
     ][] = [
-        // ["firefoxCaretPlugin", FirefoxCaretFixPlugin]
-        ["rhino_paste_event", Paste]
-      ];
+      // ["firefoxCaretPlugin", FirefoxCaretFixPlugin]
+      ["rhino_paste_event", Paste],
+    ];
 
     extensions.forEach(([string, extension]) => {
       const options = this.options[string];

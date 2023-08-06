@@ -1,5 +1,5 @@
 export function stringMap(
-  obj: Record<string, string | null | undefined | boolean>
+  obj: Record<string, string | null | undefined | boolean>,
 ): string {
   let string = "";
 
