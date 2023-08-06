@@ -1,4 +1,5 @@
 import { Extension, Mark, Node } from "@tiptap/core";
+import { Plugin } from "@tiptap/pm/state";
 // import {
 //   FirefoxCaretFixPlugin,
 //   FirefoxCaretPluginOptions,
@@ -13,6 +14,7 @@ import Placeholder, { PlaceholderOptions } from "@tiptap/extension-placeholder";
 import Focus, { FocusOptions } from "@tiptap/extension-focus";
 import { StrikeOptions } from "@tiptap/extension-strike";
 import Link, { LinkOptions } from "@tiptap/extension-link";
+import { Paste, PasteOptions } from "./paste";
 
 export interface RhinoStarterKitOptions {
   /** Funky hack extension for contenteditable in firefox. */
@@ -34,28 +36,32 @@ export interface RhinoStarterKitOptions {
   focus: Partial<FocusOptions> | false;
   link: Partial<LinkOptions> | false;
   placeholder: Partial<PlaceholderOptions> | false;
+  rhino_paste_event: Partial<PasteOptions> | false;
 }
 
 export type TipTapPlugin = Node | Extension | Mark;
 
 export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
-  // addProseMirrorPlugins() {
-  //   const loadedExtensions: Plugin[] = [];
-  //
-  //   const extensions: [
-  //     keyof RhinoStarterKitOptions,
-  //     (options: Record<string, unknown>) => Plugin
-  //   ][] = [["firefoxCaretPlugin", FirefoxCaretFixPlugin]];
-  //
-  //   extensions.forEach(([string, extension]) => {
-  //     const options = this.options[string];
-  //     if (options !== false) {
-  //       loadedExtensions.push(extension(options));
-  //     }
-  //   });
-  //
-  //   return loadedExtensions;
-  // },
+  addProseMirrorPlugins() {
+    const loadedExtensions: Plugin[] = [];
+
+    const extensions: [
+      keyof RhinoStarterKitOptions,
+      (options: Record<string, unknown>) => Plugin,
+    ][] = [
+      // ["firefoxCaretPlugin", FirefoxCaretFixPlugin]
+      ["rhino_paste_event", Paste],
+    ];
+
+    extensions.forEach(([string, extension]) => {
+      const options = this.options[string];
+      if (options !== false) {
+        loadedExtensions.push(extension(options));
+      }
+    });
+
+    return loadedExtensions;
+  },
 
   addExtensions() {
     const loadedExtensions: TipTapPlugin[] = [];

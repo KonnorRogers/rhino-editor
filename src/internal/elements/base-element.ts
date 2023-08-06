@@ -6,7 +6,7 @@ export class BaseElement extends LitElement {
   static define(
     name?: string,
     ctor?: CustomElementConstructor,
-    options?: ElementDefinitionOptions
+    options?: ElementDefinitionOptions,
   ) {
     if (name == null) name = this.baseName;
     if (ctor == null) ctor = this;

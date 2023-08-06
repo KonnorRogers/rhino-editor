@@ -1,14 +1,33 @@
-import { AttachmentManager } from "src/exports/attachment-manager";
+import {
+  AttachmentManager,
+  AttachmentManagerAttributes,
+} from "src/exports/attachment-manager.js";
 import {
   AttachmentEditor,
   LOADING_STATES,
-} from "src/exports/elements/attachment-editor";
+} from "src/exports/elements/attachment-editor.js";
+import type { LoadingState } from "src/exports/elements/attachment-editor.js";
 import { mergeAttributes, Node } from "@tiptap/core";
-import { selectionToInsertionEnd } from "src/internal/selection-to-insertion-end";
+import { selectionToInsertionEnd } from "src/internal/selection-to-insertion-end.js";
 import { Maybe } from "src/types";
 import { findAttribute } from "./find-attribute";
 import { toDefaultCaption } from "src/internal/to-default-caption";
 import { fileUploadErrorMessage } from "../translations";
+import { Plugin, PluginKey } from "@tiptap/pm/state";
+import { findChildrenByType } from "prosemirror-utils";
+import { AttachmentRemoveEvent } from "../events/attachment-remove-event";
+
+interface AttachmentAttrs extends AttachmentManagerAttributes {
+  loadingState: LoadingState;
+  previewable: boolean;
+  progress: number;
+
+  // Image
+  width?: Maybe<number>;
+  height?: Maybe<number>;
+
+  [key: string]: unknown;
+}
 
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
@@ -22,7 +41,7 @@ declare module "@tiptap/core" {
        * Add an attachment(s)
        */
       setAttachment: (
-        options: AttachmentManager | AttachmentManager[]
+        options: AttachmentManager | AttachmentManager[],
       ) => ReturnType;
     };
   }
@@ -62,6 +81,62 @@ export const Attachment = Node.create<AttachmentOptions>({
   isolating: true,
   defining: true,
 
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey("rhino-attachment-remove-event"),
+        view() {
+          return {
+            update(view, prevState) {
+              const nodeType = view.state.schema.nodes["attachment-figure"];
+
+              const attachmentNodesBefore = findChildrenByType(
+                prevState.doc,
+                nodeType,
+              );
+
+              type FindNodeResult = ReturnType<typeof findChildrenByType>;
+              type FindNodeResultObj = FindNodeResult[keyof FindNodeResult];
+
+              const afterSgidsAndAttachmentIds = new Map<
+                string,
+                FindNodeResultObj
+              >();
+
+              // attachmentNodesAfter state transform
+              findChildrenByType(view.state.doc, nodeType).forEach((node) => {
+                const nodeAttrs = node.node
+                  .attrs as AttachmentManagerAttributes;
+                const key = nodeAttrs.sgid || nodeAttrs.attachmentId;
+
+                if (key) {
+                  afterSgidsAndAttachmentIds.set(key, node);
+                }
+              });
+
+              attachmentNodesBefore.forEach((node) => {
+                const nodeAttrs = node.node
+                  .attrs as AttachmentManagerAttributes;
+
+                const key = nodeAttrs.sgid || nodeAttrs.attachmentId;
+
+                if (!key) return;
+                if (afterSgidsAndAttachmentIds.has(key)) return;
+
+                const attachmentManager = new AttachmentManager(
+                  nodeAttrs,
+                  view,
+                );
+                view.dom.dispatchEvent(
+                  new AttachmentRemoveEvent(attachmentManager),
+                );
+              });
+            },
+          };
+        },
+      }),
+    ];
+  },
   addOptions() {
     return {
       HTMLAttributes: {
@@ -103,9 +178,9 @@ export const Attachment = Node.create<AttachmentOptions>({
       src,
       width,
       height,
-    } = node.attrs;
+    } = node.attrs as AttachmentAttrs;
 
-    const attachmentAttrs: Record<keyof typeof node.attrs, string> = {
+    const attachmentAttrs = {
       caption,
       contentType,
       content,
@@ -140,7 +215,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       "figcaption",
       mergeAttributes(
         {},
-        { class: "attachment__caption attachment__caption--edited" }
+        { class: "attachment__caption attachment__caption--edited" },
       ),
       0,
     ] as const;
@@ -154,7 +229,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           contenteditable: false,
           width,
           height,
-        }
+        },
       ),
     ];
 
@@ -182,7 +257,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         parseHTML: (element) => (findAttribute(element, "sgid") ? 100 : 0),
       },
       loadingState: {
-        default: "not-started",
+        default: LOADING_STATES.notStarted,
         parseHTML: (element) =>
           findAttribute(element, "sgid")
             ? LOADING_STATES.success
@@ -248,7 +323,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         default: false,
         parseHTML: (element) => {
           const { previewable } = JSON.parse(
-            element.getAttribute("data-trix-attachment") || "{}"
+            element.getAttribute("data-trix-attachment") || "{}",
           );
 
           return previewable;
@@ -273,7 +348,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         caption,
         previewable,
         loadingState,
-      } = node.attrs;
+      } = node.attrs as AttachmentAttrs;
 
       const figure = document.createElement("figure");
       const figcaption = document.createElement("figcaption");
@@ -286,7 +361,7 @@ export const Attachment = Node.create<AttachmentOptions>({
 
       figcaption.setAttribute(
         "data-default-caption",
-        toDefaultCaption({ fileSize, fileName })
+        toDefaultCaption({ fileSize, fileName }),
       );
       figcaption.setAttribute("data-placeholder", "Add a caption...");
 
@@ -298,7 +373,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           " " +
           toType(content, canPreview(previewable, contentType)) +
           " " +
-          toExtension(fileName)
+          toExtension(fileName),
       );
       figure.setAttribute("data-trix-content-type", node.attrs.contentType);
 
@@ -317,7 +392,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           sgid,
           url,
           caption,
-        })
+        }),
       );
 
       figure.setAttribute(
@@ -325,17 +400,21 @@ export const Attachment = Node.create<AttachmentOptions>({
         JSON.stringify({
           presentation: "gallery",
           caption,
-        })
+        }),
       );
 
       const attachmentEditor = document.createElement(
-        "rhino-attachment-editor"
+        "rhino-attachment-editor",
       ) as AttachmentEditor;
-      attachmentEditor.setAttribute("file-name", fileName);
-      attachmentEditor.setAttribute("file-size", fileSize);
+
+      attachmentEditor.setAttribute("file-name", fileName || "");
+      attachmentEditor.setAttribute("file-size", String(fileSize || 0));
       attachmentEditor.setAttribute("contenteditable", "false");
-      attachmentEditor.setAttribute("loading-state", loadingState);
-      attachmentEditor.setAttribute("progress", progress);
+      attachmentEditor.setAttribute(
+        "loading-state",
+        loadingState || LOADING_STATES.notStarted,
+      );
+      attachmentEditor.setAttribute("progress", String(progress));
       attachmentEditor.fileUploadErrorMessage =
         this.options.fileUploadErrorMessage;
 
@@ -354,8 +433,8 @@ export const Attachment = Node.create<AttachmentOptions>({
 
       const img = document.createElement("img");
       img.setAttribute("contenteditable", "false");
-      img.setAttribute("width", width);
-      img.setAttribute("height", height);
+      img.setAttribute("width", String(width));
+      img.setAttribute("height", String(height));
 
       // Clean up any objects laying around
       if (url) {
@@ -385,7 +464,7 @@ export const Attachment = Node.create<AttachmentOptions>({
                   ...node.attrs,
                   height: height,
                   width: width,
-                })
+                }),
               );
             }
           };
@@ -438,7 +517,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           let attachmentNodes = attachments.map((attachment) => {
             return schema.nodes["attachment-figure"].create(
               attachment,
-              attachment.caption ? [schema.text(attachment.caption)] : []
+              attachment.caption ? [schema.text(attachment.caption)] : [],
             );
           });
 
@@ -463,7 +542,7 @@ export const Attachment = Node.create<AttachmentOptions>({
 
             const gallery = schema.nodes["attachment-gallery"].create(
               {},
-              attachmentNodes
+              attachmentNodes,
             );
 
             tr.replaceWith(currSelection.from - 1, currSelection.to, [

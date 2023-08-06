@@ -15,6 +15,9 @@ export default {
       retries: 1
     }
   },
+  plugins: [
+
+  ],
   browsers: [
     playwrightLauncher({ product: 'chromium' }),
     playwrightLauncher({ product: 'firefox' }),

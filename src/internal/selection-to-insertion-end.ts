@@ -5,7 +5,7 @@ import { ReplaceAroundStep, ReplaceStep } from "@tiptap/pm/transform";
 export function selectionToInsertionEnd(
   tr: Transaction,
   startLen: number,
-  bias: number
+  bias: number,
 ) {
   const last = tr.steps.length - 1;
 

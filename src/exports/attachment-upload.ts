@@ -15,10 +15,13 @@ export class AttachmentUpload implements DirectUploadDelegate {
   constructor(attachment: AttachmentManager, element: HTMLElement) {
     this.attachment = attachment;
     this.element = element;
+
+    if (this.attachment.file == null) throw "No file found for direct upload";
+
     this.directUpload = new DirectUpload(
       this.attachment.file,
       this.directUploadUrl,
-      this
+      this,
     );
   }
 
@@ -36,7 +39,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
 
   directUploadDidComplete(
     error: Error,
-    blob: Blob & { attachable_sgid?: string }
+    blob: Blob & { attachable_sgid?: string },
   ) {
     if (error) {
       this.currentProgress = 0;
@@ -81,7 +84,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
   get directUploadUrl() {
     if (this.element.dataset.directUploadUrl == null) {
       throw Error(
-        `No "data-direct-upload-url" attribute is set on ${this.element}`
+        `No "data-direct-upload-url" attribute is set on ${this.element}`,
       );
     }
     return this.element.dataset.directUploadUrl;
