@@ -3,7 +3,7 @@ import { Plugin } from "@tiptap/pm/state";
 export interface FirefoxCaretPluginOptions {}
 
 /**
- * Plugin to fix firefox cursor disappearing inside contenteditable.
+ * Plugin to fix firefox cursor disappearing inside contenteditable for shadow dom.
  * https://github.com/ProseMirror/prosemirror/issues/1113#issue-780389225
  */
 export function FirefoxCaretFixPlugin() {

@@ -15,6 +15,9 @@ export class AttachmentUpload implements DirectUploadDelegate {
   constructor(attachment: AttachmentManager, element: HTMLElement) {
     this.attachment = attachment;
     this.element = element;
+
+    if (this.attachment.file == null) throw "No file found for direct upload"
+
     this.directUpload = new DirectUpload(
       this.attachment.file,
       this.directUploadUrl,

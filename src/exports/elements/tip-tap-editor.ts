@@ -39,13 +39,14 @@ import { AttachmentEditor } from "./attachment-editor";
 import { FileAcceptEvent } from "../events/file-accept-event";
 import { BeforeInitializeEvent } from "../events/before-initialize-event";
 import { InitializeEvent } from "../events/initialize-event";
-import { RhinoPasteEvent } from "../events/rhino-paste-event";
 import { RhinoFocusEvent } from "../events/rhino-focus-event";
 import { RhinoBlurEvent } from "../events/rhino-blur-event";
 import { RhinoChangeEvent } from "../events/rhino-change-event";
 import { SelectionChangeEvent } from "../events/selection-change-event";
+import { RhinoPasteEvent } from "../events/rhino-paste-event";
 
 export type Serializer = "" | "html" | "json";
+
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
  *   see. This is what wraps everything into 1 coherent element.
@@ -226,6 +227,7 @@ export class TipTapEditor extends BaseElement {
 
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
     this.addEventListener("drop", this.handleDropFile);
+    this.addEventListener("rhino-paste", this.handlePaste);
   }
 
   disconnectedCallback() {
@@ -238,6 +240,7 @@ export class TipTapEditor extends BaseElement {
 
     this.removeEventListener("keydown", this.handleKeyboardDialogToggle);
     this.removeEventListener("drop", this.handleDropFile);
+    this.removeEventListener("rhino-paste", this.handlePaste);
   }
 
   /** Closes the dialog for link previews */
@@ -265,9 +268,8 @@ export class TipTapEditor extends BaseElement {
    *   direct upload functionality.
    */
   handleAttachment = (event: AddAttachmentEvent) => {
-    // use setTimeout(() => {}) so we wait until the next event loop so higher level
-    // listeners dont need to use capture.
     setTimeout(() => {
+      // For some reason this check needs to be in an timeout, haven't figured out why.
       if (event.defaultPrevented) {
         return;
       }
@@ -442,13 +444,27 @@ export class TipTapEditor extends BaseElement {
     const hasFiles = dataTransfer.files?.length > 0;
     if (!hasFiles) return;
 
-    const { view } = this.editor;
-    if (view == null) return;
-
     event.preventDefault();
 
     await this.handleFiles(dataTransfer.files);
   };
+
+  handlePaste = async (event: RhinoPasteEvent) => {
+    if (this.editor == null) return;
+    if (event == null) return;
+    if (!(event instanceof ClipboardEvent)) return;
+
+    const { clipboardData } = event;
+    if (clipboardData == null) return;
+
+    const hasFiles = clipboardData.files?.length > 0;
+    if (!hasFiles) return;
+
+    event.preventDefault();
+
+    this.editor.commands.insertContent(clipboardData.items)
+    await this.handleFiles(clipboardData.files);
+  }
 
   transformFilesToAttachments(files?: File[] | FileList | null) {
     if (this.editor == null) return;
@@ -1360,34 +1376,34 @@ export class TipTapEditor extends BaseElement {
     };
   }
 
-  __handleCreate = () => {
+  __handleCreate: EditorOptions["onCreate"] = () => {
     this.requestUpdate();
   };
 
-  __handleUpdate = () => {
+  __handleUpdate: EditorOptions["onUpdate"] = () => {
     this.updateInputElementValue();
     this.requestUpdate();
     this.dispatchEvent(new RhinoChangeEvent())
   };
 
-  __handleFocus = () => {
+  __handleFocus: EditorOptions["onFocus"] = () => {
     this.dispatchEvent(new RhinoFocusEvent())
     this.closeLinkDialog();
     this.requestUpdate();
   };
 
-  __handleBlur = () => {
+  __handleBlur: EditorOptions["onBlur"] = () => {
     this.updateInputElementValue();
     this.requestUpdate();
     this.dispatchEvent(new RhinoBlurEvent())
   };
 
-  __handleSelectionUpdate = () => {
+  __handleSelectionUpdate: EditorOptions["onSelectionUpdate"] = ({transaction}) => {
     this.requestUpdate();
-    this.dispatchEvent(new SelectionChangeEvent())
+    this.dispatchEvent(new SelectionChangeEvent({ transaction }))
   };
 
-  __handleTransaction = () => {
+  __handleTransaction: EditorOptions["onTransaction"]  = () => {
     this.requestUpdate();
   };
 
@@ -1423,29 +1439,6 @@ export class TipTapEditor extends BaseElement {
       ...this.__defaultOptions(element),
       ...this.editorOptions(element),
     });
-
-    const originalPaste = editor.options.editorProps.handlePaste
-    let handlePaste
-
-    // I dont know how `editor.setOptions({})` works, so this is me being safe
-    // to not override a users `handlePaste` function.
-    if (typeof originalPaste === "function") {
-      type HandlePaste = typeof originalPaste extends Function ? typeof originalPaste : never
-
-      const el = this
-
-      handlePaste = function handlePaste (...args: Parameters<HandlePaste>) {
-        if (originalPaste) {
-          originalPaste(...args)
-        }
-
-        el.dispatchEvent(new RhinoPasteEvent())
-      }
-
-      editor.setOptions({
-        editorProps: Object.assign(editor.options.editorProps, { handlePaste })
-      })
-    }
 
     return editor
   }
