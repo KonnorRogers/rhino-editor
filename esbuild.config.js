@@ -99,22 +99,23 @@ function BuildTimer () {
   }
 
 
-  const contexts = await Promise.allSettled([
-    esbuild.context({
+  /**
+   * @type {Array<import("esbuild").BuildOptions>}
+   */
+  const configs = [
+    {
       ...defaultConfig,
       outfile: "exports/bundle/index.common.js",
       format: "cjs",
       minify: true,
-    }),
-
-    esbuild.context({
+    },
+    {
       ...defaultConfig,
       outfile: "exports/bundle/index.module.js",
       format: "esm",
       minify: true,
-    }),
-
-    esbuild.context({
+    },
+    {
       ...defaultConfig,
       entryPoints: entries,
       outdir: 'exports',
@@ -124,9 +125,8 @@ function BuildTimer () {
       splitting: true,
       minify: false,
       chunkNames: 'chunks/[name]-[hash]'
-    }),
-
-    esbuild.context({
+    },
+    {
       ...defaultConfig,
       entryPoints: entries,
       outdir: 'cdn/exports',
@@ -136,21 +136,23 @@ function BuildTimer () {
       splitting: true,
       minify: false,
       chunkNames: 'chunks/[name]-[hash]'
-    })
-  ]).catch((e) => {
-    console.error(e)
-    process.exit(1)
+    }
+  ]
+
+  if (!watchMode) {
+    await Promise.all(configs.map((config) => esbuild.build(config)))
+      .catch((err) => {
+        console.error(err)
+        process.exit(1)
+      })
+
+    return
+  }
+
+  await Promise.all(configs.map(async (config) => {
+    const context = await esbuild.context(config)
+    return await context.rebuild()
+  })).catch((err) => {
+    console.error(err)
   })
-
-  await Promise.allSettled(contexts.map(async (promise) => {
-    if (promise.status === "rejected") {
-      return undefined
-    }
-
-    if (watchMode) {
-      await promise.value.watch()
-    } else {
-      await promise.value.rebuild()
-    }
-  }))
 })()
