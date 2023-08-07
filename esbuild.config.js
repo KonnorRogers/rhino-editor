@@ -151,7 +151,7 @@ function BuildTimer () {
 
   await Promise.all(configs.map(async (config) => {
     const context = await esbuild.context(config)
-    return await context.rebuild()
+    return await context.watch()
   })).catch((err) => {
     console.error(err)
   })

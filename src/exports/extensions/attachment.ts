@@ -3,7 +3,6 @@ import {
   AttachmentManagerAttributes,
 } from "src/exports/attachment-manager.js";
 import {
-  AttachmentEditor,
   LOADING_STATES,
 } from "src/exports/elements/attachment-editor.js";
 import type { LoadingState } from "src/exports/elements/attachment-editor.js";
@@ -16,6 +15,11 @@ import { fileUploadErrorMessage } from "../translations";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { findChildrenByType } from "prosemirror-utils";
 import { AttachmentRemoveEvent } from "../events/attachment-remove-event";
+
+import { render, html } from 'lit/html.js'
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import { ifDefined } from 'lit/directives/if-defined.js'
+import { when } from 'lit/directives/when.js'
 
 interface AttachmentAttrs extends AttachmentManagerAttributes {
   loadingState: LoadingState;
@@ -350,75 +354,38 @@ export const Attachment = Node.create<AttachmentOptions>({
         loadingState,
       } = node.attrs as AttachmentAttrs;
 
-      const figure = document.createElement("figure");
-      const figcaption = document.createElement("figcaption");
+      const trixAttachment = JSON.stringify({
+        contentType,
+        content,
+        filename: fileName,
+        filesize: fileSize,
+        height,
+        width,
+        sgid,
+        url,
+        caption,
+      })
 
-      if (!caption) {
-        figcaption.classList.add("is-empty");
-      } else {
-        figcaption.classList.remove("is-empty");
-      }
+      const trixAttributes = JSON.stringify({
+        presentation: "gallery",
+        caption,
+      })
 
-      figcaption.setAttribute(
-        "data-default-caption",
-        toDefaultCaption({ fileSize, fileName }),
-      );
-      figcaption.setAttribute("data-placeholder", "Add a caption...");
+      const figureClasses = `
+        ${this.options.HTMLAttributes.class}
+        ${toType(content, canPreview(previewable, contentType))}
+        ${toExtension(fileName)}
+      `
 
-      figcaption.classList.add("attachment__caption");
 
-      figure.setAttribute(
-        "class",
-        this.options.HTMLAttributes.class +
-          " " +
-          toType(content, canPreview(previewable, contentType)) +
-          " " +
-          toExtension(fileName),
-      );
-      figure.setAttribute("data-trix-content-type", node.attrs.contentType);
+      const scratch = document.createElement("div")
 
-      // Convenient way to tell us its "final"
-      if (sgid) figure.setAttribute("sgid", sgid);
+      function handleFigureClick (e: Event) {
+        const target = e.currentTarget as HTMLElement
+        const figcaption = target.querySelector("figcaption")
 
-      figure.setAttribute(
-        "data-trix-attachment",
-        JSON.stringify({
-          contentType,
-          content,
-          filename: fileName,
-          filesize: fileSize,
-          height,
-          width,
-          sgid,
-          url,
-          caption,
-        }),
-      );
+        if (figcaption == null) return
 
-      figure.setAttribute(
-        "data-trix-attributes",
-        JSON.stringify({
-          presentation: "gallery",
-          caption,
-        }),
-      );
-
-      const attachmentEditor = document.createElement(
-        "rhino-attachment-editor",
-      ) as AttachmentEditor;
-
-      attachmentEditor.setAttribute("file-name", fileName || "");
-      attachmentEditor.setAttribute("file-size", String(fileSize || 0));
-      attachmentEditor.setAttribute("contenteditable", "false");
-      attachmentEditor.setAttribute(
-        "loading-state",
-        loadingState || LOADING_STATES.notStarted,
-      );
-      attachmentEditor.setAttribute("progress", String(progress));
-      attachmentEditor.fileUploadErrorMessage =
-        this.options.fileUploadErrorMessage;
-
-      figure.addEventListener("click", (e: Event) => {
         if (e.composedPath().includes(figcaption)) {
           return;
         }
@@ -429,12 +396,12 @@ export const Attachment = Node.create<AttachmentOptions>({
             .setTextSelection(getPos() + 1)
             .run();
         }
-      });
+      }
 
-      const img = document.createElement("img");
-      img.setAttribute("contenteditable", "false");
-      img.setAttribute("width", String(width));
-      img.setAttribute("height", String(height));
+      // const img = document.createElement("img");
+      // img.setAttribute("contenteditable", "false");
+      // img.setAttribute("width", String(width));
+      // img.setAttribute("height", String(height));
 
       // Clean up any objects laying around
       if (url) {
@@ -443,45 +410,85 @@ export const Attachment = Node.create<AttachmentOptions>({
         } catch (_e) {}
       }
 
-      if (canPreview(previewable, contentType)) {
-        if (url || src) {
-          img.setAttribute("src", url || src);
-        }
+      const isPreviewable = canPreview(previewable, contentType)
 
-        if (loadingState === LOADING_STATES.error) {
-          img.classList.add("rhino-upload-error");
-        }
+      let imgSrc: string | undefined = undefined
+
+      if (isPreviewable && (url || src)) {
+        imgSrc = url || src
+      }
+
+      function handleImageLoad (e: Event) {
+        if (!isPreviewable) return
 
         if (!width || !height) {
-          img.src = url || src;
-          img.onload = () => {
-            const { naturalHeight: height, naturalWidth: width } = img;
+          const { naturalHeight: height, naturalWidth: width } = e.currentTarget as HTMLImageElement;
 
-            if (typeof getPos === "function") {
-              const view = editor.view;
-              view.dispatch(
-                view.state.tr.setNodeMarkup(getPos(), undefined, {
-                  ...node.attrs,
-                  height: height,
-                  width: width,
-                }),
-              );
-            }
-          };
-        }
+          if (typeof getPos === "function") {
+            const view = editor.view;
+            view.dispatch(
+              view.state.tr.setNodeMarkup(getPos(), undefined, {
+                ...node.attrs,
+                height: height,
+                width: width,
+              }),
+            );
+          }
+        };
       }
 
-      if (content && !canPreview(previewable, contentType)) {
-        figure.innerHTML = content;
-        figure.prepend(attachmentEditor);
-        figure.append(figcaption);
-      } else {
-        figure.append(attachmentEditor, img, figcaption);
-      }
+      const template = html`
+        <figure
+          class=${figureClasses}
+          sgid=${ifDefined(sgid ? sgid : undefined)}
+          data-trix-content-type=${contentType}
+          data-trix-attachment=${trixAttachment}
+          data-trix-attributes=${trixAttributes}
+          @click=${handleFigureClick}
+        >
+          <rhino-attachment-editor
+            file-name=${fileName || ""}
+            file-size=${String(fileSize || 0)}
+            contenteditable="false"
+            loading-state=${loadingState || LOADING_STATES.notStarted}
+            progress=${progress}
+          >
+          </rhino-attachment-editor>
+
+          ${when(content && !isPreviewable,
+            /* This is really not great. This is how Trix does it, but it feels very unsafe.
+               https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/views/attachment_view.js#L36
+            */
+            () => html`${unsafeHTML(content)}`,
+            () => html`
+              <img
+                class=${loadingState === LOADING_STATES.error ? "rhino-upload-error" : ""}
+                contenteditable="false"
+                width=${String(width)}
+                height=${String(height)}
+                src=${ifDefined(imgSrc)}
+                @load=${handleImageLoad}
+              >
+            `,
+          )}
+
+          <figcaption
+            class=${`attachment__caption ${caption ? "" : "is-empty"}`}
+            data-placeholder="Add a caption..."
+            data-default-caption=${toDefaultCaption({ fileName, fileSize })}
+            progress=${String(progress)}
+            .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
+          ></figcaption>
+        </figure>
+      `
+      render(template, scratch)
+
+      const dom = scratch.firstElementChild
+      const contentDOM = dom?.querySelector("figcaption")
 
       return {
-        dom: figure,
-        contentDOM: figcaption,
+        dom,
+        contentDOM,
       };
     };
   },
