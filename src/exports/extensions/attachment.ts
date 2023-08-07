@@ -375,8 +375,6 @@ export const Attachment = Node.create<AttachmentOptions>({
         ${toExtension(fileName)}
       `;
 
-      const scratch = document.createElement("div");
-
       function handleFigureClick(e: Event) {
         const target = e.currentTarget as HTMLElement;
         const figcaption = target.querySelector("figcaption");
@@ -394,11 +392,6 @@ export const Attachment = Node.create<AttachmentOptions>({
             .run();
         }
       }
-
-      // const img = document.createElement("img");
-      // img.setAttribute("contenteditable", "false");
-      // img.setAttribute("width", String(width));
-      // img.setAttribute("height", String(height));
 
       // Clean up any objects laying around
       if (url) {
@@ -418,20 +411,21 @@ export const Attachment = Node.create<AttachmentOptions>({
       function handleImageLoad(e: Event) {
         if (!isPreviewable) return;
 
-        if (!width || !height) {
-          const { naturalHeight: height, naturalWidth: width } =
-            e.currentTarget as HTMLImageElement;
+        // Can't use height / width here and have no clue why. function hoisting maybe?
+        if (node.attrs.width && node.attrs.height) return;
 
-          if (typeof getPos === "function") {
-            const view = editor.view;
-            view.dispatch(
-              view.state.tr.setNodeMarkup(getPos(), undefined, {
-                ...node.attrs,
-                height: height,
-                width: width,
-              }),
-            );
-          }
+        const { naturalHeight: height, naturalWidth: width } =
+          e.currentTarget as HTMLImageElement;
+
+        if (typeof getPos === "function") {
+          const view = editor.view;
+          view.dispatch(
+            view.state.tr.setNodeMarkup(getPos(), undefined, {
+              ...node.attrs,
+              height: height,
+              width: width,
+            }),
+          );
         }
       }
 
@@ -482,6 +476,9 @@ export const Attachment = Node.create<AttachmentOptions>({
           ></figcaption>
         </figure>
       `;
+
+      // Scratch element to render into.
+      const scratch = document.createElement("div");
       render(template, scratch);
 
       const dom = scratch.firstElementChild;
