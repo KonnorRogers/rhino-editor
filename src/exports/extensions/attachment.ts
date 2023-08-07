@@ -2,9 +2,7 @@ import {
   AttachmentManager,
   AttachmentManagerAttributes,
 } from "src/exports/attachment-manager.js";
-import {
-  LOADING_STATES,
-} from "src/exports/elements/attachment-editor.js";
+import { LOADING_STATES } from "src/exports/elements/attachment-editor.js";
 import type { LoadingState } from "src/exports/elements/attachment-editor.js";
 import { mergeAttributes, Node } from "@tiptap/core";
 import { selectionToInsertionEnd } from "src/internal/selection-to-insertion-end.js";
@@ -16,10 +14,10 @@ import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { findChildrenByType } from "prosemirror-utils";
 import { AttachmentRemoveEvent } from "../events/attachment-remove-event";
 
-import { render, html } from 'lit/html.js'
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import { ifDefined } from 'lit/directives/if-defined.js'
-import { when } from 'lit/directives/when.js'
+import { render, html } from "lit/html.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { ifDefined } from "lit/directives/if-defined.js";
+import { when } from "lit/directives/when.js";
 
 interface AttachmentAttrs extends AttachmentManagerAttributes {
   loadingState: LoadingState;
@@ -364,27 +362,26 @@ export const Attachment = Node.create<AttachmentOptions>({
         sgid,
         url,
         caption,
-      })
+      });
 
       const trixAttributes = JSON.stringify({
         presentation: "gallery",
         caption,
-      })
+      });
 
       const figureClasses = `
         ${this.options.HTMLAttributes.class}
         ${toType(content, canPreview(previewable, contentType))}
         ${toExtension(fileName)}
-      `
+      `;
 
+      const scratch = document.createElement("div");
 
-      const scratch = document.createElement("div")
+      function handleFigureClick(e: Event) {
+        const target = e.currentTarget as HTMLElement;
+        const figcaption = target.querySelector("figcaption");
 
-      function handleFigureClick (e: Event) {
-        const target = e.currentTarget as HTMLElement
-        const figcaption = target.querySelector("figcaption")
-
-        if (figcaption == null) return
+        if (figcaption == null) return;
 
         if (e.composedPath().includes(figcaption)) {
           return;
@@ -410,19 +407,20 @@ export const Attachment = Node.create<AttachmentOptions>({
         } catch (_e) {}
       }
 
-      const isPreviewable = canPreview(previewable, contentType)
+      const isPreviewable = canPreview(previewable, contentType);
 
-      let imgSrc: string | undefined = undefined
+      let imgSrc: string | undefined = undefined;
 
       if (isPreviewable && (url || src)) {
-        imgSrc = url || src
+        imgSrc = url || src;
       }
 
-      function handleImageLoad (e: Event) {
-        if (!isPreviewable) return
+      function handleImageLoad(e: Event) {
+        if (!isPreviewable) return;
 
         if (!width || !height) {
-          const { naturalHeight: height, naturalWidth: width } = e.currentTarget as HTMLImageElement;
+          const { naturalHeight: height, naturalWidth: width } =
+            e.currentTarget as HTMLImageElement;
 
           if (typeof getPos === "function") {
             const view = editor.view;
@@ -434,7 +432,7 @@ export const Attachment = Node.create<AttachmentOptions>({
               }),
             );
           }
-        };
+        }
       }
 
       const template = html`
@@ -455,20 +453,23 @@ export const Attachment = Node.create<AttachmentOptions>({
           >
           </rhino-attachment-editor>
 
-          ${when(content && !isPreviewable,
+          ${when(
+            content && !isPreviewable,
             /* This is really not great. This is how Trix does it, but it feels very unsafe.
                https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/views/attachment_view.js#L36
             */
             () => html`${unsafeHTML(content)}`,
             () => html`
               <img
-                class=${loadingState === LOADING_STATES.error ? "rhino-upload-error" : ""}
+                class=${loadingState === LOADING_STATES.error
+                  ? "rhino-upload-error"
+                  : ""}
                 contenteditable="false"
                 width=${String(width)}
                 height=${String(height)}
                 src=${ifDefined(imgSrc)}
                 @load=${handleImageLoad}
-              >
+              />
             `,
           )}
 
@@ -480,11 +481,11 @@ export const Attachment = Node.create<AttachmentOptions>({
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
           ></figcaption>
         </figure>
-      `
-      render(template, scratch)
+      `;
+      render(template, scratch);
 
-      const dom = scratch.firstElementChild
-      const contentDOM = dom?.querySelector("figcaption")
+      const dom = scratch.firstElementChild;
+      const contentDOM = dom?.querySelector("figcaption");
 
       return {
         dom,
