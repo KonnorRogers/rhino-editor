@@ -832,6 +832,8 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderBulletListButton() {
+    const isDisabled = this.editor == null || !(this.editor.can().toggleBulletList() || this.editor.can().toggleOrderedList())
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -843,12 +845,10 @@ export class TipTapEditor extends BaseElement {
           "toolbar__button--active": Boolean(
             this.editor?.isActive("bulletList"),
           ),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().toggleBulletList(),
+          "toolbar__button--disabled": isDisabled
         })}
         aria-describedby="bullet-list"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().toggleBulletList()}
+        aria-disabled=${isDisabled}
         aria-pressed=${this.editor?.isActive("bulletList")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
@@ -874,6 +874,7 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderOrderedListButton() {
+    const isDisabled = this.editor == null || !(this.editor.can().toggleBulletList() || this.editor.can().toggleOrderedList())
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -885,12 +886,10 @@ export class TipTapEditor extends BaseElement {
           "toolbar__button--active": Boolean(
             this.editor?.isActive("orderedList"),
           ),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().toggleOrderedList(),
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="ordered-list"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().toggleOrderedList()}
+        aria-disabled=${isDisabled}
         aria-pressed=${this.editor?.isActive("orderedList")}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
@@ -1009,8 +1008,9 @@ export class TipTapEditor extends BaseElement {
             this.editor == null || !this.editor.can().sinkListItem("listItem"),
         })}
         aria-describedby="decrease-indentation"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().sinkListItem("listItem")}
+        aria-disabled=${
+          this.editor == null || !this.editor.can().sinkListItem("listItem")
+        }
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -1048,8 +1048,9 @@ export class TipTapEditor extends BaseElement {
             this.editor == null || !this.editor.can().sinkListItem("listItem"),
         })}
         aria-describedby="increase-indentation"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().sinkListItem("listItem")}
+        aria-disabled=${
+          this.editor == null || !this.editor.can().sinkListItem("listItem")
+        }
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
