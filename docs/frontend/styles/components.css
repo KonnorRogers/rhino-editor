@@ -810,6 +810,10 @@ bridgetown-ninja-keys.dark {
   color: white;
 }
 
+.rhino-editor .ProseMirror {
+  max-height: 60vh;
+  overflow: auto;
+}
 
 .sl-theme-dark .rhino-editor::part(toolbar__button):is(:focus, :hover) {
   color: black;
