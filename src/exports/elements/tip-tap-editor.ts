@@ -832,7 +832,9 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderBulletListButton() {
-    const isDisabled = this.editor == null || !(this.editor.can().toggleBulletList() || this.editor.can().toggleOrderedList())
+    const isDisabled = this.editor == null || !(this.editor.can().toggleOrderedList() || this.editor.can().toggleBulletList())
+
+    const isActive = Boolean(this.editor?.isActive("bulletList") && this.editor.can().toggleBulletList())
 
     return html`
       <button
@@ -842,14 +844,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--bullet-list": true,
-          "toolbar__button--active": Boolean(
-            this.editor?.isActive("bulletList"),
-          ),
+          "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled
         })}
         aria-describedby="bullet-list"
         aria-disabled=${isDisabled}
-        aria-pressed=${this.editor?.isActive("bulletList")}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -874,7 +874,10 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderOrderedListButton() {
-    const isDisabled = this.editor == null || !(this.editor.can().toggleBulletList() || this.editor.can().toggleOrderedList())
+    const isDisabled = this.editor == null || !(this.editor.can().toggleOrderedList() || this.editor.can().toggleBulletList())
+
+    const isActive = Boolean(this.editor?.isActive("orderedList") && this.editor.can().toggleOrderedList())
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -883,14 +886,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--ordered-list": true,
-          "toolbar__button--active": Boolean(
-            this.editor?.isActive("orderedList"),
-          ),
+          "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="ordered-list"
         aria-disabled=${isDisabled}
-        aria-pressed=${this.editor?.isActive("orderedList")}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {

@@ -1,31 +1,16 @@
 // @ts-check
 import "rhino-editor"
-import { TipTapEditor } from "../../exports/elements/tip-tap-editor.js"
-import { fixture, assert, aTimeout, waitUntil } from "@open-wc/testing"
+import { assert, aTimeout, waitUntil } from "@open-wc/testing"
 import { html } from "lit"
 import { readFile, sendKeys } from '@web/test-runner-commands';
 import sinon from "sinon"
 import {createDataTransfer} from "./create-data-transfer.js"
-
-/** @type {TipTapEditor} */
-let rhinoEditor
-
-/** @type {() => HTMLElement & ElementContentEditable} */
-let tiptap
-
-async function createEditor () {
-  rhinoEditor = await fixture(html`<rhino-editor></rhino-editor>`)
-
-  // Let it render.
-  await aTimeout(1)
-
-  /** @type {HTMLDivElement & ElementContentEditable} */
-  // @ts-expect-error
-  tiptap = () => rhinoEditor.querySelector(".ProseMirror[role='textbox']")
-}
+import { createEditor } from "./create-editor.js";
 
 // "rhino-file-accept", "rhino-attachment-add", "rhino-attachment-remove", "rhino-paste", and "rhino-selection-change" are handled in the "specifying-accepted-file-types" / "index" tests
 // due to it requiring playwright APIs.
+
+const editorHTML = html`<rhino-editor></rhino-editor>`
 
 test("rhino-before-initialize", async () => {
   let called = false
@@ -35,11 +20,12 @@ test("rhino-before-initialize", async () => {
   }
 
   document.addEventListener("rhino-before-initialize", handleEvent)
-  await createEditor()
+  await createEditor(editorHTML)
 
   assert.equal(called, true)
   document.removeEventListener("rhino-before-initialize", handleEvent)
 })
+
 test("rhino-initialize", async () => {
   let called = false
 
@@ -51,7 +37,7 @@ test("rhino-initialize", async () => {
 
   assert.equal(called, false)
 
-  await createEditor()
+  await createEditor(editorHTML)
 
   assert.equal(called, true)
 
@@ -65,7 +51,7 @@ test("rhino-focus", async () => {
   }
 
   document.addEventListener("rhino-focus", handleEvent)
-  await createEditor()
+  const { tiptap } = await createEditor(editorHTML)
 
   assert.equal(called, false)
 
@@ -83,7 +69,7 @@ test("rhino-blur", async () => {
   }
 
   document.addEventListener("rhino-blur", handleEvent)
-  await createEditor()
+  const { tiptap } = await createEditor(editorHTML)
   tiptap().focus()
 
   assert.equal(called, false)
@@ -102,7 +88,7 @@ test("rhino-change", async () => {
   }
 
   document.addEventListener("rhino-change", handleEvent)
-  await createEditor()
+  const { tiptap } = await createEditor(editorHTML)
 
   tiptap().focus()
 
@@ -125,8 +111,7 @@ test("rhino-attachment-add", async () => {
     spy()
   }
 
-  await createEditor()
-  await aTimeout(1)
+  const { rhinoEditor, tiptap } = await createEditor(editorHTML)
 
   rhinoEditor.addEventListener("rhino-attachment-add", handleEvent)
   tiptap().focus()
@@ -156,7 +141,7 @@ test("rhino-selection-change", async () => {
 
   document.addEventListener("rhino-selection-change", handleEvent)
 
-  await createEditor()
+  const { tiptap } = await createEditor(editorHTML)
 
   tiptap().focus()
 
@@ -176,7 +161,7 @@ test("rhino-attachment-remove", async () => {
   function handleAttachment (e) { e.preventDefault() }
   function handleEvent (e) { spy() }
 
-  await createEditor()
+  const { rhinoEditor, tiptap } = await createEditor(editorHTML)
 
   rhinoEditor.addEventListener("rhino-attachment-add", handleAttachment)
   rhinoEditor.addEventListener("rhino-attachment-remove", handleEvent)
@@ -218,8 +203,7 @@ test("rhino-file-accept", async () => {
   document.addEventListener("rhino-file-accept", handleEvent)
   document.addEventListener("rhino-attachment-add", preventAttachment, { capture: true })
 
-  await createEditor()
-  await aTimeout(1)
+  const { tiptap } = await createEditor(editorHTML)
 
   tiptap().focus()
 
@@ -248,8 +232,7 @@ test("rhino-paste", async () => {
   function handleEvent () { spy() }
 
   document.addEventListener("rhino-paste", handleEvent)
-  await createEditor()
-  await aTimeout(1)
+  const { tiptap } = await createEditor(editorHTML)
 
   tiptap().focus()
 
