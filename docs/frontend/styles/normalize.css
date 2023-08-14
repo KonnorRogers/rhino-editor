@@ -67,21 +67,9 @@ button:hover {
   cursor: pointer;
 }
 
-h1,h2,h3,h4 {
+h1,h2,h3,h4,h5,h6 {
   scroll-margin-top: calc(80px + 2em);
-}
-
-h1 {
   padding: 0.25em var(--sl-spacing-large);
-}
-
-h2 {
-  padding: 0.25em var(--sl-spacing-medium);
-}
-
-h3,h4 {
-  padding: 0.25em var(--sl-spacing-x-small);
-  margin: var(--sl-spacing-xx-small) var(--sl-spacing-small);
 }
 
 h1 {
@@ -99,7 +87,7 @@ h3 {
   margin-top: var(--sl-spacing-x-large);
 }
 
-h4 {
+h4,h5,h6 {
   margin-top: var(--sl-spacing-medium);
   font-size: var(--sl-font-size-large);
 }
@@ -141,7 +129,7 @@ ul ul ul ul {
 
 a,
 kr-layout::part(skip-link) {
-  word-break: break-all;
+  word-break: break-word;
   word-wrap: anywhere;
   /* outline: transparent; */
   /* Unable to distinguish identifier, this makes links obvious */

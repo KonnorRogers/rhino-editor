@@ -248,15 +248,17 @@ kbd {
 }
 
 .side-nav__item {
-  padding: 4px;
+  padding: 0.4rem 0.5rem;
   max-width: 100%;
   line-height: 1.3;
 }
 
 .side-nav__link {
   color: var(--sl-color-neutral-500);
+  word-break: break-word;
   text-decoration: none;
   text-decoration-color: currentColor;
+  padding: 0;
 }
 
 .sl-theme-dark .side-nav__link {
@@ -438,7 +440,7 @@ sl-button:is(.next-page, .previous-page):is(:hover, :focus) {
 }
 
 .pagination-footer {
-  padding: 2rem 1rem 0rem 1rem;
+  padding: 2rem 1.5rem 0rem 1.5rem;
   margin-top: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -808,11 +810,6 @@ bridgetown-ninja-keys.dark {
   --rhino-button-active-border-color: var(--sl-color-primary-700);
   --rhino-button-active-background-color: var(--sl-color-primary-200);
   color: white;
-}
-
-.rhino-editor .ProseMirror {
-  max-height: 60vh;
-  overflow: auto;
 }
 
 .sl-theme-dark .rhino-editor::part(toolbar__button):is(:focus, :hover) {

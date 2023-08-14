@@ -4,16 +4,14 @@ import { TipTapEditor } from "rhino-editor/exports/elements/tip-tap-editor.js"
 class MyEditor extends TipTapEditor {
   constructor () {
     super()
-    this.starterKit = {
-      ...super.starterKit,
+    this.starterKitOptions = {
+      ...super.starterKitOptions,
       heading: {
         // Enable all heading levels
         levels: [1, 2, 3, 4, 5, 6],
       },
-    }
-    this.rhinoStarterKit = {
-      ...super.rhinoStarterKit,
-      gallery: false
+      // Remove the gallery, all images are always full size.
+      rhinoGallery: false
     }
   }
 }

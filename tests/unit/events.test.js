@@ -4,8 +4,8 @@ import { assert, aTimeout, waitUntil } from "@open-wc/testing"
 import { html } from "lit"
 import { readFile, sendKeys } from '@web/test-runner-commands';
 import sinon from "sinon"
-import {createDataTransfer} from "./create-data-transfer.js"
-import { createEditor } from "./create-editor.js";
+import {createDataTransfer} from "./helpers/create-data-transfer.js"
+import { createEditor } from "./helpers/create-editor.js";
 
 // "rhino-file-accept", "rhino-attachment-add", "rhino-attachment-remove", "rhino-paste", and "rhino-selection-change" are handled in the "specifying-accepted-file-types" / "index" tests
 // due to it requiring playwright APIs.

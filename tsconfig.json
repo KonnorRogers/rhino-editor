@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "declarationDir": "exports/",
+    "declarationDir": "./",
     "emitDeclarationOnly": true,
     "useDefineForClassFields": false,
 

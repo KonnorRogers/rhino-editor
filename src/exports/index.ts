@@ -1,5 +1,5 @@
-import { TipTapEditor } from "src/exports/elements/tip-tap-editor";
-import { AttachmentManager } from "src/exports/attachment-manager";
+import { TipTapEditor } from "./elements/tip-tap-editor.js";
+import { AttachmentManager } from "./attachment-manager.js";
 
 TipTapEditor.define();
 

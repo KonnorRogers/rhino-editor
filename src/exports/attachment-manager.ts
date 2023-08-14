@@ -1,7 +1,7 @@
-import { Maybe } from "src/types";
-import { uuidv4 } from "src/internal/uuidv4";
+import { Maybe } from "../types.js";
+import { uuidv4 } from "../internal/uuidv4.js";
 import { EditorView } from "@tiptap/pm/view";
-import { toDefaultCaption } from "src/internal/to-default-caption";
+import { toDefaultCaption } from "../internal/to-default-caption.js";
 
 export interface AttachmentManagerAttributes {
   src: string;
@@ -62,6 +62,8 @@ export class AttachmentManager implements AttachmentManagerAttributes {
           url: this.attributes.url,
           src: this.attributes.url,
           href: this.attributes.url + "?content-disposition=attachment",
+          width: image.naturalWidth,
+          height: image.naturalHeight
         });
         image.remove();
       };

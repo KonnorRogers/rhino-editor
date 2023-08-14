@@ -81,3 +81,39 @@ from <https://tabler-icons.io>
 <% end %>
 
 <%= text.html_safe %>
+
+## Removing an item from the toolbar
+
+To remove an item from the toolbar, find the `rhino-editor` element and then remove the extension.
+
+Here's how we could do it using a `before-initialize` event listener to remove the "bold" button.
+
+<% text = capture do %>
+function removeBold () {
+  const rhinoEditor = document.querySelector("rhino-editor#no-bold")
+
+  rhinoEditor.starterKitOptions = {
+    ...rhinoEditor.starterKitOptions,
+    bold: false
+  }
+}
+
+document.addEventListener("rhino-before-initialize", removeBold)
+<% end %>
+
+
+```js
+<%= text.chomp.html_safe %>
+```
+
+<script type="module">
+  <%= text.chomp.html_safe %>
+</script>
+
+<rhino-editor id="no-bold"></rhino-editor>
+
+Here are all the options available:
+
+```ts
+
+```

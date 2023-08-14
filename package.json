@@ -8,8 +8,8 @@
   "scripts": {
     "setup": "pnpm install && cd tests/rails && pnpm install && pnpm playwright install --with-deps && bundle install && cd - && cd docs && bundle install && pnpm install",
     "setup:docs": "pnpm install && pnpm run build && cd docs && bundle install && pnpm install",
-    "build": "rm -rf exports && pnpm build:types && node esbuild.config.js",
-    "build:types": "tsc",
+    "build": "rm -rf {cdn,internal,exports} && pnpm build:types && node esbuild.config.js",
+    "build:types": "tsc && tsc --declarationDir ./cdn",
     "lint": "prettier --check ./src",
     "fix": "prettier --write ./src",
     "test": "concurrently --names \"RAILS,DOCS,UNIT\" -c \"red,green,blue\" \"pnpm run test:rails\" \"pnpm run test:docs\" \"pnpm run test:unit\"",
@@ -24,7 +24,9 @@
   },
   "files": [
     "exports",
-    "cdn"
+    "internal",
+    "cdn",
+    "types.d.ts"
   ],
   "keywords": [
     "tiptap",

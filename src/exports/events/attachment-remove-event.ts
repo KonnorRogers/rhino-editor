@@ -1,5 +1,5 @@
-import { AttachmentManager } from "src/exports/attachment-manager";
-import { BaseEvent } from "./base-event";
+import { AttachmentManager } from "../attachment-manager.js";
+import { BaseEvent } from "./base-event.js";
 
 /**
  * A mapping of the "trix-attachment-add" for Rhino that follows the same construct.

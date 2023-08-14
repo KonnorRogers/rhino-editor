@@ -1,5 +1,5 @@
 import { Transaction } from "@tiptap/pm/state";
-import { BaseEvent } from "./base-event";
+import { BaseEvent } from "./base-event.js";
 
 export interface SelectionChangeProps {
   transaction: Transaction;
