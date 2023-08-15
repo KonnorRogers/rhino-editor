@@ -1,6 +1,10 @@
 import { playwrightLauncher } from '@web/test-runner-playwright';
 // import { esbuildPlugin } from '@web/dev-server-esbuild';
 
+const showChromium = process.env.BROWSER.toLowerCase().includes("chromium")
+const showFirefox = process.env.BROWSER.toLowerCase().includes("firefox")
+const showWebkit = process.env.BROWSER.toLowerCase().includes("webkit")
+
 /** @type {import("@web/test-runner").TestRunnerConfig} */
 export default {
   rootDir: '.',
@@ -19,8 +23,23 @@ export default {
 
   ],
   browsers: [
-    playwrightLauncher({ product: 'chromium' }),
-    playwrightLauncher({ product: 'firefox' }),
-    playwrightLauncher({ product: 'webkit' })
+    playwrightLauncher({ product: 'chromium',
+      launchOptions: {
+        headless: !showChromium,
+        devtools: showChromium,
+      }
+    }),
+    playwrightLauncher({ product: 'firefox' }, {
+      launchOptions: {
+        headless: !showFirefox,
+        devtools: showFirefox,
+      }
+    }),
+    playwrightLauncher({ product: 'webkit' }, {
+      launchOptions: {
+        headless: !showWebkit,
+        devtools: showWebkit,
+      }
+    })
   ],
 }

@@ -14,6 +14,7 @@ import * as icons from "../../internal/icons";
 import { Maybe } from "../../types.js";
 import { html } from "lit/html.js";
 import { stringMap } from "../../internal/string-map.js";
+import { isExactNodeActive } from "src/internal/is-exact-node-active.js";
 
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
@@ -292,7 +293,6 @@ export class TipTapEditor extends TipTapEditorBase {
 
     const isDisabled = this.editor == null || !this.editor.can().toggleBold()
     const isActive = Boolean(this.editor?.isActive("bold"))
-
 
     return html`
       <button
@@ -616,8 +616,7 @@ export class TipTapEditor extends TipTapEditorBase {
       );
 
     const isActive = Boolean(
-      this.editor?.isActive("bulletList") &&
-        this.editor.can().toggleBulletList(),
+      this.editor != null && isExactNodeActive(this.editor.state, "bulletList")
     );
 
     return html`
@@ -670,8 +669,7 @@ export class TipTapEditor extends TipTapEditorBase {
       );
 
     const isActive = Boolean(
-      this.editor?.isActive("orderedList") &&
-        this.editor.can().toggleOrderedList(),
+      this.editor != null && isExactNodeActive(this.editor.state, "orderedList")
     );
 
     return html`

@@ -130,17 +130,17 @@ test("Should allow swapping between list-items and sinking them appropriately", 
   assert(tiptap().querySelector("ol > li > ul"))
 
   // Add another new line. This is when things get weird. Make sure only the bulletList is active
-  // tiptap().focus()
-  // await sendKeys({ press: "Enter" })
-  // await elementUpdated(rhinoEditor)
-  //
-  // assert.equal(bulletListButton.getAttribute("aria-disabled"), "false")
-  // assert.equal(bulletListButton.getAttribute("aria-pressed"), "false")
-  // assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
-  // assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--active"), false)
-  //
-  // assert.equal(orderedListButton.getAttribute("aria-disabled"), "false")
-  // assert.equal(orderedListButton.getAttribute("aria-pressed"), "false")
-  // assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
-  // assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--active"), false)
+  await sendKeys({ type: "thing2" })
+  await sendKeys({ press: "Enter" })
+  await elementUpdated(rhinoEditor)
+
+  assert.equal(bulletListButton.getAttribute("aria-disabled"), "false")
+  assert.equal(bulletListButton.getAttribute("aria-pressed"), "true")
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--active"), true)
+
+  assert.equal(orderedListButton.getAttribute("aria-disabled"), "false")
+  assert.equal(orderedListButton.getAttribute("aria-pressed"), "false")
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--active"), false)
 })

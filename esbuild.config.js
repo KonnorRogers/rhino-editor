@@ -68,7 +68,7 @@ function BuildTimer () {
         const endTime = Number(new Date())
         const buildTime = endTime - startTime
 
-        console.log(chalk.green(`Build complete in ${buildTime}ms!`), `✨`)
+        console.log(chalk.green(`Build complete in ${buildTime}ms!`), `✨\n\n`)
       })
     }
   }
@@ -95,7 +95,6 @@ function BuildTimer () {
     external: [],
     plugins: [
       AppendCssStyles(),
-      BuildTimer(),
     ]
   }
 
@@ -125,6 +124,7 @@ function BuildTimer () {
       splitting: true,
       minify: false,
       chunkNames: 'chunks/[name]-[hash]',
+      plugins: defaultConfig.plugins.concat([BuildTimer()])
     },
     {
       ...defaultConfig,
