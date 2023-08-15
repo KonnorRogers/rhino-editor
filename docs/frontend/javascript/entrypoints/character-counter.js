@@ -32,4 +32,3 @@ class ExtendedEditor extends TipTapEditor {
 }
 
 ExtendedEditor.define("extended-rhino-editor")
-

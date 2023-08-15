@@ -114,6 +114,70 @@ document.addEventListener("rhino-before-initialize", removeBold)
 
 Here are all the options available:
 
+<!-- Would love a way to auto-generate this -->
 ```ts
+{
+  // These all come from TipTap's StarterKit.
+  blockquote: Partial<BlockquoteOptions> | false;
+  bold: Partial<BoldOptions> | false;
+  bulletList: Partial<BulletListOptions> | false;
+  code: Partial<CodeOptions> | false;
+  codeBlock: Partial<CodeBlockOptions> | false;
+  document: false;
+  dropcursor: Partial<DropcursorOptions> | false;
+  gapcursor: false;
+  hardBreak: Partial<HardBreakOptions> | false;
+  heading: Partial<HeadingOptions> | false;
+  history: Partial<HistoryOptions> | false;
+  horizontalRule: Partial<HorizontalRuleOptions> | false;
+  italic: Partial<ItalicOptions> | false;
+  listItem: Partial<ListItemOptions> | false;
+  orderedList: Partial<OrderedListOptions> | false;
+  paragraph: Partial<ParagraphOptions> | false;
+  strike: Partial<StrikeOptions> | false;
+  text: false;
 
+
+  // These are all internal plugins to RhinoEditor.
+
+  /** Enables attachment galleries */
+  rhinoGallery: Partial<GalleryOptions> | false;
+
+  /** Enables attachments */
+  rhinoAttachment: Partial<AttachmentOptions> | false;
+
+  /** Enables captions in attachments */
+  rhinoFigcaption: Partial<FigcaptionOptions> | false;
+
+  /** Enables images in attachments */
+  rhinoImage: Partial<ImageOptions> | false;
+
+  /**
+   * Replaces the default strike from TipTap's StarterKit and replaces it with `<del>` instead of `<s>`
+   */
+  rhinoStrike: Partial<StrikeOptions> | false;
+
+  /**
+   * A plugin for finding the currently focused element. Used by various CSS styles in the editor.
+   */
+  rhinoFocus: Partial<FocusOptions> | false;
+
+  /**
+   * Enables the link dialog
+   */
+  rhinoLink: Partial<LinkOptions> | false;
+
+  /**
+   * Enables & configures the placeholder you see for captions and for empty documents
+   */
+  rhinoPlaceholder: Partial<PlaceholderOptions> | false;
+
+  /**
+   * Sends a browser event called `rhino-paste-event` everytime a user pastes something into the document.
+   */
+  rhinoPasteEvent: Partial<PasteOptions> | false;
+
+  increaseIndentation: boolean,
+  decreaseIndentation: boolean
+}
 ```

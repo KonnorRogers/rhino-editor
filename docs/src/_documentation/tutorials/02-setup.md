@@ -53,7 +53,7 @@ You'll notice we don't want to auto-register the
 then register it.
 
 <%= render Syntax.new("js") do %>
-<%= File.read("frontend/javascript/entrypoints/starter-kit-setup.js").html_safe %>
+<%= File.read("frontend/javascript/entrypoints/starter-kit-setup.js").chomp.html_safe %>
 <% end %>
 
 <script type="module" data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/starter-kit-setup.js" %>" defer></script>
@@ -69,7 +69,7 @@ then register it.
 Now let's see how we would add extensions:
 
 ```js
-<%= File.read("./frontend/javascript/entrypoints/character-counter.js").html_safe %>
+<%= File.read("./frontend/javascript/entrypoints/character-counter.js").chomp.html_safe %>
 ```
 
 <%= render Syntax.new("html") do %>
