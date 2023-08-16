@@ -14,7 +14,7 @@ import * as icons from "../../internal/icons";
 import { Maybe } from "../../types.js";
 import { html } from "lit/html.js";
 import { stringMap } from "../../internal/string-map.js";
-import { isExactNodeActive } from "src/internal/is-exact-node-active.js";
+import { isExactNodeActive } from "../../internal/is-exact-node-active.js";
 
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
