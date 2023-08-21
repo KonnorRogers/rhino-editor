@@ -3,107 +3,14 @@ import { Application } from "@hotwired/stimulus"
 
 // Shoelace
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
-import "@shoelace-style/shoelace/dist/components/alert/alert.js";
-// import "@shoelace-style/shoelace/dist/components/breadcrumb/breadcrumb.js";
-// import "@shoelace-style/shoelace/dist/components/breadcrumb-item/breadcrumb-item.js";
-import "@shoelace-style/shoelace/dist/components/button/button.js";
-import "@shoelace-style/shoelace/dist/components/divider/divider.js";
-import "@shoelace-style/shoelace/dist/components/drawer/drawer.js";
-import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
-import "@shoelace-style/shoelace/dist/components/icon/icon.js";
-import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
-import "@shoelace-style/shoelace/dist/components/menu/menu.js";
-import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
-import "@shoelace-style/shoelace/dist/components/menu-label/menu-label.js";
-import "@shoelace-style/shoelace/dist/components/visually-hidden/visually-hidden.js";
+
+import lazyLoader from "./src/lazy-loader.js"
 
 import * as Turbo from "@hotwired/turbo"
 window.Turbo = Turbo
-import "rhino-editor"
-import "rhino-editor/exports/styles/trix.css"
-import '@github/clipboard-copy-element'
-import { BridgetownNinjaKeys } from "@konnorr/bridgetown-quick-search/ninja-keys.js"
-import "./layout.js"
+import "./src/layout.js"
 
-/** @type {import("konnors-ninja-keys").INinjaAction[]} */
-const staticData = [
-  {
-    id: "theme-light",
-    icon: "<sl-icon name='sun'></sl-icon>",
-    title: "Light Mode",
-    section: "Theme",
-    keywords: "theme",
-    handler () {
-      window.applyTheme("light");
-    }
-  },
-  {
-    id: "theme-dark",
-    icon: "<sl-icon name='moon'></sl-icon>",
-    title: "Dark Mode",
-    section: "Theme",
-    keywords: "theme",
-    handler () {
-      window.applyTheme("dark");
-    }
-  },
-  {
-    id: "theme-system",
-    icon: "<sl-icon name='display'></sl-icon>",
-    title: "System",
-    section: "Theme",
-    keywords: "theme",
-    handler () {
-      window.applyTheme("system");
-    }
-  },
-]
-
-;(class extends BridgetownNinjaKeys {
-  constructor (...args) {
-    super(...args)
-    this.staticData = staticData
-    this.openHotkey = super.openHotkey + ",/"
-  }
-
-  createData() {
-    this.results = this.showResultsForQuery(this._search)
-
-    this.results.forEach((result) => {
-      result.icon = `<sl-icon name="link-45deg"></sl-icon>`
-    })
-
-    return [
-      ...this.staticData,
-      ...this.results,
-    ]
-  }
-
-  open () {
-    this.scrollTop = window.scrollY;
-    document.body.classList.add('fixed-body');
-    // Scroll the wrapper, rather than setting an offset
-    // via `top` or `transform`.
-    document.body.scroll(0, this.scrollTop);
-
-    this.nonModals.forEach((el) => {
-      el.setAttribute("inert", "")
-    })
-    super.open()
-  }
-
-  close () {
-    document.body.classList.remove('fixed-body');
-    window.scrollTo(0, this.scrollTop);
-    super.close()
-    this.nonModals.forEach((el) => el.removeAttribute("inert"))
-  }
-
-  get nonModals () {
-    return [...document.body.children].filter((el) => el.localName !== "bridgetown-ninja-keys")
-  }
-}).define("bridgetown-ninja-keys")
-
+lazyLoader()
 setBasePath("/shoelace-assets")
 
 // Import all JavaScript & CSS files from src/_components
@@ -136,8 +43,11 @@ Object.entries(controllers).forEach(([filename, controller]) => {
 
   function restoreScroll(event) {
     if (event.detail && event.detail.newBody) {
-      event.detail.newBody.querySelectorAll('[data-preserve-scroll').forEach(element => {
+      event.detail.newBody.querySelectorAll('[data-preserve-scroll]').forEach(element => {
+
+        console.log("BEFORE: ", scrollPositions[element.id])
         element.scrollTop = scrollPositions[element.id];
+        setTimeout(() => console.log("AFTER: ", scrollPositions[element.id]))
       });
     }
 
