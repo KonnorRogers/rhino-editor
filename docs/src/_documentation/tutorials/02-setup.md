@@ -22,7 +22,8 @@ function modifyEditor (e) {
   editor.starterKitOptions = {
     ...editor.starterKitOptions,
     heading: {
-      // Enable all heading levels
+      // Enable all heading levels. This only allows the editor to support it.
+      // this doesn't provide any UI.
       levels: [1, 2, 3, 4, 5, 6],
     },
     // Disables the gallery for attachments.

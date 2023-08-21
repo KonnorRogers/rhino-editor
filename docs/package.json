@@ -36,5 +36,8 @@
     "read-cache": "^1.0.0",
     "rhino-editor": "link:../",
     "web-component-lazy-loader": "^1.0.0"
+  },
+  "overrides": {
+    "konnors-ninja-keys": "1.9.5"
   }
 }

@@ -13,6 +13,8 @@ body {
   max-width: 100%;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeSpeed;
+  scrollbar-gutter: stable;
   font-family: var(--sl-font-sans);
 	background-color: var(--body-color);
 	color: var(--text-color);
