@@ -14,7 +14,7 @@
   padding-top: 1rem;
   font-weight: normal;
   color: var(--sl-color-neutral-800);
-  font-size: var(--sl-font-size-x-large);
+  font-size: 1.05rem;
 }
 
 .table-of-contents__list {
