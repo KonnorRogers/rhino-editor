@@ -4,13 +4,14 @@ import { Application } from "@hotwired/stimulus"
 // Shoelace
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
 
-import lazyLoader from "./src/lazy-loader.js"
+import LazyLoader from "./src/lazy-loader.js"
 
 import * as Turbo from "@hotwired/turbo"
 window.Turbo = Turbo
 import "./src/layout.js"
 
-lazyLoader()
+LazyLoader()
+
 setBasePath("/shoelace-assets")
 
 // Import all JavaScript & CSS files from src/_components
@@ -44,10 +45,7 @@ Object.entries(controllers).forEach(([filename, controller]) => {
   function restoreScroll(event) {
     if (event.detail && event.detail.newBody) {
       event.detail.newBody.querySelectorAll('[data-preserve-scroll]').forEach(element => {
-
-        console.log("BEFORE: ", scrollPositions[element.id])
         element.scrollTop = scrollPositions[element.id];
-        setTimeout(() => console.log("AFTER: ", scrollPositions[element.id]))
       });
     }
 

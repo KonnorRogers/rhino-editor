@@ -16,7 +16,7 @@ dependencies:
     version: 7.3.0
   '@konnorr/bridgetown-quick-search':
     specifier: ^3.7.4
-    version: link:../../bridgetown-quick-search
+    version: 3.7.4
   '@shoelace-style/shoelace':
     specifier: ^2.7.0
     version: 2.7.0
@@ -57,8 +57,8 @@ dependencies:
     specifier: link:../
     version: link:..
   web-component-lazy-loader:
-    specifier: ^1.0.0
-    version: 1.0.0
+    specifier: ^1.0.1
+    version: 1.0.1
 
 devDependencies:
   esbuild:
@@ -277,6 +277,14 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
+  /@konnorr/bridgetown-quick-search@3.7.4:
+    resolution: {integrity: sha512-mFtmDXLcs5dfErE1rpms2O7VFvgPJA2E0UWga/ymcoYV1XWgm0ZLjV3EcZNQm4MoU4J9sGLCES9xRg/OWVy4gA==}
+    dependencies:
+      konnors-ninja-keys: 1.9.5
+      lit: 2.7.6
+      lunr: 2.3.9
+    dev: false
+
   /@lit-labs/react@1.2.1:
     resolution: {integrity: sha512-DiZdJYFU0tBbdQkfwwRSwYyI/mcWkg3sWesKRsHUd4G+NekTmmeq9fzsurvcKTNVa0comNljwtg4Hvi1ds3V+A==}
     dev: false
@@ -289,6 +297,24 @@ packages:
     resolution: {integrity: sha512-rDfl+QnCYjuIGf5xI2sVJWdYIi56CTCwWa+nidKYX6oIuBYwUbT/vX4qbUDlHiZKJ/3FRNQ/tWJui44p6/stSA==}
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.1.1
+    dev: false
+
+  /@material/mwc-icon@0.25.3:
+    resolution: {integrity: sha512-36076AWZIRSr8qYOLjuDDkxej/HA0XAosrj7TS1ZeLlUBnLUtbDtvc1S7KSa0hqez7ouzOqGaWK24yoNnTa2OA==}
+    dependencies:
+      lit: 2.7.6
+      tslib: 2.6.2
+    dev: false
+
+  /@open-wc/dedupe-mixin@1.4.0:
+    resolution: {integrity: sha512-Sj7gKl1TLcDbF7B6KUhtvr+1UCxdhMbNY5KxdU5IfMFWqL8oy1ZeAcCANjoB1TL0AJTcPmcCFsCbHf8X2jGDUA==}
+    dev: false
+
+  /@open-wc/scoped-elements@2.2.0:
+    resolution: {integrity: sha512-Qe+vWsuVHFzUkdChwlmJGuQf9cA3I+QOsSHULV/6qf6wsqLM2/32svNRH+rbBIMwiPEwzZprZlkvkqQRucYnVA==}
+    dependencies:
+      '@lit/reactive-element': 1.6.2
+      '@open-wc/dedupe-mixin': 1.4.0
     dev: false
 
   /@remirror/core-constants@2.0.2:
@@ -772,6 +798,10 @@ packages:
       function-bind: 1.1.1
     dev: true
 
+  /hotkeys-js@3.10.2:
+    resolution: {integrity: sha512-Z6vLmJTYzkbZZXlBkhrYB962Q/rZGc/WHQiyEGu9ZZVF7bAeFDjjDa31grWREuw9Ygb4zmlov2bTkPYqj0aFnQ==}
+    dev: false
+
   /inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
     dependencies:
@@ -806,6 +836,16 @@ packages:
   /isobject@3.0.1:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /konnors-ninja-keys@1.9.5:
+    resolution: {integrity: sha512-0tmshUZcaktkxQut8/nqMRYjODt8vF67TXQe04pnFDE3ZAuSmqnYvt1Ae8zV8UAerprmpBpKTRvB40AUnsaW4Q==}
+    dependencies:
+      '@material/mwc-icon': 0.25.3
+      '@open-wc/scoped-elements': 2.2.0
+      hotkeys-js: 3.10.2
+      lit: 2.7.6
+      web-component-define: 2.0.10
     dev: false
 
   /lilconfig@2.0.6:
@@ -843,6 +883,10 @@ packages:
       '@lit/reactive-element': 1.6.2
       lit-element: 3.3.2
       lit-html: 2.7.5
+    dev: false
+
+  /lunr@2.3.9:
+    resolution: {integrity: sha512-zTU3DaZaF3Rt9rhN3uBMGQD3dD2/vFQqnvZCDv4dl5iOzq2IZQqTxu90r4E5J+nP70J3ilqVCrbho2eWaeW8Ow==}
     dev: false
 
   /make-error@1.3.6:
@@ -1485,6 +1529,10 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
+  /tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+    dev: false
+
   /type-fest@2.19.0:
     resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
     engines: {node: '>=12.20'}
@@ -1513,8 +1561,15 @@ packages:
     resolution: {integrity: sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==}
     dev: false
 
-  /web-component-lazy-loader@1.0.0:
-    resolution: {integrity: sha512-zzW4ERmfwioY9uygnZ0P8BPbpNC0cBzjKuVEEvD+ojDJ0OsZ6ky5T4Nsdkvm0lSRvsbifJCeBqv2rChuj2IA/g==}
+  /web-component-define@2.0.10:
+    resolution: {integrity: sha512-gwkjTFdG8eE8fxI4+RZUCQRy06SSSkCyLpQ1YSCsA+z8ZLlnmqLX/3B3WD2ZraVRtyje3hLXS8bxL8CK1/bZYQ==}
+    dependencies:
+      '@lit/reactive-element': 1.6.2
+      '@open-wc/dedupe-mixin': 1.4.0
+    dev: false
+
+  /web-component-lazy-loader@1.0.1:
+    resolution: {integrity: sha512-57bn1D2nezxb6z4C3Jo8b0NOqAZord0rEJ/CVyt+Rafm35YHu9lkscPWdprxtQZZqm/AP3UZyqurMJxJT0lzMQ==}
     dev: false
 
   /wrappy@1.0.2:
