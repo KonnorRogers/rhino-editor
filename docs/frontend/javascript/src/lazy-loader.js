@@ -5,7 +5,6 @@ export default function lazyLoader() {
     components: {
       "rhino-editor": {
         register() {
-          console.log("Register rhino editor")
           import("rhino-editor");
           // @ts-expect-error
           import("rhino-editor/exports/styles/trix.css");

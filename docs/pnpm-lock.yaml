@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  konnors-ninja-keys: 1.10.0
+
 dependencies:
   '@github/clipboard-copy-element':
     specifier: ^1.2.1
@@ -280,7 +283,7 @@ packages:
   /@konnorr/bridgetown-quick-search@3.7.4:
     resolution: {integrity: sha512-mFtmDXLcs5dfErE1rpms2O7VFvgPJA2E0UWga/ymcoYV1XWgm0ZLjV3EcZNQm4MoU4J9sGLCES9xRg/OWVy4gA==}
     dependencies:
-      konnors-ninja-keys: 1.9.5
+      konnors-ninja-keys: 1.10.0
       lit: 2.7.6
       lunr: 2.3.9
     dev: false
@@ -838,8 +841,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
-  /konnors-ninja-keys@1.9.5:
-    resolution: {integrity: sha512-0tmshUZcaktkxQut8/nqMRYjODt8vF67TXQe04pnFDE3ZAuSmqnYvt1Ae8zV8UAerprmpBpKTRvB40AUnsaW4Q==}
+  /konnors-ninja-keys@1.10.0:
+    resolution: {integrity: sha512-vgdfzL036WHLDrfw2NrypSxUaZg9vLodNnT+o1UkaDYtVpOoxsoiHflyq6OaVRTWY5gh9VOzOG/r52KV2HAX9w==}
     dependencies:
       '@material/mwc-icon': 0.25.3
       '@open-wc/scoped-elements': 2.2.0

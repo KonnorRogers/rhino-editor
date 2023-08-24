@@ -37,7 +37,9 @@
     "rhino-editor": "link:../",
     "web-component-lazy-loader": "^1.0.1"
   },
-  "overrides": {
-    "konnors-ninja-keys": "1.9.5"
+  "pnpm": {
+    "overrides": {
+      "konnors-ninja-keys": "1.10.0"
+    }
   }
 }

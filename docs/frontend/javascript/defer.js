@@ -13,6 +13,7 @@ import "../styles/defer.css"
       keywords: "theme",
       handler () {
         window.applyTheme("light");
+        return {keepOpen: true}
       }
     },
     {
@@ -23,6 +24,7 @@ import "../styles/defer.css"
       keywords: "theme",
       handler () {
         window.applyTheme("dark");
+        return {keepOpen: true}
       }
     },
     {
@@ -33,6 +35,7 @@ import "../styles/defer.css"
       keywords: "theme",
       handler () {
         window.applyTheme("system");
+        return {keepOpen: true}
       }
     },
   ]
