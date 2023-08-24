@@ -26,7 +26,8 @@
     "exports",
     "internal",
     "cdn",
-    "types.d.ts"
+    "types.d.ts",
+    "custom-elements.json"
   ],
   "keywords": [
     "tiptap",
@@ -38,6 +39,7 @@
   ],
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
+    "@custom-elements-manifest/analyzer": "^0.8.4",
     "@esm-bundle/chai": "4.3.4-fix.0",
     "@open-wc/testing": "^3.2.0",
     "@playwright/test": "^1.36.2",
@@ -97,5 +99,6 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "customElements": "custom-elements.json"
 }

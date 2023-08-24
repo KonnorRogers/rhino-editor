@@ -165,3 +165,4 @@ docs/.bridgetown-cache
 /internal
 /cdn
 /types.d.ts
+custom-elements.json
