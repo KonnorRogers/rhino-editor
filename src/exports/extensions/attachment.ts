@@ -21,7 +21,6 @@ import { when } from "lit/directives/when.js";
 import { EditorState, Plugin, PluginKey, Transaction } from "@tiptap/pm/state";
 import { DOMSerializer, Node as ProseMirrorNode } from "@tiptap/pm/model";
 
-
 interface AttachmentAttrs extends AttachmentManagerAttributes {
   loadingState: LoadingState;
   previewable: boolean;
@@ -83,8 +82,6 @@ function handleCaptions(
   return modified;
 }
 
-
-
 /** https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4 */
 const isPreviewable = /^image(\/(gif|png|jpe?g)|$)/;
 
@@ -123,15 +120,13 @@ export const Attachment = Node.create<AttachmentOptions>({
     return [
       new Plugin({
         key: new PluginKey("rhino-autocaptions"),
-        appendTransaction (_transactions, _oldState, newState) {
+        appendTransaction(_transactions, _oldState, newState) {
           const tr = newState.tr;
           let modified = false;
 
           // @TODO: Iterate through transactions instead of descendants (?).
           newState.doc.descendants((node, pos, _parent) => {
-            const mutations = [
-              handleCaptions(node, tr, newState, pos),
-            ];
+            const mutations = [handleCaptions(node, tr, newState, pos)];
 
             const shouldModify = mutations.some((bool) => bool === true);
 
@@ -144,7 +139,6 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           return undefined;
         },
-
       }),
       new Plugin({
         key: new PluginKey("rhino-attachment-remove-event"),

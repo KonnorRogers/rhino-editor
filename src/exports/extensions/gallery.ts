@@ -2,7 +2,6 @@ import { mergeAttributes, Node } from "@tiptap/core";
 import { EditorState, Plugin, Transaction } from "@tiptap/pm/state";
 import { Node as ProseMirrorNode } from "@tiptap/pm/model";
 
-
 function handleGallery(
   node: ProseMirrorNode,
   tr: Transaction,
@@ -57,9 +56,7 @@ export const Gallery = Node.create({
 
           // @TODO: Iterate through transactions instead of descendants (?).
           newState.doc.descendants((node, pos, _parent) => {
-            const mutations = [
-              handleGallery(node, tr, newState, pos),
-            ];
+            const mutations = [handleGallery(node, tr, newState, pos)];
 
             const shouldModify = mutations.some((bool) => bool === true);
 

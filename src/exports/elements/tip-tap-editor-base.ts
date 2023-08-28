@@ -16,10 +16,8 @@ import {
   TemplateResult,
 } from "lit";
 
-
 import { AttachmentUpload } from "../attachment-upload.js";
 import { AttachmentManager } from "../attachment-manager.js";
-
 
 import { normalize } from "../styles/normalize.js";
 import editorStyles from "../styles/editor.js";
@@ -39,11 +37,12 @@ import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
 
 export type Serializer = "" | "html" | "json";
 
-export type RhinoEditorStarterKitOptions = StarterKitOptions & RhinoStarterKitOptions & {
-  // Indentation is a special case because it uses built-in editor commands and doesn't rely on extensions.
-  increaseIndentation: boolean,
-  decreaseIndentation: boolean
-}
+export type RhinoEditorStarterKitOptions = StarterKitOptions &
+  RhinoStarterKitOptions & {
+    // Indentation is a special case because it uses built-in editor commands and doesn't rely on extensions.
+    increaseIndentation: boolean;
+    decreaseIndentation: boolean;
+  };
 
 export class TipTapEditorBase extends BaseElement {
   // Static
@@ -93,7 +92,6 @@ export class TipTapEditorBase extends BaseElement {
    */
   editorElement: Maybe<Element>;
 
-
   /**
    * JSON or HTML serializer used for determining the string to write to the hidden input.
    */
@@ -107,27 +105,27 @@ export class TipTapEditorBase extends BaseElement {
   private __starterKitOptions__: Partial<RhinoEditorStarterKitOptions> = {
     // We don't use the native strike since it requires configuring ActionText.
     strike: false,
-  }
+  };
 
-  get starterKitOptions (): Partial<RhinoEditorStarterKitOptions> {
-    return this.__starterKitOptions__
+  get starterKitOptions(): Partial<RhinoEditorStarterKitOptions> {
+    return this.__starterKitOptions__;
   }
 
   /**
    * Update this with new options and the TipTap instance and web component will automatically update.
    * with new values.
    */
-  set starterKitOptions (options: Partial<RhinoEditorStarterKitOptions>) {
-    this.__starterKitOptions__ = options
+  set starterKitOptions(options: Partial<RhinoEditorStarterKitOptions>) {
+    this.__starterKitOptions__ = options;
 
-    this.rebuildEditor()
+    this.rebuildEditor();
   }
 
   /**
    * Reset mechanism. This is called on first connect, and called anytime extensions,
    * or editor options get modified to make sure we have a fresh instance.
    */
-  rebuildEditor () {
+  rebuildEditor() {
     // Make sure we dont render the editor more than once.
     const cachedEditor = this.slottedEditor;
 
@@ -151,7 +149,7 @@ export class TipTapEditorBase extends BaseElement {
     this.editorElement?.setAttribute("role", "textbox");
 
     // For good measure for rendering.
-    this.requestUpdate()
+    this.requestUpdate();
   }
 
   protected willUpdate(
@@ -170,25 +168,24 @@ export class TipTapEditorBase extends BaseElement {
     }
   }
 
-
   /** Used for registering things like <role-toolbar>, <role-tooltip>, <rhino-attachment-editor> */
   registerDependencies() {
     [AttachmentEditor].forEach((el) => el.define());
   }
 
-  get slottedEditor () {
-    return this.querySelector("[slot='editor']")
+  get slottedEditor() {
+    return this.querySelector("[slot='editor']");
   }
 
-  constructor () {
-    super()
+  constructor() {
+    super();
 
     this.registerDependencies();
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
 
     this.addEventListener("drop", this.handleDropFile);
     this.addEventListener("rhino-paste", this.handlePaste);
-    this.addEventListener("rhino-file-accept", this.handleFileAccept)
+    this.addEventListener("rhino-file-accept", this.handleFileAccept);
   }
 
   connectedCallback(): void {
@@ -203,7 +200,7 @@ export class TipTapEditorBase extends BaseElement {
     this.classList.add("rhino-editor");
 
     setTimeout(() => {
-      this.rebuildEditor()
+      this.rebuildEditor();
 
       this.dispatchEvent(new InitializeEvent());
     });
@@ -212,7 +209,7 @@ export class TipTapEditorBase extends BaseElement {
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    this.editor?.destroy()
+    this.editor?.destroy();
   }
 
   /**
@@ -239,20 +236,19 @@ export class TipTapEditorBase extends BaseElement {
   /** Override this to prevent specific file types from being uploaded. */
   handleFileAccept = (_event: FileAcceptEvent) => {};
 
-
   private __extensions__: EditorOptions["extensions"] = [];
 
   /**
    * This will be concatenated on top of the RhinoStarterKit and StarterKit extensions.
    */
-  set extensions (extensions: EditorOptions["extensions"]) {
-    this.__extensions__ = extensions
+  set extensions(extensions: EditorOptions["extensions"]) {
+    this.__extensions__ = extensions;
 
-    this.rebuildEditor()
+    this.rebuildEditor();
   }
 
-  get extensions (): EditorOptions["extensions"] {
-    return this.__extensions__
+  get extensions(): EditorOptions["extensions"] {
+    return this.__extensions__;
   }
 
   /**
@@ -293,7 +289,6 @@ export class TipTapEditorBase extends BaseElement {
 
     return this.editor.getHTML();
   }
-
 
   /**
    * Searches for the <input> element in the light dom to write the HTML or JSON to.
@@ -400,13 +395,11 @@ export class TipTapEditorBase extends BaseElement {
     return attachments;
   }
 
-
-  renderToolbar () {
-    return html``
+  renderToolbar() {
+    return html``;
   }
 
-  renderDialog () {
-  }
+  renderDialog() {}
 
   render(): TemplateResult {
     return html`
@@ -422,8 +415,11 @@ export class TipTapEditorBase extends BaseElement {
     `;
   }
 
-  allOptions (element: Element) {
-    return Object.assign(this.__defaultOptions(element), this.editorOptions(element))
+  allOptions(element: Element) {
+    return Object.assign(
+      this.__defaultOptions(element),
+      this.editorOptions(element),
+    );
   }
 
   /**
@@ -480,11 +476,11 @@ export class TipTapEditorBase extends BaseElement {
    * This is intentionally not to be configured by a user. It makes updating extensions hard.
    *  it also is a getter and not a variable so that it will rerun in case options change.
    */
-  private get __starterKitExtensions__ (): EditorOptions["extensions"] {
+  private get __starterKitExtensions__(): EditorOptions["extensions"] {
     return [
       StarterKit.configure(this.starterKitOptions),
       RhinoStarterKit.configure(this.starterKitOptions),
-    ]
+    ];
   }
 
   /**
@@ -567,7 +563,7 @@ export class TipTapEditorBase extends BaseElement {
       this.normalizeDOM(this.inputElement);
     }
 
-    const editor = new Editor(this.allOptions(element))
+    const editor = new Editor(this.allOptions(element));
 
     return editor;
   }

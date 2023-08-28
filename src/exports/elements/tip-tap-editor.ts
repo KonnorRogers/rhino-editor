@@ -1,6 +1,6 @@
 import { ref, createRef, Ref } from "lit/directives/ref.js";
-import { toolbarButtonStyles } from "../styles/editor.js"
-import { TipTapEditorBase } from "./tip-tap-editor-base.js"
+import { toolbarButtonStyles } from "../styles/editor.js";
+import { TipTapEditorBase } from "./tip-tap-editor-base.js";
 import { PropertyDeclarations, TemplateResult } from "lit";
 
 /** Imports <role-tooltip> and <role-toolbar> */
@@ -94,15 +94,17 @@ import { isExactNodeActive } from "../../internal/is-exact-node-active.js";
  * @slot toolbar-end
  */
 export class TipTapEditor extends TipTapEditorBase {
-  static get styles () { return TipTapEditorBase.styles.concat([toolbarButtonStyles]) }
+  static get styles() {
+    return TipTapEditorBase.styles.concat([toolbarButtonStyles]);
+  }
 
-  static get properties (): PropertyDeclarations {
+  static get properties(): PropertyDeclarations {
     return Object.assign(TipTapEditorBase.properties, {
       linkDialogExpanded: { type: Boolean },
       linkInputRef: { state: true },
       translations: { state: true },
       __invalidLink__: { state: true, type: Boolean },
-    })
+    });
   }
 
   /**
@@ -125,14 +127,13 @@ export class TipTapEditor extends TipTapEditorBase {
   /**
    * @override
    */
-  registerDependencies () {
-    super.registerDependencies()
-
-    ;[RoleToolbar, RoleTooltip].forEach((el) => el.define())
+  registerDependencies() {
+    super.registerDependencies();
+    [RoleToolbar, RoleTooltip].forEach((el) => el.define());
   }
 
-  constructor () {
-    super()
+  constructor() {
+    super();
 
     this.starterKitOptions = Object.assign(super.starterKitOptions, {
       rhinoPlaceholder: {
@@ -141,7 +142,7 @@ export class TipTapEditor extends TipTapEditorBase {
       rhinoAttachment: {
         fileUploadErrorMessage: this.translations.fileUploadErrorMessage,
       },
-    }) as typeof this.starterKitOptions
+    }) as typeof this.starterKitOptions;
 
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
   }
@@ -150,12 +151,12 @@ export class TipTapEditor extends TipTapEditorBase {
    * @override
    */
   async connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback();
 
-    await this.updateComplete
+    await this.updateComplete;
 
     if (this.editor) {
-      this.editor.on("focus", this.closeLinkDialog)
+      this.editor.on("focus", this.closeLinkDialog);
     }
   }
 
@@ -281,18 +282,17 @@ export class TipTapEditor extends TipTapEditorBase {
     input.value = "";
   }
 
-
   private get __tooltipExportParts() {
     return "base:tooltip-base, arrow:tooltip-arrow";
   }
 
   renderBoldButton() {
-    const boldEnabled = Boolean(this.editor?.commands.toggleBold)
+    const boldEnabled = Boolean(this.editor?.commands.toggleBold);
 
-    if (!boldEnabled) return html``
+    if (!boldEnabled) return html``;
 
-    const isDisabled = this.editor == null || !this.editor.can().toggleBold()
-    const isActive = Boolean(this.editor?.isActive("bold"))
+    const isDisabled = this.editor == null || !this.editor.can().toggleBold();
+    const isActive = Boolean(this.editor?.isActive("bold"));
 
     return html`
       <button
@@ -329,12 +329,12 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderItalicButton() {
-    const italicEnabled = Boolean(this.editor?.commands.toggleItalic)
+    const italicEnabled = Boolean(this.editor?.commands.toggleItalic);
 
-    if (!italicEnabled) return html``
+    if (!italicEnabled) return html``;
 
-    const isActive = Boolean(this.editor?.isActive("italic"))
-    const isDisabled = this.editor == null || !this.editor.can().toggleItalic()
+    const isActive = Boolean(this.editor?.isActive("italic"));
+    const isDisabled = this.editor == null || !this.editor.can().toggleItalic();
 
     return html`
       <button
@@ -375,13 +375,12 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderStrikeButton() {
-    const strikeEnabled = Boolean(this.editor?.commands.toggleStrike)
+    const strikeEnabled = Boolean(this.editor?.commands.toggleStrike);
 
-    if (!strikeEnabled) return html``
+    if (!strikeEnabled) return html``;
 
-    const isActive = Boolean(this.editor?.isActive("rhino-strike"))
-    const isDisabled = this.editor == null || !this.editor.can().toggleStrike()
-
+    const isActive = Boolean(this.editor?.isActive("rhino-strike"));
+    const isDisabled = this.editor == null || !this.editor.can().toggleStrike();
 
     return html`
       <button
@@ -392,7 +391,7 @@ export class TipTapEditor extends TipTapEditorBase {
           toolbar__button: true,
           "toolbar__button--strike": true,
           "toolbar__button--active": isActive,
-          "toolbar__button--disabled": isDisabled
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="strike"
         aria-disabled=${isDisabled}
@@ -421,12 +420,13 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderLinkButton() {
-    const linkEnabled = Boolean(this.editor?.commands.setLink)
+    const linkEnabled = Boolean(this.editor?.commands.setLink);
 
-    if (!linkEnabled) return html``
+    if (!linkEnabled) return html``;
 
-    const isActive = Boolean(this.linkDialogExpanded)
-    const isDisabled = this.editor == null || !this.editor.can().setLink({ href: "" })
+    const isActive = Boolean(this.linkDialogExpanded);
+    const isDisabled =
+      this.editor == null || !this.editor.can().setLink({ href: "" });
 
     return html`
       <button
@@ -467,12 +467,13 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderHeadingButton() {
-    const headingEnabled = Boolean(this.editor?.commands.toggleHeading)
+    const headingEnabled = Boolean(this.editor?.commands.toggleHeading);
 
-    if (!headingEnabled) return html``
+    if (!headingEnabled) return html``;
 
-    const isActive = Boolean(this.editor?.isActive("heading"))
-    const isDisabled = this.editor == null || !this.editor.can().toggleHeading({ level: 1 })
+    const isActive = Boolean(this.editor?.isActive("heading"));
+    const isDisabled =
+      this.editor == null || !this.editor.can().toggleHeading({ level: 1 });
 
     return html`
       <button
@@ -483,7 +484,7 @@ export class TipTapEditor extends TipTapEditorBase {
           toolbar__button: true,
           "toolbar__button--heading": true,
           "toolbar__button--active": isActive,
-          "toolbar__button--disabled": isDisabled
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="heading"
         aria-disabled=${isDisabled}
@@ -513,12 +514,13 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderBlockquoteButton() {
-    const blockQuoteEnabled = Boolean(this.editor?.commands.toggleBlockquote)
+    const blockQuoteEnabled = Boolean(this.editor?.commands.toggleBlockquote);
 
-    if (!blockQuoteEnabled) return html``
+    if (!blockQuoteEnabled) return html``;
 
-    const isActive = Boolean(this.editor?.isActive("blockquote"))
-    const isDisabled = this.editor == null || !this.editor.can().toggleBlockquote()
+    const isActive = Boolean(this.editor?.isActive("blockquote"));
+    const isDisabled =
+      this.editor == null || !this.editor.can().toggleBlockquote();
 
     return html`
       <button
@@ -559,12 +561,13 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderCodeBlockButton() {
-    const codeBlockEnabled = Boolean(this.editor?.commands.toggleCodeBlock)
+    const codeBlockEnabled = Boolean(this.editor?.commands.toggleCodeBlock);
 
-    if (!codeBlockEnabled) return html``
+    if (!codeBlockEnabled) return html``;
 
-    const isActive = Boolean(this.editor?.isActive("codeBlock"))
-    const isDisabled = this.editor == null || !this.editor.can().toggleCodeBlock()
+    const isActive = Boolean(this.editor?.isActive("codeBlock"));
+    const isDisabled =
+      this.editor == null || !this.editor.can().toggleCodeBlock();
 
     return html`
       <button
@@ -575,7 +578,7 @@ export class TipTapEditor extends TipTapEditorBase {
           toolbar__button: true,
           "toolbar__button--code-block": true,
           "toolbar__button--active": isActive,
-          "toolbar__button--disabled": isDisabled
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="code-block"
         aria-disabled=${isDisabled}
@@ -604,9 +607,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderBulletListButton() {
-    const bulletListEnabled = Boolean(this.editor?.commands.toggleBulletList)
+    const bulletListEnabled = Boolean(this.editor?.commands.toggleBulletList);
 
-    if (!bulletListEnabled) return html``
+    if (!bulletListEnabled) return html``;
 
     const isDisabled =
       this.editor == null ||
@@ -616,7 +619,7 @@ export class TipTapEditor extends TipTapEditorBase {
       );
 
     const isActive = Boolean(
-      this.editor != null && isExactNodeActive(this.editor.state, "bulletList")
+      this.editor != null && isExactNodeActive(this.editor.state, "bulletList"),
     );
 
     return html`
@@ -657,9 +660,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderOrderedListButton() {
-    const orderedListEnabled = Boolean(this.editor?.commands.toggleOrderedList)
+    const orderedListEnabled = Boolean(this.editor?.commands.toggleOrderedList);
 
-    if (!orderedListEnabled) return html``
+    if (!orderedListEnabled) return html``;
 
     const isDisabled =
       this.editor == null ||
@@ -669,7 +672,8 @@ export class TipTapEditor extends TipTapEditorBase {
       );
 
     const isActive = Boolean(
-      this.editor != null && isExactNodeActive(this.editor.state, "orderedList")
+      this.editor != null &&
+        isExactNodeActive(this.editor.state, "orderedList"),
     );
 
     return html`
@@ -711,11 +715,11 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderAttachmentButton() {
-    const attachmentEnabled = Boolean(this.editor?.commands.setAttachment)
+    const attachmentEnabled = Boolean(this.editor?.commands.setAttachment);
 
-    if (!attachmentEnabled) return html``
+    if (!attachmentEnabled) return html``;
 
-    const isDisabled = this.editor == null
+    const isDisabled = this.editor == null;
 
     return html`
       <button
@@ -760,11 +764,11 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderUndoButton() {
-    const undoEnabled = Boolean(this.editor?.commands.undo)
+    const undoEnabled = Boolean(this.editor?.commands.undo);
 
-    if (!undoEnabled) return html``
+    if (!undoEnabled) return html``;
 
-    const isDisabled = this.editor == null || !this.editor.can().undo()
+    const isDisabled = this.editor == null || !this.editor.can().undo();
 
     return html`
       <button
@@ -804,11 +808,13 @@ export class TipTapEditor extends TipTapEditorBase {
   renderDecreaseIndentation() {
     // Decrease / increase indentation are special cases in that they rely on built-in editor
     // commands and not commands added by extensions.
-    const decreaseIndentationNotEnabled = this.starterKitOptions.decreaseIndentation == false
+    const decreaseIndentationNotEnabled =
+      this.starterKitOptions.decreaseIndentation == false;
 
-    if (decreaseIndentationNotEnabled) return html``
+    if (decreaseIndentationNotEnabled) return html``;
 
-    const isDisabled = this.editor == null || !this.editor.can().liftListItem("listItem")
+    const isDisabled =
+      this.editor == null || !this.editor.can().liftListItem("listItem");
 
     return html`
       <button
@@ -847,11 +853,13 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderIncreaseIndentation() {
-    const increaseIndentationNotEnabled = this.starterKitOptions.increaseIndentation == false
+    const increaseIndentationNotEnabled =
+      this.starterKitOptions.increaseIndentation == false;
 
-    if (increaseIndentationNotEnabled) return html``
+    if (increaseIndentationNotEnabled) return html``;
 
-    const isDisabled = this.editor == null || !this.editor.can().sinkListItem("listItem")
+    const isDisabled =
+      this.editor == null || !this.editor.can().sinkListItem("listItem");
 
     return html`
       <button
@@ -891,11 +899,11 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderRedoButton() {
-    const redoEnabled = Boolean(this.editor?.commands.redo)
+    const redoEnabled = Boolean(this.editor?.commands.redo);
 
-    if (!redoEnabled) return html``
+    if (!redoEnabled) return html``;
 
-    const isDisabled = this.editor == null || !this.editor.can().redo?.()
+    const isDisabled = this.editor == null || !this.editor.can().redo?.();
 
     return html`
       <button
@@ -1116,7 +1124,6 @@ export class TipTapEditor extends TipTapEditorBase {
     </div>`;
   }
 }
-
 
 function elementDisabled(element: null | EventTarget | Element): boolean {
   if (element == null) return true;

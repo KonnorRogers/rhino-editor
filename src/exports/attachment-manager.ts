@@ -63,7 +63,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
           src: this.attributes.url,
           href: this.attributes.url + "?content-disposition=attachment",
           width: image.naturalWidth,
-          height: image.naturalHeight
+          height: image.naturalHeight,
         });
         image.remove();
       };
