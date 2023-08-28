@@ -31,7 +31,8 @@ const esbuildOptions = {
     "frontend/javascript/index.js",
     "frontend/javascript/defer.js",
     "frontend/javascript/entrypoints/character-counter.js",
-    "frontend/javascript/entrypoints/starter-kit-setup.js"
+    "frontend/javascript/entrypoints/starter-kit-setup.js",
+    "frontend/javascript/entrypoints/syntax-highlighting.js"
   ],
   splitting: true,
   format: "esm"
