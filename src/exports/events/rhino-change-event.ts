@@ -1,4 +1,4 @@
-import { BaseEvent } from "./base-event";
+import { BaseEvent } from "./base-event.js";
 
 /**
  * Fires any time the editor changes

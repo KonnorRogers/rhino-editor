@@ -1,4 +1,4 @@
-import { BaseEvent } from "./base-event";
+import { BaseEvent } from "./base-event.js";
 
 /**
  * Fires before the editor has been created

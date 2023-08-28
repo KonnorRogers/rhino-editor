@@ -1,10 +1,10 @@
 import { css, html, TemplateResult } from "lit";
 
-import { close } from "src/internal/icons";
-import { toMemorySize } from "src/internal/to-memory-size";
-import { normalize } from "src/exports/styles/normalize";
-import { BaseElement } from "src/internal/elements/base-element";
-import { fileUploadErrorMessage } from "../translations";
+import { close } from "../../internal/icons.js";
+import { toMemorySize } from "../../internal/to-memory-size.js";
+import { normalize } from "../styles/normalize.js";
+import { BaseElement } from "../../internal/elements/base-element.js";
+import { fileUploadErrorMessage } from "../translations.js";
 
 export const LOADING_STATES = Object.freeze({
   notStarted: "not-started",

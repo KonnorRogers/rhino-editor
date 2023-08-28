@@ -1,5 +1,5 @@
-import type { Maybe } from "../types";
-import { toMemorySize } from "./to-memory-size";
+import type { Maybe } from "../types.js";
+import { toMemorySize } from "./to-memory-size.js";
 
 interface CaptionParams {
   fileName?: Maybe<string>;

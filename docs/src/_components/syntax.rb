@@ -9,6 +9,12 @@ class Syntax < Bridgetown::Component
     html: "HTML"
   }
 
+  def self.full_language(language)
+    return "" if language.nil?
+
+    LANGUAGES[language.to_sym] || language.titleize
+  end
+
   attr_accessor :language, :filename
 
   def initialize(language = "markup", filename = nil)
@@ -29,3 +35,4 @@ class Syntax < Bridgetown::Component
     @id ||= "syntax-#{SecureRandom.uuid}"
   end
 end
+

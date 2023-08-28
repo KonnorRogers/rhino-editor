@@ -1,5 +1,9 @@
-@import "@shoelace-style/shoelace/dist/themes/light.css";
-@import "@shoelace-style/shoelace/dist/themes/dark.css";
-@import "./syntax.css";
-@import "./normalize.css";
-@import "./components.css";
+/* Tokens */
+@import "./tokens/_layout.css";
+@import "./tokens/_typography.css";
+
+@import "./_normalize.css";
+@import "./_components.css";
+@import "./_content.css";
+@import "./_layout.css";
+@import "./_overrides.css";

@@ -1,4 +1,4 @@
-import { BaseEvent } from "./base-event";
+import { BaseEvent } from "./base-event.js";
 
 /**
  * A mapping of the "trix-attachment-add" for rhino that follows the same construct.

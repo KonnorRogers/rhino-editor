@@ -14,7 +14,7 @@ class KrLayout extends LitElement {
       --aside-width: auto;
 
       /** This is a best guess. We'll attempt to calculate this with a resize observer. **/
-      --header-height: 48px;
+      --header-height: 68.33px;
     }
 
     :host([variant="documentation"]) {
@@ -70,7 +70,7 @@ class KrLayout extends LitElement {
     :host::part(menu) {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      max-height: calc(var(--height) - var(--header-height) - var(--footer-height));
+      max-height: calc(var(--height) - var(--header-height));
       overflow: auto;
       position: sticky;
       top: var(--header-height);

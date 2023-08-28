@@ -1,5 +1,5 @@
 import { Plugin, PluginKey } from "@tiptap/pm/state";
-import { RhinoPasteEvent } from "../events/rhino-paste-event";
+import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
 
 export interface PasteOptions {}
 

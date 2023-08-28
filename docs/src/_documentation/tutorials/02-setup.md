@@ -9,13 +9,40 @@ underlying rich text editor, let's look at how we can
 add, modify, or remove extensions and extend the underlying
 web component.
 
-<h2 id="configuring-extensions">
-  <a href="#configuring-extensions">
-    Configuring Extensions
-  </a>
-</h2>
+### Adding functionality to an existing editor
 
-First, we need to change how we import the editor.
+The easiest way to modify an editor is by listening to the `rhino-before-initialize` event
+and modifying it's options.
+
+Heres a simple example to remove galleries and add all heading levels.
+
+```js
+function modifyEditor (e) {
+  const editor = e.target
+  editor.starterKitOptions = {
+    ...editor.starterKitOptions,
+    heading: {
+      // Enable all heading levels. This only allows the editor to support it.
+      // this doesn't provide any UI.
+      levels: [1, 2, 3, 4, 5, 6],
+    },
+    // Disables the gallery for attachments.
+    rhinoGallery: false
+  }
+}
+
+document.addEventListener("rhino-before-initialize", modifyEditor)
+```
+
+For more reading on other ways to modify an existing editor without extends the custom
+element class, check out this reference documentation on [modifying the editor](/references/modifying-the-editor).
+
+
+### Extending the base class
+
+If you plan to do the same thing across the entire app and may have many instances of
+RhinoEditor running, it may be worth extending
+the RhinoEditor base class and adding your additional functionality.
 
 <%= render Syntax.new("js") do %>
 import "rhino-editor/exports/styles/trix.css"
@@ -26,11 +53,8 @@ You'll notice we don't want to auto-register the
 `<rhino-editor>` component. Instead, we want to extend it,
 then register it.
 
-
-Now we need to `extend` the existing editor.
-
 <%= render Syntax.new("js") do %>
-<%= File.read("./frontend/javascript/entrypoints/starter-kit-setup.js").html_safe %>
+<%= File.read("frontend/javascript/entrypoints/starter-kit-setup.js").chomp.html_safe %>
 <% end %>
 
 <script type="module" data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/starter-kit-setup.js" %>" defer></script>
@@ -45,9 +69,9 @@ Now we need to `extend` the existing editor.
 
 Now let's see how we would add extensions:
 
-<%= render Syntax.new("js") do %>
-<%= File.read("./frontend/javascript/entrypoints/character-counter.js").html_safe %>
-<% end %>
+```js
+<%= File.read("./frontend/javascript/entrypoints/character-counter.js").chomp.html_safe %>
+```
 
 <%= render Syntax.new("html") do %>
 <!-- index.html -->

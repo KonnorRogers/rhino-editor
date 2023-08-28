@@ -4,6 +4,7 @@ import * as glob from "glob"
 import esbuild from "esbuild"
 import * as fs from "fs"
 import * as fsPromises from "fs/promises"
+import chalk from "chalk"
 
 const pkg = JSON.parse(fs.readFileSync("./package.json").toString())
 const deps = [
@@ -67,7 +68,7 @@ function BuildTimer () {
         const endTime = Number(new Date())
         const buildTime = endTime - startTime
 
-        console.log(`Build complete in ${buildTime}ms! ✨`)
+        console.log(chalk.green(`Build complete in ${buildTime}ms!`), `✨\n\n`)
       })
     }
   }
@@ -94,10 +95,8 @@ function BuildTimer () {
     external: [],
     plugins: [
       AppendCssStyles(),
-      BuildTimer()
     ]
   }
-
 
   /**
    * @type {Array<import("esbuild").BuildOptions>}
@@ -124,7 +123,8 @@ function BuildTimer () {
       external: deps,
       splitting: true,
       minify: false,
-      chunkNames: 'chunks/[name]-[hash]'
+      chunkNames: 'chunks/[name]-[hash]',
+      plugins: defaultConfig.plugins.concat([BuildTimer()])
     },
     {
       ...defaultConfig,

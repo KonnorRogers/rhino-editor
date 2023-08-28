@@ -1,11 +1,11 @@
+// @ts-check
 import "rhino-editor"
 import { aTimeout, assert, elementUpdated } from "@open-wc/testing"
 import { html } from "lit"
 import { sendKeys } from '@web/test-runner-commands';
-import { createEditor } from "./create-editor.js";
+import { createEditor } from "./helpers/create-editor.js";
 
 const editorHTML = html`<rhino-editor></rhino-editor>`
-
 
 test("Should allow swapping between list-items and sinking them appropriately", async () => {
   const { tiptap, rhinoEditor } = await createEditor(editorHTML)
@@ -22,39 +22,39 @@ test("Should allow swapping between list-items and sinking them appropriately", 
   // Indentation should be disabled to start
   assert.equal(increaseIndentation.getAttribute("aria-disabled"), "true")
   assert.equal(decreaseIndentation.getAttribute("aria-disabled"), "true")
-  assert(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled"))
-  assert(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled"))
+  assert.equal(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), true)
+  assert.equal(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), true)
 
   // Lists should not be disabled, but not active either
   assert.equal(bulletListButton.getAttribute("aria-disabled"), "false")
   assert.equal(bulletListButton.getAttribute("aria-pressed"), "false")
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--active") == false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--active"), false)
 
   assert.equal(orderedListButton.getAttribute("aria-disabled"), "false")
   assert.equal(orderedListButton.getAttribute("aria-pressed"), "false")
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--active") == false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--active"), false)
 
   bulletListButton.click()
   await elementUpdated(rhinoEditor)
 
-  // Can't nest until we have a new line
+  // Can't nest until we have a new line. But we can "decreaseIndentation".
   assert.equal(increaseIndentation.getAttribute("aria-disabled"), "true")
-  assert.equal(decreaseIndentation.getAttribute("aria-disabled"), "true")
-  assert(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled"))
-  assert(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled"))
+  assert.equal(decreaseIndentation.getAttribute("aria-disabled"), "false")
+  assert.equal(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), true)
+  assert.equal(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), false)
 
   // only bullet list should be enabled and pressed
   assert.equal(bulletListButton.getAttribute("aria-disabled"), "false")
   assert.equal(bulletListButton.getAttribute("aria-pressed"), "true")
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--active") == true)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--active"), true)
 
   assert.equal(orderedListButton.getAttribute("aria-disabled"), "false")
   assert.equal(orderedListButton.getAttribute("aria-pressed"), "false")
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--active") == false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--active"), false)
 
   assert(tiptap().querySelector("ul"))
   assert(!tiptap().querySelector("ol"))
@@ -63,22 +63,22 @@ test("Should allow swapping between list-items and sinking them appropriately", 
   orderedListButton.click()
   await elementUpdated(rhinoEditor)
 
-  // Can't nest until we have a new line
+  // Can't nest until we have a new line. But we can decreaseIndentation
   assert.equal(increaseIndentation.getAttribute("aria-disabled"), "true")
-  assert.equal(decreaseIndentation.getAttribute("aria-disabled"), "true")
-  assert(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled"))
-  assert(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled"))
+  assert.equal(decreaseIndentation.getAttribute("aria-disabled"), "false")
+  assert.equal(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), true)
+  assert.equal(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), false)
 
   // only ordered list should be enabled and pressed
   assert.equal(bulletListButton.getAttribute("aria-disabled"), "false")
   assert.equal(bulletListButton.getAttribute("aria-pressed"), "false")
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--active") == false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--active"), false)
 
   assert.equal(orderedListButton.getAttribute("aria-disabled"), "false")
   assert.equal(orderedListButton.getAttribute("aria-pressed"), "true")
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--active") == true)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--active"), true)
 
   // Add a new line
   await sendKeys({ press: "Enter" })
@@ -87,28 +87,28 @@ test("Should allow swapping between list-items and sinking them appropriately", 
   // Now we can nest
   assert.equal(increaseIndentation.getAttribute("aria-disabled"), "false")
   assert.equal(decreaseIndentation.getAttribute("aria-disabled"), "false")
-  assert(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled") == false)
+  assert.equal(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), false)
 
   increaseIndentation.click()
   await elementUpdated(rhinoEditor)
 
-  // Now we can't nest
+  // Now we can't nest. Only decreaseIndentation
   assert.equal(increaseIndentation.getAttribute("aria-disabled"), "true")
-  assert.equal(decreaseIndentation.getAttribute("aria-disabled"), "true")
-  assert(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled") == true)
-  assert(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled") == true)
+  assert.equal(decreaseIndentation.getAttribute("aria-disabled"), "false")
+  assert.equal(increaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), true)
+  assert.equal(decreaseIndentation.getAttribute("part").includes("toolbar__button--disabled"), false)
 
   // only ordered list should be enabled and pressed
   assert.equal(bulletListButton.getAttribute("aria-disabled"), "false")
   assert.equal(bulletListButton.getAttribute("aria-pressed"), "false")
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--active") == false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--active"), false)
 
   assert.equal(orderedListButton.getAttribute("aria-disabled"), "false")
   assert.equal(orderedListButton.getAttribute("aria-pressed"), "true")
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--active") == true)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--active"), true)
 
   assert(tiptap().querySelector("ol > li > ol"))
 
@@ -119,13 +119,28 @@ test("Should allow swapping between list-items and sinking them appropriately", 
   // We should only see bulletList as active
   assert.equal(bulletListButton.getAttribute("aria-disabled"), "false")
   assert.equal(bulletListButton.getAttribute("aria-pressed"), "true")
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(bulletListButton.getAttribute("part").includes("toolbar__button--active") == true)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--active"), true)
 
   assert.equal(orderedListButton.getAttribute("aria-disabled"), "false")
   assert.equal(orderedListButton.getAttribute("aria-pressed"), "false")
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--disabled") == false)
-  assert(orderedListButton.getAttribute("part").includes("toolbar__button--active") == false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--active"), false)
 
   assert(tiptap().querySelector("ol > li > ul"))
+
+  // Add another new line. This is when things get weird. Make sure only the bulletList is active
+  await sendKeys({ type: "thing2" })
+  await sendKeys({ press: "Enter" })
+  await elementUpdated(rhinoEditor)
+
+  assert.equal(bulletListButton.getAttribute("aria-disabled"), "false")
+  assert.equal(bulletListButton.getAttribute("aria-pressed"), "true")
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(bulletListButton.getAttribute("part").includes("toolbar__button--active"), true)
+
+  assert.equal(orderedListButton.getAttribute("aria-disabled"), "false")
+  assert.equal(orderedListButton.getAttribute("aria-pressed"), "false")
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
+  assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--active"), false)
 })

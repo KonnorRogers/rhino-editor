@@ -1,6 +1,6 @@
 import { mergeAttributes, Node } from "@tiptap/core";
 import { EditorState, Plugin, Transaction } from "@tiptap/pm/state";
-import { DOMSerializer, Node as ProseMirrorNode } from "@tiptap/pm/model";
+import { Node as ProseMirrorNode } from "@tiptap/pm/model";
 
 function handleGallery(
   node: ProseMirrorNode,
@@ -18,37 +18,6 @@ function handleGallery(
       pos + node.nodeSize,
       newState.schema.node("paragraph", null, []),
     );
-    modified = true;
-  }
-
-  return modified;
-}
-
-function handleCaptions(
-  node: ProseMirrorNode,
-  tr: Transaction,
-  newState: EditorState,
-  pos: number,
-) {
-  let modified = false;
-  if (node.type.name !== "attachment-figure") return modified;
-
-  // @see https://discuss.prosemirror.net/t/saving-content-containing-dom-generated-by-nodeview/2594/5
-  let scratch = document.createElement("div");
-  scratch.appendChild(
-    DOMSerializer.fromSchema(newState.schema).serializeNode(node),
-  );
-
-  const figcaption = scratch.querySelector("figcaption");
-
-  if (figcaption == null) return modified;
-
-  const caption = figcaption.innerHTML;
-  if (node.attrs.caption !== caption) {
-    tr.setNodeMarkup(pos, undefined, {
-      ...node.attrs,
-      caption,
-    });
     modified = true;
   }
 
@@ -87,10 +56,7 @@ export const Gallery = Node.create({
 
           // @TODO: Iterate through transactions instead of descendants (?).
           newState.doc.descendants((node, pos, _parent) => {
-            const mutations = [
-              handleGallery(node, tr, newState, pos),
-              handleCaptions(node, tr, newState, pos),
-            ];
+            const mutations = [handleGallery(node, tr, newState, pos)];
 
             const shouldModify = mutations.some((bool) => bool === true);
 

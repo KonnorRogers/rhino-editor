@@ -4,10 +4,17 @@
 <title><%= resource_title %></title>
 
 <meta name="description" content="<%= metadata.description %>" />
-<link rel="modulepreload" href="<%= asset_path :js %>">
+<link rel="modulepreload" href="<%= asset_path "javascript/index.js" %>">
+<link rel="modulepreload" href="<%= asset_path "javascript/defer.js" %>">
+<link rel="preload" href="<%= asset_path "styles/defer.css" %>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<!-- Critical CSS -->
+<link rel="stylesheet" data-turbo-track="reload" href="<%= asset_path "styles/index.css" %>" />
+<!-- Deferred CSS -->
+<noscript><link rel="stylesheet" href="<%= asset_path "styles/defer.css" %>"></noscript>
 
-<link rel="stylesheet" data-turbo-track="reload" href="<%= asset_path :css %>" />
-<script data-turbo-track="reload" src="<%= asset_path :js %>" async type="module"></script>
+<!-- Entrypoints -->
+<script data-turbo-track="reload" src="<%= asset_path "javascript/index.js" %>" type="module"></script>
+<script data-turbo-track="reload" src="<%= asset_path "javascript/defer.js" %>" type="module"></script>
 
 <!-- Favicons -->
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">

@@ -1,23 +1,25 @@
 import {
   AttachmentManager,
   AttachmentManagerAttributes,
-} from "src/exports/attachment-manager.js";
-import { LOADING_STATES } from "src/exports/elements/attachment-editor.js";
-import type { LoadingState } from "src/exports/elements/attachment-editor.js";
+} from "../attachment-manager.js";
+import { LOADING_STATES } from "../elements/attachment-editor.js";
+import type { LoadingState } from "../elements/attachment-editor.js";
 import { mergeAttributes, Node } from "@tiptap/core";
-import { selectionToInsertionEnd } from "src/internal/selection-to-insertion-end.js";
-import { Maybe } from "src/types";
-import { findAttribute } from "./find-attribute";
-import { toDefaultCaption } from "src/internal/to-default-caption";
-import { fileUploadErrorMessage } from "../translations";
-import { Plugin, PluginKey } from "@tiptap/pm/state";
+import { selectionToInsertionEnd } from "../../internal/selection-to-insertion-end.js";
+import { Maybe } from "../../types";
+import { findAttribute } from "./find-attribute.js";
+import { toDefaultCaption } from "../../internal/to-default-caption.js";
+import { fileUploadErrorMessage } from "../translations.js";
 import { findChildrenByType } from "prosemirror-utils";
-import { AttachmentRemoveEvent } from "../events/attachment-remove-event";
+import { AttachmentRemoveEvent } from "../events/attachment-remove-event.js";
 
 import { render, html } from "lit/html.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { when } from "lit/directives/when.js";
+
+import { EditorState, Plugin, PluginKey, Transaction } from "@tiptap/pm/state";
+import { DOMSerializer, Node as ProseMirrorNode } from "@tiptap/pm/model";
 
 interface AttachmentAttrs extends AttachmentManagerAttributes {
   loadingState: LoadingState;
@@ -47,6 +49,37 @@ declare module "@tiptap/core" {
       ) => ReturnType;
     };
   }
+}
+
+function handleCaptions(
+  node: ProseMirrorNode,
+  tr: Transaction,
+  newState: EditorState,
+  pos: number,
+) {
+  let modified = false;
+  if (node.type.name !== "attachment-figure") return modified;
+
+  // @see https://discuss.prosemirror.net/t/saving-content-containing-dom-generated-by-nodeview/2594/5
+  let scratch = document.createElement("div");
+  scratch.appendChild(
+    DOMSerializer.fromSchema(newState.schema).serializeNode(node),
+  );
+
+  const figcaption = scratch.querySelector("figcaption");
+
+  if (figcaption == null) return modified;
+
+  const caption = figcaption.innerHTML;
+  if (node.attrs.caption !== caption) {
+    tr.setNodeMarkup(pos, undefined, {
+      ...node.attrs,
+      caption,
+    });
+    modified = true;
+  }
+
+  return modified;
 }
 
 /** https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4 */
@@ -85,6 +118,28 @@ export const Attachment = Node.create<AttachmentOptions>({
 
   addProseMirrorPlugins() {
     return [
+      new Plugin({
+        key: new PluginKey("rhino-autocaptions"),
+        appendTransaction(_transactions, _oldState, newState) {
+          const tr = newState.tr;
+          let modified = false;
+
+          // @TODO: Iterate through transactions instead of descendants (?).
+          newState.doc.descendants((node, pos, _parent) => {
+            const mutations = [handleCaptions(node, tr, newState, pos)];
+
+            const shouldModify = mutations.some((bool) => bool === true);
+
+            if (shouldModify) {
+              modified = true;
+            }
+          });
+
+          if (modified) return tr;
+
+          return undefined;
+        },
+      }),
       new Plugin({
         key: new PluginKey("rhino-attachment-remove-event"),
         view() {
@@ -408,27 +463,6 @@ export const Attachment = Node.create<AttachmentOptions>({
         imgSrc = url || src;
       }
 
-      function handleImageLoad(e: Event) {
-        if (!isPreviewable) return;
-
-        // Can't use height / width here and have no clue why. function hoisting maybe?
-        if (node.attrs.width && node.attrs.height) return;
-
-        const { naturalHeight: height, naturalWidth: width } =
-          e.currentTarget as HTMLImageElement;
-
-        if (typeof getPos === "function") {
-          const view = editor.view;
-          view.dispatch(
-            view.state.tr.setNodeMarkup(getPos(), undefined, {
-              ...node.attrs,
-              height: height,
-              width: width,
-            }),
-          );
-        }
-      }
-
       const template = html`
         <figure
           class=${figureClasses}
@@ -462,7 +496,6 @@ export const Attachment = Node.create<AttachmentOptions>({
                 width=${String(width)}
                 height=${String(height)}
                 src=${ifDefined(imgSrc)}
-                @load=${handleImageLoad}
               />
             `,
           )}

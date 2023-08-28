@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  konnors-ninja-keys: 1.10.0
+
 dependencies:
   '@github/clipboard-copy-element':
     specifier: ^1.2.1
@@ -18,8 +21,8 @@ dependencies:
     specifier: ^3.7.4
     version: 3.7.4
   '@shoelace-style/shoelace':
-    specifier: ^2.5.2
-    version: 2.5.2
+    specifier: ^2.7.0
+    version: 2.7.0
   '@tiptap/core':
     specifier: 2.0.4
     version: 2.0.4(@tiptap/pm@2.0.4)
@@ -56,6 +59,9 @@ dependencies:
   rhino-editor:
     specifier: link:../
     version: link:..
+  web-component-lazy-loader:
+    specifier: ^1.0.1
+    version: 1.0.1
 
 devDependencies:
   esbuild:
@@ -277,7 +283,7 @@ packages:
   /@konnorr/bridgetown-quick-search@3.7.4:
     resolution: {integrity: sha512-mFtmDXLcs5dfErE1rpms2O7VFvgPJA2E0UWga/ymcoYV1XWgm0ZLjV3EcZNQm4MoU4J9sGLCES9xRg/OWVy4gA==}
     dependencies:
-      konnors-ninja-keys: 1.9.5
+      konnors-ninja-keys: 1.10.0
       lit: 2.7.6
       lunr: 2.3.9
     dev: false
@@ -300,7 +306,7 @@ packages:
     resolution: {integrity: sha512-36076AWZIRSr8qYOLjuDDkxej/HA0XAosrj7TS1ZeLlUBnLUtbDtvc1S7KSa0hqez7ouzOqGaWK24yoNnTa2OA==}
     dependencies:
       lit: 2.7.6
-      tslib: 2.6.0
+      tslib: 2.6.2
     dev: false
 
   /@open-wc/dedupe-mixin@1.4.0:
@@ -350,8 +356,8 @@ packages:
     resolution: {integrity: sha512-NkM/hj3Js6yXCU9WxhsyxRUdyqUUUl/BSvIluUMptQteUWGOJaoyP1iMbOMqO544DYMzBfnoCw66ZHkGuTdKgA==}
     dev: false
 
-  /@shoelace-style/shoelace@2.5.2:
-    resolution: {integrity: sha512-pUvhI0bUEHzfQOdmj9AsDGspissJWnemhkaxpZCvi1i5MKi1eX73uzmPqziQTLvKUS/e8weSVKLNzqgN8tZDpw==}
+  /@shoelace-style/shoelace@2.7.0:
+    resolution: {integrity: sha512-w7FnHqBoYR6Ne42WZPW+bIJGIAGsUZgxF3WA9LLfqn3+Q4NOQ4r5jl/DEfsQmRUTmY0nUrs4WGO1CeTrhv6taA==}
     engines: {node: '>=14.17.0'}
     dependencies:
       '@ctrl/tinycolor': 3.6.0
@@ -835,8 +841,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
-  /konnors-ninja-keys@1.9.5:
-    resolution: {integrity: sha512-0tmshUZcaktkxQut8/nqMRYjODt8vF67TXQe04pnFDE3ZAuSmqnYvt1Ae8zV8UAerprmpBpKTRvB40AUnsaW4Q==}
+  /konnors-ninja-keys@1.10.0:
+    resolution: {integrity: sha512-vgdfzL036WHLDrfw2NrypSxUaZg9vLodNnT+o1UkaDYtVpOoxsoiHflyq6OaVRTWY5gh9VOzOG/r52KV2HAX9w==}
     dependencies:
       '@material/mwc-icon': 0.25.3
       '@open-wc/scoped-elements': 2.2.0
@@ -1526,8 +1532,8 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /tslib@2.6.0:
-    resolution: {integrity: sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==}
+  /tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
     dev: false
 
   /type-fest@2.19.0:
@@ -1563,6 +1569,10 @@ packages:
     dependencies:
       '@lit/reactive-element': 1.6.2
       '@open-wc/dedupe-mixin': 1.4.0
+    dev: false
+
+  /web-component-lazy-loader@1.0.1:
+    resolution: {integrity: sha512-57bn1D2nezxb6z4C3Jo8b0NOqAZord0rEJ/CVyt+Rafm35YHu9lkscPWdprxtQZZqm/AP3UZyqurMJxJT0lzMQ==}
     dev: false
 
   /wrappy@1.0.2:

@@ -156,8 +156,13 @@ yarn.lock
 package-lock.json
 docs/output
 docs/.bridgetown-cache
-/cdn
 .vercel
 /test-results
 
 .DS_Store
+
+/exports
+/internal
+/cdn
+/types.d.ts
+custom-elements.json

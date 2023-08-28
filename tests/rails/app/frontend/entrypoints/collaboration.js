@@ -34,20 +34,21 @@ class CollaborationEditor extends TipTapEditor {
   constructor () {
     super()
 
-    this.starterKit = {
-      ...super.starterKit,
+    this.starterKitOptions = {
+      ...super.starterKitOptions,
       history: false
     }
-    this.rhinoStarterKit = {
+    this.rhinoStarterKitOptions = {
+      ...super.rhinoStarterKitOptions,
       placeholder: {
         placeholder: 'Write something … It’ll be shared with everyone else looking at this example.',
       }
     }
   }
 
-  extensions () {
+  get extensions () {
     return [
-      ...super.extensions(),
+      ...super.extensions,
       // Register the document with Tiptap
       Collaboration.configure({document}),
       CollaborationCursor.configure({

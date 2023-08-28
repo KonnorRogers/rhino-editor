@@ -22,7 +22,7 @@
     "@hotwired/stimulus": "^3.2.1",
     "@hotwired/turbo": "^7.3.0",
     "@konnorr/bridgetown-quick-search": "^3.7.4",
-    "@shoelace-style/shoelace": "^2.5.2",
+    "@shoelace-style/shoelace": "^2.7.0",
     "@tiptap/core": "2.0.4",
     "@tiptap/extension-character-count": "2.0.4",
     "linkifyjs": "^4.1.1",
@@ -34,6 +34,12 @@
     "prosemirror-transform": "^1.7.4",
     "prosemirror-view": "^1.31.7",
     "read-cache": "^1.0.0",
-    "rhino-editor": "link:../"
+    "rhino-editor": "link:../",
+    "web-component-lazy-loader": "^1.0.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "konnors-ninja-keys": "1.10.0"
+    }
   }
 }

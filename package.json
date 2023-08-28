@@ -8,8 +8,8 @@
   "scripts": {
     "setup": "pnpm install && cd tests/rails && pnpm install && pnpm playwright install --with-deps && bundle install && cd - && cd docs && bundle install && pnpm install",
     "setup:docs": "pnpm install && pnpm run build && cd docs && bundle install && pnpm install",
-    "build": "rm -rf exports && pnpm build:types && node esbuild.config.js",
-    "build:types": "tsc",
+    "build": "rm -rf {cdn,internal,exports} && pnpm build:types && node esbuild.config.js",
+    "build:types": "tsc && tsc --declarationDir ./cdn",
     "lint": "prettier --check ./src",
     "fix": "prettier --write ./src",
     "test": "concurrently --names \"RAILS,DOCS,UNIT\" -c \"red,green,blue\" \"pnpm run test:rails\" \"pnpm run test:docs\" \"pnpm run test:unit\"",
@@ -24,7 +24,10 @@
   },
   "files": [
     "exports",
-    "cdn"
+    "internal",
+    "cdn",
+    "types.d.ts",
+    "custom-elements.json"
   ],
   "keywords": [
     "tiptap",
@@ -36,6 +39,7 @@
   ],
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
+    "@custom-elements-manifest/analyzer": "^0.8.4",
     "@esm-bundle/chai": "4.3.4-fix.0",
     "@open-wc/testing": "^3.2.0",
     "@playwright/test": "^1.36.2",
@@ -46,6 +50,7 @@
     "@web/test-runner": "^0.17.0",
     "@web/test-runner-commands": "^0.8.0",
     "@web/test-runner-playwright": "^0.10.1",
+    "chalk": "^5.3.0",
     "concurrently": "^8.2.0",
     "esbuild": "^0.18.18",
     "eslint": "^8.46.0",
@@ -94,5 +99,6 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "customElements": "custom-elements.json"
 }

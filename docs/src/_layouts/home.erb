@@ -21,7 +21,8 @@ layout: default
     <% end %>
   </ul>
 
-  <rhino-editor></rhino-editor>
+  <input id="rhino-input" type="hidden">
+  <rhino-editor input="rhino-input"></rhino-editor>
 
   <h2 class="reason__header" style="margin-top: 2rem;"><%= resource.data.reason_header %></h2>
 
