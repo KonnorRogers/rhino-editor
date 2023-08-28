@@ -1,17 +1,33 @@
-import { AttachmentAttributes, Maybe } from "src/types";
-import { uuidv4 } from "src/internal/uuidv4";
+import { Maybe } from "../types.js";
+import { uuidv4 } from "../internal/uuidv4.js";
 import { EditorView } from "@tiptap/pm/view";
-import { toDefaultCaption } from "src/internal/to-default-caption";
+import { toDefaultCaption } from "../internal/to-default-caption.js";
+
+export interface AttachmentManagerAttributes {
+  src: string;
+
+  file?: Maybe<File>;
+
+  attachmentId?: Maybe<string>;
+  imageId?: Maybe<string>;
+  sgid?: Maybe<string>;
+  contentType?: Maybe<string>;
+  fileName?: Maybe<string>;
+  fileSize?: Maybe<number>;
+  content?: Maybe<string>;
+  caption?: Maybe<string>;
+  url?: Maybe<string>;
+}
 
 /**
  * An attachment manager that matches the interface of Trix's attachment manager.
  *   This is what gets built on "rhino-attachment-add"
  */
-export class AttachmentManager implements AttachmentAttributes {
-  attributes: AttachmentAttributes & { attachmentId: string; imageId: string };
+export class AttachmentManager implements AttachmentManagerAttributes {
+  attributes: AttachmentManagerAttributes;
   editorView: EditorView;
 
-  constructor(obj: AttachmentAttributes, editorView: EditorView) {
+  constructor(obj: AttachmentManagerAttributes, editorView: EditorView) {
     this.editorView = editorView;
     this.attributes = {
       attachmentId: uuidv4(),
@@ -29,7 +45,7 @@ export class AttachmentManager implements AttachmentAttributes {
     }
   }
 
-  setAttributes(obj: Omit<AttachmentAttributes, "src" | "file">) {
+  setAttributes(obj: Omit<AttachmentManagerAttributes, "src" | "file">) {
     this.attributes.sgid = obj.sgid;
 
     if (obj.content == null && obj.url) {
@@ -46,6 +62,8 @@ export class AttachmentManager implements AttachmentAttributes {
           url: this.attributes.url,
           src: this.attributes.url,
           href: this.attributes.url + "?content-disposition=attachment",
+          width: image.naturalWidth,
+          height: image.naturalHeight,
         });
         image.remove();
       };
@@ -73,21 +91,21 @@ export class AttachmentManager implements AttachmentAttributes {
           view.state.tr.setNodeMarkup(position, undefined, {
             ...descendantNode.attrs,
             ...obj,
-          })
+          }),
         );
       }
     });
   }
 
-  get attachmentId(): string {
+  get attachmentId() {
     return this.attributes.attachmentId;
   }
 
-  get imageId(): string {
+  get imageId() {
     return this.attributes.imageId;
   }
 
-  get src(): string {
+  get src() {
     return this.attributes.src;
   }
 
@@ -99,23 +117,23 @@ export class AttachmentManager implements AttachmentAttributes {
     return this.attributes.sgid;
   }
 
-  get file(): File {
+  get file() {
     return this.attributes.file;
   }
 
-  get contentType(): Maybe<string> {
-    return this.file?.type;
+  get contentType() {
+    return this.attributes.contentType || this.file?.type;
   }
 
-  get fileName(): Maybe<string> {
-    return this.file?.name;
+  get fileName() {
+    return this.attributes.fileName || this.file?.name;
   }
 
-  get fileSize(): Maybe<number> {
-    return this.file?.size;
+  get fileSize() {
+    return this.attributes.fileSize || this.file?.size;
   }
 
-  get content(): Maybe<string> {
+  get content() {
     return this.attributes.content;
   }
 

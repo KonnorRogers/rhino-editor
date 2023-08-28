@@ -187,6 +187,13 @@
   flex-wrap: wrap;
   position: relative;
 }
+
+/* For if galleries are disabled */
+.trix-content figure[data-trix-attachment] {
+  display: grid;
+  position: relative;
+}
+
 .trix-content .attachment-gallery > :is(.attachment, action-text-attachment) {
   flex: 1 0 33%;
   padding: 0 0.5em;
@@ -287,6 +294,7 @@
     border: 1px solid var(--rhino-border-color);
     border-radius: var(--rhino-border-radius);
     padding: 0.2em 0.4em;
+    color: inherit;
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled) {

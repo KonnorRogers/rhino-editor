@@ -1,8 +1,6 @@
-.highlight {
-  color: black;
-}
-
-.highlight { background-color: #f8f8f8; }
+/** Syntax highlighting only */
+.highlight { color: black; background-color: #f8f8f8; font-family: var(--sl-font-mono); }
+.highlight * { font-family: var(--sl-font-mono); }
 .highlight .hll { background-color: #ffffcc }
 .highlight .c { color: #999988; font-style: italic } /* Comment */
 .highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */

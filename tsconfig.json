@@ -2,7 +2,6 @@
   "include": ["./src"],
   "exclude": ["./exports"],
   "compilerOptions": {
-    "baseUrl": ".",
     "esModuleInterop": true,
     "importHelpers": true,
     "experimentalDecorators": true,
@@ -15,7 +14,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "declarationDir": "exports/",
+    "declarationDir": "./",
     "emitDeclarationOnly": true,
     "useDefineForClassFields": false,
 

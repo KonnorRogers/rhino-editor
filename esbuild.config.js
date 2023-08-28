@@ -1,9 +1,10 @@
 // @ts-check
 import * as path from "path";
-import glob from "glob"
+import * as glob from "glob"
 import esbuild from "esbuild"
 import * as fs from "fs"
 import * as fsPromises from "fs/promises"
+import chalk from "chalk"
 
 const pkg = JSON.parse(fs.readFileSync("./package.json").toString())
 const deps = [
@@ -11,6 +12,7 @@ const deps = [
   ...Object.keys(pkg.peerDependencies || {})
 ]
 
+const watchMode = process.argv.includes("--watch")
 
 import {
   hostStyles,
@@ -18,8 +20,10 @@ import {
 } from "./src/exports/styles/editor.js"
 
 
-/** @type {(options: {} = {}) => import("esbuild").Plugin} */
-function AppendCssStyles (options = {}) {
+/**
+ * @return {import("esbuild").Plugin}
+ */
+function AppendCssStyles () {
   return {
     name: "append-css-styles",
     setup(build) {
@@ -47,7 +51,33 @@ ${toolbarButtonStyles.toString()}
   }
 }
 
+/**
+ * @returns {import("esbuild").Plugin}
+ */
+function BuildTimer () {
+  return {
+    name: "build-timer",
+    setup(build) {
+      let startTime
+
+      build.onStart(() => {
+        startTime = Number(new Date())
+      })
+
+      build.onEnd(() => {
+        const endTime = Number(new Date())
+        const buildTime = endTime - startTime
+
+        console.log(chalk.green(`Build complete in ${buildTime}ms!`), `✨\n\n`)
+      })
+    }
+  }
+}
+
 ;(async function () {
+  /**
+   * @type {import("esbuild").BuildOptions["entryPoints"]}
+   */
   const entries = {}
   glob.sync("./src/exports/**/*.{ts,js,css}")
     .forEach((file) => {
@@ -59,35 +89,32 @@ ${toolbarButtonStyles.toString()}
   const defaultConfig = {
     entryPoints: ["./src/exports/index.ts"],
     sourcemap: true,
-    platform: "browser",
     target: "es2018",
-    watch: process.argv.includes("--watch"),
     color: true,
     bundle: true,
     external: [],
     plugins: [
-      AppendCssStyles()
+      AppendCssStyles(),
     ]
   }
 
-  const startTime = Number(new Date())
-
-  await Promise.allSettled[
-    esbuild.build({
+  /**
+   * @type {Array<import("esbuild").BuildOptions>}
+   */
+  const configs = [
+    {
       ...defaultConfig,
       outfile: "exports/bundle/index.common.js",
       format: "cjs",
       minify: true,
-    }),
-
-    esbuild.build({
+    },
+    {
       ...defaultConfig,
       outfile: "exports/bundle/index.module.js",
       format: "esm",
       minify: true,
-    }),
-
-    esbuild.build({
+    },
+    {
       ...defaultConfig,
       entryPoints: entries,
       outdir: 'exports',
@@ -96,10 +123,10 @@ ${toolbarButtonStyles.toString()}
       external: deps,
       splitting: true,
       minify: false,
-      chunkNames: 'chunks/[name]-[hash]'
-    }),
-
-    esbuild.build({
+      chunkNames: 'chunks/[name]-[hash]',
+      plugins: defaultConfig.plugins.concat([BuildTimer()])
+    },
+    {
       ...defaultConfig,
       entryPoints: entries,
       outdir: 'cdn/exports',
@@ -109,11 +136,23 @@ ${toolbarButtonStyles.toString()}
       splitting: true,
       minify: false,
       chunkNames: 'chunks/[name]-[hash]'
-    })
+    }
   ]
 
-  const endTime = Number(new Date())
-  const buildTime = endTime - startTime
+  if (!watchMode) {
+    await Promise.all(configs.map((config) => esbuild.build(config)))
+      .catch((err) => {
+        console.error(err)
+        process.exit(1)
+      })
 
-  console.log(`Build complete in ${buildTime}ms! ✨`)
+    return
+  }
+
+  await Promise.all(configs.map(async (config) => {
+    const context = await esbuild.context(config)
+    return await context.watch()
+  })).catch((err) => {
+    console.error(err)
+  })
 })()

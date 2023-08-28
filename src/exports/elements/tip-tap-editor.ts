@@ -1,44 +1,21 @@
-import { Content, Editor, EditorOptions } from "@tiptap/core";
-import { tipTapCoreStyles } from "../styles/tip-tap-core-styles";
-// https://tiptap.dev/api/extensions/starter-kit#included-extensions
-import StarterKit, { StarterKitOptions } from "@tiptap/starter-kit";
-import {
-  RhinoStarterKit,
-  RhinoStarterKitOptions,
-} from "src/exports/extensions/rhino-starter-kit";
-import { isiOS, translations } from "src/exports/translations";
-import { stringMap } from "src/internal/string-map";
-
-import {
-  CSSResult,
-  html,
-  PropertyDeclarations,
-  PropertyValueMap,
-  TemplateResult,
-} from "lit";
 import { ref, createRef, Ref } from "lit/directives/ref.js";
+import { toolbarButtonStyles } from "../styles/editor.js";
+import { TipTapEditorBase } from "./tip-tap-editor-base.js";
+import { PropertyDeclarations, TemplateResult } from "lit";
 
 /** Imports <role-tooltip> and <role-toolbar> */
-import { RoleToolbar } from "role-components/dist/toolbar/component";
-import { RoleTooltip } from "role-components/dist/tooltip/component";
+import { RoleToolbar } from "role-components/dist/toolbar/component.js";
+import { RoleTooltip } from "role-components/dist/tooltip/component.js";
 
-import { AttachmentUpload } from "src/exports/attachment-upload";
-import { AttachmentManager } from "src/exports/attachment-manager";
+import { isiOS, translations } from "../translations.js";
 
-/** This will go away in favor of lazy loaded SVGs. */
-import * as icons from "src/internal/icons";
+/** This will probably go away in favor of lazy loaded SVGs. */
+import * as icons from "../../internal/icons";
+import { Maybe } from "../../types.js";
+import { html } from "lit/html.js";
+import { stringMap } from "../../internal/string-map.js";
+import { isExactNodeActive } from "../../internal/is-exact-node-active.js";
 
-import { normalize } from "src/exports/styles/normalize";
-import editorStyles, { toolbarButtonStyles } from "src/exports/styles/editor";
-import { BaseElement } from "src/internal/elements/base-element";
-
-import { AddAttachmentEvent } from "src/exports/events/add-attachment-event";
-
-import type { Maybe } from "src/types";
-import { AttachmentEditor } from "./attachment-editor";
-import { FileAcceptEvent } from "../events/file-accept-event";
-
-export type Serializer = "" | "html" | "json";
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
  *   see. This is what wraps everything into 1 coherent element.
@@ -116,117 +93,75 @@ export type Serializer = "" | "html" | "json";
  * @slot after-redo-button
  * @slot toolbar-end
  */
-export class TipTapEditor extends BaseElement {
-  readonly: boolean = false;
-  linkInputRef: Ref<HTMLInputElement> = createRef();
-  linkDialogExpanded: boolean = false;
-  input: Maybe<string>;
-  editor: Maybe<Editor>;
-  editorElement: Maybe<Element>;
-  translations = translations;
-  serializer: Serializer = "";
-  __useTouch__: boolean = false;
-  __invalidLink__: boolean = false;
-
-  /** Comma separated string passed to the attach-files input. */
-  accept: string = "*";
-
-  static baseName = "rhino-editor";
-
-  starterKit: Partial<StarterKitOptions> = {
-    strike: false,
-  };
-  rhinoStarterKit: Partial<RhinoStarterKitOptions> = {
-    placeholder: {
-      placeholder: this.translations.placeholder,
-    },
-    attachment: {
-      fileUploadErrorMessage: this.translations.fileUploadErrorMessage,
-    },
-  };
+export class TipTapEditor extends TipTapEditorBase {
+  static get styles() {
+    return TipTapEditorBase.styles.concat([toolbarButtonStyles]);
+  }
 
   static get properties(): PropertyDeclarations {
-    return {
-      readonly: { type: Boolean, reflect: true },
-      editor: { state: true },
-      editorElement: { state: true },
+    return Object.assign(TipTapEditorBase.properties, {
       linkDialogExpanded: { type: Boolean },
-      input: {},
       linkInputRef: { state: true },
       translations: { state: true },
-      class: { reflect: true },
-      accept: { reflect: true },
       __invalidLink__: { state: true, type: Boolean },
-    };
-  }
-
-  protected willUpdate(
-    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
-  ): void {
-    if (changedProperties.has("class")) {
-      this.classList.add("rhino-editor");
-    }
-  }
-
-  static get styles(): CSSResult[] {
-    return [normalize, tipTapCoreStyles, editorStyles, toolbarButtonStyles];
-  }
-
-  /** Used for registering things like <role-toolbar>, <role-tooltip>, <rhino-attachment-editor> */
-  registerDependencies() {
-    [AttachmentEditor, RoleTooltip, RoleToolbar].forEach((el) => el.define());
-  }
-
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    if (this.editor) {
-      this.__unBindEditorListeners();
-    }
-
-    setTimeout(() => {
-      // Make sure we dont render the editor more than once.
-      const cachedEditor = this.querySelector("[slot='editor']");
-
-      // light-dom version.
-      const div = document.createElement("div");
-      div.setAttribute("slot", "editor");
-
-      if (cachedEditor) {
-        cachedEditor.replaceWith(div);
-      } else {
-        this.insertAdjacentElement("beforeend", div);
-      }
-
-      this.editor = this.__setupEditor(div);
-
-      this.__bindEditorListeners();
-      this.editorElement = div.querySelector(".ProseMirror");
-
-      this.editorElement?.classList.add("trix-content");
-      this.editorElement?.setAttribute("tabindex", "0");
-      this.editorElement?.setAttribute("role", "textbox");
     });
+  }
 
-    this.classList.add("rhino-editor");
-    this.registerDependencies();
+  /**
+   * Translations for various aspects of the editor.
+   */
+  translations = translations;
 
-    this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
+  /**
+   * The <input> for inserting links
+   */
+  linkInputRef: Ref<HTMLInputElement> = createRef();
+
+  /**
+   * The dialog that contains the link input + link / unlink buttons
+   */
+  linkDialogExpanded: boolean = false;
+
+  private __invalidLink__: boolean = false;
+
+  /**
+   * @override
+   */
+  registerDependencies() {
+    super.registerDependencies();
+    [RoleToolbar, RoleTooltip].forEach((el) => el.define());
+  }
+
+  constructor() {
+    super();
+
+    this.starterKitOptions = Object.assign(super.starterKitOptions, {
+      rhinoPlaceholder: {
+        placeholder: this.translations.placeholder,
+      },
+      rhinoAttachment: {
+        fileUploadErrorMessage: this.translations.fileUploadErrorMessage,
+      },
+    }) as typeof this.starterKitOptions;
 
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
-    this.addEventListener("drop", this.handleDropFile);
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
+  /**
+   * @override
+   */
+  async connectedCallback() {
+    super.connectedCallback();
 
-    this.removeEventListener(
-      AddAttachmentEvent.eventName,
-      this.handleAttachment
-    );
+    await this.updateComplete;
 
-    this.removeEventListener("keydown", this.handleKeyboardDialogToggle);
-    this.removeEventListener("drop", this.handleDropFile);
+    if (this.editor) {
+      this.editor.on("focus", this.closeLinkDialog);
+    }
+  }
+
+  get icons(): typeof icons {
+    return icons;
   }
 
   /** Closes the dialog for link previews */
@@ -248,86 +183,6 @@ export class TipTapEditor extends BaseElement {
       this.showLinkDialog();
     }
   };
-
-  /** Used for determining how to handle uploads.
-   *   Override this for substituting your own
-   *   direct upload functionality.
-   */
-  handleAttachment = (event: AddAttachmentEvent) => {
-    if (event.defaultPrevented) {
-      return;
-    }
-
-    const { attachment, target } = event;
-
-    if (target instanceof HTMLElement && attachment.file) {
-      const upload = new AttachmentUpload(attachment, target);
-      upload.start();
-    }
-  };
-
-  /** Override this to prevent specific file types from being uploaded. */
-  handleFileAccept = (_event: FileAcceptEvent) => {};
-
-  get icons(): typeof icons {
-    return icons;
-  }
-
-  updated(
-    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
-  ): void {
-    if (changedProperties.has("readonly")) {
-      this.editor?.setEditable(!this.readonly);
-    }
-  }
-
-  extensions() {
-    return [
-      StarterKit.configure({
-        ...this.starterKit,
-      }),
-      RhinoStarterKit.configure({
-        ...this.rhinoStarterKit,
-      }),
-    ];
-  }
-
-  /**
-   * Extend this to provide your own options, or override existing options.
-   *   @example
-   *    class ExtendedRhinoEditor extends TipTapEditor {
-   *      editorOptions () {
-   *        return {
-   *          autofocus: true
-   *        }
-   *      }
-   *    }
-   *
-   */
-  editorOptions(_element: Element): Partial<EditorOptions> {
-    return {};
-  }
-
-  updateInputElementValue() {
-    if (this.inputElement != null && this.editor != null && !this.readonly) {
-      this.inputElement.value = this.serialize();
-    }
-  }
-
-  serialize() {
-    if (this.editor == null) return "";
-
-    if (this.serializer?.toLowerCase() === "json")
-      return JSON.stringify(this.editor.getJSON());
-
-    return this.editor.getHTML();
-  }
-
-  get inputElement(): Maybe<HTMLInputElement> {
-    if (this.input == null) return undefined;
-
-    return document.getElementById(this.input) as Maybe<HTMLInputElement>;
-  }
 
   toggleLinkDialog(): void {
     if (this.linkDialogExpanded) {
@@ -364,110 +219,8 @@ export class TipTapEditor extends BaseElement {
 
   get linkDialog(): Maybe<HTMLAnchorElement> {
     return this.shadowRoot?.querySelector(
-      ".link-dialog"
+      ".link-dialog",
     ) as Maybe<HTMLAnchorElement>;
-  }
-
-  async handleFiles(files: File[] | FileList): Promise<void> {
-    if (this.editor == null) return;
-
-    return new Promise((resolve, _reject) => {
-      if (files == null) return;
-
-      const fileAcceptEvents = [...files].map((file) => {
-        const event = new FileAcceptEvent(file);
-        this.dispatchEvent(event);
-        return event;
-      });
-
-      const allowedFiles: File[] = [];
-
-      for (let i = 0; i < fileAcceptEvents.length; i++) {
-        const event = fileAcceptEvents[i];
-        if (event.defaultPrevented) {
-          continue;
-        }
-        allowedFiles.push(event.file);
-      }
-
-      const attachments = this.transformFilesToAttachments(allowedFiles);
-
-      if (attachments == null || attachments.length <= 0) return;
-
-      this.editor?.chain().focus().setAttachment(attachments).run();
-
-      attachments.forEach((attachment) => {
-        this.dispatchEvent(new AddAttachmentEvent(attachment));
-      });
-
-      // Need to reset the input otherwise you get this fun state where you can't
-      //   insert the same file multiple times.
-      resolve();
-    });
-  }
-
-  async handleFileUpload(): Promise<void> {
-    const input = this.fileInputEl;
-    if (input == null) return;
-    if (input.files == null) return;
-
-    await this.handleFiles(input.files);
-
-    input.value = "";
-  }
-
-  handleDropFile = async (event: DragEvent) => {
-    if (this.editor == null) return;
-    if (event == null) return;
-    if (!(event instanceof DragEvent)) return;
-
-    const { dataTransfer } = event;
-    if (dataTransfer == null) return;
-
-    const hasFiles = dataTransfer.files?.length > 0;
-    if (!hasFiles) return;
-
-    const { view } = this.editor;
-    if (view == null) return;
-
-    event.preventDefault();
-
-    await this.handleFiles(dataTransfer.files);
-  };
-
-  transformFilesToAttachments(files?: File[] | FileList | null) {
-    if (this.editor == null) return;
-    if (files == null || files.length === 0) return;
-
-    const attachments: AttachmentManager[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-
-      if (file == null) return;
-      const src = URL.createObjectURL(file);
-
-      const attachment: AttachmentManager = new AttachmentManager(
-        {
-          src,
-          file,
-        },
-        this.editor.view
-      );
-
-      attachments.push(attachment);
-    }
-
-    return attachments;
-  }
-
-  get fileInputEl(): Maybe<HTMLInputElement> {
-    return this.shadowRoot?.getElementById(
-      "file-input"
-    ) as Maybe<HTMLInputElement>;
-  }
-
-  private get __tooltipExportParts() {
-    return "base:tooltip-base, arrow:tooltip-arrow";
   }
 
   attachFiles(): void {
@@ -513,7 +266,34 @@ export class TipTapEditor extends BaseElement {
     }
   }
 
+  get fileInputEl(): Maybe<HTMLInputElement> {
+    return this.shadowRoot?.getElementById(
+      "file-input",
+    ) as Maybe<HTMLInputElement>;
+  }
+
+  async handleFileUpload(): Promise<void> {
+    const input = this.fileInputEl;
+    if (input == null) return;
+    if (input.files == null) return;
+
+    await this.handleFiles(input.files);
+
+    input.value = "";
+  }
+
+  private get __tooltipExportParts() {
+    return "base:tooltip-base, arrow:tooltip-arrow";
+  }
+
   renderBoldButton() {
+    const boldEnabled = Boolean(this.editor?.commands.toggleBold);
+
+    if (!boldEnabled) return html``;
+
+    const isDisabled = this.editor == null || !this.editor.can().toggleBold();
+    const isActive = Boolean(this.editor?.isActive("bold"));
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -521,13 +301,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--bold": true,
-          "toolbar__button--active": Boolean(this.editor?.isActive("bold")),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().toggleBold(),
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="bold"
-        aria-disabled=${this.editor == null || !this.editor.can().toggleBold()}
-        aria-pressed=${this.editor?.isActive("bold")}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${async (e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) return;
@@ -550,6 +329,13 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderItalicButton() {
+    const italicEnabled = Boolean(this.editor?.commands.toggleItalic);
+
+    if (!italicEnabled) return html``;
+
+    const isActive = Boolean(this.editor?.isActive("italic"));
+    const isDisabled = this.editor == null || !this.editor.can().toggleItalic();
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -558,14 +344,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--italic": true,
-          "toolbar__button--active": Boolean(this.editor?.isActive("italic")),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().toggleItalic(),
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="italics"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().toggleItalic()}
-        aria-pressed=${this.editor?.isActive("italic")}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -591,6 +375,13 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderStrikeButton() {
+    const strikeEnabled = Boolean(this.editor?.commands.toggleStrike);
+
+    if (!strikeEnabled) return html``;
+
+    const isActive = Boolean(this.editor?.isActive("rhino-strike"));
+    const isDisabled = this.editor == null || !this.editor.can().toggleStrike();
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -599,16 +390,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--strike": true,
-          "toolbar__button--active": Boolean(
-            this.editor?.isActive("rhino-strike")
-          ),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().toggleStrike(),
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="strike"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().toggleStrike()}
-        aria-pressed=${Boolean(this.editor?.isActive("rhino-strike"))}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -633,6 +420,14 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderLinkButton() {
+    const linkEnabled = Boolean(this.editor?.commands.setLink);
+
+    if (!linkEnabled) return html``;
+
+    const isActive = Boolean(this.linkDialogExpanded);
+    const isDisabled =
+      this.editor == null || !this.editor.can().setLink({ href: "" });
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -641,14 +436,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--link": true,
-          "toolbar__button--active": Boolean(this.linkDialogExpanded),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().setLink({ href: "" }),
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="link"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().setLink({ href: "" })}
-        aria-pressed=${Boolean(this.linkDialogExpanded)}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
         aria-controls="link-dialog"
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
@@ -674,6 +467,14 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderHeadingButton() {
+    const headingEnabled = Boolean(this.editor?.commands.toggleHeading);
+
+    if (!headingEnabled) return html``;
+
+    const isActive = Boolean(this.editor?.isActive("heading"));
+    const isDisabled =
+      this.editor == null || !this.editor.can().toggleHeading({ level: 1 });
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -682,15 +483,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--heading": true,
-          "toolbar__button--active": Boolean(this.editor?.isActive("heading")),
-          "toolbar__button--disabled":
-            this.editor == null ||
-            !this.editor.can().toggleHeading({ level: 1 }),
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="heading"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().toggleHeading({ level: 1 })}
-        aria-pressed=${this.editor?.isActive("heading")}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -716,6 +514,14 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderBlockquoteButton() {
+    const blockQuoteEnabled = Boolean(this.editor?.commands.toggleBlockquote);
+
+    if (!blockQuoteEnabled) return html``;
+
+    const isActive = Boolean(this.editor?.isActive("blockquote"));
+    const isDisabled =
+      this.editor == null || !this.editor.can().toggleBlockquote();
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -724,16 +530,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--blockquote": true,
-          "toolbar__button--active": Boolean(
-            this.editor?.isActive("blockquote")
-          ),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().toggleBlockquote(),
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="blockquote"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().toggleBlockquote()}
-        aria-pressed=${this.editor?.isActive("blockquote")}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -759,6 +561,14 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderCodeBlockButton() {
+    const codeBlockEnabled = Boolean(this.editor?.commands.toggleCodeBlock);
+
+    if (!codeBlockEnabled) return html``;
+
+    const isActive = Boolean(this.editor?.isActive("codeBlock"));
+    const isDisabled =
+      this.editor == null || !this.editor.can().toggleCodeBlock();
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -767,16 +577,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--code-block": true,
-          "toolbar__button--active": Boolean(
-            this.editor?.isActive("codeBlock")
-          ),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().toggleCodeBlock(),
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="code-block"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().toggleCodeBlock()}
-        aria-pressed=${this.editor?.isActive("codeBlock")}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -801,6 +607,21 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderBulletListButton() {
+    const bulletListEnabled = Boolean(this.editor?.commands.toggleBulletList);
+
+    if (!bulletListEnabled) return html``;
+
+    const isDisabled =
+      this.editor == null ||
+      !(
+        this.editor.can().toggleOrderedList?.() ||
+        this.editor.can().toggleBulletList()
+      );
+
+    const isActive = Boolean(
+      this.editor != null && isExactNodeActive(this.editor.state, "bulletList"),
+    );
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -809,16 +630,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--bullet-list": true,
-          "toolbar__button--active": Boolean(
-            this.editor?.isActive("bulletList")
-          ),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().toggleBulletList(),
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="bullet-list"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().toggleBulletList()}
-        aria-pressed=${this.editor?.isActive("bulletList")}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -843,6 +660,22 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderOrderedListButton() {
+    const orderedListEnabled = Boolean(this.editor?.commands.toggleOrderedList);
+
+    if (!orderedListEnabled) return html``;
+
+    const isDisabled =
+      this.editor == null ||
+      !(
+        this.editor.can().toggleOrderedList() ||
+        this.editor.can().toggleBulletList?.()
+      );
+
+    const isActive = Boolean(
+      this.editor != null &&
+        isExactNodeActive(this.editor.state, "orderedList"),
+    );
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -851,16 +684,12 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--ordered-list": true,
-          "toolbar__button--active": Boolean(
-            this.editor?.isActive("orderedList")
-          ),
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().toggleOrderedList(),
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="ordered-list"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().toggleOrderedList()}
-        aria-pressed=${this.editor?.isActive("orderedList")}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -886,6 +715,12 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderAttachmentButton() {
+    const attachmentEnabled = Boolean(this.editor?.commands.setAttachment);
+
+    if (!attachmentEnabled) return html``;
+
+    const isDisabled = this.editor == null;
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -894,10 +729,10 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--attach-files": true,
-          "toolbar__button--disabled": this.editor == null,
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="attach-files"
-        aria-disabled=${this.editor == null}
+        aria-disabled=${isDisabled}
         data-role="toolbar-item"
         @click=${this.attachFiles}
       >
@@ -913,7 +748,7 @@ export class TipTapEditor extends BaseElement {
         </slot>
         <slot name="attach-files-icon">${this.icons.attachFiles}</slot>
 
-        <!-- @TODO: Write documentation. Hookup onchange to the slotted elements -->
+        <!-- @TODO: Write documentation. Hookup onchange to the slotted elements? -->
         <slot name="attach-files-input">
           <input
             id="file-input"
@@ -921,7 +756,7 @@ export class TipTapEditor extends BaseElement {
             hidden
             multiple
             accept=${this.accept || "*"}
-            @change=${async () => await this.handleFileUpload()}
+            @change=${this.handleFileUpload}
           />
         </slot>
       </button>
@@ -929,6 +764,12 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderUndoButton() {
+    const undoEnabled = Boolean(this.editor?.commands.undo);
+
+    if (!undoEnabled) return html``;
+
+    const isDisabled = this.editor == null || !this.editor.can().undo();
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -937,11 +778,10 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--undo": true,
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().undo(),
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="undo"
-        aria-disabled=${this.editor == null || !this.editor?.can().undo()}
+        aria-disabled=${isDisabled}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -966,6 +806,16 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderDecreaseIndentation() {
+    // Decrease / increase indentation are special cases in that they rely on built-in editor
+    // commands and not commands added by extensions.
+    const decreaseIndentationNotEnabled =
+      this.starterKitOptions.decreaseIndentation == false;
+
+    if (decreaseIndentationNotEnabled) return html``;
+
+    const isDisabled =
+      this.editor == null || !this.editor.can().liftListItem("listItem");
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -974,18 +824,16 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--decrease-indentation": true,
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().sinkListItem("listItem"),
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="decrease-indentation"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().sinkListItem("listItem")}
+        aria-disabled=${isDisabled}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
             return;
           }
-          this.editor?.chain().focus().sinkListItem("listItem").run();
+          this.editor?.chain().focus().liftListItem("listItem").run();
         }}
       >
         <slot name="decrease-indentation-tooltip">
@@ -1005,6 +853,14 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderIncreaseIndentation() {
+    const increaseIndentationNotEnabled =
+      this.starterKitOptions.increaseIndentation == false;
+
+    if (increaseIndentationNotEnabled) return html``;
+
+    const isDisabled =
+      this.editor == null || !this.editor.can().sinkListItem("listItem");
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -1013,12 +869,10 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--increase-indentation": true,
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().sinkListItem("listItem"),
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="increase-indentation"
-        aria-disabled=${this.editor == null ||
-        !this.editor.can().sinkListItem("listItem")}
+        aria-disabled=${isDisabled}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -1045,6 +899,12 @@ export class TipTapEditor extends BaseElement {
   }
 
   renderRedoButton() {
+    const redoEnabled = Boolean(this.editor?.commands.redo);
+
+    if (!redoEnabled) return html``;
+
+    const isDisabled = this.editor == null || !this.editor.can().redo?.();
+
     return html`
       <button
         class="toolbar__button rhino-toolbar-button"
@@ -1053,11 +913,10 @@ export class TipTapEditor extends BaseElement {
         part=${stringMap({
           toolbar__button: true,
           "toolbar__button--redo": true,
-          "toolbar__button--disabled":
-            this.editor == null || !this.editor.can().redo?.(),
+          "toolbar__button--disabled": isDisabled,
         })}
         aria-describedby="redo"
-        aria-disabled=${this.editor == null || !this.editor.can().redo?.()}
+        aria-disabled=${isDisabled}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -1081,11 +940,11 @@ export class TipTapEditor extends BaseElement {
     `;
   }
 
-  renderStart() {
+  renderToolbarStart() {
     return html``;
   }
 
-  renderEnd() {
+  renderToolbarEnd() {
     return html``;
   }
 
@@ -1095,7 +954,7 @@ export class TipTapEditor extends BaseElement {
     return html`
       <slot name="toolbar">
         <role-toolbar class="toolbar" part="toolbar" role="toolbar">
-          <slot name="toolbar-start">${this.renderStart()}</slot>
+          <slot name="toolbar-start">${this.renderToolbarStart()}</slot>
 
           <!-- Bold -->
           <slot name="before-bold-button"></slot>
@@ -1176,14 +1035,14 @@ export class TipTapEditor extends BaseElement {
           <slot name="redo-button"> ${this.renderRedoButton()} </slot>
           <slot name="after-redo-button"></slot>
 
-          <slot name="toolbar-end">${this.renderEnd()}</slot>
+          <slot name="toolbar-end">${this.renderToolbarEnd()}</slot>
         </role-toolbar>
       </slot>
     `;
   }
 
   /** @TODO: Lets think of a more friendly way to render dialogs for users to extend. */
-  renderLinkCreationDialog(): TemplateResult {
+  renderDialog(): TemplateResult {
     if (this.readonly) return html``;
     return html` <div
       id="link-dialog"
@@ -1263,147 +1122,6 @@ export class TipTapEditor extends BaseElement {
         </div>
       </div>
     </div>`;
-  }
-
-  render(): TemplateResult {
-    return html`
-      ${this.renderToolbar()}
-      <div class="editor-wrapper" part="editor-wrapper">
-        ${this.renderLinkCreationDialog()}
-        <div class="editor" part="editor">
-          <slot name="editor">
-            <div class="trix-content"></div>
-          </slot>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Due to some inconsistencies in how Trix will render the inputElement based on if its
-   * the HTML representation, or transfromed with `#to_trix_html` this gives
-   * us a consistent DOM structure to parse for rich text comments.
-   */
-  normalizeDOM(
-    inputElement: Maybe<HTMLInputElement>,
-    parser = new DOMParser()
-  ) {
-    if (inputElement == null || inputElement.value == null) return;
-
-    const doc = parser.parseFromString(inputElement.value, "text/html");
-    const figures = [...doc.querySelectorAll("figure[data-trix-attachment]")];
-    const filtersWithoutChildren = figures.filter(
-      (figure) => figure.querySelector("figcaption") == null
-    );
-
-    doc.querySelectorAll("div > figure:first-child").forEach((el) => {
-      el.parentElement?.classList.add("attachment-gallery");
-    });
-
-    filtersWithoutChildren.forEach((figure) => {
-      const attrs = figure.getAttribute("data-trix-attributes");
-
-      if (!attrs) return;
-
-      const { caption } = JSON.parse(attrs);
-      if (caption) {
-        figure.insertAdjacentHTML(
-          "beforeend",
-          `<figcaption class="attachment__caption">${caption}</figcaption>`
-        );
-        return;
-      }
-    });
-
-    doc.querySelectorAll("figure .attachment__name").forEach((el) => {
-      if (el.textContent?.includes(" · ") === false) return;
-
-      el.insertAdjacentText("beforeend", " · ");
-    });
-
-    const body = doc.querySelector("body");
-
-    if (body) {
-      inputElement.value = body.innerHTML;
-    }
-  }
-
-  __defaultOptions(element: Element): Partial<EditorOptions> {
-    let content: Content = this.inputElement?.value || "";
-
-    if (content && this.serializer?.toLowerCase() === "json") {
-      content = JSON.parse(content);
-    }
-
-    return {
-      injectCSS: false,
-      extensions: this.extensions(),
-      autofocus: false,
-      element,
-      content,
-      editable: !this.readonly,
-    };
-  }
-
-  __handleCreate = () => {
-    this.requestUpdate();
-  };
-
-  __handleUpdate = () => {
-    this.updateInputElementValue();
-    this.requestUpdate();
-  };
-
-  __handleFocus = () => {
-    this.closeLinkDialog();
-    this.requestUpdate();
-  };
-
-  __handleBlur = () => {
-    this.updateInputElementValue();
-    this.requestUpdate();
-  };
-
-  __handleSelectionUpdate = () => {
-    this.requestUpdate();
-  };
-
-  __handleTransaction = () => {
-    this.requestUpdate();
-  };
-
-  __bindEditorListeners(): void {
-    if (this.editor == null) return;
-
-    this.editor.on("focus", this.__handleFocus);
-    this.editor.on("create", this.__handleCreate);
-    this.editor.on("update", this.__handleUpdate);
-    this.editor.on("selectionUpdate", this.__handleSelectionUpdate);
-    this.editor.on("transaction", this.__handleTransaction);
-    this.editor.on("blur", this.__handleBlur);
-  }
-
-  __unBindEditorListeners(): void {
-    if (this.editor == null) return;
-
-    this.editor.off("focus", this.__handleFocus);
-    this.editor.off("create", this.__handleCreate);
-    this.editor.off("update", this.__handleUpdate);
-    this.editor.off("selectionUpdate", this.__handleSelectionUpdate);
-    this.editor.off("transaction", this.__handleTransaction);
-    this.editor.off("blur", this.__handleBlur);
-  }
-
-  __setupEditor(element: Element): Editor {
-    if (!this.serializer || this.serializer === "html") {
-      // This is a super hacky way to get __to_trix_html to support figcaptions without patching it.
-      this.normalizeDOM(this.inputElement);
-    }
-
-    return new Editor({
-      ...this.__defaultOptions(element),
-      ...this.editorOptions(element),
-    });
   }
 }
 

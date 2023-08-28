@@ -1,11 +1,7 @@
 /* Utility Types */
 export type Maybe<T> = T | null | undefined;
 
-/* Library specific types */
-export interface AttachmentAttributes {
-  file: File;
-  src: string;
-  sgid?: Maybe<string>;
-  url?: Maybe<string>;
-  content?: Maybe<string>;
-}
+/**
+ * Convenient way to smash all keys together and make it easy to read.
+ */
+export type Prettify<T> = { [key in keyof T]: T[key] } & {};

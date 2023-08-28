@@ -51,6 +51,7 @@ export const toolbarButtonStyles = css`
     border: 1px solid var(--rhino-border-color);
     border-radius: var(--rhino-border-radius);
     padding: 0.2em 0.4em;
+    color: inherit;
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled) {
@@ -122,8 +123,7 @@ export default css`
   }
 
   .toolbar::part(base) {
-    border-color: var(--rhino-border-color);
-    border-width: 1px;
+    border: 1px solid var(--rhino-border-color);
     border-bottom-color: transparent;
     border-radius: var(--rhino-border-radius) var(--rhino-border-radius) 0px 0px;
   }

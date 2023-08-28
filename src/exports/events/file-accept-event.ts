@@ -1,25 +1,23 @@
-import { BaseEvent } from "./base-event";
+import { BaseEvent } from "./base-event.js";
 
 /**
  * A mapping of the "trix-attachment-add" for rhino that follows the same construct.
+ *   Use this to prevent uploading a file by calling `event.preventDefault()`
  */
 export class FileAcceptEvent extends BaseEvent {
-  static get eventName(): "rhino-file-accept" {
-    return "rhino-file-accept";
-  }
+  static eventName = "rhino-file-accept" as const;
 
-  constructor(public file: File, options?: EventInit | undefined) {
+  constructor(
+    public file: File,
+    options?: EventInit | undefined,
+  ) {
     super(FileAcceptEvent.eventName, options);
     this.file = file;
   }
 }
 
-/**
- * Tell typescript this is an "offical" event and what params to expect on
- * document.addEventListener() / window.addEventListener()
- */
 declare global {
-  interface HTMLElementEventMap {
+  interface GlobalEventHandlersEventMap {
     [FileAcceptEvent.eventName]: FileAcceptEvent;
   }
 }

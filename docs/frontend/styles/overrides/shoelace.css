@@ -1,0 +1,4 @@
+:where(sl-visually-hidden:not(:defined)) {
+  display: none;
+}
+

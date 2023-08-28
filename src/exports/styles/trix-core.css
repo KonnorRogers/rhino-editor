@@ -186,6 +186,13 @@
   flex-wrap: wrap;
   position: relative;
 }
+
+/* For if galleries are disabled */
+.trix-content figure[data-trix-attachment] {
+  display: grid;
+  position: relative;
+}
+
 .trix-content .attachment-gallery > :is(.attachment, action-text-attachment) {
   flex: 1 0 33%;
   padding: 0 0.5em;

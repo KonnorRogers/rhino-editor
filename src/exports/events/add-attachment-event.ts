@@ -1,28 +1,24 @@
-import { AttachmentManager } from "src/exports/attachment-manager";
-import { BaseEvent } from "./base-event";
+import { AttachmentManager } from "../attachment-manager.js";
+import { BaseEvent } from "./base-event.js";
 
 /**
- * A mapping of the "trix-attachment-add" for rhino that follows the same construct.
+ * A mapping of the "trix-attachment-add" for Rhino that follows the same construct.
+ *   Fires after an attachment has been added.
  */
 export class AddAttachmentEvent extends BaseEvent {
-  attachment: AttachmentManager;
+  static eventName = "rhino-attachment-add" as const;
 
-  static get eventName(): "rhino-attachment-add" {
-    return "rhino-attachment-add";
-  }
-
-  constructor(attachment: AttachmentManager, options: Partial<EventInit> = {}) {
+  constructor(
+    public attachment: AttachmentManager,
+    options: Partial<EventInit> = {},
+  ) {
     super(AddAttachmentEvent.eventName, options);
     this.attachment = attachment;
   }
 }
 
-/**
- * Tell typescript this is an "offical" event and what params to expect on
- * document.addEventListener() / window.addEventListener()
- */
 declare global {
-  interface HTMLElementEventMap {
+  interface GlobalEventHandlersEventMap {
     [AddAttachmentEvent.eventName]: AddAttachmentEvent;
   }
 }

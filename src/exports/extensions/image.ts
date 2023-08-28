@@ -1,5 +1,5 @@
 import { Node, mergeAttributes } from "@tiptap/core";
-import { findAttribute } from "./find-attribute";
+import { findAttribute } from "./find-attribute.js";
 
 export interface ImageOptions {
   HTMLAttributes: Record<string, any>;

@@ -46,7 +46,7 @@ jobs:
         AWS_S3_BUCKET: "my-bucket-${{ strategy.job-index }}"
 
     - name: Install libvips
-      run: sudo apt -y install libvips
+      run: sudo apt update && sudo apt -y install libvips
 
     - name: Set parallel workers env variable
       run: echo "PARALLEL_WORKERS=$(expr $(nproc) \* 6)" >> $GITHUB_ENV
