@@ -1,9 +1,9 @@
 import { playwrightLauncher } from '@web/test-runner-playwright';
 // import { esbuildPlugin } from '@web/dev-server-esbuild';
 
-const showChromium = process.env.BROWSER.toLowerCase().includes("chromium")
-const showFirefox = process.env.BROWSER.toLowerCase().includes("firefox")
-const showWebkit = process.env.BROWSER.toLowerCase().includes("webkit")
+const showChromium = (process.env.BROWSER || "").toLowerCase().includes("chromium")
+const showFirefox = (process.env.BROWSER || "").toLowerCase().includes("firefox")
+const showWebkit = (process.env.BROWSER || "").toLowerCase().includes("webkit")
 
 /** @type {import("@web/test-runner").TestRunnerConfig} */
 export default {
