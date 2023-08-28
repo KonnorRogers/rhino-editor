@@ -1,5 +1,5 @@
 class Builders::ChangelogGenerator < SiteBuilder
-  # def build
+  def build
   #   changelog_file = File.expand_path("../../../CHANGELOG.md", __dir__)
   #   add_resource :documentation, "references/00-changelog.md" do
   #     title "Changelog"
@@ -7,5 +7,5 @@ class Builders::ChangelogGenerator < SiteBuilder
   #     category "references"
   #     content File.read(changelog_file)
   #   end
-  # end
+  end
 end
