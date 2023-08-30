@@ -128,7 +128,7 @@
 .trix-content li {
   margin-inline-start: 1em;
 }
-.trix-content pre {
+.trix-content :where(pre) {
   display: inline-block;
   width: 100%;
   vertical-align: top;

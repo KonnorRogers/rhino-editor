@@ -24,22 +24,32 @@ yarn add lowlight @tiptap/extension-code-block-lowlight
 
 ## Adding to RhinoEditor
 
-
-<% syntax_block = capture do %>
-<% end %>
-
+<% syntax_highlight_js_file = "frontend/javascript/entrypoints/syntax-highlighting.js" %>
+<% syntax_highlight_css_file = "frontend/javascript/entrypoints/syntax-highlighting.css" %>
 
 ```js
-<%= syntax_block %>
+<%= File.read(syntax_highlight_js_file).chomp.html_safe %>
 ```
 
-<script type="module">
-<%= syntax_block %>
-</script>
+```css
+<%= File.read(syntax_highlight_css_file).chomp.html_safe %>
+```
+
+<script type="module" data-turbo-track="reload" src="<%= asset_path syntax_highlight_js_file.split("frontend/")[1] %>" defer></script>
+
+<style type="text/css" data-turbo-track="reload">
+<%= File.read(syntax_highlight_css_file).chomp.html_safe %>
+</style>
+
+<% html = capture do %>
+<input type="hidden" id="syntax-highlight-input" value="<pre><code class='highlight-js'>console.log('Hello World')</code></pre>">
+<syntax-highlight-editor id="syntax-highlight-editor" input="syntax-highlight-input"></syntax-highlight-editor>
+<% end %>
 
 ```html
-<rhino-editor id="syntax-highlight-editor"></rhino-editor>
+<%= html.chomp.html_safe %>
 ```
 
-<rhino-editor id="syntax-highlight-editor"></rhino-editor>
+<%= html %>
 
+<https://github.com/highlightjs/highlight.js/tree/main/src/styles>

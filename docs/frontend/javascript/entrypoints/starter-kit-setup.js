@@ -5,7 +5,7 @@ class MyEditor extends TipTapEditor {
   constructor () {
     super()
     this.starterKitOptions = {
-      ...super.starterKitOptions,
+      ...this.starterKitOptions,
       heading: {
         // Enable all heading levels
         levels: [1, 2, 3, 4, 5, 6],

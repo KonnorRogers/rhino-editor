@@ -92,6 +92,8 @@ Here's how we could do it using a `before-initialize` event listener to remove t
 function removeBold () {
   const rhinoEditor = document.querySelector("rhino-editor#no-bold")
 
+  if (rhinoEditor == null) return
+
   rhinoEditor.starterKitOptions = {
     ...rhinoEditor.starterKitOptions,
     bold: false

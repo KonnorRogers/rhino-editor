@@ -27,6 +27,7 @@ const outputFolder = "output"
 // const esbuildOptions = { publicPath: "/my_subfolder/_bridgetown/static" }
 // ```
 const esbuildOptions = {
+  target: "es2020",
   entryPoints: [
     "frontend/javascript/index.js",
     "frontend/javascript/defer.js",
