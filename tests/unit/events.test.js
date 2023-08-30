@@ -87,17 +87,21 @@ test("rhino-change", async () => {
     called = true
   }
 
-  document.addEventListener("rhino-change", handleEvent)
   const { tiptap } = await createEditor(editorHTML)
+
+  document.addEventListener("rhino-change", handleEvent)
 
   tiptap().focus()
 
   assert.equal(called, false)
 
+  tiptap().focus()
+
   await sendKeys({
     type: "abcd"
   })
 
+  await waitUntil(() => called === true)
   assert.equal(called, true)
 
   document.removeEventListener("rhino-change", handleEvent)

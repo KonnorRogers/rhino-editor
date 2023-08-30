@@ -1,0 +1,113 @@
+/*
+OneDark theme from here: https://github.com/highlightjs/highlight.js/blob/main/src/styles/atom-one-dark.css
+
+Atom One Dark by Daniel Gamage
+Original One Dark Syntax theme from https://github.com/atom/one-dark-syntax
+
+base:    #282c34
+mono-1:  #abb2bf
+mono-2:  #818896
+mono-3:  #5c6370
+hue-1:   #56b6c2
+hue-2:   #61aeee
+hue-3:   #c678dd
+hue-4:   #98c379
+hue-5:   #e06c75
+hue-5-2: #be5046
+hue-6:   #d19a66
+hue-6-2: #e6c07b
+
+*/
+
+.trix-content .hljs {
+  color: #abb2bf;
+  background: #0d0d0d;
+}
+
+.trix-content pre {
+  color: #abb2bf;
+  background: #0d0d0d;
+  border-radius: 0.5rem;
+  font-family: "JetBrainsMono", monospace;
+  padding: 0.75rem 1rem;
+}
+
+.trix-content code {
+  background: none;
+  color: #abb2bf;
+  background: #0d0d0d;
+  color: inherit;
+  font-size: 0.8rem;
+  padding: 0;
+}
+
+
+.trix-content .hljs-comment,
+.trix-content .hljs-quote {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.trix-content .hljs-doctag,
+.trix-content .hljs-keyword,
+.trix-content .hljs-formula {
+  color: #c678dd;
+}
+
+.trix-content .hljs-section,
+.trix-content .hljs-name,
+.trix-content .hljs-selector-tag,
+.trix-content .hljs-deletion,
+.trix-content .hljs-subst {
+  color: #e06c75;
+}
+
+.trix-content .hljs-literal {
+  color: #56b6c2;
+}
+
+.trix-content .hljs-string,
+.trix-content .hljs-regexp,
+.trix-content .hljs-addition,
+.trix-content .hljs-attribute,
+.trix-content .hljs-meta .trix-content .hljs-string {
+  color: #98c379;
+}
+
+.trix-content .hljs-attr,
+.trix-content .hljs-variable,
+.trix-content .hljs-template-variable,
+.trix-content .hljs-type,
+.trix-content .hljs-selector-class,
+.trix-content .hljs-selector-attr,
+.trix-content .hljs-selector-pseudo,
+.trix-content .hljs-number {
+  color: #d19a66;
+}
+
+.trix-content .hljs-symbol,
+.trix-content .hljs-bullet,
+.trix-content .hljs-link,
+.trix-content .hljs-meta,
+.trix-content .hljs-selector-id,
+.trix-content .hljs-title {
+  color: #61aeee;
+}
+
+.trix-content .hljs-built_in,
+.trix-content .hljs-title.class_,
+.trix-content .hljs-class .trix-content .hljs-title {
+  color: #e6c07b;
+}
+
+.trix-content .hljs-emphasis {
+  font-style: italic;
+}
+
+.trix-content .hljs-strong {
+  font-weight: bold;
+}
+
+.trix-content .hljs-link {
+  text-decoration: underline;
+}

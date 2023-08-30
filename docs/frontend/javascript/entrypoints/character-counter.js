@@ -5,18 +5,18 @@ import CharacterCount from "@tiptap/extension-character-count"
 import { html } from "lit"
 
 class ExtendedEditor extends TipTapEditor {
-  get extensions () {
+  constructor () {
+    super()
     this.characterCountLimit = 240
-    return [
-      // Uses all existing extensions so we're only appending
-      ...super.extensions,
 
-      // Adds character counter
+    this.extensions = [
+      ...this.extensions,
       CharacterCount.configure({
         limit: this.characterCountLimit,
       })
     ]
   }
+
 
   render () {
     return html`

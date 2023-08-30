@@ -17,7 +17,7 @@ export async function createDataTransfer ({
       return dataTransfer;
     },
     {
-      fileHex: (await readFile(filePath)).toString("hex"),
+      fileHex: (await readFile(filePath)).toString(),
       localFileName: fileName,
       localFileType: fileType,
     }

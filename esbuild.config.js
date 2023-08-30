@@ -89,7 +89,7 @@ function BuildTimer () {
   const defaultConfig = {
     entryPoints: ["./src/exports/index.ts"],
     sourcemap: true,
-    target: "es2018",
+    target: "es2020",
     color: true,
     bundle: true,
     external: [],
