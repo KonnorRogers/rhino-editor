@@ -27,13 +27,15 @@
     "@tiptap/extension-code-block-lowlight": "^2.1.7",
     "linkifyjs": "^4.1.1",
     "lowlight": "^2.9.0",
+    "prosemirror-view": "1.28.2",
     "read-cache": "^1.0.0",
     "rhino-editor": "link:../",
     "web-component-lazy-loader": "^1.0.1"
   },
   "pnpm": {
     "overrides": {
-      "konnors-ninja-keys": "1.10.0"
+      "konnors-ninja-keys": "1.10.0",
+      "prosemirror-view": "$prosemirror-view"
     }
   }
 }
