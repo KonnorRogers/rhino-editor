@@ -53,9 +53,9 @@ You'll notice we don't want to auto-register the
 `<rhino-editor>` component. Instead, we want to extend it,
 then register it.
 
-<%= render Syntax.new("js") do %>
+```js
 <%= File.read("frontend/javascript/entrypoints/starter-kit-setup.js").chomp.html_safe %>
-<% end %>
+```
 
 <script type="module" data-turbo-track="reload" src="<%= asset_path "javascript/entrypoints/starter-kit-setup.js" %>" defer></script>
 

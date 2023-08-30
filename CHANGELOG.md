@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.1
+
+### Patch Changes
+
+- f51bf37: fix: add `addExtensions` api to editor
+- f51bf37: starterKitOptions and extensions no longer implement getters / setters, and are now direct instance variables
+- f51bf37: - Dependencies: remove unnecessary `@tiptap/extensions-text-align` dependency.
+  - Dependencies: downgrade and pin prosemirror-view from `1.31.2` to `1.28.2` to fix and error with adding plugins. <https://github.com/ueberdosis/tiptap/issues/4065#issuecomment-1699232591>
+
 ## 0.7.0
 
 ### Minor Changes

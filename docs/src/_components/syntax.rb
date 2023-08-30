@@ -1,18 +1,10 @@
 require "securerandom"
 
 class Syntax < Bridgetown::Component
-  LANGUAGES = {
-    rb: "Ruby",
-    js: "JavaScript",
-    ts: "TypeScript",
-    sh: "Shell",
-    html: "HTML"
-  }
-
   def self.full_language(language)
     return "" if language.nil?
 
-    LANGUAGES[language.to_sym] || language.titleize
+    Rouge::Lexer.find(language).title || language.titleize
   end
 
   attr_accessor :language, :filename
@@ -28,7 +20,7 @@ class Syntax < Bridgetown::Component
   end
 
   def full_language
-    LANGUAGES[@language.to_sym] || @language.titleize
+    Syntax.full_language(@language)
   end
 
   def id

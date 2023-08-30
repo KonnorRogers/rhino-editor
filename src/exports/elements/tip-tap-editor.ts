@@ -135,7 +135,8 @@ export class TipTapEditor extends TipTapEditorBase {
   constructor() {
     super();
 
-    this.starterKitOptions = Object.assign(super.starterKitOptions, {
+    // Not sure why we need to call super here and not just this.starterKitOptions
+    this.starterKitOptions = Object.assign(this.starterKitOptions, {
       rhinoPlaceholder: {
         placeholder: this.translations.placeholder,
       },
