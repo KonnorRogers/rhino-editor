@@ -68,7 +68,7 @@ export class TipTapEditorBase extends BaseElement {
       editor: { state: true },
       editorElement: { state: true },
       starterKitOptions: { state: true },
-      extensions: { state: true }
+      extensions: { state: true },
     };
   }
 
@@ -113,8 +113,7 @@ export class TipTapEditorBase extends BaseElement {
   /**
    * This will be concatenated onto RhinoStarterKit and StarterKit extensions.
    */
-  extensions: EditorOptions["extensions"] = []
-
+  extensions: EditorOptions["extensions"] = [];
 
   /**
    * Reset mechanism. This is called on first connect, and called anytime extensions,
@@ -122,13 +121,13 @@ export class TipTapEditorBase extends BaseElement {
    */
   rebuildEditor() {
     // Make sure we dont render the editor more than once.
-    if (this.editor) this.editor.destroy()
-    const editors = this.querySelectorAll("[slot='editor']")
+    if (this.editor) this.editor.destroy();
+    const editors = this.querySelectorAll("[slot='editor']");
     editors.forEach((el) => {
       // @ts-expect-error
-      el.querySelector(".tiptap")?.editor?.destroy()
-      el.remove()
-    })
+      el.querySelector(".tiptap")?.editor?.destroy();
+      el.remove();
+    });
 
     // light-dom version.
     const div = document.createElement("div");
@@ -149,7 +148,9 @@ export class TipTapEditorBase extends BaseElement {
   }
 
   protected willUpdate(
-    changedProperties: PropertyValueMap<this & { class: string }> | Map<PropertyKey, unknown>,
+    changedProperties:
+      | PropertyValueMap<this & { class: string }>
+      | Map<PropertyKey, unknown>,
   ): void {
     if (changedProperties.has("class")) {
       this.classList.add("rhino-editor");
@@ -159,15 +160,18 @@ export class TipTapEditorBase extends BaseElement {
   protected updated(
     changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
-    if (changedProperties.has("extensions") || changedProperties.has("starterKitOptions")) {
-      this.rebuildEditor()
+    if (
+      changedProperties.has("extensions") ||
+      changedProperties.has("starterKitOptions")
+    ) {
+      this.rebuildEditor();
     }
 
     if (changedProperties.has("readonly")) {
       this.editor?.setEditable(!this.readonly);
     }
 
-    super.updated(changedProperties)
+    super.updated(changedProperties);
   }
 
   /** Used for registering things like <role-toolbar>, <role-tooltip>, <rhino-attachment-editor> */
@@ -204,7 +208,7 @@ export class TipTapEditorBase extends BaseElement {
     setTimeout(() => {
       this.rebuildEditor();
       this.dispatchEvent(new InitializeEvent());
-    })
+    });
   }
 
   disconnectedCallback() {
@@ -237,13 +241,16 @@ export class TipTapEditorBase extends BaseElement {
   /** Override this to prevent specific file types from being uploaded. */
   handleFileAccept = (_event: FileAcceptEvent) => {};
 
-
-  addExtensions (...extensions: EditorOptions["extensions"] | Array<EditorOptions["extensions"]>) {
+  addExtensions(
+    ...extensions:
+      | EditorOptions["extensions"]
+      | Array<EditorOptions["extensions"]>
+  ) {
     if (Array.isArray(extensions)) {
-      extensions = extensions.flat(1)
+      extensions = extensions.flat(1);
     }
 
-    this.extensions = this.extensions.concat(extensions)
+    this.extensions = this.extensions.concat(extensions);
   }
 
   /**
@@ -472,11 +479,11 @@ export class TipTapEditorBase extends BaseElement {
    * This is intentionally not to be configured by a user. It makes updating extensions hard.
    *  it also is a getter and not a variable so that it will rerun in case options change.
    */
-   private get __starterKitExtensions__(): EditorOptions["extensions"] {
+  private get __starterKitExtensions__(): EditorOptions["extensions"] {
     return [
       StarterKit.configure(this.starterKitOptions),
       RhinoStarterKit.configure(this.starterKitOptions),
-    ]
+    ];
   }
 
   /**
