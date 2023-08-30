@@ -26,12 +26,19 @@ yarn add lowlight @tiptap/extension-code-block-lowlight
 
 ## Adding to RhinoEditor
 
+
+The first step is to add JavaScript to enhance our editor. Also of note we need to disable
+the built-in `codeBlock` extension.
+
 <% syntax_highlight_js_file = "frontend/javascript/entrypoints/syntax-highlighting.js" %>
-<% syntax_highlight_css_file = "frontend/javascript/entrypoints/syntax-highlighting.css" %>
 
 ```js
 <%= File.read(syntax_highlight_js_file).chomp.html_safe %>
 ```
+
+The next step is to choose a theme. I went with the `OneDark` theme, but feel free to choose any theme you wish.
+
+<% syntax_highlight_css_file = "frontend/javascript/entrypoints/syntax-highlighting.css" %>
 
 ```css
 <%= File.read(syntax_highlight_css_file).chomp.html_safe %>
