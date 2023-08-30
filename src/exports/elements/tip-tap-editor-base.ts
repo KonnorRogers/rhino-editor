@@ -160,7 +160,7 @@ export class TipTapEditorBase extends BaseElement {
     changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (changedProperties.has("extensions") || changedProperties.has("starterKitOptions")) {
-      // setTimeout(() => this.rebuildEditor())
+      this.rebuildEditor()
     }
 
     if (changedProperties.has("readonly")) {

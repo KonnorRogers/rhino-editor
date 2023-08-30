@@ -38,6 +38,10 @@ yarn add lowlight @tiptap/extension-code-block-lowlight
 ```
 
 <script type="module" data-turbo-track="reload" src="<%= asset_path syntax_highlight_js_file.split("frontend/")[1] %>" defer></script>
+<script type="module">
+// Sometimes inputs get cached. We need to fix that.
+document.querySelector("#syntax-highlight-input").setAttribute("value", "<pre><code class='highlight-js'>console.log('Hello World')</code></pre>")
+</script>
 
 <style type="text/css" data-turbo-track="reload">
 <%= File.read(syntax_highlight_css_file).chomp.html_safe %>
