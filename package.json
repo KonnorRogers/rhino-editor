@@ -19,7 +19,7 @@
     "start": "pnpm build -- --watch",
     "start:docs": "pnpm --filter \"./docs\" start",
     "start:rails": "cd tests/rails && overmind start -f Procfile.dev",
-    "release": "pnpm build && changeset version && changeset publish && git push --follow-tags",
+    "release": "pnpm run build && changeset version && changeset publish && git push --follow-tags",
     "changeset": "changeset"
   },
   "files": [

@@ -6,8 +6,6 @@ export default function lazyLoader() {
       "rhino-editor": {
         register() {
           import("rhino-editor");
-          // @ts-expect-error
-          import("rhino-editor/exports/styles/trix.css");
         },
       },
       "clipboard-copy": {
