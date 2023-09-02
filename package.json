@@ -17,7 +17,7 @@
     "test:unit": "web-test-runner",
     "test:docs": "playwright test",
     "start": "pnpm build -- --watch",
-    "start:docs": "pnpm --filter \"./docs\" start",
+    "start:docs": "cd docs && overmind start -f Procfile.dev",
     "start:rails": "cd tests/rails && overmind start -f Procfile.dev",
     "release": "pnpm run build && changeset version && changeset publish && git push --follow-tags",
     "changeset": "changeset"
@@ -77,7 +77,7 @@
     "lit": "^2.8.0",
     "prosemirror-utils": "1.2.1-0",
     "prosemirror-view": "1.28.2",
-    "role-components": "^1.1.4",
+    "role-components": "^2.0.0",
     "tslib": "^2.6.2"
   },
   "pnpm": {

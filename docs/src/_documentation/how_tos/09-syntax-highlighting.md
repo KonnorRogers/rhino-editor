@@ -44,10 +44,11 @@ The next step is to choose a theme. I went with the `OneDark` theme, but feel fr
 <%= File.read(syntax_highlight_css_file).chomp.html_safe %>
 ```
 
-<script type="module" data-turbo-track="reload" src="<%= asset_path syntax_highlight_js_file.split("frontend/")[1] %>" defer></script>
+<% content = "<pre><code class='highlight-js'>console.log('Hello World')</code></pre>".html_safe %>
+
 <script type="module">
 // Sometimes inputs get cached. We need to fix that.
-document.querySelector("#syntax-highlight-input").setAttribute("value", "<pre><code class='highlight-js'>console.log('Hello World')</code></pre>")
+document.querySelector("#syntax-highlight-input").setAttribute("value", "<%= content %>")
 </script>
 
 <style type="text/css" data-turbo-track="reload">
@@ -55,7 +56,7 @@ document.querySelector("#syntax-highlight-input").setAttribute("value", "<pre><c
 </style>
 
 <% html = capture do %>
-<input type="hidden" id="syntax-highlight-input" value="<pre><code class='highlight-js'>console.log('Hello World')</code></pre>">
+<input type="hidden" id="syntax-highlight-input" value="<%= content %>">
 <rhino-editor id="syntax-highlight-editor" input="syntax-highlight-input"></rhino-editor>
 <% end %>
 

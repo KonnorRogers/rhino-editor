@@ -4,8 +4,8 @@ import { TipTapEditorBase } from "./tip-tap-editor-base.js";
 import { PropertyDeclarations, TemplateResult } from "lit";
 
 /** Imports <role-tooltip> and <role-toolbar> */
-import { RoleToolbar } from "role-components/dist/toolbar/component.js";
-import { RoleTooltip } from "role-components/dist/tooltip/component.js";
+import RoleToolbar from "role-components/exports/toolbar/toolbar.js";
+import RoleTooltip from "role-components/exports/tooltip/tooltip.js";
 
 import { isiOS, translations } from "../translations.js";
 
