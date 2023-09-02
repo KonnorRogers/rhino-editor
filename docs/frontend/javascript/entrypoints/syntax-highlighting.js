@@ -33,7 +33,4 @@ function extendRhinoEditor (event) {
   rhinoEditor.rebuildEditor()
 }
 
-// Because this script is lazy loaded in the docs, we miss out on the `rhino-before-initialize` event.
-// In your app you should be able to do:
-// document.addEventListener("rhino-before-initialize", extendRhinoEditor)
-document.addEventListener("rhino-initialize", extendRhinoEditor)
+document.addEventListener("rhino-before-initialize", extendRhinoEditor)
