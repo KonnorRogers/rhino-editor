@@ -25,7 +25,6 @@
 }
 
 .table-of-contents__list a {
-  color: var(--sl-color-neutral-500);
   text-decoration: none;
 }
 
