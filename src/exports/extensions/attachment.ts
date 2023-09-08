@@ -126,7 +126,7 @@ export const Attachment = Node.create<AttachmentOptions>({
   selectable: true,
   draggable: true,
   isolating: true,
-  // defining: true,
+  defining: true,
 
   addProseMirrorPlugins() {
     return [
@@ -151,6 +151,28 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           return undefined;
         },
+      }),
+      new Plugin({
+        key: new PluginKey("rhino-prevent-unintended-figcaption-behavior"),
+        props: {
+          handleKeyDown: (view, event) => {
+          /**
+           * This is a hack. When we have an empty figcaption and you press "Enter" or "Backspace" you delete the
+           * containing gallery.
+           */
+            if (["Backspace", "Enter"].includes(event.key)) {
+              const name = view.state.selection.$anchor.parent.type.name
+              const content = view.state.selection.$anchor.parent.textContent
+
+              if (name === "attachment-figure" && content === "") {
+                event.preventDefault()
+                return true
+              }
+            }
+
+            return false
+          }
+        }
       }),
       new Plugin({
         key: new PluginKey("rhino-attachment-remove-event"),
