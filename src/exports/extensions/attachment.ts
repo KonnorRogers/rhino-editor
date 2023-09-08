@@ -19,7 +19,11 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { when } from "lit/directives/when.js";
 
 import { EditorState, Plugin, PluginKey, Transaction } from "@tiptap/pm/state";
-import { DOMSerializer, Node as ProseMirrorNode, ResolvedPos } from "@tiptap/pm/model";
+import {
+  DOMSerializer,
+  Node as ProseMirrorNode,
+  ResolvedPos,
+} from "@tiptap/pm/model";
 
 interface AttachmentAttrs extends AttachmentManagerAttributes {
   loadingState: LoadingState;
@@ -53,7 +57,7 @@ declare module "@tiptap/core" {
        */
       setAttachmentAtCoords: (
         options: AttachmentManager | AttachmentManager[],
-        coordinates: { top: number, left: number }
+        coordinates: { top: number; left: number },
       ) => ReturnType;
     };
   }
@@ -534,36 +538,48 @@ export const Attachment = Node.create<AttachmentOptions>({
   addCommands() {
     return {
       setAttachmentAtCoords:
-        (options: AttachmentManager | AttachmentManager[], coordinates: { left: number, top: number }) =>
-        ({ view, state, tr, dispatch}) => {
+        (
+          options: AttachmentManager | AttachmentManager[],
+          coordinates: { left: number; top: number },
+        ) =>
+        ({ view, state, tr, dispatch }) => {
+          const posAtCoords = view.posAtCoords(coordinates);
 
-        const posAtCoords = view.posAtCoords(coordinates);
+          if (!posAtCoords) return false;
 
-        if (!posAtCoords) return false
+          const currentSelection = state.doc.resolve(posAtCoords.pos);
 
-        const currentSelection = state.doc.resolve(posAtCoords.pos);
-
-        return handleAttachment(options, currentSelection, { state, tr, dispatch })
-      },
+          return handleAttachment(options, currentSelection, {
+            state,
+            tr,
+            dispatch,
+          });
+        },
       setAttachment:
         (options: AttachmentManager | AttachmentManager[]) =>
         ({ state, tr, dispatch }) => {
           const currentSelection = state.doc.resolve(state.selection.anchor);
-          return handleAttachment(options, currentSelection, { state, tr, dispatch })
+          return handleAttachment(options, currentSelection, {
+            state,
+            tr,
+            dispatch,
+          });
         },
     };
   },
 });
 
-
-function handleAttachment (options: AttachmentManager | AttachmentManager[], currentSelection: ResolvedPos, { state, tr, dispatch }: Pick<CommandProps, "state" | "tr" | "dispatch">) {
+function handleAttachment(
+  options: AttachmentManager | AttachmentManager[],
+  currentSelection: ResolvedPos,
+  { state, tr, dispatch }: Pick<CommandProps, "state" | "tr" | "dispatch">,
+) {
   const { schema } = state;
 
   // Attachments disabled, dont pass go.
-  const hasGalleriesDisabled =
-    schema.nodes["attachment-gallery"] == null;
+  const hasGalleriesDisabled = schema.nodes["attachment-gallery"] == null;
 
-  const currNode = state.doc.resolve(currentSelection.start(1))
+  const currNode = state.doc.resolve(currentSelection.start(1));
   const nodeBefore = state.doc.resolve(currentSelection.start(1) - 1);
 
   const isInGalleryCurrent =
@@ -589,9 +605,7 @@ function handleAttachment (options: AttachmentManager | AttachmentManager[], cur
   const end = currentSelection.end();
 
   if (hasGalleriesDisabled) {
-    attachmentNodes = attachmentNodes.flatMap((node) => [
-      node,
-    ]);
+    attachmentNodes = attachmentNodes.flatMap((node) => [node]);
     tr.insert(end, attachmentNodes);
 
     if (dispatch) dispatch(tr);
@@ -602,7 +616,11 @@ function handleAttachment (options: AttachmentManager | AttachmentManager[], cur
     const backtrack = isInGalleryCurrent ? 0 : 1;
 
     if (isInGalleryAfter) {
-      tr.replaceWith(currentSelection.start(1) - 1, currentSelection.start(1), attachmentNodes)
+      tr.replaceWith(
+        currentSelection.start(1) - 1,
+        currentSelection.start(1),
+        attachmentNodes,
+      );
     } else {
       tr.insert(end - backtrack, attachmentNodes);
     }
@@ -612,9 +630,7 @@ function handleAttachment (options: AttachmentManager | AttachmentManager[], cur
       attachmentNodes,
     );
 
-    tr.insert(currentSelection.pos, [
-      gallery
-    ])
+    tr.insert(currentSelection.pos, [gallery]);
   }
 
   selectionToInsertionEnd(tr, tr.steps.length - 1, -1);

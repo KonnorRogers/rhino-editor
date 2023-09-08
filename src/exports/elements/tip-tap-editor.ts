@@ -958,7 +958,12 @@ export class TipTapEditor extends TipTapEditorBase {
 
     return html`
       <slot name="toolbar">
-        <role-toolbar class="toolbar" part="toolbar" role="toolbar" exportparts="base:toolbar__base">
+        <role-toolbar
+          class="toolbar"
+          part="toolbar"
+          role="toolbar"
+          exportparts="base:toolbar__base"
+        >
           <slot name="toolbar-start">${this.renderToolbarStart()}</slot>
 
           <!-- Bold -->

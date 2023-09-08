@@ -136,7 +136,7 @@ export class TipTapEditorBase extends BaseElement {
     div.setAttribute("slot", "editor");
 
     //  This may seem strange, but for some reason its the only wayto get the DropCursor working correctly.
-    div.style.position = "relative"
+    div.style.position = "relative";
     this.insertAdjacentElement("beforeend", div);
 
     this.editor = this.__setupEditor(div);
@@ -308,10 +308,9 @@ export class TipTapEditorBase extends BaseElement {
 
   async handleFiles(files: File[] | FileList): Promise<AttachmentManager[]> {
     if (this.editor == null) return [];
-    if (files == null) return []
+    if (files == null) return [];
 
     return new Promise((resolve, _reject) => {
-
       const fileAcceptEvents = [...files].map((file) => {
         const event = new FileAcceptEvent(file);
         this.dispatchEvent(event);
@@ -332,7 +331,6 @@ export class TipTapEditorBase extends BaseElement {
 
       if (attachments == null || attachments.length <= 0) return;
 
-
       attachments.forEach((attachment) => {
         this.dispatchEvent(new AddAttachmentEvent(attachment));
       });
@@ -343,25 +341,36 @@ export class TipTapEditorBase extends BaseElement {
     });
   }
 
-  handleDropFile = (_view: EditorView, event: DragEvent, _slice: Slice, moved: boolean) => {
+  handleDropFile = (
+    _view: EditorView,
+    event: DragEvent,
+    _slice: Slice,
+    moved: boolean,
+  ) => {
     // console.log(event)
     if (this.editor == null) return false;
     if (event == null) return false;
     if (!(event instanceof DragEvent)) return false;
-    if (moved) return false
+    if (moved) return false;
 
-    const { dataTransfer } = event
-    if (dataTransfer == null) return false
-    if (dataTransfer.files.length <= 0) return false
+    const { dataTransfer } = event;
+    if (dataTransfer == null) return false;
+    if (dataTransfer.files.length <= 0) return false;
 
     event.preventDefault();
 
-
     this.handleFiles(dataTransfer.files).then((attachments) => {
-      this.editor?.chain().focus().setAttachmentAtCoords(attachments, { top: event.clientY, left: event.clientX }).run();
+      this.editor
+        ?.chain()
+        .focus()
+        .setAttachmentAtCoords(attachments, {
+          top: event.clientY,
+          left: event.clientX,
+        })
+        .run();
     });
 
-    return true
+    return true;
   };
 
   handlePaste = async (event: RhinoPasteEvent) => {
@@ -518,8 +527,8 @@ export class TipTapEditorBase extends BaseElement {
       content,
       editable: !this.readonly,
       editorProps: {
-        handleDrop: this.handleDropFile
-      }
+        handleDrop: this.handleDropFile,
+      },
     };
   }
 
