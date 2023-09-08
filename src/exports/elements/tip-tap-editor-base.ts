@@ -341,6 +341,7 @@ export class TipTapEditorBase extends BaseElement {
   }
 
   handleDropFile = (_view: EditorView, event: DragEvent, _slice: Slice, moved: boolean) => {
+    // console.log(event)
     if (this.editor == null) return false;
     if (event == null) return false;
     if (!(event instanceof DragEvent)) return false;
@@ -351,6 +352,7 @@ export class TipTapEditorBase extends BaseElement {
     if (dataTransfer.files.length <= 0) return false
 
     event.preventDefault();
+
 
     this.handleFiles(dataTransfer.files).then((attachments) => {
       this.editor?.chain().focus().setAttachmentAtCoords(attachments, { top: event.clientY, left: event.clientX }).run();
@@ -512,9 +514,9 @@ export class TipTapEditorBase extends BaseElement {
       element,
       content,
       editable: !this.readonly,
-      editorProps: {
-        handleDrop: this.handleDropFile
-      }
+      // editorProps: {
+      //   handleDrop: this.handleDropFile
+      // }
     };
   }
 

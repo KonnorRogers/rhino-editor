@@ -474,8 +474,6 @@ export const Attachment = Node.create<AttachmentOptions>({
       const template = html`
         <figure
           class=${figureClasses}
-          draggable="true"
-          contenteditable="false"
           sgid=${ifDefined(sgid ? sgid : undefined)}
           data-trix-content-type=${contentType}
           data-trix-attachment=${trixAttachment}
@@ -485,10 +483,8 @@ export const Attachment = Node.create<AttachmentOptions>({
           <rhino-attachment-editor
             file-name=${fileName || ""}
             file-size=${String(fileSize || 0)}
-            contenteditable="false"
             loading-state=${loadingState || LOADING_STATES.notStarted}
             progress=${progress}
-            draggable="false"
           >
           </rhino-attachment-editor>
 
@@ -503,8 +499,6 @@ export const Attachment = Node.create<AttachmentOptions>({
                 class=${loadingState === LOADING_STATES.error
                   ? "rhino-upload-error"
                   : ""}
-                contenteditable="false"
-                draggable="false"
                 width=${String(width)}
                 height=${String(height)}
                 src=${ifDefined(imgSrc)}
@@ -514,8 +508,6 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           <figcaption
             class=${`attachment__caption ${caption ? "" : "is-empty"}`}
-            contenteditable="true"
-            draggable="false"
             data-placeholder="Add a caption..."
             data-default-caption=${toDefaultCaption({ fileName, fileSize })}
             progress=${String(progress)}
