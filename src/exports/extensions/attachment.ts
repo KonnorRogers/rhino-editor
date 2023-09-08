@@ -4,7 +4,7 @@ import {
 } from "../attachment-manager.js";
 import { LOADING_STATES } from "../elements/attachment-editor.js";
 import type { LoadingState } from "../elements/attachment-editor.js";
-import { mergeAttributes, Node } from "@tiptap/core";
+import { CommandProps, mergeAttributes, Node } from "@tiptap/core";
 import { selectionToInsertionEnd } from "../../internal/selection-to-insertion-end.js";
 import { Maybe } from "../../types";
 import { findAttribute } from "./find-attribute.js";
@@ -19,7 +19,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { when } from "lit/directives/when.js";
 
 import { EditorState, Plugin, PluginKey, Transaction } from "@tiptap/pm/state";
-import { DOMSerializer, Node as ProseMirrorNode } from "@tiptap/pm/model";
+import { DOMSerializer, Node as ProseMirrorNode, ResolvedPos } from "@tiptap/pm/model";
 
 interface AttachmentAttrs extends AttachmentManagerAttributes {
   loadingState: LoadingState;
@@ -46,6 +46,14 @@ declare module "@tiptap/core" {
        */
       setAttachment: (
         options: AttachmentManager | AttachmentManager[],
+      ) => ReturnType;
+
+      /**
+       * Allows you to insert an attachment at a location within TipTap
+       */
+      setAttachmentAtCoords: (
+        options: AttachmentManager | AttachmentManager[],
+        coordinates: { top: number, left: number }
       ) => ReturnType;
     };
   }
@@ -111,7 +119,7 @@ export const Attachment = Node.create<AttachmentOptions>({
   name: "attachment-figure",
   group: "block attachmentFigure",
   content: "inline*",
-  selectable: true,
+  selectable: false,
   draggable: true,
   isolating: true,
   defining: true,
@@ -466,6 +474,8 @@ export const Attachment = Node.create<AttachmentOptions>({
       const template = html`
         <figure
           class=${figureClasses}
+          draggable="true"
+          contenteditable="false"
           sgid=${ifDefined(sgid ? sgid : undefined)}
           data-trix-content-type=${contentType}
           data-trix-attachment=${trixAttachment}
@@ -478,6 +488,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             contenteditable="false"
             loading-state=${loadingState || LOADING_STATES.notStarted}
             progress=${progress}
+            draggable="false"
           >
           </rhino-attachment-editor>
 
@@ -493,6 +504,7 @@ export const Attachment = Node.create<AttachmentOptions>({
                   ? "rhino-upload-error"
                   : ""}
                 contenteditable="false"
+                draggable="false"
                 width=${String(width)}
                 height=${String(height)}
                 src=${ifDefined(imgSrc)}
@@ -502,6 +514,8 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           <figcaption
             class=${`attachment__caption ${caption ? "" : "is-empty"}`}
+            contenteditable="true"
+            draggable="false"
             data-placeholder="Add a caption..."
             data-default-caption=${toDefaultCaption({ fileName, fileSize })}
             progress=${String(progress)}
@@ -526,75 +540,89 @@ export const Attachment = Node.create<AttachmentOptions>({
 
   addCommands() {
     return {
+      setAttachmentAtCoords:
+        (options: AttachmentManager | AttachmentManager[], coordinates: { left: number, top: number }) =>
+        ({ view, state, tr, dispatch}) => {
+
+        const posAtCoords = view.posAtCoords(coordinates);
+
+        if (!posAtCoords) return false
+
+        const currentSelection = state.doc.resolve(posAtCoords.pos);
+
+        return handleAttachment(options, currentSelection, { state, tr, dispatch })
+      },
       setAttachment:
         (options: AttachmentManager | AttachmentManager[]) =>
         ({ state, tr, dispatch }) => {
-          const { schema } = state;
-
-          // Attachments disabled, dont pass go.
-          const hasGalleriesDisabled =
-            schema.nodes["attachment-gallery"] == null;
-
           const currentSelection = state.doc.resolve(state.selection.anchor);
-          const before =
-            state.selection.anchor - 2 < 0 ? 0 : state.selection.anchor - 2;
-          const nodeBefore = state.doc.resolve(before);
-
-          // If we're in a paragraph directly following a gallery.
-          const isInGalleryCurrent =
-            currentSelection.node(1).type.name === "attachment-gallery";
-          const isInGalleryAfter =
-            nodeBefore.node(1)?.type.name === "attachment-gallery";
-
-          const isInGallery = isInGalleryCurrent || isInGalleryAfter;
-
-          const attachments: AttachmentManager[] = Array.isArray(options)
-            ? options
-            : ([] as AttachmentManager[]).concat(options);
-
-          let attachmentNodes = attachments.map((attachment) => {
-            return schema.nodes["attachment-figure"].create(
-              attachment,
-              attachment.caption ? [schema.text(attachment.caption)] : [],
-            );
-          });
-
-          const end = currentSelection.end();
-
-          if (hasGalleriesDisabled) {
-            attachmentNodes = attachmentNodes.flatMap((node) => [
-              node,
-              schema.nodes.paragraph.create(),
-            ]);
-            tr.insert(end, attachmentNodes);
-
-            if (dispatch) dispatch(tr);
-            return true;
-          }
-
-          if (isInGallery) {
-            const backtrack = isInGalleryCurrent ? 0 : 2;
-            tr.insert(end - backtrack, attachmentNodes);
-          } else {
-            const currSelection = state.selection;
-
-            const gallery = schema.nodes["attachment-gallery"].create(
-              {},
-              attachmentNodes,
-            );
-
-            tr.replaceWith(currSelection.from - 1, currSelection.to, [
-              schema.nodes.paragraph.create(),
-              gallery,
-              schema.nodes.paragraph.create(),
-            ]);
-
-            selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
-          }
-
-          if (dispatch) dispatch(tr);
-          return true;
+          return handleAttachment(options, currentSelection, { state, tr, dispatch })
         },
     };
   },
 });
+
+
+function handleAttachment (options: AttachmentManager | AttachmentManager[], currentSelection: ResolvedPos, { state, tr, dispatch }: Pick<CommandProps, "state" | "tr" | "dispatch">) {
+  const { schema } = state;
+
+  // Attachments disabled, dont pass go.
+  const hasGalleriesDisabled =
+    schema.nodes["attachment-gallery"] == null;
+
+  const before =
+    state.selection.anchor - 2 < 0 ? 0 : state.selection.anchor - 2;
+  const nodeBefore = state.doc.resolve(before);
+
+  // If we're in a paragraph directly following a gallery.
+  const isInGalleryCurrent =
+    currentSelection.node(1).type.name === "attachment-gallery";
+  const isInGalleryAfter =
+    nodeBefore.node(1)?.type.name === "attachment-gallery";
+
+  const isInGallery = isInGalleryCurrent || isInGalleryAfter;
+
+  const attachments: AttachmentManager[] = Array.isArray(options)
+    ? options
+    : ([] as AttachmentManager[]).concat(options);
+
+  let attachmentNodes = attachments.map((attachment) => {
+    return schema.nodes["attachment-figure"].create(
+      attachment,
+      attachment.caption ? [schema.text(attachment.caption)] : [],
+    );
+  });
+
+  const end = currentSelection.end();
+
+  if (hasGalleriesDisabled) {
+    attachmentNodes = attachmentNodes.flatMap((node) => [
+      node,
+    ]);
+    tr.insert(end, attachmentNodes);
+
+    if (dispatch) dispatch(tr);
+    return true;
+  }
+
+  if (isInGallery) {
+    const backtrack = isInGalleryCurrent ? 0 : 2;
+    tr.insert(end - backtrack, attachmentNodes);
+  } else {
+    const currSelection = state.selection;
+
+    const gallery = schema.nodes["attachment-gallery"].create(
+      {},
+      attachmentNodes,
+    );
+
+    tr.replaceWith(currSelection.from - 1, currSelection.to, [
+      gallery,
+    ]);
+
+    selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
+  }
+
+  if (dispatch) dispatch(tr);
+  return true;
+}
