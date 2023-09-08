@@ -119,7 +119,7 @@ export const Attachment = Node.create<AttachmentOptions>({
   name: "attachment-figure",
   group: "block attachmentFigure",
   content: "inline*",
-  selectable: false,
+  selectable: true,
   draggable: true,
   isolating: true,
   defining: true,
@@ -485,6 +485,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             file-size=${String(fileSize || 0)}
             loading-state=${loadingState || LOADING_STATES.notStarted}
             progress=${progress}
+            contenteditable="false"
           >
           </rhino-attachment-editor>
 
@@ -502,6 +503,7 @@ export const Attachment = Node.create<AttachmentOptions>({
                 width=${String(width)}
                 height=${String(height)}
                 src=${ifDefined(imgSrc)}
+                contenteditable="false"
               />
             `,
           )}
@@ -568,7 +570,7 @@ function handleAttachment (options: AttachmentManager | AttachmentManager[], cur
 
   // If we're in a paragraph directly following a gallery.
   const isInGalleryCurrent =
-    currentSelection.node(1).type.name === "attachment-gallery";
+    currentSelection.node(1)?.type.name === "attachment-gallery";
   const isInGalleryAfter =
     nodeBefore.node(1)?.type.name === "attachment-gallery";
 

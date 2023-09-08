@@ -514,9 +514,9 @@ export class TipTapEditorBase extends BaseElement {
       element,
       content,
       editable: !this.readonly,
-      // editorProps: {
-      //   handleDrop: this.handleDropFile
-      // }
+      editorProps: {
+        handleDrop: this.handleDropFile
+      }
     };
   }
 
