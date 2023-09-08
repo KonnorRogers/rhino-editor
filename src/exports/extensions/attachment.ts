@@ -544,20 +544,20 @@ export const Attachment = Node.create<AttachmentOptions>({
 
         const currentSelection = state.doc.resolve(posAtCoords.pos);
 
-        return handleAttachment(options, currentSelection, { state, tr, dispatch })
+        return handleAttachment(options, currentSelection, true, { state, tr, dispatch })
       },
       setAttachment:
         (options: AttachmentManager | AttachmentManager[]) =>
         ({ state, tr, dispatch }) => {
           const currentSelection = state.doc.resolve(state.selection.anchor);
-          return handleAttachment(options, currentSelection, { state, tr, dispatch })
+          return handleAttachment(options, currentSelection, false, { state, tr, dispatch })
         },
     };
   },
 });
 
 
-function handleAttachment (options: AttachmentManager | AttachmentManager[], currentSelection: ResolvedPos, { state, tr, dispatch }: Pick<CommandProps, "state" | "tr" | "dispatch">) {
+function handleAttachment (options: AttachmentManager | AttachmentManager[], currentSelection: ResolvedPos, dragAndDrop: boolean = false, { state, tr, dispatch }: Pick<CommandProps, "state" | "tr" | "dispatch">) {
   const { schema } = state;
 
   // Attachments disabled, dont pass go.
@@ -603,19 +603,25 @@ function handleAttachment (options: AttachmentManager | AttachmentManager[], cur
     const backtrack = isInGalleryCurrent ? 0 : 2;
     tr.insert(end - backtrack, attachmentNodes);
   } else {
-    const currSelection = state.selection;
-
     const gallery = schema.nodes["attachment-gallery"].create(
       {},
       attachmentNodes,
     );
 
-    tr.replaceWith(currSelection.from - 1, currSelection.to, [
-      gallery,
-    ]);
+    const currSelection = state.selection;
 
-    selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
+    if (dragAndDrop) {
+      tr.insert(currentSelection.pos, [
+        gallery
+      ])
+    } else {
+      tr.replaceWith(currSelection.from - 1, currSelection.to, [
+        gallery,
+      ]);
+    }
   }
+
+  selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
 
   if (dispatch) dispatch(tr);
   return true;
