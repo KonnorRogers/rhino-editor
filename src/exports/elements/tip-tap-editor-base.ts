@@ -348,16 +348,19 @@ export class TipTapEditorBase extends BaseElement {
     moved: boolean,
   ) => {
     // console.log(event)
+    // console.log("DROP")
     if (this.editor == null) return false;
     if (event == null) return false;
     if (!(event instanceof DragEvent)) return false;
     if (moved) return false;
-
+    //
     const { dataTransfer } = event;
     if (dataTransfer == null) return false;
     if (dataTransfer.files.length <= 0) return false;
 
-    event.preventDefault();
+
+    console.log("AFTER DROP")
+    // event.preventDefault();
 
     this.handleFiles(dataTransfer.files).then((attachments) => {
       this.editor

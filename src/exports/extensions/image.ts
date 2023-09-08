@@ -10,6 +10,7 @@ export const Image = Node.create({
   selectable: false,
   draggable: false,
   group: "block",
+  defining: true,
 
   addOptions() {
     return {

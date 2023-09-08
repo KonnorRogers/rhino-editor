@@ -126,7 +126,7 @@ export const Attachment = Node.create<AttachmentOptions>({
   selectable: true,
   draggable: true,
   isolating: true,
-  definingAsContext: true,
+  // defining: true,
 
   addProseMirrorPlugins() {
     return [
