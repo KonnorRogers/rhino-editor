@@ -34,6 +34,8 @@ export const Gallery = Node.create({
   draggable: false,
   selectable: false,
   content: "block*",
+  isolating: true,
+  definingAsContext: true,
 
   parseHTML() {
     return [

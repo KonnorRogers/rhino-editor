@@ -134,6 +134,9 @@ export class TipTapEditorBase extends BaseElement {
     // light-dom version.
     const div = document.createElement("div");
     div.setAttribute("slot", "editor");
+
+    //  This may seem strange, but for some reason its the only wayto get the DropCursor working correctly.
+    div.style.position = "relative"
     this.insertAdjacentElement("beforeend", div);
 
     this.editor = this.__setupEditor(div);
