@@ -10,7 +10,7 @@ import { Maybe } from "../../types";
 import { findAttribute } from "./find-attribute.js";
 import { toDefaultCaption } from "../../internal/to-default-caption.js";
 import { fileUploadErrorMessage } from "../translations.js";
-import { findChildrenByType } from "prosemirror-utils";
+import { findChildrenByType, findParentNodeOfTypeClosestToPos } from "prosemirror-utils";
 import { AttachmentRemoveEvent } from "../events/attachment-remove-event.js";
 
 import { render, html } from "lit/html.js";
@@ -569,9 +569,10 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           if (!posAtCoords) return false;
 
-          const currentSelection = state.doc.resolve(posAtCoords.pos);
-
-          return handleAttachment(options, currentSelection, {
+          const currentSelection = state.doc.resolve(posAtCoords.pos)
+          return handleAttachment(options,
+            currentSelection,
+          {
             state,
             tr,
             dispatch,
@@ -580,7 +581,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       setAttachment:
         (options: AttachmentManager | AttachmentManager[]) =>
         ({ state, tr, dispatch }) => {
-          const currentSelection = state.doc.resolve(state.selection.anchor);
+          const currentSelection = state.doc.resolve(state.selection.anchor)
           return handleAttachment(options, currentSelection, {
             state,
             tr,
@@ -602,23 +603,33 @@ function handleAttachment(
   const maxSize = tr.doc.content.size
 
   function clamp(val: number, min: number = minSize, max: number = maxSize) {
-    return Math.min(min, Math.max(val, max))
+    if (val < min) return min
+    if (val > max) return max
+    return val
   }
 
   // Attachments disabled, dont pass go.
-  const hasGalleriesDisabled = schema.nodes["attachment-gallery"] == null;
+  const hasGalleriesDisabled =
+    schema.nodes["attachment-gallery"] == null;
 
-  const currNode = state.doc.resolve(clamp(currentSelection.start(1)));
-  const nodeBefore = state.doc.resolve(clamp(currentSelection.start(1) - 1));
+  const currentNode = state.doc.resolve(currentSelection.pos)
+  const paragraphTopNode = findParentNodeOfTypeClosestToPos(currentNode, schema.nodes["paragraph"])
 
-  const isInGalleryCurrent =
-    currNode.node(1)?.type.name === "attachment-gallery";
+  let currentGallery = findParentNodeOfTypeClosestToPos(state.doc.resolve(currentSelection.pos), schema.nodes["attachment-gallery"])
 
-  // If we're in a paragraph directly following a gallery.
-  const isInGalleryAfter =
-    nodeBefore.node(1)?.type.name === "attachment-gallery";
+  let priorGalleryPos = null
 
-  const isInGallery = isInGalleryCurrent || isInGalleryAfter;
+  if (paragraphTopNode) {
+    const paragraphIsEmpty = currentSelection.parent.textContent === ""
+    console.log({ paragraphIsEmpty })
+    const prevNode = state.doc.resolve(clamp(paragraphTopNode.pos - 1))
+
+    if (paragraphIsEmpty && prevNode.parent.type.name === "attachment-gallery") {
+      priorGalleryPos = clamp(paragraphTopNode.pos - 1)
+    }
+  }
+
+  const isInGallery = currentGallery || priorGalleryPos;
 
   const attachments: AttachmentManager[] = Array.isArray(options)
     ? options
@@ -631,40 +642,43 @@ function handleAttachment(
     );
   });
 
-  const end = clamp(currentSelection.end());
+  let end = 0
+
+  if (currentGallery) {
+    end = currentGallery.start + currentGallery.node.nodeSize - 2
+  } else if (priorGalleryPos != null) {
+    end = priorGalleryPos
+  }
+
+  end = clamp(end)
 
   if (hasGalleriesDisabled) {
-    attachmentNodes = attachmentNodes.flatMap((node) => [node]);
-    tr.insert(end, attachmentNodes);
+    attachmentNodes = attachmentNodes.flatMap((node) => [
+      node,
+    ]);
+    tr.insert(end, attachmentNodes.concat([schema.nodes.paragraph.create()]));
 
     if (dispatch) dispatch(tr);
     return true;
   }
 
   if (isInGallery) {
-    const backtrack = isInGalleryCurrent ? 0 : 1;
-
-    if (isInGalleryAfter) {
-      tr.replaceWith(
-        clamp(currentSelection.start(1) - 1),
-        clamp(currentSelection.start(1)),
-        attachmentNodes,
-      );
-    } else {
-      tr.insert(end - backtrack, attachmentNodes);
-    }
+    tr.insert(end, attachmentNodes);
   } else {
+    const currSelection = state.selection;
+
     const gallery = schema.nodes["attachment-gallery"].create(
       {},
       attachmentNodes,
     );
 
-    const pos = clamp(currentSelection.start())
+    tr.replaceWith(currSelection.from - 1, currSelection.to, [
+      gallery,
+      schema.nodes.paragraph.create(),
+    ]);
 
-    tr.insert(pos, [gallery]);
+    selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
   }
-
-  selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
 
   if (dispatch) dispatch(tr);
   return true;
