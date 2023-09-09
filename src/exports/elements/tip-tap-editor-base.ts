@@ -194,7 +194,6 @@ export class TipTapEditorBase extends BaseElement {
     this.registerDependencies();
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
 
-    // this.addEventListener("drop", this.handleDropFile);
     this.addEventListener("rhino-paste", this.handlePaste);
     this.addEventListener("rhino-file-accept", this.handleFileAccept);
   }
@@ -347,8 +346,6 @@ export class TipTapEditorBase extends BaseElement {
     _slice: Slice,
     moved: boolean,
   ) => {
-    // console.log(event)
-    // console.log("DROP")
     if (this.editor == null) return false;
     if (event == null) return false;
     if (!(event instanceof DragEvent)) return false;
@@ -359,8 +356,7 @@ export class TipTapEditorBase extends BaseElement {
     if (dataTransfer.files.length <= 0) return false;
 
 
-    console.log("AFTER DROP")
-    // event.preventDefault();
+    event.preventDefault();
 
     this.handleFiles(dataTransfer.files).then((attachments) => {
       this.editor

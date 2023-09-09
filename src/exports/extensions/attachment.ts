@@ -598,11 +598,18 @@ function handleAttachment(
 ) {
   const { schema } = state;
 
+  const minSize = 0;
+  const maxSize = tr.doc.content.size
+
+  function clamp(val: number, min: number = minSize, max: number = maxSize) {
+    return Math.min(min, Math.max(val, max))
+  }
+
   // Attachments disabled, dont pass go.
   const hasGalleriesDisabled = schema.nodes["attachment-gallery"] == null;
 
-  const currNode = state.doc.resolve(currentSelection.start(1));
-  const nodeBefore = state.doc.resolve(currentSelection.start(1) - 1);
+  const currNode = state.doc.resolve(clamp(currentSelection.start(1)));
+  const nodeBefore = state.doc.resolve(clamp(currentSelection.start(1) - 1));
 
   const isInGalleryCurrent =
     currNode.node(1)?.type.name === "attachment-gallery";
@@ -624,7 +631,7 @@ function handleAttachment(
     );
   });
 
-  const end = currentSelection.end();
+  const end = clamp(currentSelection.end());
 
   if (hasGalleriesDisabled) {
     attachmentNodes = attachmentNodes.flatMap((node) => [node]);
@@ -639,8 +646,8 @@ function handleAttachment(
 
     if (isInGalleryAfter) {
       tr.replaceWith(
-        currentSelection.start(1) - 1,
-        currentSelection.start(1),
+        clamp(currentSelection.start(1) - 1),
+        clamp(currentSelection.start(1)),
         attachmentNodes,
       );
     } else {
@@ -652,7 +659,9 @@ function handleAttachment(
       attachmentNodes,
     );
 
-    tr.insert(currentSelection.pos, [gallery]);
+    const pos = clamp(currentSelection.start())
+
+    tr.insert(pos, [gallery]);
   }
 
   selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
