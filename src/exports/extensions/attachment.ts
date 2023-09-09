@@ -10,7 +10,10 @@ import { Maybe } from "../../types";
 import { findAttribute } from "./find-attribute.js";
 import { toDefaultCaption } from "../../internal/to-default-caption.js";
 import { fileUploadErrorMessage } from "../translations.js";
-import { findChildrenByType, findParentNodeOfTypeClosestToPos } from "prosemirror-utils";
+import {
+  findChildrenByType,
+  findParentNodeOfTypeClosestToPos,
+} from "prosemirror-utils";
 import { AttachmentRemoveEvent } from "../events/attachment-remove-event.js";
 
 import { render, html } from "lit/html.js";
@@ -156,23 +159,23 @@ export const Attachment = Node.create<AttachmentOptions>({
         key: new PluginKey("rhino-prevent-unintended-figcaption-behavior"),
         props: {
           handleKeyDown: (view, event) => {
-          /**
-           * This is a hack. When we have an empty figcaption and you press "Enter" or "Backspace" you delete the
-           * containing gallery.
-           */
+            /**
+             * This is a hack. When we have an empty figcaption and you press "Enter" or "Backspace" you delete the
+             * containing gallery.
+             */
             if (["Backspace", "Enter"].includes(event.key)) {
-              const name = view.state.selection.$anchor.parent.type.name
-              const content = view.state.selection.$anchor.parent.textContent
+              const name = view.state.selection.$anchor.parent.type.name;
+              const content = view.state.selection.$anchor.parent.textContent;
 
               if (name === "attachment-figure" && content === "") {
-                event.preventDefault()
-                return true
+                event.preventDefault();
+                return true;
               }
             }
 
-            return false
-          }
-        }
+            return false;
+          },
+        },
       }),
       new Plugin({
         key: new PluginKey("rhino-attachment-remove-event"),
@@ -553,7 +556,9 @@ export const Attachment = Node.create<AttachmentOptions>({
       return {
         dom,
         contentDOM,
-        update() { return false }
+        update() {
+          return false;
+        },
       };
     };
   },
@@ -570,10 +575,8 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           if (!posAtCoords) return false;
 
-          const currentSelection = state.doc.resolve(posAtCoords.pos)
-          return handleAttachment(options,
-            currentSelection,
-          {
+          const currentSelection = state.doc.resolve(posAtCoords.pos);
+          return handleAttachment(options, currentSelection, {
             state,
             tr,
             dispatch,
@@ -582,7 +585,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       setAttachment:
         (options: AttachmentManager | AttachmentManager[]) =>
         ({ state, tr, dispatch }) => {
-          const currentSelection = state.doc.resolve(state.selection.anchor)
+          const currentSelection = state.doc.resolve(state.selection.anchor);
           return handleAttachment(options, currentSelection, {
             state,
             tr,
@@ -601,31 +604,39 @@ function handleAttachment(
   const { schema } = state;
 
   const minSize = 0;
-  const maxSize = tr.doc.content.size
+  const maxSize = tr.doc.content.size;
 
   function clamp(val: number, min: number = minSize, max: number = maxSize) {
-    if (val < min) return min
-    if (val > max) return max
-    return val
+    if (val < min) return min;
+    if (val > max) return max;
+    return val;
   }
 
   // Attachments disabled, dont pass go.
-  const hasGalleriesDisabled =
-    schema.nodes["attachment-gallery"] == null;
+  const hasGalleriesDisabled = schema.nodes["attachment-gallery"] == null;
 
-  const currentNode = state.doc.resolve(currentSelection.pos)
-  const paragraphTopNode = findParentNodeOfTypeClosestToPos(currentNode, schema.nodes["paragraph"])
+  const currentNode = state.doc.resolve(currentSelection.pos);
+  const paragraphTopNode = findParentNodeOfTypeClosestToPos(
+    currentNode,
+    schema.nodes["paragraph"],
+  );
 
-  let currentGallery = findParentNodeOfTypeClosestToPos(state.doc.resolve(currentSelection.pos), schema.nodes["attachment-gallery"])
+  let currentGallery = findParentNodeOfTypeClosestToPos(
+    state.doc.resolve(currentSelection.pos),
+    schema.nodes["attachment-gallery"],
+  );
 
-  let priorGalleryPos = null
+  let priorGalleryPos = null;
 
   if (paragraphTopNode) {
-    const paragraphIsEmpty = currentSelection.parent.textContent === ""
-    const prevNode = state.doc.resolve(clamp(paragraphTopNode.pos - 1))
+    const paragraphIsEmpty = currentSelection.parent.textContent === "";
+    const prevNode = state.doc.resolve(clamp(paragraphTopNode.pos - 1));
 
-    if (paragraphIsEmpty && prevNode.parent.type.name === "attachment-gallery") {
-      priorGalleryPos = clamp(paragraphTopNode.pos - 1)
+    if (
+      paragraphIsEmpty &&
+      prevNode.parent.type.name === "attachment-gallery"
+    ) {
+      priorGalleryPos = clamp(paragraphTopNode.pos - 1);
     }
   }
 
@@ -642,20 +653,18 @@ function handleAttachment(
     );
   });
 
-  let end = 0
+  let end = 0;
 
   if (currentGallery) {
-    end = currentGallery.start + currentGallery.node.nodeSize - 2
+    end = currentGallery.start + currentGallery.node.nodeSize - 2;
   } else if (priorGalleryPos != null) {
-    end = priorGalleryPos
+    end = priorGalleryPos;
   }
 
-  end = clamp(end)
+  end = clamp(end);
 
   if (hasGalleriesDisabled) {
-    attachmentNodes = attachmentNodes.flatMap((node) => [
-      node,
-    ]);
+    attachmentNodes = attachmentNodes.flatMap((node) => [node]);
     tr.insert(end, attachmentNodes.concat([schema.nodes.paragraph.create()]));
 
     if (dispatch) dispatch(tr);

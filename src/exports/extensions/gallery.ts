@@ -1,6 +1,12 @@
 import { mergeAttributes, Node, selectionToInsertionEnd } from "@tiptap/core";
 import { EditorState, Plugin, Transaction } from "@tiptap/pm/state";
-import { chainCommands, createParagraphNear, liftEmptyBlock, newlineInCode, selectNodeForward } from "@tiptap/pm/commands"
+import {
+  chainCommands,
+  createParagraphNear,
+  liftEmptyBlock,
+  newlineInCode,
+  selectNodeForward,
+} from "@tiptap/pm/commands";
 import { Node as ProseMirrorNode } from "@tiptap/pm/model";
 import { findParentNodeOfTypeClosestToPos } from "prosemirror-utils";
 
@@ -25,7 +31,6 @@ function replaceEmptyGalleryWithParagraph(
 
   return modified;
 }
-
 
 export interface GalleryOptions {
   HTMLAttributes: Record<string, any>;
@@ -57,37 +62,43 @@ export const Gallery = Node.create({
           handleDOMEvents: {
             keydown: (view, event) => {
               if (event.key === "Enter") {
-                const nodeType = view.state.selection.$head.parent.type.name
+                const nodeType = view.state.selection.$head.parent.type.name;
                 if (nodeType === "attachment-gallery") {
-                    event.preventDefault()
+                  event.preventDefault();
 
-                    chainCommands(createParagraphNear)(view.state, view.dispatch)
-                    return true
-                  }
+                  chainCommands(createParagraphNear)(view.state, view.dispatch);
+                  return true;
+                }
 
                 if (nodeType === "attachment-figure") {
-                    event.preventDefault()
+                  event.preventDefault();
 
-                    chainCommands(createParagraphNear)(view.state, view.dispatch)
+                  chainCommands(createParagraphNear)(view.state, view.dispatch);
 
-                    const containingGallery = findParentNodeOfTypeClosestToPos(view.state.selection.$anchor, view.state.schema.nodes["attachment-gallery"])
+                  const containingGallery = findParentNodeOfTypeClosestToPos(
+                    view.state.selection.$anchor,
+                    view.state.schema.nodes["attachment-gallery"],
+                  );
 
-                    // TODO: Right now this just prevents us from splitting a gallery / figure.
-                    // Ideally, we should check `nodesBetween` and any `figures` get placed into a new gallery under the inserted paragraph like Trix does.
-                    if (containingGallery) {
-                      const tr = view.state.tr
-                      tr.insert(containingGallery.pos + containingGallery.node.nodeSize, view.state.schema.nodes["paragraph"].create())
-                      selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
+                  // TODO: Right now this just prevents us from splitting a gallery / figure.
+                  // Ideally, we should check `nodesBetween` and any `figures` get placed into a new gallery under the inserted paragraph like Trix does.
+                  if (containingGallery) {
+                    const tr = view.state.tr;
+                    tr.insert(
+                      containingGallery.pos + containingGallery.node.nodeSize,
+                      view.state.schema.nodes["paragraph"].create(),
+                    );
+                    selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
 
-                      view.dispatch(tr)
-                    }
-                    return true
+                    view.dispatch(tr);
+                  }
+                  return true;
                 }
               }
 
-              return false
-            }
-          }
+              return false;
+            },
+          },
         },
         appendTransaction: (_transactions, _oldState, newState) => {
           const tr = newState.tr;
@@ -95,7 +106,9 @@ export const Gallery = Node.create({
 
           // @TODO: Iterate through transactions instead of descendants (?).
           newState.doc.descendants((node, pos, _parent) => {
-            const mutations = [replaceEmptyGalleryWithParagraph(node, tr, newState, pos)];
+            const mutations = [
+              replaceEmptyGalleryWithParagraph(node, tr, newState, pos),
+            ];
 
             const shouldModify = mutations.some((bool) => bool === true);
 

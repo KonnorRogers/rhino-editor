@@ -355,7 +355,6 @@ export class TipTapEditorBase extends BaseElement {
     if (dataTransfer == null) return false;
     if (dataTransfer.files.length <= 0) return false;
 
-
     event.preventDefault();
 
     this.handleFiles(dataTransfer.files).then((attachments) => {
