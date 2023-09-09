@@ -553,6 +553,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       return {
         dom,
         contentDOM,
+        update() { return false }
       };
     };
   },
@@ -621,7 +622,6 @@ function handleAttachment(
 
   if (paragraphTopNode) {
     const paragraphIsEmpty = currentSelection.parent.textContent === ""
-    console.log({ paragraphIsEmpty })
     const prevNode = state.doc.resolve(clamp(paragraphTopNode.pos - 1))
 
     if (paragraphIsEmpty && prevNode.parent.type.name === "attachment-gallery") {

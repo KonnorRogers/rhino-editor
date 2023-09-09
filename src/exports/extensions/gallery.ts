@@ -1,6 +1,8 @@
-import { mergeAttributes, Node } from "@tiptap/core";
+import { mergeAttributes, Node, selectionToInsertionEnd } from "@tiptap/core";
 import { EditorState, Plugin, Transaction } from "@tiptap/pm/state";
+import { chainCommands, createParagraphNear, liftEmptyBlock, newlineInCode, selectNodeForward } from "@tiptap/pm/commands"
 import { Node as ProseMirrorNode } from "@tiptap/pm/model";
+import { findParentNodeOfTypeClosestToPos } from "prosemirror-utils";
 
 function replaceEmptyGalleryWithParagraph(
   node: ProseMirrorNode,
@@ -51,6 +53,42 @@ export const Gallery = Node.create({
   addProseMirrorPlugins() {
     return [
       new Plugin({
+        props: {
+          handleDOMEvents: {
+            keydown: (view, event) => {
+              if (event.key === "Enter") {
+                const nodeType = view.state.selection.$head.parent.type.name
+                if (nodeType === "attachment-gallery") {
+                    event.preventDefault()
+
+                    chainCommands(createParagraphNear)(view.state, view.dispatch)
+                    return true
+                  }
+
+                if (nodeType === "attachment-figure") {
+                    event.preventDefault()
+
+                    chainCommands(createParagraphNear)(view.state, view.dispatch)
+
+                    const containingGallery = findParentNodeOfTypeClosestToPos(view.state.selection.$anchor, view.state.schema.nodes["attachment-gallery"])
+
+                    // TODO: Right now this just prevents us from splitting a gallery / figure.
+                    // Ideally, we should check `nodesBetween` and any `figures` get placed into a new gallery under the inserted paragraph like Trix does.
+                    if (containingGallery) {
+                      const tr = view.state.tr
+                      tr.insert(containingGallery.pos + containingGallery.node.nodeSize, view.state.schema.nodes["paragraph"].create())
+                      selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
+
+                      view.dispatch(tr)
+                    }
+                    return true
+                }
+              }
+
+              return false
+            }
+          }
+        },
         appendTransaction: (_transactions, _oldState, newState) => {
           const tr = newState.tr;
           let modified = false;

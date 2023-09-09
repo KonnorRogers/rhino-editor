@@ -194,6 +194,16 @@
   position: relative;
 }
 
+/* This is a cheap easy way to allow us to show <p> tags in galleries */
+.trix-content .attachment-gallery > :not(.attachment, action-text-attachment) {
+  width: 0px;
+  padding: 0;
+  flex-basis: 0%;
+  max-width: 0%;
+  flex-shrink: 1;
+  flex-grow: 0;
+}
+
 .trix-content .attachment-gallery > :is(.attachment, action-text-attachment) {
   flex: 1 0 33%;
   padding: 0 0.5em;
