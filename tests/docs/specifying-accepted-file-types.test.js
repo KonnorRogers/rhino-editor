@@ -47,7 +47,7 @@ test("Should allow PNG files to be added via drag and drop", async ({ page }) =>
     fileType: "image/png",
   });
 
-  await page.dispatchEvent('rhino-editor#png-only .ProseMirror', 'drop', { dataTransfer });
+  await page.dispatchEvent('rhino-editor#png-only .ProseMirror', 'drop', { dataTransfer, bubbles: true,  composed: true, cancelable: true });
   await expect(page.locator("rhino-editor#png-only figure")).toBeVisible()
 })
 

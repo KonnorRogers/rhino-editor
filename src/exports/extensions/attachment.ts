@@ -571,11 +571,9 @@ export const Attachment = Node.create<AttachmentOptions>({
           coordinates: { left: number; top: number },
         ) =>
         ({ view, state, tr, dispatch }) => {
-          const posAtCoords = view.posAtCoords(coordinates);
+          let posAtCoords = view.posAtCoords(coordinates);
 
-          if (!posAtCoords) return false;
-
-          const currentSelection = state.doc.resolve(posAtCoords.pos);
+          const currentSelection = state.doc.resolve(posAtCoords?.pos || 0);
           return handleAttachment(options, currentSelection, {
             state,
             tr,

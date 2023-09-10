@@ -3,9 +3,9 @@ import { EditorState, Plugin, Transaction } from "@tiptap/pm/state";
 import {
   chainCommands,
   createParagraphNear,
-  liftEmptyBlock,
-  newlineInCode,
-  selectNodeForward,
+  // liftEmptyBlock,
+  // newlineInCode,
+  // selectNodeForward,
 } from "@tiptap/pm/commands";
 import { Node as ProseMirrorNode } from "@tiptap/pm/model";
 import { findParentNodeOfTypeClosestToPos } from "prosemirror-utils";

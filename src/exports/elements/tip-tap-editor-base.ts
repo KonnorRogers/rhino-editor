@@ -194,6 +194,7 @@ export class TipTapEditorBase extends BaseElement {
     this.registerDependencies();
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
 
+    this.addEventListener("drop", this.handleNativeDrop);
     this.addEventListener("rhino-paste", this.handlePaste);
     this.addEventListener("rhino-file-accept", this.handleFileAccept);
   }
@@ -346,14 +347,26 @@ export class TipTapEditorBase extends BaseElement {
     _slice: Slice,
     moved: boolean,
   ) => {
-    if (this.editor == null) return false;
-    if (event == null) return false;
     if (!(event instanceof DragEvent)) return false;
     if (moved) return false;
+
+    return this.handleNativeDrop(event)
+  };
+
+
+  /**
+   * Handles dropped files on the component, but not on the prosemirror instance.
+   */
+  handleNativeDrop (event: DragEvent): boolean {
+    if (this.editor == null) return false;
+    if (event == null) return false;
     //
     const { dataTransfer } = event;
     if (dataTransfer == null) return false;
     if (dataTransfer.files.length <= 0) return false;
+
+    // This prevents this from firing twice because we both attach here and on the prosemirror instance
+    if (event.defaultPrevented) return false;
 
     event.preventDefault();
 
@@ -368,8 +381,8 @@ export class TipTapEditorBase extends BaseElement {
         .run();
     });
 
-    return true;
-  };
+    return true
+  }
 
   handlePaste = async (event: RhinoPasteEvent) => {
     if (this.editor == null) return;
