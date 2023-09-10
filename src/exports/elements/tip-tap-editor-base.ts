@@ -350,14 +350,13 @@ export class TipTapEditorBase extends BaseElement {
     if (!(event instanceof DragEvent)) return false;
     if (moved) return false;
 
-    return this.handleNativeDrop(event)
+    return this.handleNativeDrop(event);
   };
-
 
   /**
    * Handles dropped files on the component, but not on the prosemirror instance.
    */
-  handleNativeDrop (event: DragEvent): boolean {
+  handleNativeDrop(event: DragEvent): boolean {
     if (this.editor == null) return false;
     if (event == null) return false;
     //
@@ -381,7 +380,7 @@ export class TipTapEditorBase extends BaseElement {
         .run();
     });
 
-    return true
+    return true;
   }
 
   handlePaste = async (event: RhinoPasteEvent) => {
