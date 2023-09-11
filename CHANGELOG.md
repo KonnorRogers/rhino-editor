@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.8.0
+
+### Minor Changes
+
+- a315ebe: BREAKING_CHANGE: CSS parts have changed slightly to create a more consistent naming conventions. `toolbar-tooltip` has been renamed to `toolbar__tooltip` along with other parts being slightly modified. `link-dialog__add-link` changed to
+  `link-dialog__link`.
+- a315ebe: - BREAKING_CHANGE: `handleFiles` now no longer automatically chains events. Instead now it returns the attachmentManagers to be chained.
+
+### Patch Changes
+
+- a315ebe: - The editor no longer inserts `<p>` tags above and below an attachment
+  - `<figure>` now has a default margin of `0.6em 0` to align with Trix.
+  - Updated to role-components v2.0.1
+  - Added docs on styling the border of the toolbar
+- a315ebe: - Fixed CSS for attachment galleries
+- a315ebe: - Added the ability to press the "Enter" key inside a `<figcaption>` and end up on the next line.
+- a315ebe: - Fixed a bug with dropcursor not showing
+- 6190d0b: Dependencies: update role-component to v2.0.0
+- a315ebe: - Fixed a bug where pressing backspace inside a `<figcaption>` or a Gallery would cause the attachment to no longer be in the gallery
+
 ## 0.7.1
 
 ### Patch Changes
