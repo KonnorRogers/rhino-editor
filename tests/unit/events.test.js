@@ -7,9 +7,6 @@ import sinon from "sinon"
 import {createDataTransfer} from "./helpers/create-data-transfer.js"
 import { createEditor } from "./helpers/create-editor.js";
 
-// "rhino-file-accept", "rhino-attachment-add", "rhino-attachment-remove", "rhino-paste", and "rhino-selection-change" are handled in the "specifying-accepted-file-types" / "index" tests
-// due to it requiring playwright APIs.
-
 const editorHTML = html`<rhino-editor></rhino-editor>`
 
 test("rhino-before-initialize", async () => {
@@ -118,6 +115,7 @@ test("rhino-attachment-add", async () => {
   const { rhinoEditor, tiptap } = await createEditor(editorHTML)
 
   rhinoEditor.addEventListener("rhino-attachment-add", handleEvent)
+  tiptap().click()
   tiptap().focus()
 
   assert.equal(spy.calledOnce, false)
@@ -129,10 +127,11 @@ test("rhino-attachment-add", async () => {
     type: "image/png",
   })
 
-  const dropEvent = new DragEvent("drop", { dataTransfer, bubbles: true })
+  const dropEvent = new DragEvent("drop", { dataTransfer, bubbles: true, cancelable: true, composed: true })
 
-  tiptap().dispatchEvent(dropEvent)
+  rhinoEditor.dispatchEvent(dropEvent)
 
+  await waitUntil(() => spy.calledOnce === true)
   assert.equal(spy.calledOnce, true)
 
   rhinoEditor.removeEventListener("rhino-attachment-add", handleEvent)
@@ -179,13 +178,17 @@ test("rhino-attachment-remove", async () => {
     type: "image/png",
   })
 
-  const dropEvent = new DragEvent("drop", { dataTransfer, bubbles: true })
+  const dropEvent = new DragEvent("drop", { dataTransfer, bubbles: true, cancelable: true, composed: true })
 
-  tiptap().dispatchEvent(dropEvent)
+  rhinoEditor.dispatchEvent(dropEvent)
 
   assert.equal(spy.calledOnce, false)
 
-  tiptap().querySelector("figure[data-trix-attachment]")?.remove()
+  const figure = () => tiptap().querySelector("figure[data-trix-attachment]")
+  await waitUntil(() => figure())
+
+  // @ts-expect-error
+  figure().remove()
 
   await waitUntil(() => spy.calledOnce)
 

@@ -4,13 +4,16 @@ import {
 } from "../attachment-manager.js";
 import { LOADING_STATES } from "../elements/attachment-editor.js";
 import type { LoadingState } from "../elements/attachment-editor.js";
-import { mergeAttributes, Node } from "@tiptap/core";
+import { CommandProps, mergeAttributes, Node } from "@tiptap/core";
 import { selectionToInsertionEnd } from "../../internal/selection-to-insertion-end.js";
 import { Maybe } from "../../types";
 import { findAttribute } from "./find-attribute.js";
 import { toDefaultCaption } from "../../internal/to-default-caption.js";
 import { fileUploadErrorMessage } from "../translations.js";
-import { findChildrenByType } from "prosemirror-utils";
+import {
+  findChildrenByType,
+  findParentNodeOfTypeClosestToPos,
+} from "prosemirror-utils";
 import { AttachmentRemoveEvent } from "../events/attachment-remove-event.js";
 
 import { render, html } from "lit/html.js";
@@ -19,7 +22,11 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { when } from "lit/directives/when.js";
 
 import { EditorState, Plugin, PluginKey, Transaction } from "@tiptap/pm/state";
-import { DOMSerializer, Node as ProseMirrorNode } from "@tiptap/pm/model";
+import {
+  DOMSerializer,
+  Node as ProseMirrorNode,
+  ResolvedPos,
+} from "@tiptap/pm/model";
 
 interface AttachmentAttrs extends AttachmentManagerAttributes {
   loadingState: LoadingState;
@@ -46,6 +53,14 @@ declare module "@tiptap/core" {
        */
       setAttachment: (
         options: AttachmentManager | AttachmentManager[],
+      ) => ReturnType;
+
+      /**
+       * Allows you to insert an attachment at a location within TipTap
+       */
+      setAttachmentAtCoords: (
+        options: AttachmentManager | AttachmentManager[],
+        coordinates: { top: number; left: number },
       ) => ReturnType;
     };
   }
@@ -138,6 +153,28 @@ export const Attachment = Node.create<AttachmentOptions>({
           if (modified) return tr;
 
           return undefined;
+        },
+      }),
+      new Plugin({
+        key: new PluginKey("rhino-prevent-unintended-figcaption-behavior"),
+        props: {
+          handleKeyDown: (view, event) => {
+            /**
+             * This is a hack. When we have an empty figcaption and you press "Enter" or "Backspace" you delete the
+             * containing gallery.
+             */
+            if (["Backspace", "Enter"].includes(event.key)) {
+              const name = view.state.selection.$anchor.parent.type.name;
+              const content = view.state.selection.$anchor.parent.textContent;
+
+              if (name === "attachment-figure" && content === "") {
+                event.preventDefault();
+                return true;
+              }
+            }
+
+            return false;
+          },
         },
       }),
       new Plugin({
@@ -475,9 +512,10 @@ export const Attachment = Node.create<AttachmentOptions>({
           <rhino-attachment-editor
             file-name=${fileName || ""}
             file-size=${String(fileSize || 0)}
-            contenteditable="false"
             loading-state=${loadingState || LOADING_STATES.notStarted}
-            progress=${progress}
+            progress=${String(progress)}
+            contenteditable="false"
+            .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
           >
           </rhino-attachment-editor>
 
@@ -492,10 +530,10 @@ export const Attachment = Node.create<AttachmentOptions>({
                 class=${loadingState === LOADING_STATES.error
                   ? "rhino-upload-error"
                   : ""}
-                contenteditable="false"
                 width=${String(width)}
                 height=${String(height)}
                 src=${ifDefined(imgSrc)}
+                contenteditable="false"
               />
             `,
           )}
@@ -504,8 +542,6 @@ export const Attachment = Node.create<AttachmentOptions>({
             class=${`attachment__caption ${caption ? "" : "is-empty"}`}
             data-placeholder="Add a caption..."
             data-default-caption=${toDefaultCaption({ fileName, fileSize })}
-            progress=${String(progress)}
-            .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
           ></figcaption>
         </figure>
       `;
@@ -520,81 +556,137 @@ export const Attachment = Node.create<AttachmentOptions>({
       return {
         dom,
         contentDOM,
+        update() {
+          return false;
+        },
       };
     };
   },
 
   addCommands() {
     return {
+      setAttachmentAtCoords:
+        (
+          options: AttachmentManager | AttachmentManager[],
+          coordinates: { left: number; top: number },
+        ) =>
+        ({ view, state, tr, dispatch }) => {
+          let posAtCoords = view.posAtCoords(coordinates);
+
+          const currentSelection = state.doc.resolve(posAtCoords?.pos || 0);
+          return handleAttachment(options, currentSelection, {
+            state,
+            tr,
+            dispatch,
+          });
+        },
       setAttachment:
         (options: AttachmentManager | AttachmentManager[]) =>
         ({ state, tr, dispatch }) => {
-          const { schema } = state;
-
-          // Attachments disabled, dont pass go.
-          const hasGalleriesDisabled =
-            schema.nodes["attachment-gallery"] == null;
-
           const currentSelection = state.doc.resolve(state.selection.anchor);
-          const before =
-            state.selection.anchor - 2 < 0 ? 0 : state.selection.anchor - 2;
-          const nodeBefore = state.doc.resolve(before);
-
-          // If we're in a paragraph directly following a gallery.
-          const isInGalleryCurrent =
-            currentSelection.node(1).type.name === "attachment-gallery";
-          const isInGalleryAfter =
-            nodeBefore.node(1)?.type.name === "attachment-gallery";
-
-          const isInGallery = isInGalleryCurrent || isInGalleryAfter;
-
-          const attachments: AttachmentManager[] = Array.isArray(options)
-            ? options
-            : ([] as AttachmentManager[]).concat(options);
-
-          let attachmentNodes = attachments.map((attachment) => {
-            return schema.nodes["attachment-figure"].create(
-              attachment,
-              attachment.caption ? [schema.text(attachment.caption)] : [],
-            );
+          return handleAttachment(options, currentSelection, {
+            state,
+            tr,
+            dispatch,
           });
-
-          const end = currentSelection.end();
-
-          if (hasGalleriesDisabled) {
-            attachmentNodes = attachmentNodes.flatMap((node) => [
-              node,
-              schema.nodes.paragraph.create(),
-            ]);
-            tr.insert(end, attachmentNodes);
-
-            if (dispatch) dispatch(tr);
-            return true;
-          }
-
-          if (isInGallery) {
-            const backtrack = isInGalleryCurrent ? 0 : 2;
-            tr.insert(end - backtrack, attachmentNodes);
-          } else {
-            const currSelection = state.selection;
-
-            const gallery = schema.nodes["attachment-gallery"].create(
-              {},
-              attachmentNodes,
-            );
-
-            tr.replaceWith(currSelection.from - 1, currSelection.to, [
-              schema.nodes.paragraph.create(),
-              gallery,
-              schema.nodes.paragraph.create(),
-            ]);
-
-            selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
-          }
-
-          if (dispatch) dispatch(tr);
-          return true;
         },
     };
   },
 });
+
+function handleAttachment(
+  options: AttachmentManager | AttachmentManager[],
+  currentSelection: ResolvedPos,
+  { state, tr, dispatch }: Pick<CommandProps, "state" | "tr" | "dispatch">,
+) {
+  const { schema } = state;
+
+  const minSize = 0;
+  const maxSize = tr.doc.content.size;
+
+  function clamp(val: number, min: number = minSize, max: number = maxSize) {
+    if (val < min) return min;
+    if (val > max) return max;
+    return val;
+  }
+
+  // Attachments disabled, dont pass go.
+  const hasGalleriesDisabled = schema.nodes["attachment-gallery"] == null;
+
+  const currentNode = state.doc.resolve(currentSelection.pos);
+  const paragraphTopNode = findParentNodeOfTypeClosestToPos(
+    currentNode,
+    schema.nodes["paragraph"],
+  );
+
+  let currentGallery = findParentNodeOfTypeClosestToPos(
+    state.doc.resolve(currentSelection.pos),
+    schema.nodes["attachment-gallery"],
+  );
+
+  let priorGalleryPos = null;
+
+  if (paragraphTopNode) {
+    const paragraphIsEmpty = currentSelection.parent.textContent === "";
+    const prevNode = state.doc.resolve(clamp(paragraphTopNode.pos - 1));
+
+    if (
+      paragraphIsEmpty &&
+      prevNode.parent.type.name === "attachment-gallery"
+    ) {
+      priorGalleryPos = clamp(paragraphTopNode.pos - 1);
+    }
+  }
+
+  const isInGallery = currentGallery || priorGalleryPos;
+
+  const attachments: AttachmentManager[] = Array.isArray(options)
+    ? options
+    : ([] as AttachmentManager[]).concat(options);
+
+  let attachmentNodes = attachments.map((attachment) => {
+    return schema.nodes["attachment-figure"].create(
+      attachment,
+      attachment.caption ? [schema.text(attachment.caption)] : [],
+    );
+  });
+
+  let end = 0;
+
+  if (currentGallery) {
+    end = currentGallery.start + currentGallery.node.nodeSize - 2;
+  } else if (priorGalleryPos != null) {
+    end = priorGalleryPos;
+  }
+
+  end = clamp(end);
+
+  if (hasGalleriesDisabled) {
+    attachmentNodes = attachmentNodes.flatMap((node) => [node]);
+    tr.insert(end, attachmentNodes.concat([schema.nodes.paragraph.create()]));
+
+    if (dispatch) dispatch(tr);
+    return true;
+  }
+
+  if (isInGallery) {
+    tr.insert(end, attachmentNodes);
+  } else {
+    const currSelection = state.selection;
+
+    const gallery = schema.nodes["attachment-gallery"].create(
+      {},
+      attachmentNodes,
+    );
+
+    tr.replaceWith(currSelection.from - 1, currSelection.to, [
+      gallery,
+      schema.nodes.paragraph.create(),
+    ]);
+
+    selectionToInsertionEnd(tr, tr.steps.length - 1, -1);
+  }
+
+  if (dispatch) dispatch(tr);
+  return true;
+}

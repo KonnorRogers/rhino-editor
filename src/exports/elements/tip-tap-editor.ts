@@ -278,7 +278,11 @@ export class TipTapEditor extends TipTapEditorBase {
     if (input == null) return;
     if (input.files == null) return;
 
-    await this.handleFiles(input.files);
+    const attachments = await this.handleFiles(input.files);
+
+    if (attachments.length > 0) {
+      this.editor?.chain().focus().setAttachment(attachments).run();
+    }
 
     input.value = "";
   }
@@ -318,7 +322,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="bold"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__bold"
+            part="toolbar__tooltip toolbar__tooltip--bold"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.bold}
@@ -364,7 +368,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="italics"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__italics"
+            part="toolbar__tooltip toolbar__tooltip--italics"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.italics}
@@ -409,7 +413,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="strike"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__strike"
+            part="toolbar__tooltip toolbar__tooltip--strike"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.strike}
@@ -456,7 +460,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="link"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__link"
+            part="toolbar__tooltip toolbar__tooltip--link"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.link}
@@ -503,7 +507,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="heading"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__heading"
+            part="toolbar__tooltip toolbar__tooltip--heading"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.heading}
@@ -550,7 +554,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="blockquote"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__blockquote"
+            part="toolbar__tooltip toolbar__tooltip--blockquote"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.blockQuote}
@@ -596,7 +600,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="code-block"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__code-block"
+            part="toolbar__tooltip toolbar__tooltip--code-block"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.codeBlock}
@@ -649,7 +653,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="bullet-list"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__bullet-list"
+            part="toolbar__tooltip toolbar__tooltip--bullet-list"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.bulletList}
@@ -704,7 +708,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="ordered-list"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__ordered-list"
+            part="toolbar__tooltip toolbar__tooltip--ordered-list"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.orderedList}
@@ -741,7 +745,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="attach-files"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__attach-files"
+            part="toolbar__tooltip toolbar__tooltip--attach-files"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.attachFiles}
@@ -795,7 +799,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="undo"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__undo"
+            part="toolbar__tooltip toolbar__tooltip--undo"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.undo}
@@ -841,7 +845,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="decrease-indentation"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__decrease-indentation"
+            part="toolbar__tooltip toolbar__tooltip--decrease-indentation"
           >
             ${this.translations.decreaseIndentation}
           </role-tooltip>
@@ -886,7 +890,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="increase-indentation"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__increase-indentation"
+            part="toolbar__tooltip toolbar__tooltip--increase-indentation"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.increaseIndentation}
@@ -930,7 +934,7 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-tooltip
             id="redo"
             hoist
-            part="toolbar-tooltip toolbar-tooltip__redo"
+            part="toolbar__tooltip toolbar__tooltip--redo"
             exportparts=${this.__tooltipExportParts}
           >
             ${this.translations.redo}
@@ -954,7 +958,12 @@ export class TipTapEditor extends TipTapEditorBase {
 
     return html`
       <slot name="toolbar">
-        <role-toolbar class="toolbar" part="toolbar" role="toolbar">
+        <role-toolbar
+          class="toolbar"
+          part="toolbar"
+          role="toolbar"
+          exportparts="base:toolbar__base"
+        >
           <slot name="toolbar-start">${this.renderToolbarStart()}</slot>
 
           <!-- Bold -->
@@ -1101,14 +1110,14 @@ export class TipTapEditor extends TipTapEditorBase {
         <div class="link-dialog__buttons" part="link-dialog__buttons">
           <button
             class="link-dialog__button"
-            part="link-dialog__button link-dialog__button-add-link"
+            part="link-dialog__button link-dialog__button--link"
             @click=${this.addLink}
           >
             ${this.translations.linkDialogLink}
           </button>
           <button
             class="link-dialog__button"
-            part="link-dialog__button link-dialog__button-unlink"
+            part="link-dialog__button link-dialog__button--unlink"
             @click=${() => {
               this.editor
                 ?.chain()

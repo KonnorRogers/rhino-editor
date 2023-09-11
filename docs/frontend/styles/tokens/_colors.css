@@ -6,6 +6,8 @@ html.sl-theme-dark {
   --light-text-color: var(--sl-color-neutral-700);
   --body-color: var(--sl-color-neutral-0);
 
+  --logo-color: var(--sl-color-neutral-1000);
+
   --input-border-color: var(--divider-color);
   --input-bg-color: var(--sl-color-neutral-0);
   --input-transition: 100ms box-shadow ease-in-out;
