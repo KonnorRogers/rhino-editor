@@ -45,7 +45,6 @@ export const hostStyles = css`
   color: var(--rhino-text-color);
 `;
 
-// @TODO: Wire up a plugin to auto-write this.
 export const toolbarButtonStyles = css`
   .rhino-toolbar-button {
     border: 1px solid var(--rhino-border-color);
@@ -123,27 +122,30 @@ export default css`
   }
 
   .toolbar::part(base) {
-    border: 1px solid var(--rhino-border-color);
+    border-color: var(--rhino-border-color);
     border-bottom-color: transparent;
-    border-radius: var(--rhino-border-radius) var(--rhino-border-radius) 0px 0px;
+    border-width: 1px;
+    border-radius: 4px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
   }
 
-  .toolbar::part(base):is(:focus-visible, :focus-within) {
+  .toolbar::part(base):is(:focus-within) {
     border-color: var(--rhino-button-active-border-color);
     outline: transparent;
   }
 
-  :host::part(toolbar__button--active),
-  :host::part(toolbar__button--active):is(:hover, :focus) {
+  [part~="toolbar__button--active"],
+  [part~="toolbar__button--active"]:is(:hover, :focus-within) {
     background-color: var(--rhino-button-active-background-color);
   }
 
-  :host::part(toolbar__button--link),
-  :host::part(toolbar__button--increase-indentation) {
+  [part~="toolbar__button--link"],
+  [part~="toolbar__button--increase-indentation"] {
     margin-inline-end: 1rem;
   }
 
-  :host::part(toolbar__button--attach-files) {
+  [part~="toolbar__button--attach-files"] {
     margin-inline-end: auto;
   }
 

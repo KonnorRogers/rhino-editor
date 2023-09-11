@@ -34,6 +34,8 @@ import { RhinoBlurEvent } from "../events/rhino-blur-event.js";
 import { RhinoChangeEvent } from "../events/rhino-change-event.js";
 import { SelectionChangeEvent } from "../events/selection-change-event.js";
 import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
+import { Slice } from "@tiptap/pm/model";
+import { EditorView } from "@tiptap/pm/view";
 
 export type Serializer = "" | "html" | "json";
 
@@ -132,6 +134,9 @@ export class TipTapEditorBase extends BaseElement {
     // light-dom version.
     const div = document.createElement("div");
     div.setAttribute("slot", "editor");
+
+    //  This may seem strange, but for some reason its the only wayto get the DropCursor working correctly.
+    div.style.position = "relative";
     this.insertAdjacentElement("beforeend", div);
 
     this.editor = this.__setupEditor(div);
@@ -189,7 +194,7 @@ export class TipTapEditorBase extends BaseElement {
     this.registerDependencies();
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
 
-    this.addEventListener("drop", this.handleDropFile);
+    this.addEventListener("drop", this.handleNativeDrop);
     this.addEventListener("rhino-paste", this.handlePaste);
     this.addEventListener("rhino-file-accept", this.handleFileAccept);
   }
@@ -301,12 +306,11 @@ export class TipTapEditorBase extends BaseElement {
     return document.getElementById(this.input) as Maybe<HTMLInputElement>;
   }
 
-  async handleFiles(files: File[] | FileList): Promise<void> {
-    if (this.editor == null) return;
+  async handleFiles(files: File[] | FileList): Promise<AttachmentManager[]> {
+    if (this.editor == null) return [];
+    if (files == null) return [];
 
     return new Promise((resolve, _reject) => {
-      if (files == null) return;
-
       const fileAcceptEvents = [...files].map((file) => {
         const event = new FileAcceptEvent(file);
         this.dispatchEvent(event);
@@ -327,33 +331,57 @@ export class TipTapEditorBase extends BaseElement {
 
       if (attachments == null || attachments.length <= 0) return;
 
-      this.editor?.chain().focus().setAttachment(attachments).run();
-
       attachments.forEach((attachment) => {
         this.dispatchEvent(new AddAttachmentEvent(attachment));
       });
 
       // Need to reset the input otherwise you get this fun state where you can't
       //   insert the same file multiple times.
-      resolve();
+      resolve(attachments);
     });
   }
 
-  handleDropFile = async (event: DragEvent) => {
-    if (this.editor == null) return;
-    if (event == null) return;
-    if (!(event instanceof DragEvent)) return;
+  handleDropFile = (
+    _view: EditorView,
+    event: DragEvent,
+    _slice: Slice,
+    moved: boolean,
+  ) => {
+    if (!(event instanceof DragEvent)) return false;
+    if (moved) return false;
 
+    return this.handleNativeDrop(event);
+  };
+
+  /**
+   * Handles dropped files on the component, but not on the prosemirror instance.
+   */
+  handleNativeDrop(event: DragEvent): boolean {
+    if (this.editor == null) return false;
+    if (event == null) return false;
+    //
     const { dataTransfer } = event;
-    if (dataTransfer == null) return;
+    if (dataTransfer == null) return false;
+    if (dataTransfer.files.length <= 0) return false;
 
-    const hasFiles = dataTransfer.files?.length > 0;
-    if (!hasFiles) return;
+    // This prevents this from firing twice because we both attach here and on the prosemirror instance
+    if (event.defaultPrevented) return false;
 
     event.preventDefault();
 
-    await this.handleFiles(dataTransfer.files);
-  };
+    this.handleFiles(dataTransfer.files).then((attachments) => {
+      this.editor
+        ?.chain()
+        .focus()
+        .setAttachmentAtCoords(attachments, {
+          top: event.clientY,
+          left: event.clientX,
+        })
+        .run();
+    });
+
+    return true;
+  }
 
   handlePaste = async (event: RhinoPasteEvent) => {
     if (this.editor == null) return;
@@ -368,8 +396,13 @@ export class TipTapEditorBase extends BaseElement {
 
     event.preventDefault();
 
+    // This inserts the file name, this is consistent with Trix, but can feel weird.
     this.editor.commands.insertContent(clipboardData.items);
-    await this.handleFiles(clipboardData.files);
+    const attachments = await this.handleFiles(clipboardData.files);
+
+    if (attachments.length > 0) {
+      this.editor?.chain().focus().setAttachment(attachments).run();
+    }
   };
 
   transformFilesToAttachments(files?: File[] | FileList | null) {
@@ -503,6 +536,9 @@ export class TipTapEditorBase extends BaseElement {
       element,
       content,
       editable: !this.readonly,
+      editorProps: {
+        handleDrop: this.handleDropFile,
+      },
     };
   }
 

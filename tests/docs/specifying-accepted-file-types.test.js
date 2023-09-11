@@ -35,7 +35,7 @@ test("Should allow PNG files to be added via drag and drop", async ({ page }) =>
 
 
   // Need to interact with the page before drag and drop works
-  await page.locator("rhino-editor#png-only").click()
+  await page.locator("rhino-editor#png-only .ProseMirror").click()
   // Drag and drop
   // https://github.com/microsoft/playwright/issues/13364#issuecomment-1156288428
   // https://github.com/microsoft/playwright/issues/10667#issuecomment-998397241
@@ -47,7 +47,7 @@ test("Should allow PNG files to be added via drag and drop", async ({ page }) =>
     fileType: "image/png",
   });
 
-  await page.dispatchEvent('rhino-editor#png-only', 'drop', { dataTransfer });
+  await page.dispatchEvent('rhino-editor#png-only .ProseMirror', 'drop', { dataTransfer, bubbles: true,  composed: true, cancelable: true });
   await expect(page.locator("rhino-editor#png-only figure")).toBeVisible()
 })
 
