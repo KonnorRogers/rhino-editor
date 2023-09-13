@@ -5,7 +5,7 @@ export function findAttribute(element: HTMLElement, attribute: string) {
   if (attr) return attr;
 
   const attrs = element
-    .closest("figure[data-trix-attachment]")
+    .closest("[data-trix-attachment]")
     ?.getAttribute("data-trix-attachment");
   if (!attrs) return null;
 

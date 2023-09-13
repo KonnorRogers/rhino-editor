@@ -70,7 +70,6 @@ export class AttachmentUpload implements DirectUploadDelegate {
     }
 
     this.attachment.setUploadProgress(this.currentProgress);
-    this.setUploadProgress();
   }
 
   createBlobUrl(signedId: string, filename: string) {
