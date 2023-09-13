@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.1
+
+### Patch Changes
+
+- 09e403f: - Fixed a conflict where ActiveStorage attachments not bound via custom attachments (like Mentions via TipTap extension) would get parsed by RhinoEditor by ignoring `contentType="application/octet-stream"` on attachments.
+- cfe01a5: - Fixed a bug where progress bars showed on element with `sgid` on them.
+  - Fixed a recursive issue with `setUploadProgress()`
+
 ## 0.8.0
 
 ### Minor Changes
