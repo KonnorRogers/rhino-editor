@@ -247,8 +247,11 @@ export const Attachment = Node.create<AttachmentOptions>({
       {
         tag: "figure[data-trix-attachment]",
         getAttrs: (element) => {
-          if (findAttribute(element, "contentType") == "application/octet-stream") {
-            return true;
+          if (
+            element instanceof HTMLElement &&
+            findAttribute(element, "contentType") === "application/octet-stream"
+          ) {
+            return null;
           }
           return false;
         },
