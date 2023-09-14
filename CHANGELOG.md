@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.2
+
+### Patch Changes
+
+- fdae042: - Fix a regression in attachment rendering
+
 ## 0.8.1
 
 ### Patch Changes
