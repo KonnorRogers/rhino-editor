@@ -30,3 +30,9 @@
   color: var(--sl-color-neutral-700);
 }
 
+:is(.language-bash, .language-shell, .language-zsh, .language-sh).highlighter-rouge pre.highlight::before {
+  content: "$";
+  user-select: none;
+  padding-inline-end: 0.45em;
+  color: gray;
+}
