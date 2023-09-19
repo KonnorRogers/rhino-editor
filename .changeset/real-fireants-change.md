@@ -2,4 +2,4 @@
 "rhino-editor": patch
 ---
 
-- Fixed a bug where changed the serializer type did not update the input element
+- Fixed a bug where changing the `serializer` from HTML to JSON or vice-versa did not update the input element
