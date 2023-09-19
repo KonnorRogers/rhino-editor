@@ -163,10 +163,10 @@ export class TipTapEditorBase extends BaseElement {
     }
 
     if (changedProperties.has("serializer")) {
-      this.updateInputElementValue()
+      this.updateInputElementValue();
     }
 
-    super.willUpdate(changedProperties)
+    super.willUpdate(changedProperties);
   }
 
   protected updated(
