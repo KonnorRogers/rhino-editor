@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.3
+
+### Patch Changes
+
+- 486935e: - Fixed a bug where changing the `serializer` from HTML to JSON or vice-versa did not update the input element
+
 ## 0.8.2
 
 ### Patch Changes
