@@ -30,3 +30,8 @@
   color: var(--sl-color-neutral-700);
 }
 
+.highlight-command-line-start {
+  user-select: none;
+  padding-inline-end: 0.45em;
+  color: gray;
+}

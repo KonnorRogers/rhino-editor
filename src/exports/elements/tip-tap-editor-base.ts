@@ -65,6 +65,7 @@ export class TipTapEditorBase extends BaseElement {
       input: { reflect: true },
       class: { reflect: true },
       accept: { reflect: true },
+      serializer: { reflect: true },
 
       // Properties
       editor: { state: true },
@@ -160,6 +161,12 @@ export class TipTapEditorBase extends BaseElement {
     if (changedProperties.has("class")) {
       this.classList.add("rhino-editor");
     }
+
+    if (changedProperties.has("serializer")) {
+      this.updateInputElementValue();
+    }
+
+    super.willUpdate(changedProperties);
   }
 
   protected updated(
@@ -291,8 +298,9 @@ export class TipTapEditorBase extends BaseElement {
   serialize() {
     if (this.editor == null) return "";
 
-    if (this.serializer?.toLowerCase() === "json")
+    if (this.serializer?.toLowerCase() === "json") {
       return JSON.stringify(this.editor.getJSON());
+    }
 
     return this.editor.getHTML();
   }
@@ -525,8 +533,10 @@ export class TipTapEditorBase extends BaseElement {
   private __defaultOptions(element: Element): Partial<EditorOptions> {
     let content: Content = this.inputElement?.value || "";
 
-    if (content && this.serializer?.toLowerCase() === "json") {
-      content = JSON.parse(content);
+    if (content) {
+      try {
+        content = JSON.parse(content);
+      } catch (e) {}
     }
 
     return {
