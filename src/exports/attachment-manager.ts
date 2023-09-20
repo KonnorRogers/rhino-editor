@@ -17,6 +17,8 @@ export interface AttachmentManagerAttributes {
   content?: Maybe<string>;
   caption?: Maybe<string>;
   url?: Maybe<string>;
+  width?: Maybe<number>;
+  height?: Maybe<number>;
 }
 
 /**
@@ -26,6 +28,15 @@ export interface AttachmentManagerAttributes {
 export class AttachmentManager implements AttachmentManagerAttributes {
   attributes: AttachmentManagerAttributes;
   editorView: EditorView;
+
+  static get previewableRegex () {
+    return /^image(\/(gif|png|jpe?g)|$)/
+  }
+
+  static isPreviewable (str: string) {
+    // (this || AttachmentManager) works around a strange bug in ESBuild v0.14.17 around how it transpiles static functions.
+    return (this || AttachmentManager).previewableRegex.test(str);
+  }
 
   constructor(obj: AttachmentManagerAttributes, editorView: EditorView) {
     this.editorView = editorView;
@@ -45,34 +56,69 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     }
   }
 
-  setAttributes(obj: Omit<AttachmentManagerAttributes, "src" | "file">) {
-    this.attributes.sgid = obj.sgid;
+  setAttributes(obj: AttachmentManagerAttributes) {
+  console.log({
+  attributes: this.attributes,
+  obj
+  })
+    this.attributes = Object.assign(this.attributes, obj)
 
-    if (obj.content == null && obj.url) {
+    /**
+     * These are the old Trix custom attachment APIs.
+     */
+    if (obj.content) {
+      this.setNodeMarkup({
+        sgid: this.attributes.sgid,
+        content: this.attributes.content,
+      });
+
+      return
+    }
+
+    /**
+     * Sometimes we don't have a URL. We need that.
+     */
+    // if (!obj.url) {
+    //   return
+    // }
+
+    const isPreviewable = (this.constructor as unknown as typeof AttachmentManager).isPreviewable
+
+    const contentType = this.contentType
+
+    if (contentType && isPreviewable(contentType)) {
       /** This preloads the image so we don't show a big flash. */
       const image = new Image();
 
-      this.attributes.url = obj.url;
-
+      // @ts-expect-error
       image.src = obj.url;
 
       image.onload = () => {
+        this.attributes.width = image.naturalWidth
+        this.attributes.height = image.naturalHeight
+        console.log({ naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight })
+
         this.setNodeMarkup({
           sgid: this.attributes.sgid,
           url: this.attributes.url,
           src: this.attributes.url,
           href: this.attributes.url + "?content-disposition=attachment",
-          width: image.naturalWidth,
-          height: image.naturalHeight,
+          width: this.attributes.width,
+          height: this.attributes.height,
+          contentType: this.contentType,
         });
         image.remove();
       };
       return;
     }
 
+    /**
+     * These are non-previewable assets like CSVs, Word docs, etc.
+     */
     this.setNodeMarkup({
       sgid: this.attributes.sgid,
-      content: this.attributes.content,
+      url: this.attributes.url,
+      contentType: this.contentType
     });
   }
 
@@ -139,6 +185,14 @@ export class AttachmentManager implements AttachmentManagerAttributes {
 
   set content(val: Maybe<string>) {
     this.attributes.content = val;
+  }
+
+  get height () {
+    return this.attributes.height
+  }
+
+  get width () {
+    return this.attributes.width
   }
 
   get caption(): string {

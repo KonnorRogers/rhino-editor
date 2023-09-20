@@ -97,11 +97,8 @@ function handleCaptions(
   return modified;
 }
 
-/** https://github.com/basecamp/trix/blob/main/src/trix/models/attachment.coffee#L4 */
-const isPreviewable = /^image(\/(gif|png|jpe?g)|$)/;
-
 function canPreview(previewable: Boolean, contentType: Maybe<string>): Boolean {
-  return previewable || contentType?.match(isPreviewable) != null;
+  return previewable || AttachmentManager.isPreviewable(contentType || "");
 }
 
 function toExtension(fileName: Maybe<string>): string {

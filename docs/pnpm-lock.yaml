@@ -25,10 +25,10 @@ dependencies:
     specifier: ^2.7.0
     version: 2.7.0
   '@tiptap/extension-character-count':
-    specifier: 2.1.7
+    specifier: ~2.1.7
     version: 2.1.7(@tiptap/core@2.1.8)(@tiptap/pm@2.1.8)
   '@tiptap/extension-code-block-lowlight':
-    specifier: 2.1.7
+    specifier: ~2.1.7
     version: 2.1.7(@tiptap/core@2.1.8)(@tiptap/extension-code-block@2.1.8)(@tiptap/pm@2.1.8)
   linkifyjs:
     specifier: ^4.1.1
