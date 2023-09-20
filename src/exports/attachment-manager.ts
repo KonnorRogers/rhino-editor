@@ -75,7 +75,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
      * Sometimes we don't have a URL. We need that.
      */
     if (!obj.url) {
-      return
+      return;
     }
 
     const isPreviewable = (
