@@ -57,10 +57,6 @@ export class AttachmentManager implements AttachmentManagerAttributes {
   }
 
   setAttributes(obj: AttachmentManagerAttributes) {
-    console.log({
-      attributes: this.attributes,
-      obj,
-    });
     this.attributes = Object.assign(this.attributes, obj);
 
     /**
