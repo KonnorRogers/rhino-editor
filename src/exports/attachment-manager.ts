@@ -56,7 +56,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     }
   }
 
-  setAttributes(obj: AttachmentManagerAttributes) {
+  setAttributes(obj: Partial<AttachmentManagerAttributes>) {
     this.attributes = Object.assign(this.attributes, obj);
 
     /**
