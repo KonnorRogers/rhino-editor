@@ -29,11 +29,11 @@ export class AttachmentManager implements AttachmentManagerAttributes {
   attributes: AttachmentManagerAttributes;
   editorView: EditorView;
 
-  static get previewableRegex () {
-    return /^image(\/(gif|png|jpe?g)|$)/
+  static get previewableRegex() {
+    return /^image(\/(gif|png|jpe?g)|$)/;
   }
 
-  static isPreviewable (str: string) {
+  static isPreviewable(str: string) {
     // (this || AttachmentManager) works around a strange bug in ESBuild v0.14.17 around how it transpiles static functions.
     return (this || AttachmentManager).previewableRegex.test(str);
   }
@@ -57,11 +57,11 @@ export class AttachmentManager implements AttachmentManagerAttributes {
   }
 
   setAttributes(obj: AttachmentManagerAttributes) {
-  console.log({
-  attributes: this.attributes,
-  obj
-  })
-    this.attributes = Object.assign(this.attributes, obj)
+    console.log({
+      attributes: this.attributes,
+      obj,
+    });
+    this.attributes = Object.assign(this.attributes, obj);
 
     /**
      * These are the old Trix custom attachment APIs.
@@ -72,7 +72,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
         content: this.attributes.content,
       });
 
-      return
+      return;
     }
 
     /**
@@ -82,9 +82,11 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     //   return
     // }
 
-    const isPreviewable = (this.constructor as unknown as typeof AttachmentManager).isPreviewable
+    const isPreviewable = (
+      this.constructor as unknown as typeof AttachmentManager
+    ).isPreviewable;
 
-    const contentType = this.contentType
+    const contentType = this.contentType;
 
     if (contentType && isPreviewable(contentType)) {
       /** This preloads the image so we don't show a big flash. */
@@ -94,9 +96,12 @@ export class AttachmentManager implements AttachmentManagerAttributes {
       image.src = obj.url;
 
       image.onload = () => {
-        this.attributes.width = image.naturalWidth
-        this.attributes.height = image.naturalHeight
-        console.log({ naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight })
+        this.attributes.width = image.naturalWidth;
+        this.attributes.height = image.naturalHeight;
+        console.log({
+          naturalWidth: image.naturalWidth,
+          naturalHeight: image.naturalHeight,
+        });
 
         this.setNodeMarkup({
           sgid: this.attributes.sgid,
@@ -118,7 +123,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     this.setNodeMarkup({
       sgid: this.attributes.sgid,
       url: this.attributes.url,
-      contentType: this.contentType
+      contentType: this.contentType,
     });
   }
 
@@ -187,12 +192,12 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     this.attributes.content = val;
   }
 
-  get height () {
-    return this.attributes.height
+  get height() {
+    return this.attributes.height;
   }
 
-  get width () {
-    return this.attributes.width
+  get width() {
+    return this.attributes.width;
   }
 
   get caption(): string {
