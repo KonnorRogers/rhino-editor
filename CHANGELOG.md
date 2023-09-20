@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.4
+
+### Patch Changes
+
+- 4e036a3: - Fixed a bug in rendering of non-previewable attachments not having an `sgid` or `url`
+  - Fixed a bug in previewable attachments not having their height + width attached
+
 ## 0.8.3
 
 ### Patch Changes
