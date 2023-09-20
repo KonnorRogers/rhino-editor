@@ -74,9 +74,9 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     /**
      * Sometimes we don't have a URL. We need that.
      */
-    // if (!obj.url) {
-    //   return
-    // }
+    if (!obj.url) {
+      return
+    }
 
     const isPreviewable = (
       this.constructor as unknown as typeof AttachmentManager
@@ -88,7 +88,6 @@ export class AttachmentManager implements AttachmentManagerAttributes {
       /** This preloads the image so we don't show a big flash. */
       const image = new Image();
 
-      // @ts-expect-error
       image.src = obj.url;
 
       image.onload = () => {
