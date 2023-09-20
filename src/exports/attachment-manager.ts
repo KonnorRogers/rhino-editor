@@ -93,10 +93,6 @@ export class AttachmentManager implements AttachmentManagerAttributes {
       image.onload = () => {
         this.attributes.width = image.naturalWidth;
         this.attributes.height = image.naturalHeight;
-        console.log({
-          naturalWidth: image.naturalWidth,
-          naturalHeight: image.naturalHeight,
-        });
 
         this.setNodeMarkup({
           sgid: this.attributes.sgid,
