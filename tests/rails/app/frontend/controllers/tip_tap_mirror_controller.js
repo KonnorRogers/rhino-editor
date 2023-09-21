@@ -6,9 +6,11 @@ export default class TipTapMirrorController extends Controller {
 	}
 	connect () {
 		const editor = this.element
-		replaceWithWrapper(this.trixInput, "value", (_obj, _property, value) => {
-			editor.editor.commands.setContent(value)
-		})
+		setTimeout(() => {
+		  replaceWithWrapper(this.trixInput, "value", (_obj, _property, value) => {
+			  editor.editor.commands.setContent(value)
+		  })
+		}, 30)
 	}
 }
 

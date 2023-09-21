@@ -6,6 +6,10 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
   end
 
   def rhino_editor_figure
+    page.locator("rhino-editor figure[data-trix-attachment][sgid]").first
+  end
+
+  def rhino_editor_png_figure
     page.locator("rhino-editor figure.attachment.attachment--preview.attachment--png[sgid]").first
   end
 
@@ -21,11 +25,11 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     page.locator("trix-editor").first
   end
 
-  def trix_figure
+  def trix_png_figure
     page.locator("trix-editor figure.attachment.attachment--preview.attachment--png")
   end
 
-  def attach_images(files)
+  def attach_files(files)
     rhino_editor = page.expect_file_chooser do
       page.locator("rhino-editor [part~='toolbar__button--attach-files']").first.click
     end
@@ -46,15 +50,15 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     page.get_by_role('link', name: /New Post/i).click
 
     @file_name = "view-layer-benchmarks.png"
-    attach_images([file_fixture(@file_name).to_s])
+    attach_files([file_fixture(@file_name).to_s])
 
     def attachment_attrs_test
       figure_attributes = ["data-trix-content-type"]
 
-      figure_attributes.each { |str| assert_equal rhino_editor_figure[str], trix_figure[str] }
+      figure_attributes.each { |str| assert_equal rhino_editor_png_figure[str], trix_png_figure[str] }
 
-      rhino_editor_attachment_attrs = JSON.parse(rhino_editor_figure["data-trix-attachment"])
-      trix_attachment_attrs = JSON.parse(trix_figure["data-trix-attachment"])
+      rhino_editor_attachment_attrs = JSON.parse(rhino_editor_png_figure["data-trix-attachment"])
+      trix_attachment_attrs = JSON.parse(trix_png_figure["data-trix-attachment"])
 
       comparable_attributes = [
         "filename",
@@ -68,8 +72,6 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
         assert_equal rhino_editor_attachment_attrs[attr], trix_attachment_attrs[attr]
       end
 
-
-      # @TODO: Until we get minio working in GH actions, punt on this for now.
       blob_path = rails_service_blob_path(":signed_id", ":filename")
       blob_path = blob_path.split(":signed_id")[0]
       assert_match /#{blob_path}\S+\//, rhino_editor_attachment_attrs["url"]
@@ -78,8 +80,8 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
       # Trix-attributes
       attributes = "data-trix-attributes"
 
-      rhino_editor_attributes = JSON.parse(rhino_editor_figure[attributes])
-      trix_attributes = JSON.parse(trix_figure[attributes])
+      rhino_editor_attributes = JSON.parse(rhino_editor_png_figure[attributes])
+      trix_attributes = JSON.parse(trix_png_figure[attributes])
 
       assert_match rhino_editor_attributes["presentation"], trix_attributes["presentation"]
     end
@@ -105,8 +107,39 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     page.get_by_role('link', name: /New Post/i).click
 
     @file_name = "view-layer-benchmarks.png"
-    attach_images([file_fixture(@file_name).to_s])
+    attach_files([file_fixture(@file_name).to_s])
+
     assert_equal rhino_editor_image["width"], trix_image["width"]
     assert_equal rhino_editor_image["height"], trix_image["height"]
+  end
+
+  test "Non previewable assets" do
+    page.get_by_role('link', name: /New Post/i).click
+
+    @file_name = "addresses.csv"
+    attach_files([file_fixture(@file_name).to_s])
+
+    def check_attrs
+      rhino_editor_attachment_attrs = JSON.parse(rhino_editor_figure["data-trix-attachment"])
+
+      refute rhino_editor_attachment_attrs["url"].blank?
+      refute rhino_editor_attachment_attrs["sgid"].blank?
+    end
+
+    check_attrs
+
+    # Save the attachment, make sure we render properly.
+    page.get_by_role('button', name: /Create Post/i).click
+
+    assert page.get_by_text("Post was successfully created")
+
+    check_attrs
+
+    assert page.get_by_text("Editing post")
+
+    # Go back and edit the file and make sure it renders properly in editor
+    page.get_by_role('link', name: /Edit this post/i).click
+
+    check_attrs
   end
 end
