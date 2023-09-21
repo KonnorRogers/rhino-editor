@@ -218,6 +218,7 @@ export const Attachment = Node.create<AttachmentOptions>({
                   nodeAttrs,
                   view,
                 );
+
                 view.dom.dispatchEvent(
                   new AttachmentRemoveEvent(attachmentManager),
                 );
@@ -483,13 +484,6 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
       }
 
-      // Clean up any objects laying around
-      if (url) {
-        try {
-          URL.revokeObjectURL(src);
-        } catch (_e) {}
-      }
-
       const isPreviewable = canPreview(previewable, contentType);
 
       let imgSrc: string | undefined = undefined;
@@ -551,10 +545,25 @@ export const Attachment = Node.create<AttachmentOptions>({
       const dom = scratch.firstElementChild;
       const contentDOM = dom?.querySelector("figcaption");
 
+      let srcRevoked = false
+
       return {
         dom,
         contentDOM,
-        update() {
+        update(node) {
+          if (node.type.name !== "attachment") return false
+
+          if (!srcRevoked && node.attrs.url) {
+            srcRevoked = true
+
+            /** Do your part to save the environment. (Try to) prevent memory leaks. */
+            try {
+              URL.revokeObjectURL(node.attrs.src)
+            } catch (_e) {
+              /* We don't really care if this fails. We tried. */
+            }
+          }
+
           return false;
         },
       };
