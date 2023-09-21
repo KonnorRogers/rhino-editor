@@ -88,7 +88,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
       /** This preloads the image so we don't show a big flash. */
       const image = new Image();
 
-      image.src = obj.url;
+      image.setAttribute("src", obj.url);
 
       image.onload = () => {
         this.attributes.width = image.naturalWidth;
@@ -139,14 +139,27 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     });
   }
 
+  /**
+   * This is an internal ID used for finding newly attached attachments in the TipTap editor.
+   * This is used primarily for direct upload purposes.
+   * This generally won't exist when a node is recreated from you database.
+   */
   get attachmentId() {
     return this.attributes.attachmentId;
   }
 
+  /**
+   * This is an internal ID used for finding newly attached images in the TipTap editor.
+   * This is used primarily for direct upload purposes.
+   * This generally won't exist when a node is recreated from you database.
+   */
   get imageId() {
     return this.attributes.imageId;
   }
 
+  /**
+   * `src` (when present) always maps to a URL.createObjectURL.
+   */
   get src() {
     return this.attributes.src;
   }
@@ -175,6 +188,10 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     return this.attributes.fileSize || this.file?.size;
   }
 
+  /**
+   * This field is populated by the old Trix custom attachment API and denotes if we're using a custom
+   * attachment.
+   */
   get content() {
     return this.attributes.content;
   }
