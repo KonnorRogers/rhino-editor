@@ -68,6 +68,9 @@
   font-size: 0.9em;
   line-height: 1.2;
 }
+.trix-content:not(.rhino-editor .trix-content) figcaption {
+  white-space: normal;
+}
 .trix-content .attachment--file {
   color: #333;
   line-height: 1;
