@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.5
+
+### Patch Changes
+
+- [#128](https://github.com/KonnorRogers/rhino-editor/pull/128) [`fae7c47`](https://github.com/KonnorRogers/rhino-editor/commit/fae7c474536e8139e078dc8d39fd105e6241212a) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - - Fix rendering of inline previews of images on Mobile Safari.
+
 ## 0.8.4
 
 ### Patch Changes
