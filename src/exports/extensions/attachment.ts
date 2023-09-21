@@ -545,20 +545,20 @@ export const Attachment = Node.create<AttachmentOptions>({
       const dom = scratch.firstElementChild;
       const contentDOM = dom?.querySelector("figcaption");
 
-      let srcRevoked = false
+      let srcRevoked = false;
 
       return {
         dom,
         contentDOM,
         update(node) {
-          if (node.type.name !== "attachment") return false
+          if (node.type.name !== "attachment") return false;
 
           if (!srcRevoked && node.attrs.url) {
-            srcRevoked = true
+            srcRevoked = true;
 
             /** Do your part to save the environment. (Try to) prevent memory leaks. */
             try {
-              URL.revokeObjectURL(node.attrs.src)
+              URL.revokeObjectURL(node.attrs.src);
             } catch (_e) {
               /* We don't really care if this fails. We tried. */
             }
