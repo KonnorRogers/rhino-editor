@@ -9,7 +9,7 @@ import { selectionToInsertionEnd } from "../../internal/selection-to-insertion-e
 import { Maybe } from "../../types";
 import { findAttribute } from "./find-attribute.js";
 import { toDefaultCaption } from "../../internal/to-default-caption.js";
-import { fileUploadErrorMessage } from "../translations.js";
+import { fileUploadErrorMessage, captionPlaceholder } from "../translations.js";
 import {
   findChildrenByType,
   findParentNodeOfTypeClosestToPos,
@@ -43,6 +43,7 @@ interface AttachmentAttrs extends AttachmentManagerAttributes {
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
   fileUploadErrorMessage: string;
+  captionPlaceholder: string;
 }
 
 declare module "@tiptap/core" {
@@ -66,6 +67,11 @@ declare module "@tiptap/core" {
   }
 }
 
+
+/**
+ * This appends to the current HTML of the <figcaption> into node.attrs.caption.
+ * This is how a figcaption knows if it's empty and is important for ActionText.
+ */
 function handleCaptions(
   node: ProseMirrorNode,
   tr: Transaction,
@@ -155,6 +161,25 @@ export const Attachment = Node.create<AttachmentOptions>({
       new Plugin({
         key: new PluginKey("rhino-prevent-unintended-figcaption-behavior"),
         props: {
+          handlePaste: (view, event) => {
+            const name = view.state.selection.$anchor.parent.type.name;
+
+            const { clipboardData } = event
+
+            if (!clipboardData) return false
+
+            if (name === "attachment-figure") {
+              event.preventDefault();
+              const tr = view.state.tr
+              // @TODO: Ideally we don't need to do this. This prevents inserting unnecessary <p> tags in the figcaption
+                // causing things to get fubar and <p> to get inserted in a bizarre place.
+              const text = clipboardData.getData("text/plain")
+              tr.insertText(text)
+              view.dispatch(tr)
+              return true;
+            }
+            return false
+          },
           handleKeyDown: (view, event) => {
             /**
              * This is a hack. When we have an empty figcaption and you press "Enter" or "Backspace" you delete the
@@ -236,6 +261,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         "data-trix-attributes": JSON.stringify({ presentation: "gallery" }),
       },
       fileUploadErrorMessage: fileUploadErrorMessage,
+      captionPlaceholder: captionPlaceholder,
     };
   },
 
@@ -532,7 +558,7 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           <figcaption
             class=${`attachment__caption ${caption ? "" : "is-empty"}`}
-            data-placeholder="Add a caption..."
+            data-placeholder=${this.options.captionPlaceholder}
             data-default-caption=${toDefaultCaption({ fileName, fileSize })}
           ></figcaption>
         </figure>

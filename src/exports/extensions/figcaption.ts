@@ -22,7 +22,7 @@ export const Figcaption = Node.create({
   parseHTML() {
     return [
       {
-        tag: `figure[data-trix-attachment] figcaption`,
+        tag: `figure.attachment figcaption`,
       },
     ];
   },

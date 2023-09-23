@@ -22,10 +22,13 @@
   position: relative;
 }
 
-/* If you use white-space: normal; in firefox you cant add white-space to the end of the figcaption */
 .trix-content figcaption {
-  white-space: pre;
   margin-top: 0.5em;
+  line-break: anywhere;
+}
+
+/* If you use white-space: normal; in firefox you cant add blank space to the figcaption */
+.trix-content[contenteditable="true"] figcaption {
   white-space: break-spaces;
 }
 
@@ -64,6 +67,10 @@
   padding: 0.4em 0.6em;
   min-height: 200px;
   outline: transparent;
+}
+
+.trix-content[contenteditable] {
+  /* Required by Prosemirror / TipTap */
   white-space: pre-wrap;
 }
 
@@ -71,7 +78,7 @@
   border-color: var(--rhino-button-active-border-color);
 }
 
-.trix-content figure[data-trix-attachment] figcaption {
+.trix-content figure.attachment figcaption {
   position: relative;
 }
 
@@ -190,9 +197,10 @@
 }
 
 /* For if galleries are disabled */
-.trix-content figure[data-trix-attachment] {
+.trix-content figure.attachment {
   display: grid;
   position: relative;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 /* This is a cheap easy way to allow us to show <p> tags in galleries */

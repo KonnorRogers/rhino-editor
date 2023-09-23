@@ -1,7 +1,7 @@
 import { Maybe } from "../types.js";
 import { uuidv4 } from "../internal/uuidv4.js";
 import { EditorView } from "@tiptap/pm/view";
-import { toDefaultCaption } from "../internal/to-default-caption.js";
+import { LOADING_STATES } from "./elements/attachment-editor.js";
 
 export interface AttachmentManagerAttributes {
   src: string;
@@ -52,7 +52,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
 
   setUploadProgress(progress: number): void {
     if (this.content == null) {
-      this.setNodeMarkup({ progress });
+      this.setNodeMarkup({ progress, loadingState: progress >= 100 ? LOADING_STATES.success : LOADING_STATES.loading });
     }
   }
 
@@ -208,10 +208,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     return this.attributes.width;
   }
 
-  get caption(): string {
-    return toDefaultCaption({
-      fileName: this.fileName,
-      fileSize: this.fileSize,
-    });
+  get caption() {
+    return this.attributes.caption
   }
 }
