@@ -4,13 +4,3 @@
 require_relative "config/application"
 
 Rails.application.load_tasks
-
-namespace :build do
-  # Gets around annoying caching locally
-  task :clean do
-    system("bin/vite build --clean")
-  end
-end
-
-Rake::Task["assets:precompile"].enhance([Rake::Task["assets:clobber"], Rake::Task["build:clean"]])
-
