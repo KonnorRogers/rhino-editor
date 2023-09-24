@@ -46,7 +46,11 @@ export class AttachmentEditor extends BaseElement {
       class: { attribute: "class", type: String },
       loadingState: { attribute: "loading-state" },
       fileUploadErrorMessage: { state: true },
-      showMetadata: { attribute: "show-metadata", reflect: true, type: Boolean }
+      showMetadata: {
+        attribute: "show-metadata",
+        reflect: true,
+        type: Boolean,
+      },
     };
   }
 
@@ -211,7 +215,7 @@ export class AttachmentEditor extends BaseElement {
       <span
         part="file-metadata"
         class="file-metadata"
-        ?hidden=${(!this.showMetadata || !(this.fileName || this.toFileSize()))}
+        ?hidden=${!this.showMetadata || !(this.fileName || this.toFileSize())}
       >
         <span class="file-name" part="file-name">${this.fileName}</span>
         <span class="file-size" part="file-size">${this.toFileSize()}</span>

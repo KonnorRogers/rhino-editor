@@ -118,7 +118,9 @@
   list-style: disc;
 }
 
-.trix-content figure[data-trix-attachment].has-focus figcaption.is-empty::before {
+.trix-content
+  figure[data-trix-attachment].has-focus
+  figcaption.is-empty::before {
   position: absolute;
   left: 50%;
   top: 0;
@@ -237,7 +239,9 @@
   white-space: normal;
 }
 
-.trix-content .attachment-gallery > :is(.attachment--preview, action-text-attachment[previewable="true"]) {
+.trix-content
+  .attachment-gallery
+  > :is(.attachment--preview, action-text-attachment[previewable="true"]) {
   flex: 1 0 33%;
   padding: 0 0.5em;
   max-width: 33%;
@@ -259,14 +263,26 @@
 
 /* 2 items / 4 items */
 .attachment-gallery
-  > :is(.attachment--preview, action-text-attachment[previewable="true"]):first-of-type:nth-last-of-type(2),
+  > :is(
+    .attachment--preview,
+    action-text-attachment[previewable="true"]
+  ):first-of-type:nth-last-of-type(2),
 .attachment-gallery
-  > :is(.attachment--preview, action-text-attachment[previewable="true"]):first-of-type:nth-last-of-type(2)
+  > :is(
+    .attachment--preview,
+    action-text-attachment[previewable="true"]
+  ):first-of-type:nth-last-of-type(2)
   ~ :is(.attachment--preview, action-text-attachment[previewable="true"]),
 .attachment-gallery
-  > :is(.attachment--preview, action-text-attachment[previewable="true"]):first-of-type:nth-last-of-type(4),
+  > :is(
+    .attachment--preview,
+    action-text-attachment[previewable="true"]
+  ):first-of-type:nth-last-of-type(4),
 .attachment-gallery
-  > :is(.attachment--preview, action-text-attachment[previewable="true"]):first-of-type:nth-last-of-type(4)
+  > :is(
+    .attachment--preview,
+    action-text-attachment[previewable="true"]
+  ):first-of-type:nth-last-of-type(4)
   ~ :is(.attachment--preview, action-text-attachment[previewable="true"]) {
   flex-basis: 50%;
   max-width: 50%;

@@ -141,7 +141,7 @@ export class TipTapEditor extends TipTapEditorBase {
       },
       rhinoAttachment: {
         fileUploadErrorMessage: this.translations.fileUploadErrorMessage,
-        captionPlaceholder: this.translations.captionPlaceholder
+        captionPlaceholder: this.translations.captionPlaceholder,
       },
     }) as typeof this.starterKitOptions;
 

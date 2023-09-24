@@ -53,7 +53,11 @@ export class AttachmentManager implements AttachmentManagerAttributes {
 
   setUploadProgress(progress: number): void {
     if (this.content == null) {
-      this.setNodeMarkup({ progress, loadingState: progress >= 100 ? LOADING_STATES.success : LOADING_STATES.loading });
+      this.setNodeMarkup({
+        progress,
+        loadingState:
+          progress >= 100 ? LOADING_STATES.success : LOADING_STATES.loading,
+      });
     }
   }
 
@@ -209,23 +213,26 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     return this.attributes.width;
   }
 
-  get isPreviewable () {
+  get isPreviewable() {
     const isPreviewable = (
       this.constructor as unknown as typeof AttachmentManager
     ).isPreviewable;
 
     const contentType = this.contentType;
 
-    return isPreviewable(contentType || "")
+    return isPreviewable(contentType || "");
   }
 
   get caption() {
-    const defaultCaption = toDefaultCaption({ fileName: this.attributes.fileName, fileSize: this.attributes.fileSize })
+    const defaultCaption = toDefaultCaption({
+      fileName: this.attributes.fileName,
+      fileSize: this.attributes.fileSize,
+    });
     // We want to set a real caption for non-previewable assets to prevent them from getting cleared out.
     if (this.isPreviewable) {
-      return defaultCaption
+      return defaultCaption;
     }
 
-    return this.attributes.caption || defaultCaption || ""
+    return this.attributes.caption || defaultCaption || "";
   }
 }

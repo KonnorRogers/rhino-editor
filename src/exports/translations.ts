@@ -25,5 +25,5 @@ export const translations = {
   increaseIndentation: "Increase indentation",
   decreaseIndentation: "Decrease indentation",
   fileUploadErrorMessage: fileUploadErrorMessage,
-  captionPlaceholder: captionPlaceholder
+  captionPlaceholder: captionPlaceholder,
 } as const;
