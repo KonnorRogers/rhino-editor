@@ -80,6 +80,23 @@ export const figureTypes = [
   "attachment-figure",
 ];
 
+function getAttributes (node: HTMLElement | string, previewable: boolean) {
+  if (node instanceof HTMLElement) {
+    if (findAttribute(node, "contentType") === "application/octet-stream") {
+      return false
+    }
+    if (
+      Boolean(findAttribute(node, "previewable")) !== previewable
+    ) {
+      return false;
+    }
+
+    return node.attributes;
+  }
+
+  return false;
+}
+
 /**
  * This appends to the current HTML of the <figcaption> into node.attrs.caption.
  * This is how a figcaption knows if it's empty and is important for ActionText.
@@ -298,17 +315,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         // context: https://github.com/KonnorRogers/rhino-editor/pull/112
         tag: "figure[data-trix-attachment]:not([data-trix-content-type='application/octet-stream'])",
         getAttrs: (node) => {
-          if (node instanceof HTMLElement) {
-            console.log(findAttribute(node, "previewable"));
-            if (
-              findAttribute(node, "previewable") === this.options.previewable
-            ) {
-              return node.attributes;
-            }
-            return false;
-          }
-
-          return false;
+          return getAttributes(node, this.options.previewable)
         },
         // contentElement: "figcaption"
       },
@@ -316,6 +323,9 @@ export const Attachment = Node.create<AttachmentOptions>({
       {
         tag: "figure.attachment",
         contentElement: "figcaption",
+        getAttrs: (node) => {
+          return getAttributes(node, this.options.previewable)
+        },
       },
     ];
   },
@@ -822,8 +832,18 @@ function handleAttachment(
     return true;
   }
 
-  if (isInGallery && allNodesPreviewable) {
-    tr.insert(end, attachmentNodes);
+  if (isInGallery) {
+    if (allNodesPreviewable) {
+      tr.insert(end, attachmentNodes);
+    } else {
+      // Make a new gallery. Non-previewable nodes dont belong in galleries.
+      if (!hasGalleriesDisabled && currGalleryOfNodes.length >= 1) {
+        attachmentNodes = attachmentNodes.concat(
+          schema.nodes["attachment-gallery"].create({}, currGalleryOfNodes),
+        );
+      }
+      tr.insert(end + 1, attachmentNodes)
+    }
   } else {
     const currSelection = state.selection;
 
