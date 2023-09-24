@@ -2,6 +2,7 @@ import { Maybe } from "../types.js";
 import { uuidv4 } from "../internal/uuidv4.js";
 import { EditorView } from "@tiptap/pm/view";
 import { LOADING_STATES } from "./elements/attachment-editor.js";
+import { toDefaultCaption } from "../internal/to-default-caption.js";
 
 export interface AttachmentManagerAttributes {
   src: string;
@@ -208,7 +209,23 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     return this.attributes.width;
   }
 
+  get isPreviewable () {
+    const isPreviewable = (
+      this.constructor as unknown as typeof AttachmentManager
+    ).isPreviewable;
+
+    const contentType = this.contentType;
+
+    return isPreviewable(contentType || "")
+  }
+
   get caption() {
-    return this.attributes.caption
+    const defaultCaption = toDefaultCaption({ fileName: this.attributes.fileName, fileSize: this.attributes.fileSize })
+    // We want to set a real caption for non-previewable assets to prevent them from getting cleared out.
+    if (this.isPreviewable) {
+      return defaultCaption
+    }
+
+    return this.attributes.caption || defaultCaption || ""
   }
 }
