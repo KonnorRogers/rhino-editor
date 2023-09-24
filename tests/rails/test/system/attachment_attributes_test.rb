@@ -95,12 +95,12 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
     attachment_attrs_test
 
-    # assert page.get_by_text("Editing post")
-    #
-    # # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Edit this post/i).click
-    #
-    # attachment_attrs_test
+    assert page.get_by_text("Editing post")
+
+    # Go back and edit the file and make sure it renders properly in editor
+    page.get_by_role('link', name: /Edit this post/i).click
+
+    attachment_attrs_test
   end
 
   test "Image attributes" do
