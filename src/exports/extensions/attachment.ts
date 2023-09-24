@@ -80,14 +80,12 @@ export const figureTypes = [
   "attachment-figure",
 ];
 
-function getAttributes (node: HTMLElement | string, previewable: boolean) {
+function getAttributes(node: HTMLElement | string, previewable: boolean) {
   if (node instanceof HTMLElement) {
     if (findAttribute(node, "contentType") === "application/octet-stream") {
-      return false
+      return false;
     }
-    if (
-      Boolean(findAttribute(node, "previewable")) !== previewable
-    ) {
+    if (Boolean(findAttribute(node, "previewable")) !== previewable) {
       return false;
     }
 
@@ -315,7 +313,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         // context: https://github.com/KonnorRogers/rhino-editor/pull/112
         tag: "figure[data-trix-attachment]:not([data-trix-content-type='application/octet-stream'])",
         getAttrs: (node) => {
-          return getAttributes(node, this.options.previewable)
+          return getAttributes(node, this.options.previewable);
         },
         // contentElement: "figcaption"
       },
@@ -324,7 +322,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         tag: "figure.attachment",
         contentElement: "figcaption",
         getAttrs: (node) => {
-          return getAttributes(node, this.options.previewable)
+          return getAttributes(node, this.options.previewable);
         },
       },
     ];
@@ -842,7 +840,7 @@ function handleAttachment(
           schema.nodes["attachment-gallery"].create({}, currGalleryOfNodes),
         );
       }
-      tr.insert(end + 1, attachmentNodes)
+      tr.insert(end + 1, attachmentNodes);
     }
   } else {
     const currSelection = state.selection;
