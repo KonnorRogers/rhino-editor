@@ -174,7 +174,8 @@ export class TipTapEditorBase extends BaseElement {
   ): void {
     if (
       changedProperties.has("extensions") ||
-      changedProperties.has("starterKitOptions")
+      changedProperties.has("starterKitOptions") ||
+      changedProperties.has("translations")
     ) {
       this.rebuildEditor();
     }

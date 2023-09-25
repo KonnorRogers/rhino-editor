@@ -21,10 +21,29 @@
   position: relative;
 }
 
-/* If you use white-space: normal; in firefox you cant add white-space to the end of the figcaption */
 .trix-content figcaption {
-  white-space: pre;
   margin-top: 0.5em;
+  line-break: anywhere;
+  display: inline-block;
+  white-space: normal;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  color: inherit;
+  text-align: center;
+  vertical-align: top;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* If you use white-space: normal; in firefox you cant add blank space to the figcaption */
+.trix-content[contenteditable="true"] figcaption {
   white-space: break-spaces;
 }
 
@@ -63,6 +82,10 @@
   padding: 0.4em 0.6em;
   min-height: 200px;
   outline: transparent;
+}
+
+.trix-content[contenteditable="true"] {
+  /* Required by Prosemirror / TipTap */
   white-space: pre-wrap;
 }
 
@@ -70,7 +93,7 @@
   border-color: var(--rhino-button-active-border-color);
 }
 
-.trix-content figure[data-trix-attachment] figcaption {
+.trix-content figure.attachment figcaption {
   position: relative;
 }
 
@@ -80,24 +103,27 @@
   figcaption.is-empty::before {
   color: var(--rhino-placeholder-text-color);
   content: attr(data-placeholder);
+  pointer-events: none;
 }
 
 .trix-content
   figure[data-trix-attachment]:not(.has-focus)
   figcaption.is-empty::before {
   content: attr(data-default-caption);
+  pointer-events: none;
 }
 
 .trix-content ul {
   list-style: disc;
 }
 
-.trix-content figure[data-trix-attachment] figcaption.is-empty::before {
+.trix-content
+  figure[data-trix-attachment].has-focus
+  figcaption.is-empty::before {
   position: absolute;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
+  top: 0;
+  transform: translate(-50%, 0%);
 }
 
 .trix-content p.is-editor-empty:first-child::before {
@@ -174,7 +200,7 @@
   font-size: 0.9em;
   line-height: 1.2;
 }
-.trix-content .attachment--file {
+.trix-content .attachment.attachment--file {
   color: #333;
   line-height: 1;
   margin: 0 2px 2px 2px;
@@ -189,13 +215,14 @@
 }
 
 /* For if galleries are disabled */
-.trix-content figure[data-trix-attachment] {
-  display: grid;
+.trix-content figure.attachment {
+  display: inline-block;
   position: relative;
+  white-space: normal;
 }
 
 /* This is a cheap easy way to allow us to show <p> tags in galleries */
-.trix-content .attachment-gallery > :not(.attachment, action-text-attachment) {
+.trix-content .attachment-gallery > p {
   width: 0px;
   padding: 0;
   flex-basis: 0%;
@@ -204,7 +231,16 @@
   flex-grow: 0;
 }
 
-.trix-content .attachment-gallery > :is(.attachment, action-text-attachment) {
+.trix-content .attachment-gallery .attachment {
+  flex: 1 0 100%;
+  padding: 0 0.5em;
+  max-width: 100%;
+  white-space: normal;
+}
+
+.trix-content
+  .attachment-gallery
+  > :is(.attachment--preview, action-text-attachment[previewable="true"]) {
   flex: 1 0 33%;
   padding: 0 0.5em;
   max-width: 33%;
@@ -226,19 +262,32 @@
 
 /* 2 items / 4 items */
 .attachment-gallery
-  > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2),
+  > :is(
+    .attachment--preview,
+    action-text-attachment[previewable="true"]
+  ):first-of-type:nth-last-of-type(2),
 .attachment-gallery
-  > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(2)
-  ~ :is(.attachment, action-text-attachment),
+  > :is(
+    .attachment--preview,
+    action-text-attachment[previewable="true"]
+  ):first-of-type:nth-last-of-type(2)
+  ~ :is(.attachment--preview, action-text-attachment[previewable="true"]),
 .attachment-gallery
-  > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(4),
+  > :is(
+    .attachment--preview,
+    action-text-attachment[previewable="true"]
+  ):first-of-type:nth-last-of-type(4),
 .attachment-gallery
-  > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(4)
-  ~ :is(.attachment, action-text-attachment) {
+  > :is(
+    .attachment--preview,
+    action-text-attachment[previewable="true"]
+  ):first-of-type:nth-last-of-type(4)
+  ~ :is(.attachment--preview, action-text-attachment[previewable="true"]) {
   flex-basis: 50%;
   max-width: 50%;
 }
 
+/** This carry over from Trix's gallery for backwards compat */
 .trix-content
   .attachment-gallery.attachment-gallery--2
   action-text-attachment

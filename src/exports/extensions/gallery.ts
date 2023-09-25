@@ -9,6 +9,7 @@ import {
 } from "@tiptap/pm/commands";
 import { Node as ProseMirrorNode } from "@tiptap/pm/model";
 import { findParentNodeOfTypeClosestToPos } from "prosemirror-utils";
+import { figureTypes } from "./attachment";
 
 function replaceEmptyGalleryWithParagraph(
   node: ProseMirrorNode,
@@ -41,7 +42,7 @@ export const Gallery = Node.create({
   group: "block",
   draggable: false,
   selectable: false,
-  content: "block*",
+  content: "(paragraph | previewableAttachmentFigure)*",
 
   parseHTML() {
     return [
@@ -70,7 +71,7 @@ export const Gallery = Node.create({
                   return true;
                 }
 
-                if (nodeType === "attachment-figure") {
+                if (figureTypes.includes(nodeType)) {
                   event.preventDefault();
 
                   chainCommands(createParagraphNear)(view.state, view.dispatch);
