@@ -42,7 +42,7 @@ export const Gallery = Node.create({
   group: "block",
   draggable: false,
   selectable: false,
-  content: "(paragraph | previewableAttachmentFigure | attachmentFigure)*",
+  content: "(paragraph | previewableAttachmentFigure)*",
 
   parseHTML() {
     return [

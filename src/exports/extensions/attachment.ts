@@ -239,11 +239,20 @@ export const Attachment = Node.create<AttachmentOptions>({
       new Plugin({
         key: new PluginKey("rhino-attachment-remove-event"),
         view() {
+          type FindNodeResult = ReturnType<typeof findChildrenByType>;
+          type FindNodeResultObj = FindNodeResult[keyof FindNodeResult];
+
+          const afterSgidsAndAttachmentIds = new Map<
+            string,
+            FindNodeResultObj
+          >();
+
           return {
             update(view, prevState) {
-              const nodeTypes = figureTypes.map((str) => {
-                return view.state.schema.nodes[str];
-              });
+              const nodeTypes = [
+                view.state.schema.nodes["previewable-attachment-figure"],
+                view.state.schema.nodes["attachment-figure"]
+              ]
 
               nodeTypes.forEach((nodeType) => {
                 const attachmentNodesBefore = findChildrenByType(
@@ -251,22 +260,19 @@ export const Attachment = Node.create<AttachmentOptions>({
                   nodeType,
                 );
 
-                type FindNodeResult = ReturnType<typeof findChildrenByType>;
-                type FindNodeResultObj = FindNodeResult[keyof FindNodeResult];
-
-                const afterSgidsAndAttachmentIds = new Map<
-                  string,
-                  FindNodeResultObj
-                >();
-
                 // attachmentNodesAfter state transform
                 findChildrenByType(view.state.doc, nodeType).forEach((node) => {
                   const nodeAttrs = node.node
                     .attrs as AttachmentManagerAttributes;
-                  const key = nodeAttrs.sgid || nodeAttrs.attachmentId;
+                  const sgid = nodeAttrs.sgid
+                  const attachmentId = nodeAttrs.attachmentId;
 
-                  if (key) {
-                    afterSgidsAndAttachmentIds.set(key, node);
+                  if (sgid) {
+                    afterSgidsAndAttachmentIds.set(sgid, node);
+                  }
+
+                  if (attachmentId) {
+                    afterSgidsAndAttachmentIds.set(attachmentId, node);
                   }
                 });
 
@@ -274,10 +280,10 @@ export const Attachment = Node.create<AttachmentOptions>({
                   const nodeAttrs = node.node
                     .attrs as AttachmentManagerAttributes;
 
-                  const key = nodeAttrs.sgid || nodeAttrs.attachmentId;
+                  const { sgid, attachmentId } = nodeAttrs
 
-                  if (!key) return;
-                  if (afterSgidsAndAttachmentIds.has(key)) return;
+                  if (sgid && afterSgidsAndAttachmentIds.has(sgid)) return;
+                  if (attachmentId && afterSgidsAndAttachmentIds.has(attachmentId)) return;
 
                   const attachmentManager = new AttachmentManager(
                     nodeAttrs,
@@ -288,6 +294,8 @@ export const Attachment = Node.create<AttachmentOptions>({
                     new AttachmentRemoveEvent(attachmentManager),
                   );
                 });
+
+                afterSgidsAndAttachmentIds.clear()
               });
             },
           };
@@ -721,6 +729,12 @@ export const PreviewableAttachment = Attachment.extend({
       previewable: true,
     };
   },
+  // We purposely override this to nothing. Because all of the extensions registered by Attachment
+  // are global, they run twice. We don't want that. for example, this causes `rhino-attachment-remove`
+  // to fire twice. No bueno.
+  addProseMirrorPlugins () {
+    return []
+  }
 });
 
 function handleAttachment(
