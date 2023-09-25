@@ -80,16 +80,23 @@ export const figureTypes = [
   "attachment-figure",
 ];
 
-function getAttributes(node: HTMLElement | string, previewable: boolean) {
+function getAttributes(node: HTMLElement | string, shouldPreview: boolean) {
   if (node instanceof HTMLElement) {
     if (findAttribute(node, "contentType") === "application/octet-stream") {
       return false;
     }
-    if (Boolean(findAttribute(node, "previewable")) !== previewable) {
-      return false;
-    }
 
-    return node.attributes;
+    const previewable = canPreview(findAttribute(node, "previewable"), findAttribute(node, "contentType"))
+
+    if (previewable === shouldPreview) {
+      var obj = {};
+      var attributes = node.attributes
+      for (var i = 0, len = attributes.length; i < len; i++) {
+        // @ts-expect-error
+        obj[attributes[i].name] = attributes[i].value;
+      }
+      return obj;
+    }
   }
 
   return false;
@@ -325,7 +332,8 @@ export const Attachment = Node.create<AttachmentOptions>({
         // context: https://github.com/KonnorRogers/rhino-editor/pull/112
         tag: "figure[data-trix-attachment]:not([data-trix-content-type='application/octet-stream'])",
         getAttrs: (node) => {
-          return getAttributes(node, this.options.previewable);
+          const attrs = getAttributes(node, this.options.previewable)
+          return attrs
         },
         // contentElement: "figcaption"
       },
@@ -334,7 +342,8 @@ export const Attachment = Node.create<AttachmentOptions>({
         tag: "figure.attachment",
         contentElement: "figcaption",
         getAttrs: (node) => {
-          return getAttributes(node, this.options.previewable);
+          const attrs = getAttributes(node, this.options.previewable)
+          return attrs
         },
       },
     ];
@@ -614,6 +623,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       const template = html`
         <figure
           class=${figureClasses}
+          attachment-type=${this.name}
           sgid=${ifDefined(sgid ? sgid : undefined)}
           data-trix-content-type=${contentType}
           data-trix-attachment=${trixAttachment}
@@ -726,7 +736,7 @@ export const Attachment = Node.create<AttachmentOptions>({
 
 export const PreviewableAttachment = Attachment.extend({
   name: "previewable-attachment-figure",
-  group: "block attachmentFigure previewableAttachmentFigure",
+  group: "block previewableAttachmentFigure",
   addOptions() {
     return {
       ...Attachment.options,
