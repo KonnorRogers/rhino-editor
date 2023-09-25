@@ -86,11 +86,14 @@ function getAttributes(node: HTMLElement | string, shouldPreview: boolean) {
       return false;
     }
 
-    const previewable = canPreview(findAttribute(node, "previewable"), findAttribute(node, "contentType"))
+    const previewable = canPreview(
+      findAttribute(node, "previewable"),
+      findAttribute(node, "contentType"),
+    );
 
     if (previewable === shouldPreview) {
       var obj = {};
-      var attributes = node.attributes
+      var attributes = node.attributes;
       for (var i = 0, len = attributes.length; i < len; i++) {
         // @ts-expect-error
         obj[attributes[i].name] = attributes[i].value;
@@ -332,8 +335,8 @@ export const Attachment = Node.create<AttachmentOptions>({
         // context: https://github.com/KonnorRogers/rhino-editor/pull/112
         tag: "figure[data-trix-attachment]:not([data-trix-content-type='application/octet-stream'])",
         getAttrs: (node) => {
-          const attrs = getAttributes(node, this.options.previewable)
-          return attrs
+          const attrs = getAttributes(node, this.options.previewable);
+          return attrs;
         },
         // contentElement: "figcaption"
       },
@@ -342,8 +345,8 @@ export const Attachment = Node.create<AttachmentOptions>({
         tag: "figure.attachment",
         contentElement: "figcaption",
         getAttrs: (node) => {
-          const attrs = getAttributes(node, this.options.previewable)
-          return attrs
+          const attrs = getAttributes(node, this.options.previewable);
+          return attrs;
         },
       },
     ];
