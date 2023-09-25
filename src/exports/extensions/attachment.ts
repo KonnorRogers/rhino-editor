@@ -808,7 +808,7 @@ function handleAttachment(
 
   let attachmentNodes: ProseMirrorNode[] = [];
 
-  let currGalleryOfNodes: ProseMirrorNode[] = [];
+  let previewableNodes: ProseMirrorNode[] = [];
 
   attachments.forEach((attachment) => {
     const nodeType = attachment.isPreviewable
@@ -829,18 +829,18 @@ function handleAttachment(
       allNodesPreviewable = false;
 
       // Make a new gallery. Non-previewable nodes dont belong in galleries.
-      if (currGalleryOfNodes.length >= 1) {
+      if (previewableNodes.length >= 1) {
         attachmentNodes = attachmentNodes.concat(
-          schema.nodes["attachment-gallery"].create({}, currGalleryOfNodes),
+          schema.nodes["attachment-gallery"].create({}, previewableNodes),
         );
-        currGalleryOfNodes = [];
+        previewableNodes = [];
       }
 
       attachmentNodes.push(figure);
       return;
     }
 
-    currGalleryOfNodes.push(figure);
+    previewableNodes.push(figure);
   });
 
   let end = 0;
@@ -863,12 +863,12 @@ function handleAttachment(
 
   if (isInGallery) {
     if (allNodesPreviewable) {
-      tr.insert(end, attachmentNodes);
+      tr.insert(end, previewableNodes);
     } else {
       // Make a new gallery. Non-previewable nodes dont belong in galleries.
-      if (!hasGalleriesDisabled && currGalleryOfNodes.length >= 1) {
+      if (!hasGalleriesDisabled && previewableNodes.length >= 1) {
         attachmentNodes = attachmentNodes.concat(
-          schema.nodes["attachment-gallery"].create({}, currGalleryOfNodes),
+          schema.nodes["attachment-gallery"].create({}, previewableNodes),
         );
       }
       tr.insert(end + 1, attachmentNodes);
@@ -877,9 +877,9 @@ function handleAttachment(
     const currSelection = state.selection;
 
     // Make a new gallery. Non-previewable nodes dont belong in galleries.
-    if (!hasGalleriesDisabled && currGalleryOfNodes.length >= 1) {
+    if (!hasGalleriesDisabled && previewableNodes.length >= 1) {
       attachmentNodes = attachmentNodes.concat(
-        schema.nodes["attachment-gallery"].create({}, currGalleryOfNodes),
+        schema.nodes["attachment-gallery"].create({}, previewableNodes),
       );
     }
 

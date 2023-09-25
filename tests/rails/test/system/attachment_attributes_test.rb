@@ -95,12 +95,16 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
     attachment_attrs_test
 
-    assert page.get_by_text("Editing post")
-
     # Go back and edit the file and make sure it renders properly in editor
     page.get_by_role('link', name: /Edit this post/i).click
+    assert page.get_by_text("Editing post")
 
     attachment_attrs_test
+
+    # Go back and edit the file and make sure it renders properly in editor
+    # page.get_by_role('link', name: /Edit raw post/i).click
+    # assert page.get_by_text("Editing raw post")
+    # attachment_attrs_test
   end
 
   test "Image attributes" do
@@ -135,11 +139,15 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
     check_attrs
 
-    assert page.get_by_text("Editing post")
-
     # Go back and edit the file and make sure it renders properly in editor
     page.get_by_role('link', name: /Edit this post/i).click
+    assert page.get_by_text("Editing post")
 
     check_attrs
+
+    # Go back and edit the file and make sure it renders properly in editor
+    # page.get_by_role('link', name: /Edit raw post/i).click
+    # assert page.get_by_text("Editing raw post")
+    # check_attrs
   end
 end
