@@ -251,8 +251,8 @@ export const Attachment = Node.create<AttachmentOptions>({
             update(view, prevState) {
               const nodeTypes = [
                 view.state.schema.nodes["previewable-attachment-figure"],
-                view.state.schema.nodes["attachment-figure"]
-              ]
+                view.state.schema.nodes["attachment-figure"],
+              ];
 
               nodeTypes.forEach((nodeType) => {
                 const attachmentNodesBefore = findChildrenByType(
@@ -264,7 +264,7 @@ export const Attachment = Node.create<AttachmentOptions>({
                 findChildrenByType(view.state.doc, nodeType).forEach((node) => {
                   const nodeAttrs = node.node
                     .attrs as AttachmentManagerAttributes;
-                  const sgid = nodeAttrs.sgid
+                  const sgid = nodeAttrs.sgid;
                   const attachmentId = nodeAttrs.attachmentId;
 
                   if (sgid) {
@@ -280,10 +280,14 @@ export const Attachment = Node.create<AttachmentOptions>({
                   const nodeAttrs = node.node
                     .attrs as AttachmentManagerAttributes;
 
-                  const { sgid, attachmentId } = nodeAttrs
+                  const { sgid, attachmentId } = nodeAttrs;
 
                   if (sgid && afterSgidsAndAttachmentIds.has(sgid)) return;
-                  if (attachmentId && afterSgidsAndAttachmentIds.has(attachmentId)) return;
+                  if (
+                    attachmentId &&
+                    afterSgidsAndAttachmentIds.has(attachmentId)
+                  )
+                    return;
 
                   const attachmentManager = new AttachmentManager(
                     nodeAttrs,
@@ -295,7 +299,7 @@ export const Attachment = Node.create<AttachmentOptions>({
                   );
                 });
 
-                afterSgidsAndAttachmentIds.clear()
+                afterSgidsAndAttachmentIds.clear();
               });
             },
           };
@@ -732,9 +736,9 @@ export const PreviewableAttachment = Attachment.extend({
   // We purposely override this to nothing. Because all of the extensions registered by Attachment
   // are global, they run twice. We don't want that. for example, this causes `rhino-attachment-remove`
   // to fire twice. No bueno.
-  addProseMirrorPlugins () {
-    return []
-  }
+  addProseMirrorPlugins() {
+    return [];
+  },
 });
 
 function handleAttachment(
