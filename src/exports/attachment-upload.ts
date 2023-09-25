@@ -1,6 +1,7 @@
 import { DirectUpload } from "@rails/activestorage";
 import type { Blob, DirectUploadDelegate } from "@rails/activestorage";
 import { AttachmentManager } from "./attachment-manager.js";
+import { LOADING_STATES } from "./elements/attachment-editor.js";
 
 /**
  * An extension of DirectUpload. This is what handles uploading to remote sources
@@ -46,7 +47,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
       if (this.attachment.content == null) {
         this.attachment.setNodeMarkup({
           progress: 0,
-          loadingState: "error",
+          loadingState: LOADING_STATES.error,
         });
       }
 

@@ -152,14 +152,14 @@ test("Should disable orderedList", async () => {
   assert.isNotOk(button())
 })
 
-test("Should disable attachment", async () => {
+test("Should disable attachments", async () => {
   const { rhinoEditor } = await createEditor()
 
   const button = () => rhinoEditor.shadowRoot.querySelector("role-toolbar [part~='toolbar__button--attach-files']")
 
   assert.ok(button())
 
-  rhinoEditor.starterKitOptions = { ...rhinoEditor.starterKitOptions, rhinoAttachment: false }
+  rhinoEditor.starterKitOptions = { ...rhinoEditor.starterKitOptions, rhinoAttachment: false, rhinoGallery: false }
 
   await elementUpdated(rhinoEditor)
 

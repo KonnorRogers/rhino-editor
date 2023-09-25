@@ -162,14 +162,15 @@ test("rhino-attachment-remove", async () => {
   let spy = sinon.spy()
 
   function handleAttachment (e) { e.preventDefault() }
-  function handleEvent (e) { spy() }
+  function handleEvent (e) {
+    spy()
+  }
 
   const { rhinoEditor, tiptap } = await createEditor(editorHTML)
 
   rhinoEditor.addEventListener("rhino-attachment-add", handleAttachment)
   rhinoEditor.addEventListener("rhino-attachment-remove", handleEvent)
   tiptap().focus()
-
 
   const fileData = await readFile({ path: '../fixtures/view-layer-benchmarks.png' }) || ""
   const dataTransfer = createDataTransfer({

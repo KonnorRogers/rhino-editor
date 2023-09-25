@@ -4,7 +4,11 @@ import { Plugin } from "@tiptap/pm/state";
 //   FirefoxCaretFixPlugin,
 //   FirefoxCaretPluginOptions,
 // } from "./firefox-caret-plugin";
-import { Attachment, AttachmentOptions } from "./attachment.js";
+import {
+  Attachment,
+  AttachmentOptions,
+  PreviewableAttachment,
+} from "./attachment.js";
 import { Image, ImageOptions } from "./image.js";
 import { Gallery, GalleryOptions } from "./gallery.js";
 import { Figcaption, FigcaptionOptions } from "./figcaption.js";
@@ -101,6 +105,14 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       const options = this.options[string];
       if (options !== false) {
         loadedExtensions.push(extension.configure(options));
+
+        // This is a special case. Because non-previewable attachments don't belong in galleries
+        // To reduce the logic we have to write, previewable attachments are a slightly modified version of non-previewable attachments with a different "group" so they can belong to a gallery.
+        if (string === "rhinoAttachment") {
+          loadedExtensions.push(
+            PreviewableAttachment.configure(options as AttachmentOptions),
+          );
+        }
       }
     });
 

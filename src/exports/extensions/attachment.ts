@@ -9,7 +9,7 @@ import { selectionToInsertionEnd } from "../../internal/selection-to-insertion-e
 import { Maybe } from "../../types";
 import { findAttribute } from "./find-attribute.js";
 import { toDefaultCaption } from "../../internal/to-default-caption.js";
-import { fileUploadErrorMessage } from "../translations.js";
+import { fileUploadErrorMessage, captionPlaceholder } from "../translations.js";
 import {
   findChildrenByType,
   findParentNodeOfTypeClosestToPos,
@@ -21,7 +21,14 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { when } from "lit/directives/when.js";
 
-import { EditorState, Plugin, PluginKey, Transaction } from "@tiptap/pm/state";
+import {
+  EditorState,
+  NodeSelection,
+  Plugin,
+  PluginKey,
+  TextSelection,
+  Transaction,
+} from "@tiptap/pm/state";
 import {
   DOMSerializer,
   Node as ProseMirrorNode,
@@ -43,6 +50,8 @@ interface AttachmentAttrs extends AttachmentManagerAttributes {
 export interface AttachmentOptions {
   HTMLAttributes: Record<string, any>;
   fileUploadErrorMessage: string;
+  captionPlaceholder: string;
+  previewable: boolean;
 }
 
 declare module "@tiptap/core" {
@@ -66,6 +75,40 @@ declare module "@tiptap/core" {
   }
 }
 
+export const figureTypes = [
+  "previewable-attachment-figure",
+  "attachment-figure",
+];
+
+function getAttributes(node: HTMLElement | string, shouldPreview: boolean) {
+  if (node instanceof HTMLElement) {
+    if (findAttribute(node, "contentType") === "application/octet-stream") {
+      return false;
+    }
+
+    const previewable = canPreview(
+      findAttribute(node, "previewable"),
+      findAttribute(node, "contentType"),
+    );
+
+    if (previewable === shouldPreview) {
+      var obj = {};
+      var attributes = node.attributes;
+      for (var i = 0, len = attributes.length; i < len; i++) {
+        // @ts-expect-error
+        obj[attributes[i].name] = attributes[i].value;
+      }
+      return obj;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * This appends to the current HTML of the <figcaption> into node.attrs.caption.
+ * This is how a figcaption knows if it's empty and is important for ActionText.
+ */
 function handleCaptions(
   node: ProseMirrorNode,
   tr: Transaction,
@@ -73,7 +116,13 @@ function handleCaptions(
   pos: number,
 ) {
   let modified = false;
-  if (node.type.name !== "attachment-figure") return modified;
+
+  if (figureTypes.includes(node.type.name) === false) return modified;
+
+  // Make sure the user isn't selecting multiple nodes.
+  if (newState.selection.from !== newState.selection.to) {
+    return modified;
+  }
 
   // @see https://discuss.prosemirror.net/t/saving-content-containing-dom-generated-by-nodeview/2594/5
   let scratch = document.createElement("div");
@@ -131,7 +180,7 @@ export const Attachment = Node.create<AttachmentOptions>({
   addProseMirrorPlugins() {
     return [
       new Plugin({
-        key: new PluginKey("rhino-autocaptions"),
+        key: new PluginKey("rhino-attachment-fixer"),
         appendTransaction(_transactions, _oldState, newState) {
           const tr = newState.tr;
           let modified = false;
@@ -155,16 +204,39 @@ export const Attachment = Node.create<AttachmentOptions>({
       new Plugin({
         key: new PluginKey("rhino-prevent-unintended-figcaption-behavior"),
         props: {
+          handlePaste: (view, event) => {
+            const name = view.state.selection.$anchor.parent.type.name;
+
+            const { clipboardData } = event;
+
+            if (!clipboardData) return false;
+
+            if (figureTypes.includes(name)) {
+              event.preventDefault();
+              const tr = view.state.tr;
+              // @TODO: Ideally we don't need to do this. This prevents inserting unnecessary <p> tags in the figcaption
+              // causing things to get fubar and <p> to get inserted in a bizarre place.
+              const text = clipboardData.getData("text/plain");
+              tr.insertText(text);
+              view.dispatch(tr);
+              return true;
+            }
+            return false;
+          },
           handleKeyDown: (view, event) => {
             /**
              * This is a hack. When we have an empty figcaption and you press "Enter" or "Backspace" you delete the
              * containing gallery.
              */
             if (["Backspace", "Enter"].includes(event.key)) {
-              const name = view.state.selection.$anchor.parent.type.name;
-              const content = view.state.selection.$anchor.parent.textContent;
+              const name = view.state.selection.$head.parent.type.name;
+              const content = view.state.selection.$head.parent.textContent;
 
-              if (name === "attachment-figure" && content === "") {
+              if (view.state.selection.to !== view.state.selection.from) {
+                return false;
+              }
+
+              if (figureTypes.includes(name) && content === "") {
                 event.preventDefault();
                 return true;
               }
@@ -177,51 +249,67 @@ export const Attachment = Node.create<AttachmentOptions>({
       new Plugin({
         key: new PluginKey("rhino-attachment-remove-event"),
         view() {
+          type FindNodeResult = ReturnType<typeof findChildrenByType>;
+          type FindNodeResultObj = FindNodeResult[keyof FindNodeResult];
+
+          const afterSgidsAndAttachmentIds = new Map<
+            string,
+            FindNodeResultObj
+          >();
+
           return {
             update(view, prevState) {
-              const nodeType = view.state.schema.nodes["attachment-figure"];
+              const nodeTypes = [
+                view.state.schema.nodes["previewable-attachment-figure"],
+                view.state.schema.nodes["attachment-figure"],
+              ];
 
-              const attachmentNodesBefore = findChildrenByType(
-                prevState.doc,
-                nodeType,
-              );
-
-              type FindNodeResult = ReturnType<typeof findChildrenByType>;
-              type FindNodeResultObj = FindNodeResult[keyof FindNodeResult];
-
-              const afterSgidsAndAttachmentIds = new Map<
-                string,
-                FindNodeResultObj
-              >();
-
-              // attachmentNodesAfter state transform
-              findChildrenByType(view.state.doc, nodeType).forEach((node) => {
-                const nodeAttrs = node.node
-                  .attrs as AttachmentManagerAttributes;
-                const key = nodeAttrs.sgid || nodeAttrs.attachmentId;
-
-                if (key) {
-                  afterSgidsAndAttachmentIds.set(key, node);
-                }
-              });
-
-              attachmentNodesBefore.forEach((node) => {
-                const nodeAttrs = node.node
-                  .attrs as AttachmentManagerAttributes;
-
-                const key = nodeAttrs.sgid || nodeAttrs.attachmentId;
-
-                if (!key) return;
-                if (afterSgidsAndAttachmentIds.has(key)) return;
-
-                const attachmentManager = new AttachmentManager(
-                  nodeAttrs,
-                  view,
+              nodeTypes.forEach((nodeType) => {
+                const attachmentNodesBefore = findChildrenByType(
+                  prevState.doc,
+                  nodeType,
                 );
 
-                view.dom.dispatchEvent(
-                  new AttachmentRemoveEvent(attachmentManager),
-                );
+                // attachmentNodesAfter state transform
+                findChildrenByType(view.state.doc, nodeType).forEach((node) => {
+                  const nodeAttrs = node.node
+                    .attrs as AttachmentManagerAttributes;
+                  const sgid = nodeAttrs.sgid;
+                  const attachmentId = nodeAttrs.attachmentId;
+
+                  if (sgid) {
+                    afterSgidsAndAttachmentIds.set(sgid, node);
+                  }
+
+                  if (attachmentId) {
+                    afterSgidsAndAttachmentIds.set(attachmentId, node);
+                  }
+                });
+
+                attachmentNodesBefore.forEach((node) => {
+                  const nodeAttrs = node.node
+                    .attrs as AttachmentManagerAttributes;
+
+                  const { sgid, attachmentId } = nodeAttrs;
+
+                  if (sgid && afterSgidsAndAttachmentIds.has(sgid)) return;
+                  if (
+                    attachmentId &&
+                    afterSgidsAndAttachmentIds.has(attachmentId)
+                  )
+                    return;
+
+                  const attachmentManager = new AttachmentManager(
+                    nodeAttrs,
+                    view,
+                  );
+
+                  view.dom.dispatchEvent(
+                    new AttachmentRemoveEvent(attachmentManager),
+                  );
+                });
+
+                afterSgidsAndAttachmentIds.clear();
               });
             },
           };
@@ -233,9 +321,10 @@ export const Attachment = Node.create<AttachmentOptions>({
     return {
       HTMLAttributes: {
         class: "attachment",
-        "data-trix-attributes": JSON.stringify({ presentation: "gallery" }),
       },
       fileUploadErrorMessage: fileUploadErrorMessage,
+      captionPlaceholder: captionPlaceholder,
+      previewable: false,
     };
   },
 
@@ -245,12 +334,20 @@ export const Attachment = Node.create<AttachmentOptions>({
       {
         // context: https://github.com/KonnorRogers/rhino-editor/pull/112
         tag: "figure[data-trix-attachment]:not([data-trix-content-type='application/octet-stream'])",
+        getAttrs: (node) => {
+          const attrs = getAttributes(node, this.options.previewable);
+          return attrs;
+        },
         // contentElement: "figcaption"
       },
       // Generated by the standard output.
       {
         tag: "figure.attachment",
         contentElement: "figcaption",
+        getAttrs: (node) => {
+          const attrs = getAttributes(node, this.options.previewable);
+          return attrs;
+        },
       },
     ];
   },
@@ -299,7 +396,9 @@ export const Attachment = Node.create<AttachmentOptions>({
         "data-trix-attachment": JSON.stringify(attachmentAttrs),
         "data-trix-attributes": JSON.stringify({
           caption,
-          presentation: "gallery",
+          ...(canPreview(previewable, contentType)
+            ? { presentation: "gallery" }
+            : {}),
         }),
       }),
     ] as const;
@@ -326,7 +425,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       ),
     ];
 
-    if (!content) {
+    if (!content && canPreview(previewable, contentType)) {
       return [...figure, image, figcaption];
     }
 
@@ -455,8 +554,10 @@ export const Attachment = Node.create<AttachmentOptions>({
         caption,
       });
 
+      const isPreviewable = canPreview(previewable, contentType);
+
       const trixAttributes = JSON.stringify({
-        presentation: "gallery",
+        ...(isPreviewable ? { presentation: "gallery" } : {}),
         caption,
       });
 
@@ -477,14 +578,14 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
 
         if (typeof getPos === "function") {
-          editor
-            .chain()
-            .setTextSelection(getPos() + 1)
-            .run();
+          const { view } = editor;
+          view.dispatch(
+            view.state.tr.setSelection(
+              TextSelection.create(view.state.doc, getPos() + 1),
+            ),
+          );
         }
       }
-
-      const isPreviewable = canPreview(previewable, contentType);
 
       let imgSrc: string | undefined = undefined;
 
@@ -492,14 +593,48 @@ export const Attachment = Node.create<AttachmentOptions>({
         imgSrc = url || src;
       }
 
+      let mouseIsDown = false;
+      let mouseTimeout: number | null = null;
+
+      // This is a very simple drag handler. This allows us to drag non-previewable nodes.
+      // https://discuss.prosemirror.net/t/dragndrop-a-drag-handle-element/4563
+      const handleMouseDown = (_e: MouseEvent) => {
+        // We need to give this a second just so we dont mess with "click" behavior.
+        mouseTimeout = setTimeout(() => {
+          mouseIsDown = true;
+        }, 10);
+      };
+
+      const handleMouseUp = (_e: MouseEvent) => {
+        mouseIsDown = false;
+        if (mouseTimeout) {
+          clearTimeout(mouseTimeout);
+        }
+      };
+
+      const handleMouseMove = (_e: MouseEvent) => {
+        if (mouseIsDown && typeof getPos === "function") {
+          const { view } = editor;
+          view.dispatch(
+            view.state.tr.setSelection(
+              NodeSelection.create(view.state.doc, getPos()),
+            ),
+          );
+        }
+      };
+
       const template = html`
         <figure
           class=${figureClasses}
+          attachment-type=${this.name}
           sgid=${ifDefined(sgid ? sgid : undefined)}
           data-trix-content-type=${contentType}
           data-trix-attachment=${trixAttachment}
           data-trix-attributes=${trixAttributes}
           @click=${handleFigureClick}
+          @mousedown=${handleMouseDown}
+          @mouseup=${handleMouseUp}
+          @mousemove=${handleMouseMove}
         >
           <rhino-attachment-editor
             file-name=${fileName || ""}
@@ -507,12 +642,13 @@ export const Attachment = Node.create<AttachmentOptions>({
             loading-state=${loadingState || LOADING_STATES.notStarted}
             progress=${String(sgid ? 100 : progress)}
             contenteditable="false"
+            ?show-metadata=${isPreviewable}
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
           >
           </rhino-attachment-editor>
 
           ${when(
-            content && !isPreviewable,
+            content || !isPreviewable,
             /* This is really not great. This is how Trix does it, but it feels very unsafe.
                https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/views/attachment_view.js#L36
             */
@@ -532,7 +668,7 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           <figcaption
             class=${`attachment__caption ${caption ? "" : "is-empty"}`}
-            data-placeholder="Add a caption..."
+            data-placeholder=${this.options.captionPlaceholder}
             data-default-caption=${toDefaultCaption({ fileName, fileSize })}
           ></figcaption>
         </figure>
@@ -601,6 +737,23 @@ export const Attachment = Node.create<AttachmentOptions>({
   },
 });
 
+export const PreviewableAttachment = Attachment.extend({
+  name: "previewable-attachment-figure",
+  group: "block previewableAttachmentFigure",
+  addOptions() {
+    return {
+      ...Attachment.options,
+      previewable: true,
+    };
+  },
+  // We purposely override this to nothing. Because all of the extensions registered by Attachment
+  // are global, they run twice. We don't want that. for example, this causes `rhino-attachment-remove`
+  // to fire twice. No bueno.
+  addProseMirrorPlugins() {
+    return [];
+  },
+});
+
 function handleAttachment(
   options: AttachmentManager | AttachmentManager[],
   currentSelection: ResolvedPos,
@@ -651,11 +804,43 @@ function handleAttachment(
     ? options
     : ([] as AttachmentManager[]).concat(options);
 
-  let attachmentNodes = attachments.map((attachment) => {
-    return schema.nodes["attachment-figure"].create(
+  let allNodesPreviewable = true;
+
+  let attachmentNodes: ProseMirrorNode[] = [];
+
+  let currGalleryOfNodes: ProseMirrorNode[] = [];
+
+  attachments.forEach((attachment) => {
+    const nodeType = attachment.isPreviewable
+      ? "previewable-attachment-figure"
+      : "attachment-figure";
+
+    const figure = schema.nodes[nodeType].create(
       attachment,
       attachment.caption ? [schema.text(attachment.caption)] : [],
     );
+
+    if (hasGalleriesDisabled) {
+      attachmentNodes.push(figure);
+      return;
+    }
+
+    if (!attachment.isPreviewable) {
+      allNodesPreviewable = false;
+
+      // Make a new gallery. Non-previewable nodes dont belong in galleries.
+      if (currGalleryOfNodes.length >= 1) {
+        attachmentNodes = attachmentNodes.concat(
+          schema.nodes["attachment-gallery"].create({}, currGalleryOfNodes),
+        );
+        currGalleryOfNodes = [];
+      }
+
+      attachmentNodes.push(figure);
+      return;
+    }
+
+    currGalleryOfNodes.push(figure);
   });
 
   let end = 0;
@@ -677,17 +862,29 @@ function handleAttachment(
   }
 
   if (isInGallery) {
-    tr.insert(end, attachmentNodes);
+    if (allNodesPreviewable) {
+      tr.insert(end, attachmentNodes);
+    } else {
+      // Make a new gallery. Non-previewable nodes dont belong in galleries.
+      if (!hasGalleriesDisabled && currGalleryOfNodes.length >= 1) {
+        attachmentNodes = attachmentNodes.concat(
+          schema.nodes["attachment-gallery"].create({}, currGalleryOfNodes),
+        );
+      }
+      tr.insert(end + 1, attachmentNodes);
+    }
   } else {
     const currSelection = state.selection;
 
-    const gallery = schema.nodes["attachment-gallery"].create(
-      {},
-      attachmentNodes,
-    );
+    // Make a new gallery. Non-previewable nodes dont belong in galleries.
+    if (!hasGalleriesDisabled && currGalleryOfNodes.length >= 1) {
+      attachmentNodes = attachmentNodes.concat(
+        schema.nodes["attachment-gallery"].create({}, currGalleryOfNodes),
+      );
+    }
 
     tr.replaceWith(currSelection.from - 1, currSelection.to, [
-      gallery,
+      ...attachmentNodes,
       schema.nodes.paragraph.create(),
     ]);
 

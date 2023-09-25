@@ -13,7 +13,7 @@ end
 
 ENV["APP_HOST"] = ENV.fetch("APP_HOST", "0.0.0.0")
 Capybara.register_driver(:null) { CapybaraNullDriver.new }
-EvilSystems.initial_setup
+EvilSystems.initial_setup(task: "build:all", silent: false)
 
 module Playwright
   class Page
