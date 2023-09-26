@@ -3,8 +3,9 @@
     <%= image_tag blob.representation(resize_to_limit: local_assigns[:in_gallery] ? [ 800, 600 ] : [ 1024, 768 ]) %>
   <% end %>
 
-  <figcaption class="attachment__caption">
-    <% if caption = blob.try(:caption) %>
+  <% caption = blob.try(:caption) %>
+  <figcaption class="attachment__caption <%= caption ? "attachment__caption--edited" : "" %>">
+    <% if caption %>
       <%= caption.html_safe %>
     <% else %>
       <span class="attachment__name"><%= blob.filename %></span>

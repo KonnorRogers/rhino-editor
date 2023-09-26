@@ -502,7 +502,7 @@ export class TipTapEditorBase extends BaseElement {
       }
     });
 
-    doc.querySelectorAll("figure .attachment__name").forEach((el) => {
+    doc.querySelectorAll("figure :not(.attachment__caption--edited) .attachment__name").forEach((el) => {
       if (el.textContent?.includes(" · ") === false) return;
 
       el.insertAdjacentText("beforeend", " · ");

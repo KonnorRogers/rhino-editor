@@ -14,6 +14,7 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
   def setup
     page.goto(posts_path)
     assert page.text_content("h1").include?("Posts")
+    wait_for_network_idle
   end
 
   test "Should allow to insert multiple attachments in the gallery in sequence" do
@@ -39,13 +40,11 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     attach_files(files)
 
     def check
-      assert page.locator(".attachment-gallery > figure.attachment").first
-
       wait_for_network_idle
 
-      assert page.locator(".attachment-gallery > figure.attachment").nth(0)
-      assert page.locator(".attachment-gallery > figure.attachment").nth(1)
-      assert page.locator(".attachment-gallery > figure.attachment").nth(2)
+      assert page.locator(".attachment-gallery > figure.attachment").nth(0).wait_for(state: "visible")
+      assert page.locator(".attachment-gallery > figure.attachment").nth(1).wait_for(state: "visible")
+      assert page.locator(".attachment-gallery > figure.attachment").nth(2).wait_for(state: "visible")
 
       assert_equal page.locator(".attachment-gallery > figure.attachment").count, 3
     end
@@ -60,12 +59,14 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     check
 
     # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Edit this post/i).click
-    # assert page.get_by_text("Editing post")
-    #
-    # check
+    page.get_by_role('link', name: /Edit this post/i).click
+    assert page.get_by_text("Editing post")
+
+    check
 
     # Go back and edit the file and make sure it renders properly in editor
+    # page.get_by_role('link', name: /Show this post/i).click
+    # wait_for_network_idle
     # page.get_by_role('link', name: /Edit raw post/i).click
     # assert page.get_by_text("Editing raw post")
     # check
@@ -83,12 +84,10 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     attach_files(files)
 
     def check
-      assert page.locator(".attachment-gallery > figure.attachment").first
-
       wait_for_network_idle
 
-      assert page.locator(".attachment-gallery > figure.attachment").nth(0)
-      assert page.locator("figure.attachment").nth(1)
+      assert page.locator(".attachment-gallery > figure.attachment").nth(0).wait_for(state: "visible")
+      assert page.locator("figure.attachment").nth(1).wait_for(state: "visible")
 
       assert_equal page.locator(".attachment-gallery > figure.attachment").count, 1
       assert_equal page.locator("figure.attachment").count, 2
@@ -104,12 +103,14 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     check
 
     # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Edit this post/i).click
-    # assert page.get_by_text("Editing post")
-    #
-    # check
+    page.get_by_role('link', name: /Edit this post/i).click
+    assert page.get_by_text("Editing post")
+
+    check
 
     # Go back and edit the file and make sure it renders properly in editor
+    # page.get_by_role('link', name: /Show this post/i).click
+    # wait_for_network_idle
     # page.get_by_role('link', name: /Edit raw post/i).click
     # assert page.get_by_text("Editing raw post")
     # check
@@ -117,6 +118,8 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
 
   test "Should not allow to insert multiple attachments in the gallery in sequence" do
     page.get_by_role('link', name: /New Post/i).click
+
+    wait_for_network_idle
 
 
     files = [
@@ -132,12 +135,10 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     attach_files(files)
 
     def check
-      assert page.locator(".attachment-gallery > figure.attachment").first
-
       wait_for_network_idle
 
-      assert page.locator(".attachment-gallery > figure.attachment").nth(0)
-      assert page.locator("figure.attachment").nth(1)
+      assert page.locator(".attachment-gallery > figure.attachment").nth(0).wait_for(state: 'visible')
+      assert page.locator("figure.attachment").nth(1).wait_for(state: 'visible')
 
       assert_equal page.locator(".attachment-gallery > figure.attachment").count, 1
       assert_equal page.locator("figure.attachment").count, 2
@@ -153,12 +154,15 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     check
 
     # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Edit this post/i).click
-    # assert page.get_by_text("Editing post")
-    #
-    # check
+    page.get_by_role('link', name: /Edit this post/i).click
+
+    assert page.get_by_text("Editing post")
+
+    check
 
     # Go back and edit the file and make sure it renders properly in editor
+    # page.get_by_role('link', name: /Show this post/i).click
+    # wait_for_network_idle
     # page.get_by_role('link', name: /Edit raw post/i).click
     # assert page.get_by_text("Editing raw post")
     # check
