@@ -18,8 +18,8 @@ class Youtube
     "youtubes/thumbnail"
   end
 
-  # # A custom content type for easy querying
-  # def attachable_content_type
-  #   "application/vnd.active_record.user"
-  # end
+  # A custom content type for easy querying
+  def attachable_content_type
+    "application/vnd.active_record.youtube"
+  end
 end

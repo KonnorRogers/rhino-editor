@@ -65,11 +65,11 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     check
 
     # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Show this post/i).click
-    # wait_for_network_idle
-    # page.get_by_role('link', name: /Edit raw post/i).click
-    # assert page.get_by_text("Editing raw post")
-    # check
+    page.get_by_role('link', name: /Show this post/i).click
+    wait_for_network_idle
+    page.get_by_role('link', name: /Edit raw post/i).click
+    assert page.get_by_text("Editing raw post")
+    check
   end
 
   test "Should not allow to insert multiple attachments in the gallery at once" do
@@ -109,11 +109,11 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     check
 
     # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Show this post/i).click
-    # wait_for_network_idle
-    # page.get_by_role('link', name: /Edit raw post/i).click
-    # assert page.get_by_text("Editing raw post")
-    # check
+    page.get_by_role('link', name: /Show this post/i).click
+    wait_for_network_idle
+    page.get_by_role('link', name: /Edit raw post/i).click
+    assert page.get_by_text("Editing raw post")
+    check
   end
 
   test "Should not allow to insert multiple attachments in the gallery in sequence" do
@@ -161,10 +161,10 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     check
 
     # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Show this post/i).click
-    # wait_for_network_idle
-    # page.get_by_role('link', name: /Edit raw post/i).click
-    # assert page.get_by_text("Editing raw post")
-    # check
+    page.get_by_role('link', name: /Show this post/i).click
+    wait_for_network_idle
+    page.get_by_role('link', name: /Edit raw post/i).click
+    assert page.get_by_text("Editing raw post")
+    check
   end
 end

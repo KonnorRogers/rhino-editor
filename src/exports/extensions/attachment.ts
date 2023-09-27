@@ -108,7 +108,6 @@ const canParseAttachment = (node: HTMLElement | string, shouldPreview: boolean) 
 
       if (!actionTextAttachment.getAttribute("sgid")) { return false }
 
-      console.log("yo")
       if (previewable === shouldPreview) {
         return true
       }
@@ -382,6 +381,18 @@ export const Attachment = Node.create<AttachmentOptions>({
           return null
         },
       },
+      {
+        tag: "action-text-attachment",
+        getAttrs: (node) => {
+          const isValid = canParseAttachment(node, this.options.previewable);
+
+          if (!isValid) {
+            return false
+          }
+
+          return null
+        },
+      },
     ];
   },
 
@@ -530,14 +541,24 @@ export const Attachment = Node.create<AttachmentOptions>({
         parseHTML: (element) => {
           const attachment = element.closest("action-text-attachment")
 
+
           let content = ""
 
-          if (attachment && element.classList.contains("attachment--content")) {
-            content = attachment.innerHTML
+          if (attachment) {
+            const domParser = new DOMParser()
+            const parsedDom = domParser.parseFromString(attachment.innerHTML, "text/html")
+
+            const firstChild = parsedDom.body.firstElementChild
+
+            if (firstChild) {
+              if (firstChild.tagName.toLowerCase() !== "figure" || !firstChild.classList.contains("attachment")) {
+                content = attachment.innerHTML
+              }
+            }
           }
 
           return (
-            findAttribute(element, "content") || content
+            content || findAttribute(element, "content")
           );
         },
       },
@@ -582,6 +603,8 @@ export const Attachment = Node.create<AttachmentOptions>({
         loadingState,
       } = node.attrs as AttachmentAttrs;
 
+      console.log({content})
+
       const trixAttachment = JSON.stringify({
         contentType,
         content,
@@ -621,16 +644,20 @@ export const Attachment = Node.create<AttachmentOptions>({
           const { view } = editor;
 
           const { tr } = view.state
-          const defaultCaption = toDefaultCaption({ fileName, fileSize })
 
-          tr.setSelection(TextSelection.create(view.state.doc, getPos() + 1))
+          const captionNode = view.state.doc.nodeAt(getPos() + 1)
+          captionNode?.nodeSize
 
-          // SelectTextBlockEnd
+          tr.setSelection(TextSelection.create(view.state.doc, getPos() + 1 + (captionNode?.nodeSize || 0)))
 
-          // TextSelection.atEnd()
-          if (figcaption.innerHTML === defaultCaption || figcaption.innerHTML === defaultCaption.split(" · ").join(" ")) {
-            // view.dispatch(tr.setNodeMarkup(getPos(), null, { caption: "" }))
-          }
+          view.dispatch(tr)
+
+          // This is for raw HTML, its kinda not a huge deal...
+          // const defaultCaption = toDefaultCaption({ fileName, fileSize })
+          // if (figcaption.innerHTML === defaultCaption || figcaption.innerHTML === defaultCaption.split(" · ").join(" ")) {
+          //
+          //   // view.dispatch(tr.setNodeMarkup(getPos(), null, { caption: "" }))
+          // }
         }
       }
 

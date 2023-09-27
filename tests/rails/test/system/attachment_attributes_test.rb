@@ -147,9 +147,9 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
     check_attrs
 
     # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Show this post/i).click
-    # page.get_by_role('link', name: /Edit raw post/i).click
-    # assert page.get_by_text("Editing raw post")
-    # check_attrs
+    page.get_by_role('link', name: /Show this post/i).click
+    page.get_by_role('link', name: /Edit raw post/i).click
+    assert page.get_by_text("Editing raw post")
+    check_attrs
   end
 end
