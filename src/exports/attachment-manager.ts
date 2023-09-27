@@ -20,7 +20,7 @@ export interface AttachmentManagerAttributes {
   url?: Maybe<string>;
   width?: Maybe<number>;
   height?: Maybe<number>;
-  previewable?: Maybe<boolean>
+  previewable?: Maybe<boolean>;
 }
 
 /**
@@ -51,7 +51,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
       ...obj,
     };
 
-    this.attributes.previewable = this.isPreviewable
+    this.attributes.previewable = this.isPreviewable;
   }
 
   setUploadProgress(progress: number): void {

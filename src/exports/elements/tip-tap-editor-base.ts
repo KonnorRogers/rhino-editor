@@ -502,11 +502,15 @@ export class TipTapEditorBase extends BaseElement {
       }
     });
 
-    doc.querySelectorAll("figure :not(.attachment__caption--edited) .attachment__name").forEach((el) => {
-      if (el.textContent?.includes(" · ") === false) return;
+    doc
+      .querySelectorAll(
+        "figure :not(.attachment__caption--edited) .attachment__name",
+      )
+      .forEach((el) => {
+        if (el.textContent?.includes(" · ") === false) return;
 
-      el.insertAdjacentText("beforeend", " · ");
-    });
+        el.insertAdjacentText("beforeend", " · ");
+      });
 
     const body = doc.querySelector("body");
 

@@ -80,39 +80,46 @@ export const figureTypes = [
   "attachment-figure",
 ];
 
-
 /**
  * This is a special case where it exists as:
  * figure["data-trix-attachment"]["contentType"] and
  * action-text-attachment["content-type"]
  */
-function parseContentTypeFromElement (element: HTMLElement) {
+function parseContentTypeFromElement(element: HTMLElement) {
   return (
     findAttribute(element, "content-type") ||
-    JSON.parse(element.getAttribute("data-trix-attachment") || "{}").contentType || "application/octet-stream"
-  )
+    JSON.parse(element.getAttribute("data-trix-attachment") || "{}")
+      .contentType ||
+    "application/octet-stream"
+  );
 }
 
-const canParseAttachment = (node: HTMLElement | string, shouldPreview: boolean) => {
+const canParseAttachment = (
+  node: HTMLElement | string,
+  shouldPreview: boolean,
+) => {
   if (node instanceof HTMLElement) {
-    const contentType = parseContentTypeFromElement(node)
+    const contentType = parseContentTypeFromElement(node);
 
     if (contentType === "application/octet-stream") {
       return false;
     }
 
     // For <action-text-attachment>
-    const actionTextAttachment = node.closest("action-text-attachment")
+    const actionTextAttachment = node.closest("action-text-attachment");
     if (actionTextAttachment) {
-      const previewable = actionTextAttachment.getAttribute("previewable") === "true"
+      const previewable =
+        actionTextAttachment.getAttribute("previewable") === "true";
 
-      if (!actionTextAttachment.getAttribute("sgid")) { return false }
-
-      if (previewable === shouldPreview) {
-        return true
+      if (!actionTextAttachment.getAttribute("sgid")) {
+        return false;
       }
 
-      return false
+      if (previewable === shouldPreview) {
+        return true;
+      }
+
+      return false;
     }
 
     const previewable = canPreview(
@@ -121,13 +128,12 @@ const canParseAttachment = (node: HTMLElement | string, shouldPreview: boolean) 
     );
 
     if (previewable === shouldPreview) {
-      return true
+      return true;
     }
   }
 
   return false;
-}
-
+};
 
 /**
  * This appends to the current HTML of the <figcaption> into node.attrs.caption.
@@ -171,7 +177,9 @@ function handleCaptions(
 }
 
 function canPreview(previewable: boolean, contentType: Maybe<string>): boolean {
-  return Boolean(previewable || AttachmentManager.isPreviewable(contentType || ""));
+  return Boolean(
+    previewable || AttachmentManager.isPreviewable(contentType || ""),
+  );
 }
 
 function toExtension(fileName: Maybe<string>): string {
@@ -361,10 +369,10 @@ export const Attachment = Node.create<AttachmentOptions>({
           const isValid = canParseAttachment(node, this.options.previewable);
 
           if (!isValid) {
-            return false
+            return false;
           }
 
-          return null
+          return null;
         },
       },
       // When it's .attachment, its coming from <action-text-attachment><figure></figure></action-text-attachment> its the raw HTML.
@@ -375,10 +383,10 @@ export const Attachment = Node.create<AttachmentOptions>({
           const isValid = canParseAttachment(node, this.options.previewable);
 
           if (!isValid) {
-            return false
+            return false;
           }
 
-          return null
+          return null;
         },
       },
       {
@@ -387,10 +395,10 @@ export const Attachment = Node.create<AttachmentOptions>({
           const isValid = canParseAttachment(node, this.options.previewable);
 
           if (!isValid) {
-            return false
+            return false;
           }
 
-          return null
+          return null;
         },
       },
     ];
@@ -491,11 +499,12 @@ export const Attachment = Node.create<AttachmentOptions>({
       progress: {
         default: 0,
         parseHTML: (element) => {
-          return (
-            (findAttribute(element, "sgid") ||
-             findAttribute(element, "content") ||
-             element.closest("action-text-attachment")?.innerHTML) ? 100 : 0)
-        }
+          return findAttribute(element, "sgid") ||
+            findAttribute(element, "content") ||
+            element.closest("action-text-attachment")?.innerHTML
+            ? 100
+            : 0;
+        },
       },
       loadingState: {
         default: LOADING_STATES.notStarted,
@@ -525,7 +534,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       contentType: {
         default: "",
         parseHTML: (element) => {
-          return parseContentTypeFromElement(element)
+          return parseContentTypeFromElement(element);
         },
       },
       fileName: {
@@ -539,27 +548,30 @@ export const Attachment = Node.create<AttachmentOptions>({
       content: {
         default: "",
         parseHTML: (element) => {
-          const attachment = element.closest("action-text-attachment")
+          const attachment = element.closest("action-text-attachment");
 
-
-          let content = ""
+          let content = "";
 
           if (attachment) {
-            const domParser = new DOMParser()
-            const parsedDom = domParser.parseFromString(attachment.innerHTML, "text/html")
+            const domParser = new DOMParser();
+            const parsedDom = domParser.parseFromString(
+              attachment.innerHTML,
+              "text/html",
+            );
 
-            const firstChild = parsedDom.body.firstElementChild
+            const firstChild = parsedDom.body.firstElementChild;
 
             if (firstChild) {
-              if (firstChild.tagName.toLowerCase() !== "figure" || !firstChild.classList.contains("attachment")) {
-                content = attachment.innerHTML
+              if (
+                firstChild.tagName.toLowerCase() !== "figure" ||
+                !firstChild.classList.contains("attachment")
+              ) {
+                content = attachment.innerHTML;
               }
             }
           }
 
-          return (
-            content || findAttribute(element, "content")
-          );
+          return content || findAttribute(element, "content");
         },
       },
       url: {
@@ -576,7 +588,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           );
 
           if (previewable == null) {
-            previewable = findAttribute(element, "previewable")
+            previewable = findAttribute(element, "previewable");
           }
 
           return previewable;
@@ -603,7 +615,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         loadingState,
       } = node.attrs as AttachmentAttrs;
 
-      console.log({content})
+      console.log({ content });
 
       const trixAttachment = JSON.stringify({
         contentType,
@@ -643,14 +655,19 @@ export const Attachment = Node.create<AttachmentOptions>({
         if (typeof getPos === "function") {
           const { view } = editor;
 
-          const { tr } = view.state
+          const { tr } = view.state;
 
-          const captionNode = view.state.doc.nodeAt(getPos() + 1)
-          captionNode?.nodeSize
+          const captionNode = view.state.doc.nodeAt(getPos() + 1);
+          captionNode?.nodeSize;
 
-          tr.setSelection(TextSelection.create(view.state.doc, getPos() + 1 + (captionNode?.nodeSize || 0)))
+          tr.setSelection(
+            TextSelection.create(
+              view.state.doc,
+              getPos() + 1 + (captionNode?.nodeSize || 0),
+            ),
+          );
 
-          view.dispatch(tr)
+          view.dispatch(tr);
 
           // This is for raw HTML, its kinda not a huge deal...
           // const defaultCaption = toDefaultCaption({ fileName, fileSize })
@@ -714,7 +731,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             file-name=${fileName || ""}
             file-size=${String(fileSize || 0)}
             loading-state=${loadingState || LOADING_STATES.notStarted}
-            progress=${String((sgid || content || !fileSize) ? 100 : progress)}
+            progress=${String(sgid || content || !fileSize ? 100 : progress)}
             contenteditable="false"
             ?show-metadata=${isPreviewable}
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
@@ -742,7 +759,9 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           <figcaption
             style="display: ${Boolean(content) ? "none" : ""};"
-            class=${`attachment__caption ${caption ? "attachment__caption--edited" : "is-empty"}`}
+            class=${`attachment__caption ${
+              caption ? "attachment__caption--edited" : "is-empty"
+            }`}
             data-placeholder=${this.options.captionPlaceholder}
             data-default-caption=${toDefaultCaption({ fileName, fileSize })}
           ></figcaption>
