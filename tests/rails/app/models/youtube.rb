@@ -17,4 +17,9 @@ class Youtube
   def to_trix_content_attachment_partial_path
     "youtubes/thumbnail"
   end
+
+  # A custom content type for easy querying
+  def attachable_content_type
+    "application/vnd.active_record.youtube"
+  end
 end

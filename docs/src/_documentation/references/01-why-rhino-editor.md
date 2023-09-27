@@ -3,7 +3,7 @@ title: Why Rhino Editor?
 permalink: /references/why-rhino-editor/
 ---
 
-Rhino Editor is intended to be a drop-in replacement for Trix.
+Rhino Editor is intended to be a (mostly) drop-in replacement for Trix.
 The current standard WYSIWYG editor for Rails.
 
 Trix provides a solid foundation to get started with WYSIWYG editing in Rails.

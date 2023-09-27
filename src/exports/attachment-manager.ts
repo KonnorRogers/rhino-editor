@@ -20,6 +20,7 @@ export interface AttachmentManagerAttributes {
   url?: Maybe<string>;
   width?: Maybe<number>;
   height?: Maybe<number>;
+  previewable?: Maybe<boolean>;
 }
 
 /**
@@ -49,6 +50,8 @@ export class AttachmentManager implements AttachmentManagerAttributes {
       url: null,
       ...obj,
     };
+
+    this.attributes.previewable = this.isPreviewable;
   }
 
   setUploadProgress(progress: number): void {
@@ -71,6 +74,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
       this.setNodeMarkup({
         sgid: this.attributes.sgid,
         content: this.attributes.content,
+        previewable: this.isPreviewable,
       });
 
       return;
@@ -82,14 +86,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
     if (!obj.url) {
       return;
     }
-
-    const isPreviewable = (
-      this.constructor as unknown as typeof AttachmentManager
-    ).isPreviewable;
-
-    const contentType = this.contentType;
-
-    if (contentType && isPreviewable(contentType)) {
+    if (this.isPreviewable) {
       /** This preloads the image so we don't show a big flash. */
       const image = new Image();
 
@@ -107,6 +104,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
           width: this.attributes.width,
           height: this.attributes.height,
           contentType: this.contentType,
+          previewable: this.isPreviewable,
         });
         image.remove();
       };
@@ -120,6 +118,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
       sgid: this.attributes.sgid,
       url: this.attributes.url,
       contentType: this.contentType,
+      previewable: this.isPreviewable,
     });
   }
 

@@ -22,7 +22,6 @@
 }
 
 .trix-content figcaption {
-  margin-top: 0.5em;
   line-break: anywhere;
   display: inline-block;
   white-space: normal;
@@ -48,7 +47,8 @@
 }
 
 /* Attachments */
-.trix-content:not([readonly]) figure:is(:focus-within, :focus, .has-focus) img {
+.trix-content:not([readonly])
+  figure:is(:focus-within, :focus, .has-focus):nth-child(2) {
   outline: transparent;
   box-shadow: var(--rhino-focus-ring);
 }
@@ -183,6 +183,7 @@
 }
 .trix-content .attachment__caption {
   text-align: center;
+  margin-top: 0.5em;
 }
 .trix-content
   .attachment__caption
