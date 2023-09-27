@@ -615,8 +615,6 @@ export const Attachment = Node.create<AttachmentOptions>({
         loadingState,
       } = node.attrs as AttachmentAttrs;
 
-      console.log({ content });
-
       const trixAttachment = JSON.stringify({
         contentType,
         content,
