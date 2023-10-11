@@ -123,28 +123,38 @@ export class TipTapEditorBase extends BaseElement {
    * or editor options get modified to make sure we have a fresh instance.
    */
   rebuildEditor() {
+    const editors = this.querySelectorAll("[slot='editor']");
+
+    const originalAttributes: Record<string, string> = {}
+    if (editors[editors.length - 1]) {
+      ;[...editors[editors.length - 1].attributes].forEach((attr) => {
+        const { nodeName, nodeValue } = attr
+        if (nodeName && nodeValue != null) {
+          originalAttributes[nodeName] = nodeValue
+        }
+      })
+    }
+
     // Make sure we dont render the editor more than once.
     if (this.editor) this.editor.destroy();
-    const editors = this.querySelectorAll("[slot='editor']");
+
     editors.forEach((el) => {
       // @ts-expect-error
-      el.querySelector(".tiptap")?.editor?.destroy();
+      el.editor?.destroy();
       el.remove();
     });
 
-    // light-dom version.
-    const div = document.createElement("div");
-    div.setAttribute("slot", "editor");
-
-    //  This may seem strange, but for some reason its the only wayto get the DropCursor working correctly.
-    div.style.position = "relative";
-    this.insertAdjacentElement("beforeend", div);
-
-    this.editor = this.__setupEditor(div);
+    this.editor = this.__setupEditor(this);
 
     this.__bindEditorListeners();
-    this.editorElement = div.querySelector(".ProseMirror");
-    //
+
+    this.editorElement = this.querySelector(".ProseMirror");
+
+    Object.entries(originalAttributes)?.forEach(([attrName, attrValue]) => {
+      this.editorElement?.setAttribute(attrName, attrValue)
+    })
+
+    this.editorElement?.setAttribute("slot", "editor")
     this.editorElement?.classList.add("trix-content");
     this.editorElement?.setAttribute("tabindex", "0");
     this.editorElement?.setAttribute("role", "textbox");
@@ -172,17 +182,17 @@ export class TipTapEditorBase extends BaseElement {
   protected updated(
     changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
-    if (
-      changedProperties.has("extensions") ||
-      changedProperties.has("starterKitOptions") ||
-      changedProperties.has("translations")
-    ) {
-      this.rebuildEditor();
-    }
-
-    if (changedProperties.has("readonly")) {
-      this.editor?.setEditable(!this.readonly);
-    }
+    // if (
+    //   changedProperties.has("extensions") ||
+    //   changedProperties.has("starterKitOptions") ||
+    //   changedProperties.has("translations")
+    // ) {
+    //   this.rebuildEditor();
+    // }
+    //
+    // if (changedProperties.has("readonly")) {
+    //   this.editor?.setEditable(!this.readonly);
+    // }
 
     super.updated(changedProperties);
   }
@@ -611,7 +621,7 @@ export class TipTapEditorBase extends BaseElement {
     this.editor.off("blur", this.__handleBlur);
   }
 
-  private __setupEditor(element: Element): Editor {
+  private __setupEditor(element: Element = this): Editor {
     if (!this.serializer || this.serializer === "html") {
       // This is a super hacky way to get __to_trix_html to support figcaptions without patching it.
       this.normalizeDOM(this.inputElement);
