@@ -1,15 +1,13 @@
 // @ts-check
-import { TipTapEditor } from "../../exports/elements/tip-tap-editor.js"
+import "rhino-editor"
 import { fixture, assert, aTimeout } from "@open-wc/testing"
 import { html } from "lit"
 
 test("Should only render a textbox once", async () => {
-  /** @type {TipTapEditor} */
   const rhinoEditor = await fixture(html`<rhino-editor>
     <div slot="editor" aria-describedby="errors" aria-invalid="true" class="my-class"></div>
   </rhino-editor>`)
 
-  TipTapEditor.define()
   await aTimeout(100)
 
   assert.equal(rhinoEditor.querySelectorAll("[role='textbox']").length, 1)
@@ -23,6 +21,7 @@ test("Should only render a textbox once", async () => {
   // Make sure classes don't get overwritten
   assert(editor?.classList.contains("my-class"))
   assert(editor?.classList.contains("trix-content"))
+  console.log(editor.outerHTML)
   assert(editor?.classList.contains("tiptap"))
 })
 

@@ -122,21 +122,40 @@ export class TipTapEditorBase extends BaseElement {
   extensions: EditorOptions["extensions"] = [];
 
   /**
+   * @internal
+   */
+   __initialAttributes: Record<string, string> = {}
+
+  /**
+   * @internal
+   */
+   __hasRendered: boolean = false
+
+   __getInitialAttributes () {
+    if (this.__hasRendered) return
+
+    const slottedEditor = this.slottedEditor
+    if (slottedEditor) {
+      this.__initialAttributes = {};
+      [...slottedEditor.attributes].forEach((attr) => {
+        const { nodeName, nodeValue } = attr;
+        if (nodeName && nodeValue != null) {
+          this.__initialAttributes[nodeName] = nodeValue;
+        }
+      });
+    }
+
+    this.__hasRendered = true
+   }
+
+  /**
    * Reset mechanism. This is called on first connect, and called anytime extensions,
    * or editor options get modified to make sure we have a fresh instance.
    */
   rebuildEditor() {
     const editors = this.querySelectorAll("[slot='editor']");
 
-    const originalAttributes: Record<string, string> = {};
-    if (editors[editors.length - 1]) {
-      [...editors[editors.length - 1].attributes].forEach((attr) => {
-        const { nodeName, nodeValue } = attr;
-        if (nodeName && nodeValue != null) {
-          originalAttributes[nodeName] = nodeValue;
-        }
-      });
-    }
+    this.__getInitialAttributes()
 
     // Make sure we dont render the editor more than once.
     if (this.editor) this.editor.destroy();
@@ -151,9 +170,13 @@ export class TipTapEditorBase extends BaseElement {
 
     this.__bindEditorListeners();
 
-    this.editorElement = this.querySelector(".ProseMirror");
+    this.editorElement = this.querySelector(".ProseMirror")
 
-    Object.entries(originalAttributes)?.forEach(([attrName, attrValue]) => {
+    Object.entries(this.__initialAttributes)?.forEach(([attrName, attrValue]) => {
+      if (attrName === "class") {
+        this.editorElement?.classList.add(...attrValue.split(" "))
+        return
+      }
       this.editorElement?.setAttribute(attrName, attrValue);
     });
 
@@ -457,6 +480,7 @@ export class TipTapEditorBase extends BaseElement {
   renderDialog() {}
 
   render(): TemplateResult {
+
     return html`
       ${this.renderToolbar()}
       <div class="editor-wrapper" part="editor-wrapper">
