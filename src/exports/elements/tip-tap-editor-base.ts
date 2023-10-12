@@ -128,14 +128,14 @@ export class TipTapEditorBase extends BaseElement {
   rebuildEditor() {
     const editors = this.querySelectorAll("[slot='editor']");
 
-    const originalAttributes: Record<string, string> = {}
+    const originalAttributes: Record<string, string> = {};
     if (editors[editors.length - 1]) {
-      ;[...editors[editors.length - 1].attributes].forEach((attr) => {
-        const { nodeName, nodeValue } = attr
+      [...editors[editors.length - 1].attributes].forEach((attr) => {
+        const { nodeName, nodeValue } = attr;
         if (nodeName && nodeValue != null) {
-          originalAttributes[nodeName] = nodeValue
+          originalAttributes[nodeName] = nodeValue;
         }
-      })
+      });
     }
 
     // Make sure we dont render the editor more than once.
@@ -154,10 +154,10 @@ export class TipTapEditorBase extends BaseElement {
     this.editorElement = this.querySelector(".ProseMirror");
 
     Object.entries(originalAttributes)?.forEach(([attrName, attrValue]) => {
-      this.editorElement?.setAttribute(attrName, attrValue)
-    })
+      this.editorElement?.setAttribute(attrName, attrValue);
+    });
 
-    this.editorElement?.setAttribute("slot", "editor")
+    this.editorElement?.setAttribute("slot", "editor");
     this.editorElement?.classList.add("trix-content");
     this.editorElement?.setAttribute("tabindex", "0");
     this.editorElement?.setAttribute("role", "textbox");
