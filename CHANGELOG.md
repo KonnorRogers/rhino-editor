@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.0
+
+### Minor Changes
+
+- [#143](https://github.com/KonnorRogers/rhino-editor/pull/143) [`13dce87`](https://github.com/KonnorRogers/rhino-editor/commit/13dce878f5aed3479bf8a783141283b9925c19af) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - BREAKING_CHANGE: Allow the light-dom editor to be slotted. Do note, this change may result in a small breaking change for the users relying on the original light-dom structure being `div > div.trix-content`. Most users should not see a difference.
+
+### Patch Changes
+
+- [#142](https://github.com/KonnorRogers/rhino-editor/pull/142) [`a69c1cc`](https://github.com/KonnorRogers/rhino-editor/commit/a69c1cc1d11762584e474a823ec2c0a838b196e4) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - fix: `openOnClick` for links is now set to `false` by default in the editor. This fixes some bugs around editing links and was the original intended behavior.
+
+- [#143](https://github.com/KonnorRogers/rhino-editor/pull/143) [`13dce87`](https://github.com/KonnorRogers/rhino-editor/commit/13dce878f5aed3479bf8a783141283b9925c19af) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - fix: link-dialog buttons now have proper hover / focus state.
+
 ## 0.8.7
 
 ### Patch Changes
