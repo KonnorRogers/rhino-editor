@@ -167,9 +167,7 @@ export class TipTapEditorBase extends BaseElement {
   }
 
   protected willUpdate(
-    changedProperties:
-      | PropertyValueMap<this & { class: string }>
-      | Map<PropertyKey, unknown>,
+    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (changedProperties.has("class")) {
       this.classList.add("rhino-editor");
@@ -185,17 +183,17 @@ export class TipTapEditorBase extends BaseElement {
   protected updated(
     changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
-    // if (
-    //   changedProperties.has("extensions") ||
-    //   changedProperties.has("starterKitOptions") ||
-    //   changedProperties.has("translations")
-    // ) {
-    //   this.rebuildEditor();
-    // }
-    //
-    // if (changedProperties.has("readonly")) {
-    //   this.editor?.setEditable(!this.readonly);
-    // }
+    if (changedProperties.has("readonly")) {
+      this.editor?.setEditable(!this.readonly);
+    }
+
+    if (
+      changedProperties.has("extensions") ||
+      changedProperties.has("starterKitOptions") ||
+      changedProperties.has("translations")
+    ) {
+      this.rebuildEditor();
+    }
 
     super.updated(changedProperties);
   }
