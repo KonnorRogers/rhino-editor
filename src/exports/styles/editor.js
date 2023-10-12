@@ -130,7 +130,7 @@ export default css`
     border-bottom-left-radius: 0px;
   }
 
-  .toolbar::part(base):is(:focus-within) {
+  .toolbar::part(base):is(:focus-visible, :focus-within) {
     border-color: var(--rhino-button-active-border-color);
     outline: transparent;
   }
@@ -177,7 +177,6 @@ export default css`
 
   .link-dialog__input:is(:focus) {
     outline: transparent;
-    box-shadow: var(--rhino-focus-ring);
     border-color: var(--rhino-button-active-border-color);
   }
 
@@ -188,7 +187,7 @@ export default css`
     box-shadow: none;
   }
 
-  .link-dialog__button {
+  .rhino-toolbar-button.link-dialog__button {
     padding: 0.4em 0.6em;
     border: 1px solid var(--rhino-button-border-color);
     border-radius: var(--rhino-border-radius);

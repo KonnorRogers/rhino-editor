@@ -20,6 +20,8 @@
 
 .top-nav__hamburger__button {
   font-size: 1.75em;
+  display: flex;
+  align-items: center;
 }
 
 .top-nav__hamburger__button::part(base),

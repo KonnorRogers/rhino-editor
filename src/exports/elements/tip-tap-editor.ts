@@ -1109,14 +1109,14 @@ export class TipTapEditor extends TipTapEditorBase {
         />
         <div class="link-dialog__buttons" part="link-dialog__buttons">
           <button
-            class="link-dialog__button"
+            class="rhino-toolbar-button link-dialog__button"
             part="link-dialog__button link-dialog__button--link"
             @click=${this.addLink}
           >
             ${this.translations.linkDialogLink}
           </button>
           <button
-            class="link-dialog__button"
+            class="rhino-toolbar-button link-dialog__button"
             part="link-dialog__button link-dialog__button--unlink"
             @click=${() => {
               this.editor
