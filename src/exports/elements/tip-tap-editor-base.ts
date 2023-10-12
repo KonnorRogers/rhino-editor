@@ -124,17 +124,17 @@ export class TipTapEditorBase extends BaseElement {
   /**
    * @internal
    */
-   __initialAttributes: Record<string, string> = {}
+  __initialAttributes: Record<string, string> = {};
 
   /**
    * @internal
    */
-   __hasRendered: boolean = false
+  __hasRendered: boolean = false;
 
-   __getInitialAttributes () {
-    if (this.__hasRendered) return
+  __getInitialAttributes() {
+    if (this.__hasRendered) return;
 
-    const slottedEditor = this.slottedEditor
+    const slottedEditor = this.slottedEditor;
     if (slottedEditor) {
       this.__initialAttributes = {};
       [...slottedEditor.attributes].forEach((attr) => {
@@ -145,8 +145,8 @@ export class TipTapEditorBase extends BaseElement {
       });
     }
 
-    this.__hasRendered = true
-   }
+    this.__hasRendered = true;
+  }
 
   /**
    * Reset mechanism. This is called on first connect, and called anytime extensions,
@@ -155,7 +155,7 @@ export class TipTapEditorBase extends BaseElement {
   rebuildEditor() {
     const editors = this.querySelectorAll("[slot='editor']");
 
-    this.__getInitialAttributes()
+    this.__getInitialAttributes();
 
     // Make sure we dont render the editor more than once.
     if (this.editor) this.editor.destroy();
@@ -170,15 +170,17 @@ export class TipTapEditorBase extends BaseElement {
 
     this.__bindEditorListeners();
 
-    this.editorElement = this.querySelector(".ProseMirror")
+    this.editorElement = this.querySelector(".ProseMirror");
 
-    Object.entries(this.__initialAttributes)?.forEach(([attrName, attrValue]) => {
-      if (attrName === "class") {
-        this.editorElement?.classList.add(...attrValue.split(" "))
-        return
-      }
-      this.editorElement?.setAttribute(attrName, attrValue);
-    });
+    Object.entries(this.__initialAttributes)?.forEach(
+      ([attrName, attrValue]) => {
+        if (attrName === "class") {
+          this.editorElement?.classList.add(...attrValue.split(" "));
+          return;
+        }
+        this.editorElement?.setAttribute(attrName, attrValue);
+      },
+    );
 
     this.editorElement?.setAttribute("slot", "editor");
     this.editorElement?.classList.add("trix-content");
@@ -480,7 +482,6 @@ export class TipTapEditorBase extends BaseElement {
   renderDialog() {}
 
   render(): TemplateResult {
-
     return html`
       ${this.renderToolbar()}
       <div class="editor-wrapper" part="editor-wrapper">
