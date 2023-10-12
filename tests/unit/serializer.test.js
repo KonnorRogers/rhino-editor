@@ -10,6 +10,8 @@ test("It should properly update the input element when the serializer changes", 
     <rhino-editor input="input"></rhino-editor>
   </div>`)
 
+  await aTimeout(0)
+
   const rhinoEditor = div.querySelector("rhino-editor")
   const input = div.querySelector("input")
 
