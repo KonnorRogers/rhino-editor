@@ -18,5 +18,8 @@ test("Should only render a textbox once", async () => {
 
   // Make sure classes don't get overwritten
   assert(editor.classList.contains("my-class"))
+  assert(editor.classList.contains("trix-content"))
+  assert(editor.classList.contains("ProseMirror"))
+  assert(editor.classList.contains("tiptap"))
 })
 
