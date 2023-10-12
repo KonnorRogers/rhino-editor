@@ -111,6 +111,9 @@ export class TipTapEditorBase extends BaseElement {
   starterKitOptions: Partial<RhinoEditorStarterKitOptions> = {
     // We don't use the native strike since it requires configuring ActionText.
     strike: false,
+    rhinoLink: {
+      openOnClick: false,
+    },
   };
 
   /**
