@@ -34,6 +34,7 @@ export default class EmbedController extends Controller {
 
   async embed() {
   	const attrs = await this.fetch()
+  	console.log(attrs)
     let trixAttachment = new Trix.Attachment({ ...attrs })
     const trix = document.querySelector("trix-editor")
     trix.editor.insertAttachment(trixAttachment)

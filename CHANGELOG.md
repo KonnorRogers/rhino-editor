@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.9.0
+
+### Minor Changes
+
+- [#143](https://github.com/KonnorRogers/rhino-editor/pull/143) [`13dce87`](https://github.com/KonnorRogers/rhino-editor/commit/13dce878f5aed3479bf8a783141283b9925c19af) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - BREAKING_CHANGE: Allow the light-dom editor to be slotted. Do note, this change may result in a small breaking change for the users relying on the original light-dom structure being `div > div.trix-content`. Most users should not see a difference.
+
+### Patch Changes
+
+- [#142](https://github.com/KonnorRogers/rhino-editor/pull/142) [`a69c1cc`](https://github.com/KonnorRogers/rhino-editor/commit/a69c1cc1d11762584e474a823ec2c0a838b196e4) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - fix: `openOnClick` for links is now set to `false` by default in the editor. This fixes some bugs around editing links and was the original intended behavior.
+
+- [#143](https://github.com/KonnorRogers/rhino-editor/pull/143) [`13dce87`](https://github.com/KonnorRogers/rhino-editor/commit/13dce878f5aed3479bf8a783141283b9925c19af) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - fix: link-dialog buttons now have proper hover / focus state.
+
+## 0.8.7
+
+### Patch Changes
+
+- [#136](https://github.com/KonnorRogers/rhino-editor/pull/136) [`ba79275`](https://github.com/KonnorRogers/rhino-editor/commit/ba7927570d8333ea45810396c8f22db9d868b6ab) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - - `previewable` attribute is now more consistently applied and checked on attachments.
+  - Fixed a bug where attachments were not rendering properly when the raw action-text HTML passed to the editor.
+  - Fixed a bug where all attachments were not being properly rendered.
+  - Figcaption now jumps to the end of the block when you click on the `figure`
+  - `"Add a caption"` will no longer show up on custom attachments.
+  - Added a note about custom attachments need an actual content-type unlike Trix.
+  - Added a small amount of `margin-top` to `figcaption` to match Trix.
+  - `toMemorySize` now does not return decimales for KB / MB sizes. This is to align with Trix.
+
 ## 0.8.6
 
 ### Patch Changes

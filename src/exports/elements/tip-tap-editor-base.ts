@@ -111,6 +111,9 @@ export class TipTapEditorBase extends BaseElement {
   starterKitOptions: Partial<RhinoEditorStarterKitOptions> = {
     // We don't use the native strike since it requires configuring ActionText.
     strike: false,
+    rhinoLink: {
+      openOnClick: false,
+    },
   };
 
   /**
@@ -119,32 +122,67 @@ export class TipTapEditorBase extends BaseElement {
   extensions: EditorOptions["extensions"] = [];
 
   /**
+   * @internal
+   */
+  __initialAttributes: Record<string, string> = {};
+
+  /**
+   * @internal
+   */
+  __hasRendered: boolean = false;
+
+  __getInitialAttributes() {
+    if (this.__hasRendered) return;
+
+    const slottedEditor = this.slottedEditor;
+    if (slottedEditor) {
+      this.__initialAttributes = {};
+      [...slottedEditor.attributes].forEach((attr) => {
+        const { nodeName, nodeValue } = attr;
+        if (nodeName && nodeValue != null) {
+          this.__initialAttributes[nodeName] = nodeValue;
+        }
+      });
+    }
+
+    this.__hasRendered = true;
+  }
+
+  /**
    * Reset mechanism. This is called on first connect, and called anytime extensions,
    * or editor options get modified to make sure we have a fresh instance.
    */
   rebuildEditor() {
+    const editors = this.querySelectorAll("[slot='editor']");
+
+    this.__getInitialAttributes();
+
     // Make sure we dont render the editor more than once.
     if (this.editor) this.editor.destroy();
-    const editors = this.querySelectorAll("[slot='editor']");
+
     editors.forEach((el) => {
       // @ts-expect-error
-      el.querySelector(".tiptap")?.editor?.destroy();
+      el.editor?.destroy();
       el.remove();
     });
 
-    // light-dom version.
-    const div = document.createElement("div");
-    div.setAttribute("slot", "editor");
-
-    //  This may seem strange, but for some reason its the only wayto get the DropCursor working correctly.
-    div.style.position = "relative";
-    this.insertAdjacentElement("beforeend", div);
-
-    this.editor = this.__setupEditor(div);
+    this.editor = this.__setupEditor(this);
 
     this.__bindEditorListeners();
-    this.editorElement = div.querySelector(".ProseMirror");
-    //
+
+    this.editorElement = this.querySelector(".ProseMirror");
+
+    Object.entries(this.__initialAttributes)?.forEach(
+      ([attrName, attrValue]) => {
+        if (attrName === "class") {
+          this.editorElement?.classList.add(...attrValue.split(" "));
+          return;
+        }
+        this.editorElement?.setAttribute(attrName, attrValue);
+      },
+    );
+
+    this.editorElement?.setAttribute("slot", "editor");
     this.editorElement?.classList.add("trix-content");
     this.editorElement?.setAttribute("tabindex", "0");
     this.editorElement?.setAttribute("role", "textbox");
@@ -154,9 +192,7 @@ export class TipTapEditorBase extends BaseElement {
   }
 
   protected willUpdate(
-    changedProperties:
-      | PropertyValueMap<this & { class: string }>
-      | Map<PropertyKey, unknown>,
+    changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (changedProperties.has("class")) {
       this.classList.add("rhino-editor");
@@ -172,16 +208,16 @@ export class TipTapEditorBase extends BaseElement {
   protected updated(
     changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
+    if (changedProperties.has("readonly")) {
+      this.editor?.setEditable(!this.readonly);
+    }
+
     if (
       changedProperties.has("extensions") ||
       changedProperties.has("starterKitOptions") ||
       changedProperties.has("translations")
     ) {
       this.rebuildEditor();
-    }
-
-    if (changedProperties.has("readonly")) {
-      this.editor?.setEditable(!this.readonly);
     }
 
     super.updated(changedProperties);
@@ -502,11 +538,15 @@ export class TipTapEditorBase extends BaseElement {
       }
     });
 
-    doc.querySelectorAll("figure .attachment__name").forEach((el) => {
-      if (el.textContent?.includes(" · ") === false) return;
+    doc
+      .querySelectorAll(
+        "figure :not(.attachment__caption--edited) .attachment__name",
+      )
+      .forEach((el) => {
+        if (el.textContent?.includes(" · ") === false) return;
 
-      el.insertAdjacentText("beforeend", " · ");
-    });
+        el.insertAdjacentText("beforeend", " · ");
+      });
 
     const body = doc.querySelector("body");
 
@@ -607,7 +647,7 @@ export class TipTapEditorBase extends BaseElement {
     this.editor.off("blur", this.__handleBlur);
   }
 
-  private __setupEditor(element: Element): Editor {
+  private __setupEditor(element: Element = this): Editor {
     if (!this.serializer || this.serializer === "html") {
       // This is a super hacky way to get __to_trix_html to support figcaptions without patching it.
       this.normalizeDOM(this.inputElement);
