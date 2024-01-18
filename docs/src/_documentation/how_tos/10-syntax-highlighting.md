@@ -21,7 +21,7 @@ TipTap provides an official extension using [Lowlight](https://github.com/wooorm
 Assuming you have Rhino installed and working, let's start by installing the additional dependencies we need.
 
 ```bash
-yarn add lowlight @tiptap/extension-code-block-lowlight
+yarn add lowlight @tiptap/extension-code-block-lowlight hast-util-to-html
 ```
 
 ## Adding to RhinoEditor
@@ -56,7 +56,7 @@ document.querySelector("#syntax-highlight-input").setAttribute("value", "<%= con
 </style>
 
 <% html = capture do %>
-<input type="hidden" id="syntax-highlight-input" value="<%= content %>">
+<input type="hidden" class="rhino-editor-input" id="syntax-highlight-input" value="<%= content %>">
 <rhino-editor id="syntax-highlight-editor" input="syntax-highlight-input"></rhino-editor>
 <% end %>
 
