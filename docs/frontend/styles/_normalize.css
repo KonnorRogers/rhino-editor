@@ -138,8 +138,6 @@ kr-layout::part(skip-link) {
   display: inline;
   padding: 0.25em;
   margin: -0.25em;
-  line-height: 1.2;
-  transition: all 0.2s;
 }
 
 kr-layout::part(skip-link):is(:hover),
