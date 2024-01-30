@@ -9,7 +9,7 @@ class Builders::Inspectors < SiteBuilder
 
   def mark_external(document)
     document.css("a[href^='http']").each do |anchor|
-      next unless anchor[:href]&.starts_with?("http") && !anchor[:href]&.include?(site.config.url)
+      next unless anchor[:href]&.starts_with?("http") && !anchor[:href].to_s.include?(site.config.url)
 
       anchor[:target] = "_blank"
       anchor[:rel] = "nofollow noopener noreferrer"

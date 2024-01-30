@@ -1,8 +1,25 @@
 /* These all come from Trix / ActionText. This should probably be cleaned up into
    a regular .css for users to include.
 */
-.trix-content .rhino-upload-error {
-  background-color: rgba(255, 0, 0, 0.3);
+
+.trix-content {
+  border: 1px solid var(--rhino-border-color);
+  border-radius: 0px 0px var(--rhino-border-radius) var(--rhino-border-radius);
+  margin: 0;
+  padding: 0.4em 0.6em;
+  min-height: 200px;
+  outline: transparent;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.trix-content[contenteditable="true"] {
+  /* Required by Prosemirror / TipTap */
+  white-space: pre-wrap;
+}
+
+.trix-content:is(:focus, :focus-within) {
+  border-color: var(--rhino-button-active-border-color);
 }
 
 .trix-content :is(img, svg, figure) {
@@ -46,6 +63,10 @@
   white-space: break-spaces;
 }
 
+.trix-content .rhino-upload-error {
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
 /* Attachments */
 .trix-content:not([readonly])
   figure:is(:focus-within, :focus, .has-focus):nth-child(2) {
@@ -74,25 +95,6 @@
   cursor: text;
   content: "";
 }
-
-.trix-content {
-  border: 1px solid var(--rhino-border-color);
-  border-radius: 0px 0px var(--rhino-border-radius) var(--rhino-border-radius);
-  margin: 0;
-  padding: 0.4em 0.6em;
-  min-height: 200px;
-  outline: transparent;
-}
-
-.trix-content[contenteditable="true"] {
-  /* Required by Prosemirror / TipTap */
-  white-space: pre-wrap;
-}
-
-.trix-content:is(:focus, :focus-within) {
-  border-color: var(--rhino-button-active-border-color);
-}
-
 .trix-content figure.attachment figcaption {
   position: relative;
 }
