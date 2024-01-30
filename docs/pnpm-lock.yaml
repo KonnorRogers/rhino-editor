@@ -30,6 +30,9 @@ dependencies:
   '@tiptap/extension-code-block-lowlight':
     specifier: ~2.1.7
     version: 2.1.7(@tiptap/core@2.1.16)(@tiptap/extension-code-block@2.1.16)(@tiptap/pm@2.1.16)
+  bridgetown-quick-search:
+    specifier: 2.0.0
+    version: 2.0.0
   linkifyjs:
     specifier: ^4.1.1
     version: 4.1.1
@@ -76,6 +79,13 @@ devDependencies:
     version: 7.8.3(postcss@8.4.19)
 
 packages:
+
+  /@babel/runtime@7.23.9:
+    resolution: {integrity: sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.1
+    dev: false
 
   /@csstools/postcss-cascade-layers@1.1.1(postcss@8.4.19):
     resolution: {integrity: sha512-+KdYrpKC5TgomQr2DlZF4lDEpHcoxnj5IGddYYfBWJAKfj1JtuHUIqMa+E1pJJ+z3kvDViWMqyqPlG4Ja7amQA==}
@@ -520,6 +530,14 @@ packages:
     dependencies:
       balanced-match: 1.0.2
     dev: true
+
+  /bridgetown-quick-search@2.0.0:
+    resolution: {integrity: sha512-Sr8RS0qu+a9o4dDbRyaDGEcVEWphuuhcZUnqqgL6EghDncE4QiocGB8xem6mPdT+gWAw22O5BznqH3DCb1WI+Q==}
+    dependencies:
+      '@babel/runtime': 7.23.9
+      lit: 2.8.0
+      lunr: 2.3.9
+    dev: false
 
   /browserslist@4.21.4:
     resolution: {integrity: sha512-CBHJJdDmgjl3daYjN5Cp5kbTf1mUhZoS+beLklHIvkOWscs83YAhLlF3Wsh/lciQYAcbBJgTOD44VtG31ZM4Hw==}
@@ -1782,6 +1800,10 @@ packages:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}
     dependencies:
       pify: 2.3.0
+
+  /regenerator-runtime@0.14.1:
+    resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
+    dev: false
 
   /resolve@1.22.1:
     resolution: {integrity: sha512-nBpuuYuY5jFsli/JIs1oldw6fOQCBioohqWZg/2hiaOybXOft4lonv85uDOKXdf8rhyK159cxU5cDcK/NKk8zw==}
