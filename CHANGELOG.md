@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.1
+
+### Patch Changes
+
+- [#150](https://github.com/KonnorRogers/rhino-editor/pull/150) [`98bb49c`](https://github.com/KonnorRogers/rhino-editor/commit/98bb49caf67c3d0f83fe4e3a2413da937cd8fa31) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add default word-break to .trix-content <https://github.com/basecamp/trix/pull/1126>
+
 ## 0.9.0
 
 ### Minor Changes
