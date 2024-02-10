@@ -1,3 +1,5 @@
+require "cgi"
+
 class Builders::Inspectors < SiteBuilder
   def build
     inspect_html do |document|
@@ -49,7 +51,7 @@ class Builders::Inspectors < SiteBuilder
             <sl-icon class='clipboard__icon--idle' name='clipboard'></sl-icon>
           </clipboard-copy>
 
-          <textarea id='#{id}' hidden>#{text}</textarea>
+          <textarea id='#{id}' hidden>#{CGI.escape_html(text)}</textarea>
         </div>
       HTML
 
