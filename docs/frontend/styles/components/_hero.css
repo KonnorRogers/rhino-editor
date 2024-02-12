@@ -11,15 +11,13 @@
 }
 
 .hero--mobile a {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
-  width: auto;
-  flex: 0 0 auto;
+  max-width: 100%;
+  display: block;
+  text-align: center;
 }
 
 .hero--mobile .logo__text{
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 .hero__caption {
