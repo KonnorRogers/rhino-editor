@@ -12,7 +12,9 @@
 
 .hero--mobile a {
   max-width: 100%;
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   text-align: center;
 }
 
