@@ -6,9 +6,6 @@ package does so using [TipTap](https://tiptap.dev/) but
 will most likely include another integration for [ProseMirror](https://prosemirror.net/)
 to allow for both Markdown + WYSIWYG editing.
 
-> Note: This package is still in beta and is currently not
-recommended for production use until a 1.0 is released.
-
 ## Documentation
 
 <https://rhino-editor.vercel.app>
