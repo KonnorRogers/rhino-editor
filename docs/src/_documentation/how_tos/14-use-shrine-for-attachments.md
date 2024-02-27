@@ -1,6 +1,6 @@
 ---
 title: Using Shrine for attachments
-permalink: /use-shrine-for-attachments/
+permalink: /how-tos/use-shrine-for-attachments/
 ---
 
 [Shrine](https://shrinerb.com) is a great toolkit for file attachments; and with some modifications, you can use it instead of ActiveStorage!
@@ -12,21 +12,23 @@ permalink: /use-shrine-for-attachments/
 The process is:
 1. Setup the endpoint on your server that will accept the attachment
 2. Add the `data-direct-upload-url` attribute, which points to the endpont
-3. Add an event listner for `rhino-attachment-add` that uploads the file to your endpoint, then complete the attachment
+3. Add an event listener for `rhino-attachment-add` that uploads the file to your endpoint, then complete the attachment
    add process with the appropriate calls to `event.attachment`
 
-
-<%= render Syntax.new("js") do %>
-this.addEventListener(`rhino-attachment-add`, async function(event) {
+```js
+document.addEventListener(`rhino-attachment-add`, async function(event) {
   event.preventDefault()
   const { attachment, target } = event;
 
+  // Grab the `data-direct-upload` string for uploading to Shrine.
   const url = event.target.dataset.directUploadUrl
 
   let formData = new FormData()
   formData.append('file', attachment.file, attachment.file.name)
 
-  let response = await window.mrujs.fetch(url, {
+  // If you have CSRF checks enabled for this endpoint, you may need a library like
+  // request.js or mrujs to fetch with the proper CSRF headers / tokens.
+  let response = await fetch(url, {
     method: 'POST',
     body: formData,
     headers: {"Accept": "application/json"}
@@ -40,4 +42,8 @@ this.addEventListener(`rhino-attachment-add`, async function(event) {
 
   attachment.setUploadProgress(100)
 })
-<% end %>
+```
+
+Do note, because we are using the `fetch()` API, there's no way to properly show a progress bar for upload progress.
+If you want to implement upload progress, you can use the `XMLHttpRequest` API which does support
+upload progress.
