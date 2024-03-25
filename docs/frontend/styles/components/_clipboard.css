@@ -11,7 +11,7 @@
 }
 
 .clipboard sl-icon {
-  font-size: 1rem;
+  font-size: 1em;
 }
 
 .clipboard__icon--success, .clipboard__icon--idle {

@@ -6,11 +6,11 @@
     <% if previous_page %>
       <sl-button class="previous-page" href="<%= previous_page.relative_url %>">
         <span slot="prefix">
-          <sl-icon name="arrow-left" style="font-size: 1.5rem; display: block;"></sl-icon>
+          <sl-icon name="arrow-left" style="font-size: 1.5em; display: block;"></sl-icon>
         </span>
 
         <span style="text-align: end; display: block;">
-          <span style="display: block; color: var(--sl-color-neutral-500); font-size: 0.85rem;">
+          <span style="display: block; color: var(--sl-color-neutral-500); font-size: 0.85em;">
             Previous Page
           </span>
           <pagination-title><%= previous_page.data.title %></pagination-title>
@@ -24,14 +24,14 @@
     <% if next_page %>
       <sl-button class="next-page" href="<%= next_page.relative_url %>">
         <span style="text-align: start; display: block;">
-          <span style="display: block; color: var(--sl-color-neutral-500); font-size: 0.85rem;">Next Page</span>
+          <span style="display: block; color: var(--sl-color-neutral-500); font-size: 0.85em;">Next Page</span>
           <pagination-title>
             <%= next_page.data.title %>
           </pagination-title>
         </span>
 
         <span slot="suffix">
-          <sl-icon name="arrow-right" style="font-size: 1.5rem; display: block;"></sl-icon>
+          <sl-icon name="arrow-right" style="font-size: 1.5em; display: block;"></sl-icon>
         </span>
 
       </sl-button>

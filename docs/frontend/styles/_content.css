@@ -10,7 +10,7 @@ pre.highlight {
 .highlighter-rouge,
 .highlight {
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 0.925em;
   line-height: 1.4;
   font-family: var(--sl-font-mono);
 }
@@ -25,7 +25,7 @@ code.highlight,
 code.highlighter-rouge {
   /** Layout */
   display: inline-block;
-  font-size: 0.85em;
+  font-size: 0.925em;
   padding: 0.1em 0.4em;
   margin: 4px 0;
   border-radius: 6px;
