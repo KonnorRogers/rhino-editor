@@ -113,6 +113,7 @@ function BuildTimer () {
       outfile: "exports/bundle/index.module.js",
       format: "esm",
       minify: true,
+      splitting: false,
     },
     {
       ...defaultConfig,
@@ -136,7 +137,7 @@ function BuildTimer () {
       splitting: true,
       minify: false,
       chunkNames: 'chunks/[name]-[hash]'
-    }
+    },
   ]
 
   if (!watchMode) {
