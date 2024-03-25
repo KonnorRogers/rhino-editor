@@ -1,7 +1,6 @@
 html {
   box-sizing: border-box;
   height: 100%;
-  font-size: 16px;
   /* letter-spacing: 0.025em; */
 }
 
@@ -23,6 +22,7 @@ body {
   min-height: 100%;
   margin: 0;
   padding: 0;
+  font-size: 115%;
 }
 
 [hidden] {
@@ -66,33 +66,33 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 main p {
-  font-size: 1rem;
+  font-size: 1em;
 }
 
 h1 {
-  font-size: 1.25rem;
+  font-size: 1.25em;
   margin: 0;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 h2 {
-  font-size: 1.15rem;
+  font-size: 1.15em;
 }
 
 h3, h4 {
-  font-size: 1.1rem;
+  font-size: 1.1em;
 }
 
 h5, h6 {
-  font-size: 1.05rem;
+  font-size: 1.05em;
 }
 
 p {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
   padding: 0;
-  font-size: 1rem;
+  font-size: 1em;
 }
 
 p, li {
@@ -100,7 +100,7 @@ p, li {
 }
 
 li {
-  font-size: 1rem;
+  font-size: 1em;
 }
 
 ul {
@@ -189,7 +189,7 @@ a external-icon {
 
 blockquote {
   border-inline-start: 4px solid var(--divider-color);
-  margin-inline-start: 0.5rem;
-  padding: 0.75rem;
+  margin-inline-start: 0.5em;
+  padding: 0.75em;
   background-color: var(--sl-color-neutral-50);
 }

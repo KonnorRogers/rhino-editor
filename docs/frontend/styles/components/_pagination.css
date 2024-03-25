@@ -37,7 +37,7 @@ pagination-title {
   display: block;
   max-width: 100%;
   overflow: hidden;
-  font-size: 1.15rem;
+  font-size: 1.15em;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
