@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.2
+
+### Patch Changes
+
+- [#163](https://github.com/KonnorRogers/rhino-editor/pull/163) [`65a86d1`](https://github.com/KonnorRogers/rhino-editor/commit/65a86d1b61dd333d36fb8a8d069debd6c2136916) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Docs: Added documentation for importmaps workaround
+
 ## 0.9.1
 
 ### Patch Changes
