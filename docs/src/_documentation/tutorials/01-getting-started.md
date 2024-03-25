@@ -5,7 +5,7 @@ permalink: /tutorials/getting-started/
 
 The first step to working with the Rhino Editor is installing it! There are 2 ways to install it.
 
-You can either [install with npm](#install-with-npm) or [install with importmaps](#install-with-importmaps)
+You can either [install with npm](#install-with-npm) or [install with importmaps](#manual-importmaps-installation)
 
 ## Install with npm
 
@@ -34,14 +34,24 @@ here is a manual installation workaround until it gets fixed.
   Make sure to run the following commands at the root of your Rails project!
 <% end %>
 
+First we'll start by pulling down the Trix CSS file, and the precompiled JS bundle.
+
+CSS File: <https://unpkg.com/rhino-editor/cdn/styles/trix.css>
+
+JS File: <https://unpkg.com/rhino-editor/exports/bundle/index.module.js>
+
 ```bash
 curl -Lo ./app/assets/stylesheets/rhino-editor.css https://unpkg.com/rhino-editor/cdn/styles/trix.css
 curl -Lo ./vendor/javascript/rhino-editor.js https://unpkg.com/rhino-editor/exports/bundle/index.module.js
-
+# Remove actiontext css to avoid conflicts.
 rm ./app/assets/stylesheets/actiontext.css
 ```
 
-Then set the pin manually:
+Once you have downloaded the files into `app/assets/stylesheets/rhino-editor.css` and
+`vendor/javascript/rhino-editor.js`, the Rhino Editor CSS file will automatically be included in your stylesheets as part of the AssetPipeline.
+
+To get the JavaScript portion to work, you need to modify your `config/importmap.rb` to point to the `rhino-editor.js`
+vendored file. We can also remove the Trix + ActionText pins if you don't plan to use them. Like so:
 
 ```diff
 # config/importmap.rb
@@ -51,7 +61,7 @@ Then set the pin manually:
 + pin "rhino-editor", to: "rhino-editor.js"
 ```
 
-And then in your JS entrypoint, remove Trix + ActionText, and import rhino-editor.
+And then in your `application.js`, we can do the same thing. Import Rhino Editor, remove Trix + ActionText.
 
 ```js
 // app/javascript/application.js
@@ -61,11 +71,13 @@ And then in your JS entrypoint, remove Trix + ActionText, and import rhino-edito
 + import "rhino-editor"
 ```
 
+And you should be ready to go!
+
 <br>
 
 ## Usage
 
-Finally, to see it appear on a page you can write the following HTML:
+To see Rhino Editor appear on your page you can write the following HTML:
 
 <%= render Syntax.new("html") do %>
 <rhino-editor></rhino-editor>
