@@ -30,6 +30,10 @@ As of v2.x [importmaps-rails](https://github.com/rails/importmap-rails) vendors 
 Unfortunately, the typical importmap flow doesn't work as expected with RhinoEditor. So,
 here is a manual installation workaround until it gets fixed.
 
+<%= render Alert.new(type: :danger) do %>
+  Make sure to run the following commands at the root of your Rails project!
+<% end %>
+
 ```bash
 curl -Lo ./app/assets/stylesheets/rhino-editor.css https://unpkg.com/rhino-editor/cdn/styles/trix.css
 curl -Lo ./vendor/javascript/rhino-editor.js https://unpkg.com/rhino-editor/exports/bundle/index.module.js

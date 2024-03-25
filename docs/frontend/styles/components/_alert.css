@@ -8,6 +8,11 @@ sl-alert p {
 }
 
 sl-alert::part(base) {
+  font-size: 1em;
   box-shadow: 3px 3px 6px 1px var(--sl-color-neutral-100);
 }
 
+sl-alert[variant="danger"]::part(base) {
+  --sl-panel-background-color: var(--sl-color-red-100);
+  color: var(--sl-color-red-800);
+}
