@@ -36,12 +36,12 @@ here is a manual installation workaround until it gets fixed.
 
 First we'll start by pulling down the Trix CSS file, and the precompiled JS bundle.
 
-CSS File: <https://unpkg.com/rhino-editor/cdn/styles/trix.css>
+CSS File: <https://unpkg.com/rhino-editor/exports/styles/trix.css>
 
 JS File: <https://unpkg.com/rhino-editor/exports/bundle/index.module.js>
 
 ```bash
-curl -Lo ./app/assets/stylesheets/rhino-editor.css https://unpkg.com/rhino-editor/cdn/styles/trix.css
+curl -Lo ./app/assets/stylesheets/rhino-editor.css https://unpkg.com/rhino-editor/exports/styles/trix.css
 curl -Lo ./vendor/javascript/rhino-editor.js https://unpkg.com/rhino-editor/exports/bundle/index.module.js
 # Remove actiontext css to avoid conflicts.
 rm ./app/assets/stylesheets/actiontext.css
