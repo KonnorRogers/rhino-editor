@@ -185,11 +185,10 @@ test("rhino-attachment-remove", async () => {
 
   assert.equal(spy.calledOnce, false)
 
-  const figure = () => tiptap().querySelector("figure[data-trix-attachment]")
-  await waitUntil(() => figure())
+  const attachmentEditor = () => tiptap().querySelector("figure > rhino-attachment-editor")
+  await waitUntil(() => attachmentEditor())
 
-  // @ts-expect-error
-  figure().remove()
+  attachmentEditor().removeFigure()
 
   await waitUntil(() => spy.calledOnce)
 
