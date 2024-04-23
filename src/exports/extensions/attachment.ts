@@ -718,11 +718,11 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           const { tr } = view.state;
 
-          const pos = getPos()
-          tr.delete(pos, pos + 1)
-          view.dispatch(tr)
+          const pos = getPos();
+          tr.delete(pos, pos + 1);
+          view.dispatch(tr);
         }
-      }
+      };
 
       const template = html`
         <figure
