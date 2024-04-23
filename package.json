@@ -65,8 +65,8 @@
   },
   "dependencies": {
     "@rails/activestorage": "^7.0.6",
-    "@tiptap/core": "2.3.0",
-    "@tiptap/extension-code-block": "2.3.0",
+    "@tiptap/core": "~2.3.0",
+    "@tiptap/extension-code-block": "~2.3.0",
     "@tiptap/extension-focus": "~2.3.0",
     "@tiptap/extension-image": "~2.3.0",
     "@tiptap/extension-link": "~2.3.0",
