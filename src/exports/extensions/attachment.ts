@@ -712,7 +712,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
       };
 
-      function removeFigure (this: HTMLElement) {
+      function removeFigure(this: HTMLElement) {
         if (typeof getPos === "function") {
           const { view } = editor;
 
@@ -724,11 +724,11 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
 
         // For some reason it doesnt always delete the attachment, so this is some extra insurance.
-        const closestAttachment = this.closest(".attachment")
+        const closestAttachment = this.closest(".attachment");
         if (closestAttachment) {
-          closestAttachment.remove()
+          closestAttachment.remove();
         }
-      };
+      }
 
       const template = html`
         <figure
