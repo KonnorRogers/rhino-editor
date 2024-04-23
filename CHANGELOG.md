@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.3
+
+### Patch Changes
+
+- [#170](https://github.com/KonnorRogers/rhino-editor/pull/170) [`bb3f160`](https://github.com/KonnorRogers/rhino-editor/commit/bb3f16057056a9fa2ac69dfb5e4562f060382de6) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a bug with removing attachments
+
 ## 0.9.2
 
 ### Patch Changes
