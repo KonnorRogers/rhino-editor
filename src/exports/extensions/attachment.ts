@@ -712,7 +712,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
       };
 
-      const removeFigure = () => {
+      function removeFigure (this: HTMLElement) {
         if (typeof getPos === "function") {
           const { view } = editor;
 
@@ -721,6 +721,12 @@ export const Attachment = Node.create<AttachmentOptions>({
           const pos = getPos();
           tr.delete(pos, pos + 1);
           view.dispatch(tr);
+        }
+
+        // For some reason it doesnt always delete the attachment, so this is some extra insurance.
+        const closestAttachment = this.closest(".attachment")
+        if (closestAttachment) {
+          closestAttachment.remove()
         }
       };
 
