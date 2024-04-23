@@ -712,6 +712,24 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
       };
 
+      function removeFigure(this: HTMLElement) {
+        if (typeof getPos === "function") {
+          const { view } = editor;
+
+          const { tr } = view.state;
+
+          const pos = getPos();
+          tr.delete(pos, pos + 1);
+          view.dispatch(tr);
+        }
+
+        // For some reason it doesnt always delete the attachment, so this is some extra insurance.
+        const closestAttachment = this.closest(".attachment");
+        if (closestAttachment) {
+          closestAttachment.remove();
+        }
+      }
+
       const template = html`
         <figure
           class=${figureClasses}
@@ -733,6 +751,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             contenteditable="false"
             ?show-metadata=${isPreviewable}
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
+            .removeFigure=${removeFigure}
           >
           </rhino-attachment-editor>
 
