@@ -11,6 +11,7 @@
     "@rails/actioncable": "^7.0.0",
     "@rails/actiontext": "^7.0.0",
     "@rails/activestorage": "^7.0.0",
+    "@tiptap/extension-bubble-menu": "^2.3.0",
     "@tiptap/extension-collaboration": "~2.3.0",
     "@tiptap/extension-collaboration-cursor": "~2.3.0",
     "@y-rb/actioncable": "^0.2.1",

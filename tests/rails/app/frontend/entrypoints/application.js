@@ -8,10 +8,28 @@ import "rhino-editor/exports/styles/trix.css";
 import { Application } from "@hotwired/stimulus"
 import EmbedController from "../controllers/embed_controller.js"
 import TipTapMirrorController from "../controllers/tip_tap_mirror_controller.js"
+import BubbleMenu from '@tiptap/extension-bubble-menu'
+
 window.Stimulus = Application.start()
 window.Stimulus.debug = true
 Stimulus.register("embed", EmbedController)
 Stimulus.register("tip-tap-mirror", TipTapMirrorController)
+
+function addBubbleMenu () {
+  document.querySelectorAll("rhino-editor").forEach((editor) => {
+    const menu = document.querySelector(".menu")
+    if (!menu) return
+
+    editor.addExtensions(
+      BubbleMenu.configure({
+        element: menu
+      })
+    )
+  })
+}
+
+document.addEventListener("rhino-before-initialize", addBubbleMenu)
+document.addEventListener("rhino-initialize", addBubbleMenu)
 
 ActiveStorage.start()
 

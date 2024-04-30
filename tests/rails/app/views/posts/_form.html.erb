@@ -25,20 +25,35 @@
         <%= tag.input type: :hidden, **post.form_fields(:tip_tap_body), value: post.tip_tap_body.try(:to_trix_html) || post.tip_tap_body %>
       <% end %>
 
-      <rhino-editor
-        input="<%= post.form_id(:tip_tap_body) %>"
-        id="main-tip-tap-editor"
-        data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
-        data-direct-upload-url="<%= rails_direct_uploads_url %>"
-      >
-        <%# <button type="button" slot="bold-button" data-role="toolbar-item">Bold</button> %>
-        <%# <button type="button" slot="italic-button" data-role="toolbar-item">Italics</button> %>
-        <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">Embed</button> %>
-        <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">EmbedTwo</button> %>
-        <button slot="before-undo-button" tabindex="-1" type="button" data-role="toolbar-item" data-controller="embed">Embed</button>
+        <rhino-editor
+          input="<%= post.form_id(:tip_tap_body) %>"
+          id="main-tip-tap-editor"
+          data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
+          data-direct-upload-url="<%= rails_direct_uploads_url %>"
+        >
+          <%# <button type="button" slot="bold-button" data-role="toolbar-item">Bold</button> %>
+          <%# <button type="button" slot="italic-button" data-role="toolbar-item">Italics</button> %>
+          <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">Embed</button> %>
+          <%# <button slot="toolbar-end" tabindex="-1" type="button" data-role="toolbar-item">EmbedTwo</button> %>
+          <button slot="before-undo-button" tabindex="-1" type="button" data-role="toolbar-item" data-controller="embed">Embed</button>
 
-        <div slot="editor" aria-invalid="true" class="my-class"></div>
-      </rhino-editor>
+          <div
+            slot="menu"
+            class="menu"
+            style="
+              background-color: Canvas;
+              color: inherit;
+              padding: 6px 8px;
+              border: 1px solid lightgray;
+              border-radius: 8px;
+            "
+          >
+            <sl-button size="small" type="button"><sl-icon name="type-bold"></sl-icon></sl-button>
+            <sl-button size="small" type="button"><sl-icon name="type-italic"></sl-icon></sl-button>
+            <sl-button size="small" type="button"><sl-icon name="type-strikethrough"></sl-icon></sl-button>
+          </div>
+          <div slot="editor" aria-invalid="true" class="my-class"></div>
+        </rhino-editor>
     </section>
 
     <section style="display: grid; gap: 2rem; margin: 0 auto; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);">
