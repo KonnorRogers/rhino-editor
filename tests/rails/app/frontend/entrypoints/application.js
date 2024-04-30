@@ -15,14 +15,12 @@ window.Stimulus.debug = true
 Stimulus.register("embed", EmbedController)
 Stimulus.register("tip-tap-mirror", TipTapMirrorController)
 
-let bubbleMenuAdded = false
 function addBubbleMenu () {
   document.querySelectorAll("rhino-editor").forEach((editor) => {
     const menu = document.querySelector(".menu")
 
     if (!menu) return
 
-    bubbleMenuAdded = true
     editor.addExtensions(
       BubbleMenu.configure({
         element: menu
@@ -31,7 +29,6 @@ function addBubbleMenu () {
   })
 }
 
-document.addEventListener("rhino-before-initialize", addBubbleMenu)
 document.addEventListener("rhino-initialize", addBubbleMenu)
 
 ActiveStorage.start()
