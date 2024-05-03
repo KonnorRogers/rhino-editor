@@ -288,7 +288,7 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   private get __tooltipExportParts() {
-    return "base:tooltip-base, arrow:tooltip-arrow";
+    return "base:toolbar__tooltip__base, arrow:toolbar__tooltip__arrow";
   }
 
   renderBoldButton() {
