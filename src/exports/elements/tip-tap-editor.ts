@@ -150,23 +150,25 @@ export class TipTapEditor extends TipTapEditorBase {
 
   protected willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has("translations")) {
-      const { rhinoAttachment, rhinoPlaceholder } = this.starterKitOptions
-      let shouldRebuild = Boolean(rhinoAttachment || rhinoPlaceholder)
+      const { rhinoAttachment, rhinoPlaceholder } = this.starterKitOptions;
+      let shouldRebuild = Boolean(rhinoAttachment || rhinoPlaceholder);
 
       if (rhinoPlaceholder) {
-        rhinoPlaceholder.placeholder = this.translations.placeholder
+        rhinoPlaceholder.placeholder = this.translations.placeholder;
       }
 
       if (rhinoAttachment) {
-        rhinoAttachment.captionPlaceholder = this.translations.captionPlaceholder
-        rhinoAttachment.fileUploadErrorMessage = this.translations.fileUploadErrorMessage
+        rhinoAttachment.captionPlaceholder =
+          this.translations.captionPlaceholder;
+        rhinoAttachment.fileUploadErrorMessage =
+          this.translations.fileUploadErrorMessage;
       }
 
       if (shouldRebuild) {
-        this.rebuildEditor()
+        this.rebuildEditor();
       }
     }
-    return super.willUpdate(changedProperties)
+    return super.willUpdate(changedProperties);
   }
 
   /**
