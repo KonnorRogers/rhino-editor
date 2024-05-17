@@ -191,7 +191,6 @@ export class TipTapEditorBase extends BaseElement {
     this.requestUpdate();
   }
 
-
   /**
    * Grabs HTML content based on a given range. If no range is given, it will return the contents
    *   of the current editor selection. If the current selection is empty, it will return an empty string.
@@ -213,42 +212,48 @@ export class TipTapEditorBase extends BaseElement {
    *    }
    */
   getHTMLContentFromRange(from?: number, to?: number) {
-    const editor = this.editor
+    const editor = this.editor;
 
-    if (!editor) return ""
+    if (!editor) return "";
 
-    let empty
+    let empty;
 
     if (!from && !to) {
-      const currentSelection = editor.state.selection
+      const currentSelection = editor.state.selection;
 
-      from = currentSelection.from
-      to = currentSelection.to
+      from = currentSelection.from;
+      to = currentSelection.to;
     }
 
-    if (empty) { return "" }
-    if (from == null) { return "" }
-    if (to == null) { return "" }
+    if (empty) {
+      return "";
+    }
+    if (from == null) {
+      return "";
+    }
+    if (to == null) {
+      return "";
+    }
 
-    const { state } = editor
-    const htmlArray: string[] = []
+    const { state } = editor;
+    const htmlArray: string[] = [];
 
-    const tempScript = document.createElement("script")
+    const tempScript = document.createElement("script");
     // We want plain text so we don't parse.
-    tempScript.type = "text/plain"
+    tempScript.type = "text/plain";
 
     state.doc.nodesBetween(from, to, (node, _pos, parent) => {
       if (parent === state.doc) {
-        tempScript.innerHTML = ""
-        const serializer = DOMSerializer.fromSchema(editor.schema)
-        const dom = serializer.serializeNode(node)
-        tempScript.appendChild(dom)
-        htmlArray.push(tempScript.innerHTML)
-        tempScript.innerHTML = ""
+        tempScript.innerHTML = "";
+        const serializer = DOMSerializer.fromSchema(editor.schema);
+        const dom = serializer.serializeNode(node);
+        tempScript.appendChild(dom);
+        htmlArray.push(tempScript.innerHTML);
+        tempScript.innerHTML = "";
       }
-    })
+    });
 
-    return htmlArray.join('')
+    return htmlArray.join("");
   }
 
   /**
@@ -272,24 +277,32 @@ export class TipTapEditorBase extends BaseElement {
    *    }
    */
   getTextContentFromRange(from?: number, to?: number) {
-    const editor = this.editor
+    const editor = this.editor;
 
-    if (!editor) { return "" }
-
-    let empty
-
-    if (!from && !to) {
-      const selection = editor.state.selection
-      from = selection.from
-      to = selection.to
-      empty = selection.empty
+    if (!editor) {
+      return "";
     }
 
-    if (empty) { return "" }
-    if (from == null) { return "" }
-    if (to == null) { return "" }
+    let empty;
 
-    return editor.state.doc.textBetween(from, to, ' ')
+    if (!from && !to) {
+      const selection = editor.state.selection;
+      from = selection.from;
+      to = selection.to;
+      empty = selection.empty;
+    }
+
+    if (empty) {
+      return "";
+    }
+    if (from == null) {
+      return "";
+    }
+    if (to == null) {
+      return "";
+    }
+
+    return editor.state.doc.textBetween(from, to, " ");
   }
 
   protected willUpdate(

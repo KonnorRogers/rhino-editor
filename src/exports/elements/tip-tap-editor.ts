@@ -146,7 +146,6 @@ export class TipTapEditor extends TipTapEditorBase {
     }) as typeof this.starterKitOptions;
 
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
-
   }
 
   protected willUpdate(changedProperties: PropertyValues<this>): void {
@@ -184,12 +183,12 @@ export class TipTapEditor extends TipTapEditorBase {
       this.editor.on("focus", this.closeLinkDialog);
     }
 
-    document.addEventListener("click", this.__handleLinkDialogClick)
+    document.addEventListener("click", this.__handleLinkDialogClick);
   }
 
-  disconnectedCallback () {
-    super.disconnectedCallback()
-    document.removeEventListener("click", this.__handleLinkDialogClick)
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener("click", this.__handleLinkDialogClick);
   }
 
   get icons(): typeof icons {
@@ -248,9 +247,7 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   get linkDialog(): Maybe<HTMLDivElement> {
-    return this.shadowRoot?.querySelector<HTMLDivElement>(
-      "#link-dialog",
-    )
+    return this.shadowRoot?.querySelector<HTMLDivElement>("#link-dialog");
   }
 
   attachFiles(): void {
@@ -1084,28 +1081,29 @@ export class TipTapEditor extends TipTapEditorBase {
    * @private
    */
   private __handleLinkDialogClick = (e: Event) => {
-    const linkDialogContainer = this.shadowRoot?.querySelector(".link-dialog__container")
+    const linkDialogContainer = this.shadowRoot?.querySelector(
+      ".link-dialog__container",
+    );
 
     if (!linkDialogContainer) {
-      this.linkDialogExpanded = false
-      return
+      this.linkDialogExpanded = false;
+      return;
     }
 
+    const composedPath = e.composedPath();
 
-    const composedPath = e.composedPath()
-
-    const linkButton = this.shadowRoot?.querySelector("[name='link-button']")
+    const linkButton = this.shadowRoot?.querySelector("[name='link-button']");
 
     if (composedPath.includes(linkDialogContainer as EventTarget)) {
-      return
+      return;
     }
 
     if (linkButton && composedPath.includes(linkButton as EventTarget)) {
-      return
+      return;
     }
 
-    this.linkDialogExpanded = false
-  }
+    this.linkDialogExpanded = false;
+  };
 
   /** @TODO: Lets think of a more friendly way to render dialogs for users to extend. */
   renderDialog(): TemplateResult {
