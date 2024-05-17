@@ -44,22 +44,19 @@ class CollaborationEditor extends TipTapEditor {
         placeholder: 'Write something … It’ll be shared with everyone else looking at this example.',
       }
     }
-  }
 
-  get extensions () {
-    return [
-      ...super.extensions,
-      // Register the document with Tiptap
-      Collaboration.configure({document}),
-      CollaborationCursor.configure({
-        provider,
-        user: {
-          name,
-          color: '#f783ac',
-        },
-      })
-    ]
-  }
+  this.addExtensions(
+    Collaboration.configure({document}),
+    CollaborationCursor.configure({
+      provider,
+      user: {
+        name,
+        color: '#f783ac',
+      },
+    })
+  )
+
+
 }
 
 CollaborationEditor.define("rhino-collaboration-editor")
