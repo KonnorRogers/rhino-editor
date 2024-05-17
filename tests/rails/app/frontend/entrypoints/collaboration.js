@@ -45,18 +45,17 @@ class CollaborationEditor extends TipTapEditor {
       }
     }
 
-  this.addExtensions(
-    Collaboration.configure({document}),
-    CollaborationCursor.configure({
-      provider,
-      user: {
-        name,
-        color: '#f783ac',
-      },
-    })
-  )
-
-
+    this.addExtensions(
+      Collaboration.configure({document}),
+      CollaborationCursor.configure({
+        provider,
+        user: {
+          name,
+          color: '#f783ac',
+        },
+      })
+    )
+  }
 }
 
 CollaborationEditor.define("rhino-collaboration-editor")
