@@ -34,7 +34,7 @@ import { RhinoBlurEvent } from "../events/rhino-blur-event.js";
 import { RhinoChangeEvent } from "../events/rhino-change-event.js";
 import { SelectionChangeEvent } from "../events/selection-change-event.js";
 import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
-import { DOMSerializer, Node, Slice } from "@tiptap/pm/model";
+import { DOMSerializer, Slice } from "@tiptap/pm/model";
 import { EditorView } from "@tiptap/pm/view";
 
 export type Serializer = "" | "html" | "json";
