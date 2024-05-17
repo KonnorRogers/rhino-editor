@@ -44,12 +44,8 @@ class CollaborationEditor extends TipTapEditor {
         placeholder: 'Write something … It’ll be shared with everyone else looking at this example.',
       }
     }
-  }
 
-  get extensions () {
-    return [
-      ...super.extensions,
-      // Register the document with Tiptap
+    this.addExtensions(
       Collaboration.configure({document}),
       CollaborationCursor.configure({
         provider,
@@ -58,7 +54,7 @@ class CollaborationEditor extends TipTapEditor {
           color: '#f783ac',
         },
       })
-    ]
+    )
   }
 }
 

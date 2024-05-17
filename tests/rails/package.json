@@ -11,21 +11,20 @@
     "@rails/actioncable": "^7.0.0",
     "@rails/actiontext": "^7.0.0",
     "@rails/activestorage": "^7.0.0",
-    "@tiptap/extension-collaboration": "~2.3.0",
-    "@tiptap/extension-collaboration-cursor": "~2.3.0",
+    "@tiptap/extension-collaboration": "~2.4.0",
+    "@tiptap/extension-collaboration-cursor": "~2.4.0",
     "@y-rb/actioncable": "^0.2.1",
+    "prosemirror-view": "~1.28.0",
     "rhino-editor": "link:../../",
     "trix": "^2.0.5",
-    "y-prosemirror": "1.2.1",
+    "y-prosemirror": "1.2.5",
     "y-protocols": "^1.0.6",
     "y-websocket": "1.5.0",
-    "yjs": "13.6.8"
+    "yjs": "13.6.15"
   },
   "pnpm": {
     "overrides": {
-      "prosemirror-model": "^1.7.1",
-      "prosemirror-state": "^1.2.3",
-      "prosemirror-view": "1.29.0"
+      "prosemirror-view": "$prosemirror-view"
     }
   },
   "scripts": {

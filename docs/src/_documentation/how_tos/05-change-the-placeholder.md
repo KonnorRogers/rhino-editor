@@ -14,7 +14,7 @@ class ExtendedEditor extends TipTapEditor {
   constructor () {
     super()
     this.starterKitOptions = {
-      ...super.starterKitOptions
+      ...super.starterKitOptions,
       rhinoPlaceholder: {
         placeholder: "modified placeholder"
       }

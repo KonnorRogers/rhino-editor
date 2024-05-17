@@ -1,7 +1,7 @@
 import { ref, createRef, Ref } from "lit/directives/ref.js";
 import { toolbarButtonStyles } from "../styles/editor.js";
 import { TipTapEditorBase } from "./tip-tap-editor-base.js";
-import { PropertyDeclarations, TemplateResult } from "lit";
+import { PropertyDeclarations, PropertyValues, TemplateResult } from "lit";
 
 /** Imports <role-tooltip> and <role-toolbar> */
 import RoleToolbar from "role-components/exports/toolbar/toolbar.js";
@@ -148,6 +148,29 @@ export class TipTapEditor extends TipTapEditorBase {
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
   }
 
+  protected willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has("translations")) {
+      const { rhinoAttachment, rhinoPlaceholder } = this.starterKitOptions;
+      let shouldRebuild = Boolean(rhinoAttachment || rhinoPlaceholder);
+
+      if (rhinoPlaceholder) {
+        rhinoPlaceholder.placeholder = this.translations.placeholder;
+      }
+
+      if (rhinoAttachment) {
+        rhinoAttachment.captionPlaceholder =
+          this.translations.captionPlaceholder;
+        rhinoAttachment.fileUploadErrorMessage =
+          this.translations.fileUploadErrorMessage;
+      }
+
+      if (shouldRebuild) {
+        this.rebuildEditor();
+      }
+    }
+    return super.willUpdate(changedProperties);
+  }
+
   /**
    * @override
    */
@@ -288,7 +311,7 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   private get __tooltipExportParts() {
-    return "base:tooltip-base, arrow:tooltip-arrow";
+    return "base:toolbar__tooltip__base, arrow:toolbar__tooltip__arrow";
   }
 
   renderBoldButton() {
