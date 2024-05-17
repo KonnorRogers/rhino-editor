@@ -775,7 +775,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           )}
 
           <figcaption
-            style="display: ${Boolean(content) ? "none" : ""};"
+            style="${Boolean(content) ? "display: none;" : ""}"
             class=${`attachment__caption ${
               caption ? "attachment__caption--edited" : "is-empty"
             }`}

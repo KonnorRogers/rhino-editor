@@ -149,6 +149,13 @@ export default css`
     margin-inline-end: auto;
   }
 
+  #dialogs {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+  }
+
   .link-dialog {
     position: absolute;
     z-index: 1;
