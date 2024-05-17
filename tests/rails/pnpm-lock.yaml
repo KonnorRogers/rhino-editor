@@ -225,6 +225,7 @@ packages:
   '@playwright/test@1.28.1':
     resolution: {integrity: sha512-xN6spdqrNlwSn9KabIhqfZR7IWjPpFK1835tFNgjrlysaSezuX8PYUwaz38V/yI8TJLG9PkAMEXoHRXYXlpTPQ==}
     engines: {node: '>=14'}
+    deprecated: Please update to the latest version of Playwright to test up-to-date browsers.
     hasBin: true
 
   '@rails/actioncable@7.0.4':
@@ -261,9 +262,6 @@ packages:
 
   '@tiptap/pm@2.4.0':
     resolution: {integrity: sha512-B1HMEqGS4MzIVXnpgRZDLm30mxDWj51LkBT/if1XD+hj5gm8B9Q0c84bhvODX6KIs+c6z+zsY9VkVu8w9Yfgxg==}
-
-  '@types/node@20.1.4':
-    resolution: {integrity: sha512-At4pvmIOki8yuwLtd7BNHl3CiWNbtclUbNtScGx4OHfBd4/oWoJC8KRCIxXwkdndzhxOsPXihrsOoydxBjlE9Q==}
 
   '@types/node@20.12.12':
     resolution: {integrity: sha512-eWLDGF/FOSPtAvEqeRAQ4C8LSA7M1I7i0ky1I8U7kD1J5ITyW3AsRhQrKVoWf5pFKZ2kILsEGJhsI9r93PYnOw==}
@@ -415,16 +413,6 @@ packages:
   levelup@4.4.0:
     resolution: {integrity: sha512-94++VFO3qN95cM/d6eBXvd894oJE0w3cInq9USsyQzzoJxmiYzPAocNcuGCPGGjoXqDVJcr3C1jzt1TSjyaiLQ==}
     engines: {node: '>=6'}
-
-  lib0@0.2.74:
-    resolution: {integrity: sha512-roj9i46/JwG5ik5KNTkxP2IytlnrssAkD/OhlAVtE+GqectrdkfR+pttszVLrOzMDeXNs1MPt6yo66MUolWSiA==}
-    engines: {node: '>=14'}
-    hasBin: true
-
-  lib0@0.2.85:
-    resolution: {integrity: sha512-vtAhVttLXCu3ps2OIsTz8CdKYKdcMo7ds1MNBIcSXz6vrY8sxASqpTi4vmsAIn7xjWvyT7haKcWW6woP6jebjQ==}
-    engines: {node: '>=16'}
-    hasBin: true
 
   lib0@0.2.94:
     resolution: {integrity: sha512-hZ3p54jL4Wpu7IOg26uC7dnEWiMyNlUrb9KoG7+xYs45WkQwpVvKFndVq2+pqLYKe1u8Fp3+zAfZHVvTK34PvQ==}
@@ -778,7 +766,7 @@ snapshots:
 
   '@playwright/test@1.28.1':
     dependencies:
-      '@types/node': 20.1.4
+      '@types/node': 20.12.12
       playwright-core: 1.28.1
 
   '@rails/actioncable@7.0.4': {}
@@ -830,16 +818,13 @@ snapshots:
       prosemirror-transform: 1.9.0
       prosemirror-view: 1.29.0
 
-  '@types/node@20.1.4': {}
-
   '@types/node@20.12.12':
     dependencies:
       undici-types: 5.26.5
-    optional: true
 
   '@y-rb/actioncable@0.2.1':
     dependencies:
-      lib0: 0.2.85
+      lib0: 0.2.94
       y-protocols: 1.0.6(yjs@13.6.15)
       yjs: 13.6.15
 
@@ -1036,14 +1021,6 @@ snapshots:
       level-supports: 1.0.1
       xtend: 4.0.2
     optional: true
-
-  lib0@0.2.74:
-    dependencies:
-      isomorphic.js: 0.2.5
-
-  lib0@0.2.85:
-    dependencies:
-      isomorphic.js: 0.2.5
 
   lib0@0.2.94:
     dependencies:
@@ -1258,8 +1235,7 @@ snapshots:
 
   uc.micro@2.1.0: {}
 
-  undici-types@5.26.5:
-    optional: true
+  undici-types@5.26.5: {}
 
   util-deprecate@1.0.2:
     optional: true
@@ -1294,7 +1270,7 @@ snapshots:
   y-leveldb@0.1.2(yjs@13.6.15):
     dependencies:
       level: 6.0.1
-      lib0: 0.2.74
+      lib0: 0.2.94
       yjs: 13.6.15
     optional: true
 
@@ -1309,12 +1285,12 @@ snapshots:
 
   y-protocols@1.0.6(yjs@13.6.15):
     dependencies:
-      lib0: 0.2.85
+      lib0: 0.2.94
       yjs: 13.6.15
 
   y-websocket@1.5.0(yjs@13.6.15):
     dependencies:
-      lib0: 0.2.74
+      lib0: 0.2.94
       lodash.debounce: 4.0.8
       y-protocols: 1.0.6(yjs@13.6.15)
       yjs: 13.6.15
