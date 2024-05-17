@@ -16,22 +16,22 @@ importers:
         version: 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-code-block':
         specifier: ~2.3.0
-        version: 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+        version: 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@tiptap/extension-focus':
         specifier: ~2.3.0
-        version: 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+        version: 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@tiptap/extension-image':
         specifier: ~2.3.0
-        version: 2.3.0(@tiptap/core@2.3.0)
+        version: 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/extension-link':
         specifier: ~2.3.0
-        version: 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+        version: 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@tiptap/extension-placeholder':
         specifier: ~2.3.0
-        version: 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+        version: 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@tiptap/extension-strike':
         specifier: ~2.3.0
-        version: 2.3.0(@tiptap/core@2.3.0)
+        version: 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/pm':
         specifier: ~2.3.0
         version: 2.3.0
@@ -45,10 +45,10 @@ importers:
         specifier: ^2.8.0
         version: 2.8.0
       prosemirror-utils:
-        specifier: 1.2.1-0
+        specifier: ~1.2.1-0
         version: 1.2.1-0(prosemirror-model@1.20.0)(prosemirror-state@1.4.3)
       prosemirror-view:
-        specifier: 1.28.2
+        specifier: ~1.28.2
         version: 1.28.2
       role-components:
         specifier: ^2.0.2
@@ -2829,9 +2829,6 @@ packages:
   prosemirror-menu@1.2.4:
     resolution: {integrity: sha512-S/bXlc0ODQup6aiBbWVsX/eM+xJgCTAfMq/nLqaO5ID/am4wS0tTCIkzwytmao7ypEtjj39i7YbJjAgO20mIqA==}
 
-  prosemirror-model@1.19.3:
-    resolution: {integrity: sha512-tgSnwN7BS7/UM0sSARcW+IQryx2vODKX4MI7xpqY2X+iaepJdKBPc7I4aACIsDV/LTaTjt12Z56MhDr9LsyuZQ==}
-
   prosemirror-model@1.20.0:
     resolution: {integrity: sha512-q7AY7vMjKYqDCeoedgUiAgrLabliXxndJuuFmcmc2+YU1SblvnOiG2WEACF2lwAZsMlfLpiAilA3L+TWlDqIsQ==}
 
@@ -2853,9 +2850,6 @@ packages:
       prosemirror-model: ^1.19.0
       prosemirror-state: ^1.4.2
       prosemirror-view: ^1.31.2
-
-  prosemirror-transform@1.7.5:
-    resolution: {integrity: sha512-U/fWB6frEzY7dzwJUo+ir8dU1JEanaI/RwL12Imy9js/527N0v/IRUKewocP1kTq998JNT18IGtThaDLwLOBxQ==}
 
   prosemirror-transform@1.8.0:
     resolution: {integrity: sha512-BaSBsIMv52F1BVVMvOmp1yzD3u65uC3HTzCBQV1WDPqJRQ2LuHKcyfn0jwqodo8sR9vVzMzZyI+Dal5W9E6a9A==}
@@ -4116,9 +4110,10 @@ snapshots:
       progress: 2.0.3
       proxy-agent: 6.3.0
       tar-fs: 3.0.4
-      typescript: 5.2.2
       unbzip2-stream: 1.4.3
       yargs: 17.7.1
+    optionalDependencies:
+      typescript: 5.2.2
     transitivePeerDependencies:
       - supports-color
 
@@ -4136,6 +4131,7 @@ snapshots:
       is-builtin-module: 3.2.1
       is-module: 1.0.0
       resolve: 1.22.4
+    optionalDependencies:
       rollup: 3.28.1
 
   '@rollup/pluginutils@5.0.4(rollup@3.28.1)':
@@ -4143,6 +4139,7 @@ snapshots:
       '@types/estree': 1.0.1
       estree-walker: 2.0.2
       picomatch: 2.3.1
+    optionalDependencies:
       rollup: 3.28.1
 
   '@sinonjs/commons@2.0.0':
@@ -4169,100 +4166,100 @@ snapshots:
     dependencies:
       '@tiptap/pm': 2.3.0
 
-  '@tiptap/extension-blockquote@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-blockquote@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-bold@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-bold@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-bullet-list@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-bullet-list@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-code-block@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)':
-    dependencies:
-      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
-      '@tiptap/pm': 2.3.0
-
-  '@tiptap/extension-code@2.3.0(@tiptap/core@2.3.0)':
-    dependencies:
-      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
-
-  '@tiptap/extension-document@2.3.0(@tiptap/core@2.3.0)':
-    dependencies:
-      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
-
-  '@tiptap/extension-dropcursor@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)':
+  '@tiptap/extension-code-block@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/pm': 2.3.0
 
-  '@tiptap/extension-focus@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)':
+  '@tiptap/extension-code@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
+    dependencies:
+      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
+
+  '@tiptap/extension-document@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
+    dependencies:
+      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
+
+  '@tiptap/extension-dropcursor@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/pm': 2.3.0
 
-  '@tiptap/extension-gapcursor@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)':
+  '@tiptap/extension-focus@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/pm': 2.3.0
 
-  '@tiptap/extension-hard-break@2.3.0(@tiptap/core@2.3.0)':
-    dependencies:
-      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
-
-  '@tiptap/extension-heading@2.3.0(@tiptap/core@2.3.0)':
-    dependencies:
-      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
-
-  '@tiptap/extension-history@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)':
+  '@tiptap/extension-gapcursor@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/pm': 2.3.0
 
-  '@tiptap/extension-horizontal-rule@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)':
+  '@tiptap/extension-hard-break@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
+    dependencies:
+      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
+
+  '@tiptap/extension-heading@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
+    dependencies:
+      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
+
+  '@tiptap/extension-history@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/pm': 2.3.0
 
-  '@tiptap/extension-image@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-horizontal-rule@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
+    dependencies:
+      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
+      '@tiptap/pm': 2.3.0
+
+  '@tiptap/extension-image@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-italic@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-italic@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-link@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)':
+  '@tiptap/extension-link@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/pm': 2.3.0
       linkifyjs: 4.1.1
 
-  '@tiptap/extension-list-item@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-list-item@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-ordered-list@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-ordered-list@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-paragraph@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-paragraph@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-placeholder@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)':
+  '@tiptap/extension-placeholder@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/pm': 2.3.0
 
-  '@tiptap/extension-strike@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-strike@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-text@2.3.0(@tiptap/core@2.3.0)':
+  '@tiptap/extension-text@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
 
@@ -4290,24 +4287,24 @@ snapshots:
   '@tiptap/starter-kit@2.3.0(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
-      '@tiptap/extension-blockquote': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-bold': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-bullet-list': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-code': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-code-block': 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@tiptap/extension-document': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-dropcursor': 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@tiptap/extension-gapcursor': 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@tiptap/extension-hard-break': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-heading': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-history': 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@tiptap/extension-horizontal-rule': 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@tiptap/extension-italic': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-list-item': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-ordered-list': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-paragraph': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-strike': 2.3.0(@tiptap/core@2.3.0)
-      '@tiptap/extension-text': 2.3.0(@tiptap/core@2.3.0)
+      '@tiptap/extension-blockquote': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-bold': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-bullet-list': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-code': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-code-block': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
+      '@tiptap/extension-document': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-dropcursor': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
+      '@tiptap/extension-gapcursor': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
+      '@tiptap/extension-hard-break': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-heading': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-history': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
+      '@tiptap/extension-horizontal-rule': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
+      '@tiptap/extension-italic': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-list-item': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-ordered-list': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-paragraph': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-strike': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
+      '@tiptap/extension-text': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
     transitivePeerDependencies:
       - '@tiptap/pm'
 
@@ -4469,6 +4466,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 6.5.0
       debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.48.0
+    optionalDependencies:
       typescript: 5.2.2
     transitivePeerDependencies:
       - supports-color
@@ -4489,6 +4487,7 @@ snapshots:
       is-glob: 4.0.3
       semver: 7.5.4
       ts-api-utils: 1.0.2(typescript@5.2.2)
+    optionalDependencies:
       typescript: 5.2.2
     transitivePeerDependencies:
       - supports-color
@@ -5243,6 +5242,7 @@ snapshots:
   debug@4.3.4(supports-color@8.1.1):
     dependencies:
       ms: 2.1.2
+    optionalDependencies:
       supports-color: 8.1.1
 
   decamelize-keys@1.1.1:
@@ -6677,14 +6677,14 @@ snapshots:
     dependencies:
       prosemirror-state: 1.4.3
       prosemirror-transform: 1.8.0
-      prosemirror-view: 1.33.5
+      prosemirror-view: 1.28.2
 
   prosemirror-gapcursor@1.3.2:
     dependencies:
       prosemirror-keymap: 1.2.2
       prosemirror-model: 1.20.0
       prosemirror-state: 1.4.3
-      prosemirror-view: 1.33.5
+      prosemirror-view: 1.28.2
 
   prosemirror-history@1.4.0:
     dependencies:
@@ -6715,10 +6715,6 @@ snapshots:
       prosemirror-history: 1.4.0
       prosemirror-state: 1.4.3
 
-  prosemirror-model@1.19.3:
-    dependencies:
-      orderedmap: 2.1.1
-
   prosemirror-model@1.20.0:
     dependencies:
       orderedmap: 2.1.1
@@ -6737,7 +6733,7 @@ snapshots:
     dependencies:
       prosemirror-model: 1.20.0
       prosemirror-transform: 1.8.0
-      prosemirror-view: 1.33.5
+      prosemirror-view: 1.28.2
 
   prosemirror-tables@1.3.7:
     dependencies:
@@ -6745,7 +6741,7 @@ snapshots:
       prosemirror-model: 1.20.0
       prosemirror-state: 1.4.3
       prosemirror-transform: 1.8.0
-      prosemirror-view: 1.33.5
+      prosemirror-view: 1.28.2
 
   prosemirror-trailing-node@2.0.8(prosemirror-model@1.20.0)(prosemirror-state@1.4.3)(prosemirror-view@1.33.5):
     dependencies:
@@ -6754,10 +6750,6 @@ snapshots:
       prosemirror-model: 1.20.0
       prosemirror-state: 1.4.3
       prosemirror-view: 1.33.5
-
-  prosemirror-transform@1.7.5:
-    dependencies:
-      prosemirror-model: 1.19.3
 
   prosemirror-transform@1.8.0:
     dependencies:
@@ -6770,9 +6762,9 @@ snapshots:
 
   prosemirror-view@1.28.2:
     dependencies:
-      prosemirror-model: 1.19.3
+      prosemirror-model: 1.20.0
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.7.5
+      prosemirror-transform: 1.8.0
 
   prosemirror-view@1.33.5:
     dependencies:
@@ -6813,8 +6805,9 @@ snapshots:
       cross-fetch: 4.0.0
       debug: 4.3.4(supports-color@8.1.1)
       devtools-protocol: 0.0.1147663
-      typescript: 5.2.2
       ws: 8.13.0
+    optionalDependencies:
+      typescript: 5.2.2
     transitivePeerDependencies:
       - bufferutil
       - encoding

@@ -76,14 +76,14 @@
     "@tiptap/starter-kit": "~2.3.0",
     "linkifyjs": "^4.1.1",
     "lit": "^2.8.0",
-    "prosemirror-utils": "1.2.1-0",
-    "prosemirror-view": "1.28.2",
+    "prosemirror-utils": "~1.2.1-0",
+    "prosemirror-view": "~1.28.2",
     "role-components": "^2.0.2",
     "tslib": "^2.6.2"
   },
   "pnpm": {
     "overrides ": {
-      "prosemirror-view": "$prosemirror-view"
+      "prosemirror-view": "~1.28.2"
     }
   },
   "repository": "git@github.com:KonnorRogers/rhino-editor.git",
