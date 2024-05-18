@@ -312,10 +312,6 @@ export class TipTapEditorBase extends BaseElement {
       this.classList.add("rhino-editor");
     }
 
-    if (changedProperties.has("serializer")) {
-      this.updateInputElementValue();
-    }
-
     super.willUpdate(changedProperties);
   }
 
@@ -328,10 +324,15 @@ export class TipTapEditorBase extends BaseElement {
 
     if (
       changedProperties.has("extensions") ||
+      changedProperties.has("serializer") ||
       changedProperties.has("starterKitOptions") ||
       changedProperties.has("translations")
     ) {
       this.rebuildEditor();
+    }
+
+    if (changedProperties.has("serializer")) {
+      this.updateInputElementValue();
     }
 
     super.updated(changedProperties);

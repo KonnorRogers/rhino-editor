@@ -148,7 +148,8 @@ export class TipTapEditor extends TipTapEditorBase {
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
   }
 
-  protected willUpdate(changedProperties: PropertyValues<this>): void {
+  protected updated(changedProperties: PropertyValues<this>): void {
+    const returnValue = super.updated(changedProperties);
     if (changedProperties.has("translations")) {
       const { rhinoAttachment, rhinoPlaceholder } = this.starterKitOptions;
       let shouldRebuild = Boolean(rhinoAttachment || rhinoPlaceholder);
@@ -168,7 +169,8 @@ export class TipTapEditor extends TipTapEditorBase {
         this.rebuildEditor();
       }
     }
-    return super.willUpdate(changedProperties);
+
+    return returnValue;
   }
 
   /**
