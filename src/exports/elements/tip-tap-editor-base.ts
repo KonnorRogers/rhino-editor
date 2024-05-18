@@ -34,7 +34,7 @@ import { RhinoBlurEvent } from "../events/rhino-blur-event.js";
 import { RhinoChangeEvent } from "../events/rhino-change-event.js";
 import { SelectionChangeEvent } from "../events/selection-change-event.js";
 import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
-import { Slice } from "@tiptap/pm/model";
+import { DOMSerializer, Slice } from "@tiptap/pm/model";
 import { EditorView } from "@tiptap/pm/view";
 
 export type Serializer = "" | "html" | "json";
@@ -189,6 +189,120 @@ export class TipTapEditorBase extends BaseElement {
 
     // For good measure for rendering.
     this.requestUpdate();
+  }
+
+  /**
+   * Grabs HTML content based on a given range. If no range is given, it will return the contents
+   *   of the current editor selection. If the current selection is empty, it will return an empty string.
+   * @param from - The start of the selection
+   * @param to - The end of the selection
+   * @example Getting the HTML content of the current selection
+   *    const rhinoEditor = document.querySelector("rhino-editor")
+   *    rhinoEditor.getHTMLContentFromRange()
+   *
+   * @example Getting the HTML content of node range
+   *    const rhinoEditor = document.querySelector("rhino-editor")
+   *    rhinoEditor.getHTMLContentFromRange(0, 50)
+   *
+   * @example Getting the HTML content and falling back to entire editor HTML
+   *    const rhinoEditor = document.querySelector("rhino-editor")
+   *    let html = rhinoEditor.getHTMLContentFromRange()
+   *    if (!html) {
+   *       html = rhinoEditor.editor.getHTML()
+   *    }
+   */
+  getHTMLContentFromRange(from?: number, to?: number) {
+    const editor = this.editor;
+
+    if (!editor) return "";
+
+    let empty;
+
+    if (!from && !to) {
+      const currentSelection = editor.state.selection;
+
+      from = currentSelection.from;
+      to = currentSelection.to;
+    }
+
+    if (empty) {
+      return "";
+    }
+    if (from == null) {
+      return "";
+    }
+    if (to == null) {
+      return "";
+    }
+
+    const { state } = editor;
+    const htmlArray: string[] = [];
+
+    const tempScript = document.createElement("script");
+    // We want plain text so we don't parse.
+    tempScript.type = "text/plain";
+
+    state.doc.nodesBetween(from, to, (node, _pos, parent) => {
+      if (parent === state.doc) {
+        tempScript.innerHTML = "";
+        const serializer = DOMSerializer.fromSchema(editor.schema);
+        const dom = serializer.serializeNode(node);
+        tempScript.appendChild(dom);
+        htmlArray.push(tempScript.innerHTML);
+        tempScript.innerHTML = "";
+      }
+    });
+
+    return htmlArray.join("");
+  }
+
+  /**
+   * Grabs plain text representation based on a given range. If no parameters are given, it will return the contents
+   *   of the current selection. If the current selection is empty, it will return an empty string.
+   * @param from - The start of the selection
+   * @param to - The end of the selection
+   * @example Getting the Text content of the current selection
+   *    const rhinoEditor = document.querySelector("rhino-editor")
+   *    rhinoEditor.getTextContentFromRange()
+   *
+   * @example Getting the Text content of node range
+   *    const rhinoEditor = document.querySelector("rhino-editor")
+   *    rhinoEditor.getTextContentFromRange(0, 50)
+   *
+   * @example Getting the Text content and falling back to entire editor Text
+   *    const rhinoEditor = document.querySelector("rhino-editor")
+   *    let text = rhinoEditor.getTextContentFromRange()
+   *    if (!text) {
+   *       text = rhinoEditor.editor.getText()
+   *    }
+   */
+  getTextContentFromRange(from?: number, to?: number) {
+    const editor = this.editor;
+
+    if (!editor) {
+      return "";
+    }
+
+    let empty;
+
+    if (!from && !to) {
+      const selection = editor.state.selection;
+      from = selection.from;
+      to = selection.to;
+      empty = selection.empty;
+    }
+
+    if (empty) {
+      return "";
+    }
+    if (from == null) {
+      return "";
+    }
+    if (to == null) {
+      return "";
+    }
+
+    return editor.state.doc.textBetween(from, to, " ");
   }
 
   protected willUpdate(

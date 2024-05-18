@@ -3,7 +3,7 @@ import { css } from "lit";
 
 export const hostStyles = css`
   /* General tokens */
-  --rhino-focus-ring: 0px 0px 3px 0px var(--rhino-button-active-border-color);
+  --rhino-focus-ring: 0px 0px 4px 1px var(--rhino-button-active-border-color);
   --rhino-border-radius: 4px;
 
   --rhino-danger-border-color: red;
@@ -147,6 +147,13 @@ export default css`
 
   [part~="toolbar__button--attach-files"] {
     margin-inline-end: auto;
+  }
+
+  #dialogs {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
   }
 
   .link-dialog {
