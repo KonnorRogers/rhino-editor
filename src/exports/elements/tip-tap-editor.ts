@@ -1,7 +1,7 @@
 import { ref, createRef, Ref } from "lit/directives/ref.js";
 import { toolbarButtonStyles } from "../styles/editor.js";
 import { TipTapEditorBase } from "./tip-tap-editor-base.js";
-import { PropertyDeclarations, TemplateResult } from "lit";
+import { PropertyDeclarations, PropertyValues, TemplateResult } from "lit";
 
 /** Imports <role-tooltip> and <role-toolbar> */
 import RoleToolbar from "role-components/exports/toolbar/toolbar.js";
@@ -148,6 +148,29 @@ export class TipTapEditor extends TipTapEditorBase {
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);
   }
 
+  protected willUpdate(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has("translations")) {
+      const { rhinoAttachment, rhinoPlaceholder } = this.starterKitOptions;
+      let shouldRebuild = Boolean(rhinoAttachment || rhinoPlaceholder);
+
+      if (rhinoPlaceholder) {
+        rhinoPlaceholder.placeholder = this.translations.placeholder;
+      }
+
+      if (rhinoAttachment) {
+        rhinoAttachment.captionPlaceholder =
+          this.translations.captionPlaceholder;
+        rhinoAttachment.fileUploadErrorMessage =
+          this.translations.fileUploadErrorMessage;
+      }
+
+      if (shouldRebuild) {
+        this.rebuildEditor();
+      }
+    }
+    return super.willUpdate(changedProperties);
+  }
+
   /**
    * @override
    */
@@ -159,6 +182,13 @@ export class TipTapEditor extends TipTapEditorBase {
     if (this.editor) {
       this.editor.on("focus", this.closeLinkDialog);
     }
+
+    document.addEventListener("click", this.__handleLinkDialogClick);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener("click", this.__handleLinkDialogClick);
   }
 
   get icons(): typeof icons {
@@ -198,7 +228,6 @@ export class TipTapEditor extends TipTapEditorBase {
     if (this.linkDialog == null) return;
 
     this.linkDialogExpanded = false;
-    this.linkDialog.setAttribute("hidden", "");
   }
 
   showLinkDialog(): void {
@@ -212,16 +241,13 @@ export class TipTapEditor extends TipTapEditorBase {
 
     this.__invalidLink__ = false;
     this.linkDialogExpanded = true;
-    this.linkDialog.removeAttribute("hidden");
     setTimeout(() => {
       if (inputElement != null) inputElement.focus();
     });
   }
 
-  get linkDialog(): Maybe<HTMLAnchorElement> {
-    return this.shadowRoot?.querySelector(
-      ".link-dialog",
-    ) as Maybe<HTMLAnchorElement>;
+  get linkDialog(): Maybe<HTMLDivElement> {
+    return this.shadowRoot?.querySelector<HTMLDivElement>("#link-dialog");
   }
 
   attachFiles(): void {
@@ -288,7 +314,7 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   private get __tooltipExportParts() {
-    return "base:tooltip-base, arrow:tooltip-arrow";
+    return "base:toolbar__tooltip__base, arrow:toolbar__tooltip__arrow";
   }
 
   renderBoldButton() {
@@ -1051,24 +1077,45 @@ export class TipTapEditor extends TipTapEditorBase {
     `;
   }
 
+  /**
+   * @private
+   */
+  private __handleLinkDialogClick = (e: Event) => {
+    const linkDialogContainer = this.shadowRoot?.querySelector(
+      ".link-dialog__container",
+    );
+
+    if (!linkDialogContainer) {
+      this.linkDialogExpanded = false;
+      return;
+    }
+
+    const composedPath = e.composedPath();
+
+    const linkButton = this.shadowRoot?.querySelector("[name='link-button']");
+
+    if (composedPath.includes(linkDialogContainer as EventTarget)) {
+      return;
+    }
+
+    if (linkButton && composedPath.includes(linkButton as EventTarget)) {
+      return;
+    }
+
+    this.linkDialogExpanded = false;
+  };
+
   /** @TODO: Lets think of a more friendly way to render dialogs for users to extend. */
   renderDialog(): TemplateResult {
-    if (this.readonly) return html``;
+    if (this.readonly) {
+      return html``;
+    }
+
     return html` <div
       id="link-dialog"
       class="link-dialog"
       part="link-dialog"
-      hidden
-      @click=${(event: MouseEvent) => {
-        const target = event.target as HTMLElement;
-        const currentTarget = event.currentTarget as HTMLElement;
-
-        if (currentTarget.contains(target) && currentTarget !== target) {
-          return;
-        }
-
-        this.closeLinkDialog();
-      }}
+      ?hidden=${!this.linkDialogExpanded}
     >
       <div class="link-dialog__container" part="link-dialog__container">
         <input

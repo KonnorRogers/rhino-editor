@@ -25,11 +25,14 @@ export class AttachmentEditor extends BaseElement {
   showMetadata?: boolean;
   loadingState?: LoadingState;
   fileUploadErrorMessage?: TemplateResult | string;
+  removeFigure: () => void;
 
   constructor() {
     super();
     this.loadingState = "not-started";
     this.fileUploadErrorMessage = fileUploadErrorMessage;
+
+    this.removeFigure = () => {};
   }
 
   static baseName = "rhino-attachment-editor";
@@ -206,7 +209,7 @@ export class AttachmentEditor extends BaseElement {
         part="delete-button"
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
-          this.parentElement?.remove();
+          this.removeFigure();
         }}
       >
         ${this.close()}

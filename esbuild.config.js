@@ -14,12 +14,6 @@ const deps = [
 
 const watchMode = process.argv.includes("--watch")
 
-import {
-  hostStyles,
-  toolbarButtonStyles
-} from "./src/exports/styles/editor.js"
-
-
 /**
  * @return {import("esbuild").Plugin}
  */
@@ -32,6 +26,13 @@ function AppendCssStyles () {
           path.join(process.cwd(), "src", "exports", "styles", "trix-core.css"),
           { encoding: "utf8" }
         )
+
+        let date = new Date()
+
+        const {
+          hostStyles,
+          toolbarButtonStyles
+        } = await import(`./src/exports/styles/editor.js?cache=${date.toString()}`)
 
         const finalString = `/* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
 ${styles.toString()}

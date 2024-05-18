@@ -19,6 +19,7 @@ export default {
       retries: 1
     }
   },
+  watch: process.argv.includes("--watch"),
   plugins: [
 
   ],

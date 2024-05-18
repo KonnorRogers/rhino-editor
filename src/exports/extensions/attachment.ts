@@ -149,11 +149,6 @@ function handleCaptions(
 
   if (figureTypes.includes(node.type.name) === false) return modified;
 
-  // Make sure the user isn't selecting multiple nodes.
-  if (newState.selection.from !== newState.selection.to) {
-    return modified;
-  }
-
   // @see https://discuss.prosemirror.net/t/saving-content-containing-dom-generated-by-nodeview/2594/5
   let scratch = document.createElement("div");
   scratch.appendChild(
@@ -712,6 +707,24 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
       };
 
+      function removeFigure(this: HTMLElement) {
+        if (typeof getPos === "function") {
+          const { view } = editor;
+
+          const { tr } = view.state;
+
+          const pos = getPos();
+          tr.delete(pos, pos + 1);
+          view.dispatch(tr);
+        }
+
+        // For some reason it doesnt always delete the attachment, so this is some extra insurance.
+        const closestAttachment = this.closest(".attachment");
+        if (closestAttachment) {
+          closestAttachment.remove();
+        }
+      }
+
       const template = html`
         <figure
           class=${figureClasses}
@@ -733,6 +746,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             contenteditable="false"
             ?show-metadata=${isPreviewable}
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
+            .removeFigure=${removeFigure}
           >
           </rhino-attachment-editor>
 
@@ -756,7 +770,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           )}
 
           <figcaption
-            style="display: ${Boolean(content) ? "none" : ""};"
+            style="${Boolean(content) ? "display: none;" : ""}"
             class=${`attachment__caption ${
               caption ? "attachment__caption--edited" : "is-empty"
             }`}

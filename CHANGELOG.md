@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.10.0
+
+### Minor Changes
+
+- [#178](https://github.com/KonnorRogers/rhino-editor/pull/178) [`abddbac`](https://github.com/KonnorRogers/rhino-editor/commit/abddbac90ffd69aa77e47b3ff9c78bf4e25309f2) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add `getHTMLContentFromRange()` and `getTextContentFromRange()` functions
+
+- [#176](https://github.com/KonnorRogers/rhino-editor/pull/176) [`fd8cc08`](https://github.com/KonnorRogers/rhino-editor/commit/fd8cc0873fbade6a2f9eeeb3259872c11a50836d) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - upgrade TipTap versions to 2.4.0
+
+### Patch Changes
+
+- [#176](https://github.com/KonnorRogers/rhino-editor/pull/176) [`fd8cc08`](https://github.com/KonnorRogers/rhino-editor/commit/fd8cc0873fbade6a2f9eeeb3259872c11a50836d) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed an issue where updating translations would not update the editor
+
+- [#178](https://github.com/KonnorRogers/rhino-editor/pull/178) [`abddbac`](https://github.com/KonnorRogers/rhino-editor/commit/abddbac90ffd69aa77e47b3ff9c78bf4e25309f2) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a bug where the current focused figure did not have an outline
+
+- [#178](https://github.com/KonnorRogers/rhino-editor/pull/178) [`abddbac`](https://github.com/KonnorRogers/rhino-editor/commit/abddbac90ffd69aa77e47b3ff9c78bf4e25309f2) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Close link dialogs when clicking outside the editor or on other toolbar items
+
+- [#176](https://github.com/KonnorRogers/rhino-editor/pull/176) [`fd8cc08`](https://github.com/KonnorRogers/rhino-editor/commit/fd8cc0873fbade6a2f9eeeb3259872c11a50836d) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - - Fixed `tooltip-arrow` and `tooltip-base` parts renamed to `toolbar__tooltip__arrow` and `toolbar__tooltip__base` respectively.
+
+- [#178](https://github.com/KonnorRogers/rhino-editor/pull/178) [`abddbac`](https://github.com/KonnorRogers/rhino-editor/commit/abddbac90ffd69aa77e47b3ff9c78bf4e25309f2) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a bug where figcaptions would never update if you did not interact with the editor
+
+## 0.9.3
+
+### Patch Changes
+
+- [#170](https://github.com/KonnorRogers/rhino-editor/pull/170) [`bb3f160`](https://github.com/KonnorRogers/rhino-editor/commit/bb3f16057056a9fa2ac69dfb5e4562f060382de6) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a bug with removing attachments
+
+## 0.9.2
+
+### Patch Changes
+
+- [#163](https://github.com/KonnorRogers/rhino-editor/pull/163) [`65a86d1`](https://github.com/KonnorRogers/rhino-editor/commit/65a86d1b61dd333d36fb8a8d069debd6c2136916) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Docs: Added documentation for importmaps workaround
+
 ## 0.9.1
 
 ### Patch Changes
