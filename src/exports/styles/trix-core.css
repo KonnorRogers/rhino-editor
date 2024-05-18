@@ -69,7 +69,8 @@
 
 /* Attachments */
 .trix-content:not([readonly])
-  figure:is(:focus-within, :focus, .has-focus) :nth-child(2) {
+  figure:is(:focus-within, :focus, .has-focus)
+  :nth-child(2) {
   outline: transparent;
   box-shadow: var(--rhino-focus-ring);
 }
