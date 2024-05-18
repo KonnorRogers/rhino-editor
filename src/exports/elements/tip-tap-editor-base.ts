@@ -46,7 +46,10 @@ export type RhinoEditorStarterKitOptions = StarterKitOptions &
     decreaseIndentation: boolean;
   };
 
-const debounce = <T extends ((...args: unknown[]) => unknown)>(mainFunction: T, delay: number = 0) => {
+const debounce = <T extends (...args: unknown[]) => unknown>(
+  mainFunction: T,
+  delay: number = 0,
+) => {
   // Declare a variable called 'timer' to store the timer ID
   let timer: ReturnType<typeof setTimeout>;
 
@@ -138,11 +141,11 @@ export class TipTapEditorBase extends BaseElement {
   extensions: EditorOptions["extensions"] = [];
 
   /**
-    * Debounced editor rebuilder for cases where you may be calling `rebuildEditor` in the same event loop.
-    */
+   * Debounced editor rebuilder for cases where you may be calling `rebuildEditor` in the same event loop.
+   */
   debouncedRebuildEditor = debounce(() => {
-    this.rebuildEditor()
-  }, 0)
+    this.rebuildEditor();
+  }, 0);
 
   /**
    * @internal

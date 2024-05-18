@@ -165,7 +165,7 @@ export class TipTapEditor extends TipTapEditorBase {
       }
 
       if (shouldRebuild) {
-        this.debouncedRebuildEditor()
+        this.debouncedRebuildEditor();
       }
     }
 
