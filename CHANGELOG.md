@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.1
+
+### Patch Changes
+
+- [#182](https://github.com/KonnorRogers/rhino-editor/pull/182) [`c64173a`](https://github.com/KonnorRogers/rhino-editor/commit/c64173a02b7f84c77edf3dba6a3642cf8e2e0619) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a bug in the update lifecycles of RhinoEditor causing rebuilds to happen too frequently
+
 ## 0.10.0
 
 ### Minor Changes
