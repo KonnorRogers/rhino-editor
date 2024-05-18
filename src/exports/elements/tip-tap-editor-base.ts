@@ -328,7 +328,7 @@ export class TipTapEditorBase extends BaseElement {
       changedProperties.has("starterKitOptions") ||
       changedProperties.has("translations")
     ) {
-      this.rebuildEditor()
+      this.rebuildEditor();
     }
 
     if (changedProperties.has("serializer")) {

@@ -170,7 +170,7 @@ export class TipTapEditor extends TipTapEditorBase {
       }
     }
 
-    return returnValue
+    return returnValue;
   }
 
   /**
