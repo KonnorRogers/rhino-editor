@@ -86,6 +86,11 @@ export class TipTapEditorBase extends BaseElement {
   readonly: boolean = false;
 
   /**
+   * Prevents premature rebuilds.
+   */
+  hasInitialized = false
+
+  /**
    * The hidden input to attach to
    */
   input: Maybe<string>;
@@ -153,6 +158,8 @@ export class TipTapEditorBase extends BaseElement {
    * or editor options get modified to make sure we have a fresh instance.
    */
   rebuildEditor() {
+    if (!this.hasInitialized) return
+
     const editors = this.querySelectorAll("[slot='editor']");
 
     this.__getInitialAttributes();
@@ -318,6 +325,10 @@ export class TipTapEditorBase extends BaseElement {
   protected updated(
     changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
+    if (!this.hasInitialized) {
+      return super.updated(changedProperties);
+    }
+
     if (changedProperties.has("readonly")) {
       this.editor?.setEditable(!this.readonly);
     }
@@ -328,7 +339,7 @@ export class TipTapEditorBase extends BaseElement {
       changedProperties.has("starterKitOptions") ||
       changedProperties.has("translations")
     ) {
-      this.rebuildEditor();
+      this.rebuildEditor()
     }
 
     if (changedProperties.has("serializer")) {
@@ -358,7 +369,7 @@ export class TipTapEditorBase extends BaseElement {
     this.addEventListener("rhino-file-accept", this.handleFileAccept);
   }
 
-  connectedCallback(): void {
+  async connectedCallback(): Promise<void> {
     super.connectedCallback();
 
     if (this.editor) {
@@ -367,18 +378,25 @@ export class TipTapEditorBase extends BaseElement {
 
     this.classList.add("rhino-editor");
 
-    this.dispatchEvent(new BeforeInitializeEvent());
+    await this.updateComplete
 
     setTimeout(() => {
-      this.rebuildEditor();
-      this.dispatchEvent(new InitializeEvent());
-    });
+      this.dispatchEvent(new BeforeInitializeEvent());
+
+      setTimeout(async () => {
+        await this.updateComplete
+        this.hasInitialized = true
+        this.rebuildEditor();
+        this.dispatchEvent(new InitializeEvent());
+      });
+    })
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
 
     this.editor?.destroy();
+    this.hasInitialized = false
   }
 
   /**
@@ -713,8 +731,14 @@ export class TipTapEditorBase extends BaseElement {
   };
 
   private __handleUpdate: EditorOptions["onUpdate"] = () => {
-    this.updateInputElementValue();
     this.requestUpdate();
+
+    if (!this.hasInitialized) {
+      return
+    }
+
+    // We dont want to update until we've fully initialized to give time for user extensions to kick in.
+    this.updateInputElementValue();
     this.dispatchEvent(new RhinoChangeEvent());
   };
 
