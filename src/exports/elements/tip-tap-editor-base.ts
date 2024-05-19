@@ -88,7 +88,7 @@ export class TipTapEditorBase extends BaseElement {
   /**
    * Prevents premature rebuilds.
    */
-  hasInitialized = false
+  hasInitialized = false;
 
   /**
    * The hidden input to attach to
@@ -158,7 +158,7 @@ export class TipTapEditorBase extends BaseElement {
    * or editor options get modified to make sure we have a fresh instance.
    */
   rebuildEditor() {
-    if (!this.hasInitialized) return
+    if (!this.hasInitialized) return;
 
     const editors = this.querySelectorAll("[slot='editor']");
 
@@ -339,7 +339,7 @@ export class TipTapEditorBase extends BaseElement {
       changedProperties.has("starterKitOptions") ||
       changedProperties.has("translations")
     ) {
-      this.rebuildEditor()
+      this.rebuildEditor();
     }
 
     if (changedProperties.has("serializer")) {
@@ -378,25 +378,25 @@ export class TipTapEditorBase extends BaseElement {
 
     this.classList.add("rhino-editor");
 
-    await this.updateComplete
+    await this.updateComplete;
 
     setTimeout(() => {
       this.dispatchEvent(new BeforeInitializeEvent());
 
       setTimeout(async () => {
-        await this.updateComplete
-        this.hasInitialized = true
+        await this.updateComplete;
+        this.hasInitialized = true;
         this.rebuildEditor();
         this.dispatchEvent(new InitializeEvent());
       });
-    })
+    });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
 
     this.editor?.destroy();
-    this.hasInitialized = false
+    this.hasInitialized = false;
   }
 
   /**
@@ -734,7 +734,7 @@ export class TipTapEditorBase extends BaseElement {
     this.requestUpdate();
 
     if (!this.hasInitialized) {
-      return
+      return;
     }
 
     // We dont want to update until we've fully initialized to give time for user extensions to kick in.

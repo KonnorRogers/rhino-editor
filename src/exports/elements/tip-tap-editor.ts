@@ -149,7 +149,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   protected updated(changedProperties: PropertyValues<this>): void {
-    if (!this.hasInitialized) { return super.updated(changedProperties) }
+    if (!this.hasInitialized) {
+      return super.updated(changedProperties);
+    }
 
     if (changedProperties.has("translations")) {
       const { rhinoAttachment, rhinoPlaceholder } = this.starterKitOptions;
@@ -166,7 +168,7 @@ export class TipTapEditor extends TipTapEditorBase {
       }
     }
 
-    return super.updated(changedProperties)
+    return super.updated(changedProperties);
   }
 
   /**
