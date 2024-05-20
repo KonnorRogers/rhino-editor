@@ -8,7 +8,14 @@ import {html} from "lit"
 export async function createEditor (templateResult = html`<rhino-editor></rhino-editor>`) {
   const el = await fixture(templateResult)
 
-  // Let it render.
+  // let resolver
+  // const promise = new Promise((resolve) => {
+  //   resolver = resolve
+  // })
+
+  // el.addEventListener("rhino-initialize", resolver)
+  // await promise
+  await el.initializationComplete
   await aTimeout(1)
 
   /** @type {import("../../../exports/elements/tip-tap-editor.js").TipTapEditor} */

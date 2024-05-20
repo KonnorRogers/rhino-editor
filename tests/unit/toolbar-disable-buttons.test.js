@@ -13,6 +13,8 @@ test("Should not remove existing content when rebuilding editor", async () => {
     </div>
   `)
 
+  await rhinoEditor.initializationComplete
+
   tiptap().focus()
   await sendKeys({ type: "abcd" })
 

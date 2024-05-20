@@ -149,10 +149,12 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   protected updated(changedProperties: PropertyValues<this>): void {
-    const returnValue = super.updated(changedProperties);
+    if (!this.hasInitialized) {
+      return super.updated(changedProperties);
+    }
+
     if (changedProperties.has("translations")) {
       const { rhinoAttachment, rhinoPlaceholder } = this.starterKitOptions;
-      let shouldRebuild = Boolean(rhinoAttachment || rhinoPlaceholder);
 
       if (rhinoPlaceholder) {
         rhinoPlaceholder.placeholder = this.translations.placeholder;
@@ -164,13 +166,9 @@ export class TipTapEditor extends TipTapEditorBase {
         rhinoAttachment.fileUploadErrorMessage =
           this.translations.fileUploadErrorMessage;
       }
-
-      if (shouldRebuild) {
-        this.rebuildEditor();
-      }
     }
 
-    return returnValue;
+    return super.updated(changedProperties);
   }
 
   /**
