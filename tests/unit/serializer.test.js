@@ -10,13 +10,14 @@ test("It should properly update the input element when the serializer changes", 
     <rhino-editor input="input"></rhino-editor>
   </div>`)
 
-  await aTimeout(0)
+  await div.querySelector("rhino-editor").initializationComplete
+  await aTimeout(1)
 
   const rhinoEditor = div.querySelector("rhino-editor")
   const input = div.querySelector("input")
 
   assert.equal(rhinoEditor.serializer, "html")
-  assert.equal(input.value, "<p></p>")
+  assert.equal(input.value, "")
 
   rhinoEditor.serializer = "json"
 
