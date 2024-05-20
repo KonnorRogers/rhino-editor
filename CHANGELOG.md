@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.2
+
+### Patch Changes
+
+- [#185](https://github.com/KonnorRogers/rhino-editor/pull/185) [`2a6fb5b`](https://github.com/KonnorRogers/rhino-editor/commit/2a6fb5bd5f63cab016d62f77f3d3eba39748662d) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add `initializationComplete` async function for listening to initialization
+
+- [#185](https://github.com/KonnorRogers/rhino-editor/pull/185) [`2a6fb5b`](https://github.com/KonnorRogers/rhino-editor/commit/2a6fb5bd5f63cab016d62f77f3d3eba39748662d) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed initialization events to be more reliable to catch
+
 ## 0.10.1
 
 ### Patch Changes
