@@ -372,7 +372,7 @@ export class TipTapEditorBase extends BaseElement {
   async connectedCallback(): Promise<void> {
     super.connectedCallback();
 
-    this.__setupInitialization__()
+    this.__setupInitialization__();
 
     if (this.editor) {
       this.__unBindEditorListeners();
@@ -390,7 +390,7 @@ export class TipTapEditorBase extends BaseElement {
         this.hasInitialized = true;
         this.rebuildEditor();
         this.dispatchEvent(new InitializeEvent());
-        this.__initializationResolver__?.()
+        this.__initializationResolver__?.();
       });
     });
   }
@@ -404,20 +404,22 @@ export class TipTapEditorBase extends BaseElement {
     this.__initializationResolver__ = null;
   }
 
-  __initializationPromise__: null | Promise<void> = null
-  __initializationResolver__: null | ((value: void | PromiseLike<void>) => void) = null
+  __initializationPromise__: null | Promise<void> = null;
+  __initializationResolver__:
+    | null
+    | ((value: void | PromiseLike<void>) => void) = null;
 
-  __setupInitialization__ () {
+  __setupInitialization__() {
     if (!this.__initializationPromise__) {
       this.__initializationPromise__ = new Promise<void>((resolve) => {
-        this.__initializationResolver__ = resolve
-      })
+        this.__initializationResolver__ = resolve;
+      });
     }
   }
 
-  get initializationComplete () {
-    this.__setupInitialization__()
-    return this.__initializationPromise__
+  get initializationComplete() {
+    this.__setupInitialization__();
+    return this.__initializationPromise__;
   }
 
   /**
