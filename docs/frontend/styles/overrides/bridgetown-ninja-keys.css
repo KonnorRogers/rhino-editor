@@ -1,10 +1,11 @@
 bridgetown-ninja-keys {
   /* This is a hacky media query. We do this so that we can guess for mobile devices we should
   be full height / width so we don't need to deal with dialog scrolling bullshit. */
-  --ninja-top: 0px;
+  --ninja-top: 24px;
   --ninja-width: clamp(200px, 100vw, 100ch);
   --ninja-accent-color: var(--sl-color-primary-600);
   z-index: 9999;
+  --ninja-selected-background: rgba(230, 230, 230, 0.4);
 }
 
 bridgetown-ninja-keys::part(modal-content) {
@@ -24,7 +25,16 @@ bridgetown-ninja-keys::part(modal-content) {
   }
 }
 
+bridgetown-ninja-keys::part(ninja-action__highlight) {
+  color: white;
+}
+
 bridgetown-ninja-keys.dark {
   --ninja-modal-background: rgba(35, 35, 35, 1);
-  --ninja-text-color: gray;
+  --ninja-text-color: white;
+  --ninja-selected-background: rgba(120, 120, 120, 0.4);
+}
+
+bridgetown-ninja-keys.dark::part(ninja-action__highlight) {
+  color: black;
 }
