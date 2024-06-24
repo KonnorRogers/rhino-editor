@@ -46,7 +46,6 @@ kr-layout::part(skip-links) {
 kr-layout::part(body) {
   max-width: 100%;
   justify-content: center;
-  margin: 0 auto;
 }
 
 kr-layout::part(main) {
