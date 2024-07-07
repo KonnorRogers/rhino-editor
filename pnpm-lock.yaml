@@ -54,8 +54,8 @@ importers:
         specifier: ~1.28.0
         version: 1.28.3
       role-components:
-        specifier: ^2.0.2
-        version: 2.0.2
+        specifier: 3.0.0-beta.2
+        version: link:../role-components
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -508,15 +508,6 @@ packages:
 
   '@esm-bundle/chai@4.3.4-fix.0':
     resolution: {integrity: sha512-26SKdM4uvDWlY8/OOOxSB1AqQWeBosCX3wRYUZO7enTAj03CtVxIiCimYVG2WpULcyV51qapK4qTovwkUr5Mlw==}
-
-  '@floating-ui/core@1.4.1':
-    resolution: {integrity: sha512-jk3WqquEJRlcyu7997NtR5PibI+y5bi+LS3hPmguVClypenMsCY3CBa3LAQnozRCtCrYWSEtAdiskpamuJRFOQ==}
-
-  '@floating-ui/dom@1.5.1':
-    resolution: {integrity: sha512-KwvVcPSXg6mQygvA1TjbN/gh///36kKtllIF8SUm0qpFj8+rvYrpvlYdL1JoA71SHpDqgSSdGOSoQ0Mp3uY5aw==}
-
-  '@floating-ui/utils@0.1.1':
-    resolution: {integrity: sha512-m0G6wlnhm/AX0H12IOWtK8gASEMffnX08RtKkCgTdHb9JpHKGloI7icFfLg9ZmQeavcvR0PKmzxClyuFPSjKWw==}
 
   '@github/catalyst@1.6.0':
     resolution: {integrity: sha512-u8A+DameixqpeyHzvnJWTGj+wfiskQOYHzSiJscCWVfMkIT3rxnbHMtGh3lMthaRY21nbUOK71WcsCnCrXhBJQ==}
@@ -2979,9 +2970,6 @@ packages:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     hasBin: true
 
-  role-components@2.0.2:
-    resolution: {integrity: sha512-DHkqel77IBg/Sd74uT7j6OHd68Hc6cErW7fRUwN0+nEBODDm1Wa9Gsk0kKeK/eh128sqBPlf8v2f4cAoyoZQdg==}
-
   rollup@3.28.1:
     resolution: {integrity: sha512-R9OMQmIHJm9znrU3m3cpE8uhN0fGdXiawME7aZIpQqvpS/85+Vt1Hq1/yVIcYfOmaQiHjvXkQAoJukvLpau6Yw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -3419,9 +3407,6 @@ packages:
 
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
-
-  web-component-define@2.0.11:
-    resolution: {integrity: sha512-oMOngNGL5k55NyaQNnPz0UnV5QtPuESvSuxpBgmHHfNjb8sgVm4akAFq7HO4I5bhGHX8Of+0XnUZ3whBo0chgw==}
 
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
@@ -3937,17 +3922,6 @@ snapshots:
   '@esm-bundle/chai@4.3.4-fix.0':
     dependencies:
       '@types/chai': 4.3.5
-
-  '@floating-ui/core@1.4.1':
-    dependencies:
-      '@floating-ui/utils': 0.1.1
-
-  '@floating-ui/dom@1.5.1':
-    dependencies:
-      '@floating-ui/core': 1.4.1
-      '@floating-ui/utils': 0.1.1
-
-  '@floating-ui/utils@0.1.1': {}
 
   '@github/catalyst@1.6.0': {}
 
@@ -6877,12 +6851,6 @@ snapshots:
     dependencies:
       glob: 7.2.0
 
-  role-components@2.0.2:
-    dependencies:
-      '@floating-ui/dom': 1.5.1
-      lit: 2.8.0
-      web-component-define: 2.0.11
-
   rollup@3.28.1:
     optionalDependencies:
       fsevents: 2.3.3
@@ -7332,11 +7300,6 @@ snapshots:
   wcwidth@1.0.1:
     dependencies:
       defaults: 1.0.4
-
-  web-component-define@2.0.11:
-    dependencies:
-      '@lit/reactive-element': 1.6.3
-      '@open-wc/dedupe-mixin': 1.4.0
 
   webidl-conversions@3.0.1: {}
 

@@ -3,7 +3,7 @@ import { css } from "lit";
 
 export const hostStyles = css`
   /* General tokens */
-  --rhino-focus-ring: 0px 0px 4px 1px var(--rhino-button-active-border-color);
+  --rhino-focus-ring: 0px 0px 1px 1px var(--rhino-button-active-border-color);
   --rhino-border-radius: 4px;
 
   --rhino-danger-border-color: red;
@@ -28,7 +28,7 @@ export const hostStyles = css`
   --rhino-button-active-background-color: rgb(226 239 255);
 
   --rhino-toolbar-text-color: hsl(219, 6%, 43%);
-  --rhino-toolbar-icon-size: 24px;
+  --rhino-toolbar-icon-size: 1em;
 
   --rhino-dialog-border-color: hsl(
     var(--rhino-button-focus-background-color-hsl) / 50%
@@ -49,8 +49,10 @@ export const toolbarButtonStyles = css`
   .rhino-toolbar-button {
     border: 1px solid var(--rhino-border-color);
     border-radius: var(--rhino-border-radius);
-    padding: 0.2em 0.4em;
+    padding: 0.4em;
     color: inherit;
+    font-size: inherit;
+    display: inline-grid;
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled) {
@@ -76,12 +78,18 @@ export const toolbarButtonStyles = css`
       :disabled
     ) {
     outline: transparent;
-    box-shadow: var(--rhino-focus-ring);
     border-color: var(--rhino-button-active-border-color);
   }
 
+  .rhino-toolbar-button:is(:focus):not(
+      [aria-disabled="true"],
+      :disabled
+    ) {
+    box-shadow: var(--rhino-focus-ring);
+  }
+
   /* Only change the background color in certain scenarios */
-  .rhino-toolbar-button:is(:focus, :hover):not(
+  .rhino-toolbar-button:is(:hover):not(
       [aria-disabled="true"],
       :disabled,
       [aria-pressed="true"],
@@ -113,15 +121,15 @@ export default css`
     ${hostStyles}
   }
 
-  .toolbar {
+  [part~="toolbar"] {
     color: var(--rhino-toolbar-text-color);
   }
 
-  .toolbar::part(base) {
+  [part~="toolbar"]::part(base) {
     overflow: auto;
   }
 
-  .toolbar::part(base) {
+  [part~="toolbar"]::part(base) {
     border-color: var(--rhino-border-color);
     border-bottom-color: transparent;
     border-width: 1px;
@@ -130,7 +138,12 @@ export default css`
     border-bottom-left-radius: 0px;
   }
 
-  .toolbar::part(base):is(:focus-visible, :focus-within) {
+  [part~="toolbar"][part~="toolbar--bubble-menu"]::part(base) {
+    border: 1px solid var(--rhino-border-color);
+    border-radius: 4px;
+  }
+
+  [part~="toolbar"]::part(base):is(:focus-visible, :focus-within) {
     border-color: var(--rhino-button-active-border-color);
     outline: transparent;
   }
@@ -140,8 +153,10 @@ export default css`
     background-color: var(--rhino-button-active-background-color);
   }
 
-  [part~="toolbar__button--link"],
-  [part~="toolbar__button--increase-indentation"] {
+  slot[name="toolbar"] :is(
+    [part~="toolbar__button--link"],
+    [part~="toolbar__button--increase-indentation"]
+  ) {
     margin-inline-end: 1rem;
   }
 
@@ -217,5 +232,12 @@ export default css`
     min-height: 200px;
     outline: transparent;
     white-space: pre-wrap;
+  }
+
+  role-tooltip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 0.75em;
   }
 `;

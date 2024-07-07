@@ -78,7 +78,7 @@
     "lit": "^2.8.0",
     "prosemirror-utils": "^1.2.2",
     "prosemirror-view": "~1.28.0",
-    "role-components": "^2.0.2",
+    "role-components": "3.0.0-beta.2",
     "tslib": "^2.6.2"
   },
   "pnpm": {
