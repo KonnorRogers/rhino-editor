@@ -389,10 +389,7 @@
     border-color: var(--rhino-button-active-border-color);
   }
 
-  .rhino-toolbar-button:is(:focus):not(
-      [aria-disabled="true"],
-      :disabled
-    ) {
+  .rhino-toolbar-button:is(:focus):not([aria-disabled="true"], :disabled) {
     box-shadow: var(--rhino-focus-ring);
   }
 

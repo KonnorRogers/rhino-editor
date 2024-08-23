@@ -436,7 +436,7 @@ export class TipTapEditorBase extends BaseElement {
 
       // Don't error if there's no direct upload URL. Allowing people to use Rhino Editor for other things.
       if (!this.getAttribute("data-direct-upload-url")) {
-        return
+        return;
       }
 
       const { attachment, target } = event;

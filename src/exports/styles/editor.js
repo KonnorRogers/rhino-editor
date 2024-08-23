@@ -81,10 +81,7 @@ export const toolbarButtonStyles = css`
     border-color: var(--rhino-button-active-border-color);
   }
 
-  .rhino-toolbar-button:is(:focus):not(
-      [aria-disabled="true"],
-      :disabled
-    ) {
+  .rhino-toolbar-button:is(:focus):not([aria-disabled="true"], :disabled) {
     box-shadow: var(--rhino-focus-ring);
   }
 
@@ -153,10 +150,11 @@ export default css`
     background-color: var(--rhino-button-active-background-color);
   }
 
-  slot[name="toolbar"] :is(
-    [part~="toolbar__button--link"],
-    [part~="toolbar__button--increase-indentation"]
-  ) {
+  slot[name="toolbar"]
+    :is(
+      [part~="toolbar__button--link"],
+      [part~="toolbar__button--increase-indentation"]
+    ) {
     margin-inline-end: 1rem;
   }
 

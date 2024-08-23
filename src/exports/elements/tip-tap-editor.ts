@@ -183,8 +183,8 @@ export class TipTapEditor extends TipTapEditorBase {
     this.starterKitOptions = Object.assign(this.starterKitOptions, {
       rhinoDefaultBubbleMenu: {
         ...this.starterKitOptions.rhinoDefaultBubbleMenu,
-        element: this.shadowRoot?.querySelector('role-anchored-region'),
-      }
+        element: this.shadowRoot?.querySelector("role-anchored-region"),
+      },
     }) as typeof this.starterKitOptions;
 
     if (this.editor) {
@@ -253,7 +253,7 @@ export class TipTapEditor extends TipTapEditorBase {
       if (inputElement != null) inputElement.focus();
     });
 
-    console.log("showing")
+    console.log("showing");
   }
 
   get linkDialog(): Maybe<HTMLDivElement> {
@@ -335,16 +335,15 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled = this.editor == null || !this.editor.can().toggleBold();
     const isActive = Boolean(this.editor?.isActive("bold"));
 
-    let tooltip_slot_name = "bold-tooltip"
-    let tooltip_id = "bold"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--bold"
-    let icon_slot_name = "bold-icon"
+    let tooltip_slot_name = "bold-tooltip";
+    let tooltip_id = "bold";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--bold";
+    let icon_slot_name = "bold-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
-
 
     return html`
       <slot name=${tooltip_slot_name}>
@@ -387,14 +386,14 @@ export class TipTapEditor extends TipTapEditorBase {
     const isActive = Boolean(this.editor?.isActive("italic"));
     const isDisabled = this.editor == null || !this.editor.can().toggleItalic();
 
-    let tooltip_slot_name = "italics-tooltip"
-    let tooltip_id = "italics"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--italics"
-    let icon_slot_name = "italics-icon"
+    let tooltip_slot_name = "italics-tooltip";
+    let tooltip_id = "italics";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--italics";
+    let icon_slot_name = "italics-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -442,14 +441,14 @@ export class TipTapEditor extends TipTapEditorBase {
     const isActive = Boolean(this.editor?.isActive("rhino-strike"));
     const isDisabled = this.editor == null || !this.editor.can().toggleStrike();
 
-    let tooltip_slot_name = "strike-tooltip"
-    let tooltip_id = "strike"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--strike"
-    let icon_slot_name = "strike-icon"
+    let tooltip_slot_name = "strike-tooltip";
+    let tooltip_id = "strike";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--strike";
+    let icon_slot_name = "strike-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -497,14 +496,14 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().setLink({ href: "" });
 
-    let tooltip_slot_name = "link-tooltip"
-    let tooltip_id = "link"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--link"
-    let icon_slot_name = "link-icon"
+    let tooltip_slot_name = "link-tooltip";
+    let tooltip_id = "link";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--link";
+    let icon_slot_name = "link-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -536,7 +535,7 @@ export class TipTapEditor extends TipTapEditorBase {
           if (this.editor == null) return;
           if (elementDisabled(e.currentTarget)) return;
 
-          e.preventDefault()
+          e.preventDefault();
           this.toggleLinkDialog();
         }}
       >
@@ -554,14 +553,14 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().toggleHeading({ level: 1 });
 
-    let tooltip_slot_name = "heading-tooltip"
-    let tooltip_id = "heading"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--heading"
-    let icon_slot_name = "heading-icon"
+    let tooltip_slot_name = "heading-tooltip";
+    let tooltip_id = "heading";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--heading";
+    let icon_slot_name = "heading-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -610,14 +609,14 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().toggleBlockquote();
 
-    let tooltip_slot_name = "blockquote-tooltip"
-    let tooltip_id = "blockquote"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--blockquote"
-    let icon_slot_name = "blockquote-icon"
+    let tooltip_slot_name = "blockquote-tooltip";
+    let tooltip_id = "blockquote";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--blockquote";
+    let icon_slot_name = "blockquote-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -666,14 +665,14 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().toggleCodeBlock();
 
-    let tooltip_slot_name = "code-block-tooltip"
-    let tooltip_id = "code-block"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--code-block"
-    let icon_slot_name = "code-block-icon"
+    let tooltip_slot_name = "code-block-tooltip";
+    let tooltip_id = "code-block";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--code-block";
+    let icon_slot_name = "code-block-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -728,14 +727,14 @@ export class TipTapEditor extends TipTapEditorBase {
       this.editor != null && isExactNodeActive(this.editor.state, "bulletList"),
     );
 
-    let tooltip_slot_name = "bullet-list-tooltip"
-    let tooltip_id = "bullet-list"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--bullet-list"
-    let icon_slot_name = "bullet-list-icon"
+    let tooltip_slot_name = "bullet-list-tooltip";
+    let tooltip_id = "bullet-list";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--bullet-list";
+    let icon_slot_name = "bullet-list-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -791,14 +790,14 @@ export class TipTapEditor extends TipTapEditorBase {
         isExactNodeActive(this.editor.state, "orderedList"),
     );
 
-    let tooltip_slot_name = "ordered-list-tooltip"
-    let tooltip_id = "ordered-list"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--ordered-list"
-    let icon_slot_name = "ordered-list-icon"
+    let tooltip_slot_name = "ordered-list-tooltip";
+    let tooltip_id = "ordered-list";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--ordered-list";
+    let icon_slot_name = "ordered-list-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -845,16 +844,16 @@ export class TipTapEditor extends TipTapEditorBase {
 
     const isDisabled = this.editor == null;
 
-    let tooltip_slot_name = "attach-files-tooltip"
-    let tooltip_id = "attach-files"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--attach-files"
-    let icon_slot_name = "attach-files-icon"
-    let file_input_id = "file-input"
+    let tooltip_slot_name = "attach-files-tooltip";
+    let tooltip_id = "attach-files";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--attach-files";
+    let icon_slot_name = "attach-files-icon";
+    let file_input_id = "file-input";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
-      file_input_id = prefix + "-" + file_input_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
+      file_input_id = prefix + "-" + file_input_id;
     }
 
     return html`
@@ -905,16 +904,15 @@ export class TipTapEditor extends TipTapEditorBase {
 
     const isDisabled = this.editor == null || !this.editor.can().undo();
 
-    let tooltip_slot_name = "undo-tooltip"
-    let tooltip_id = "undo"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--undo"
-    let icon_slot_name = "undo-icon"
+    let tooltip_slot_name = "undo-tooltip";
+    let tooltip_id = "undo";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--undo";
+    let icon_slot_name = "undo-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
-
 
     return html`
       <slot name=${tooltip_slot_name}>
@@ -961,14 +959,15 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().liftListItem("listItem");
 
-    let tooltip_slot_name = "decrease-indentation-tooltip"
-    let tooltip_id = "decrease-indentation"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--decrease-indentation"
-    let icon_slot_name = "decrease-indentation-icon"
+    let tooltip_slot_name = "decrease-indentation-tooltip";
+    let tooltip_id = "decrease-indentation";
+    let tooltip_parts =
+      "toolbar__tooltip toolbar__tooltip--decrease-indentation";
+    let icon_slot_name = "decrease-indentation-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -1000,9 +999,7 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().liftListItem("listItem").run();
         }}
       >
-        <slot name=${icon_slot_name}>
-          ${this.icons.decreaseIndentation}
-        </slot>
+        <slot name=${icon_slot_name}> ${this.icons.decreaseIndentation} </slot>
       </button>
     `;
   }
@@ -1016,16 +1013,16 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().sinkListItem("listItem");
 
-    let tooltip_slot_name = "increase-indentation-tooltip"
-    let tooltip_id = "increase-indentation"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--increase-indentation"
-    let icon_slot_name = "increase-indentation-icon"
+    let tooltip_slot_name = "increase-indentation-tooltip";
+    let tooltip_id = "increase-indentation";
+    let tooltip_parts =
+      "toolbar__tooltip toolbar__tooltip--increase-indentation";
+    let icon_slot_name = "increase-indentation-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
-
 
     return html`
       <slot name=${tooltip_slot_name}>
@@ -1056,9 +1053,7 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().sinkListItem("listItem").run();
         }}
       >
-        <slot name=${icon_slot_name}>
-          ${this.icons.increaseIndentation}
-        </slot>
+        <slot name=${icon_slot_name}> ${this.icons.increaseIndentation} </slot>
       </button>
     `;
   }
@@ -1070,14 +1065,14 @@ export class TipTapEditor extends TipTapEditorBase {
 
     const isDisabled = this.editor == null || !this.editor.can().redo?.();
 
-    let tooltip_slot_name = "redo-indentation-tooltip"
-    let tooltip_id = "redo-indentation"
-    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--redo-indentation"
-    let icon_slot_name = "redo-indentation-icon"
+    let tooltip_slot_name = "redo-indentation-tooltip";
+    let tooltip_id = "redo-indentation";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--redo-indentation";
+    let icon_slot_name = "redo-indentation-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name
-      tooltip_id = prefix + "-" + tooltip_id
+      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
+      tooltip_id = prefix + "-" + tooltip_id;
     }
 
     return html`
@@ -1225,7 +1220,9 @@ export class TipTapEditor extends TipTapEditorBase {
    * @private
    */
   private __handleLinkDialogClick = (e: Event) => {
-    if (e.defaultPrevented) { return }
+    if (e.defaultPrevented) {
+      return;
+    }
 
     const linkDialogContainer = this.shadowRoot?.querySelector(
       ".link-dialog__container",
@@ -1327,18 +1324,18 @@ export class TipTapEditor extends TipTapEditorBase {
     </div>`;
   }
 
-  renderBubbleMenuToolbar () {
+  renderBubbleMenuToolbar() {
     return html`
       <role-anchored-region
         @bubble-menu-show=${(e: Event & { clientRect: () => DOMRect }) => {
-          const self = e.currentTarget as RoleAnchoredRegion
-          self.anchor = { getBoundingClientRect: e.clientRect }
-          self.active = true
+          const self = e.currentTarget as RoleAnchoredRegion;
+          self.anchor = { getBoundingClientRect: e.clientRect };
+          self.active = true;
         }}
         @bubble-menu-hide=${(e: Event) => {
-          const self = e.currentTarget as RoleAnchoredRegion
-          self.anchor = null
-          self.active = false
+          const self = e.currentTarget as RoleAnchoredRegion;
+          self.anchor = null;
+          self.active = false;
         }}
         style="
           --background: transparent;
@@ -1362,7 +1359,7 @@ export class TipTapEditor extends TipTapEditorBase {
           </role-toolbar>
         </slot>
       </role-anchored-region>
-    `
+    `;
   }
 }
 
