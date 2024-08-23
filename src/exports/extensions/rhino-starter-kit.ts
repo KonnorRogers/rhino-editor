@@ -64,7 +64,7 @@ export interface RhinoStarterKitOptions {
    */
   rhinoPasteEvent: Partial<PasteOptions> | false;
 
-  rhinoDefaultBubbleMenu: Partial<BubbleMenuOptions> | false;
+  rhinoBubbleMenu: Partial<BubbleMenuOptions> | false;
 }
 
 export type TipTapPlugin = Node | Extension | Mark;
@@ -104,7 +104,7 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       ["rhinoLink", Link],
       ["rhinoFocus", Focus],
       ["rhinoPlaceholder", Placeholder],
-      ["rhinoDefaultBubbleMenu", BubbleMenuExtension],
+      ["rhinoBubbleMenu", BubbleMenuExtension],
     ];
 
     extensions.forEach(([string, extension]) => {

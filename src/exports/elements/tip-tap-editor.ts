@@ -181,8 +181,8 @@ export class TipTapEditor extends TipTapEditorBase {
     await this.updateComplete;
 
     this.starterKitOptions = Object.assign(this.starterKitOptions, {
-      rhinoDefaultBubbleMenu: {
-        ...this.starterKitOptions.rhinoDefaultBubbleMenu,
+      rhinoBubbleMenu: {
+        ...this.starterKitOptions.rhinoBubbleMenu,
         element: this.shadowRoot?.querySelector("role-anchored-region"),
       },
     }) as typeof this.starterKitOptions;
@@ -341,8 +341,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "bold-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -392,8 +393,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "italics-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -447,8 +449,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "strike-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -502,8 +505,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "link-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -559,8 +563,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "heading-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -615,8 +620,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "blockquote-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -671,8 +677,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "code-block-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -733,8 +740,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "bullet-list-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -796,8 +804,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "ordered-list-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -851,9 +860,10 @@ export class TipTapEditor extends TipTapEditorBase {
     let file_input_id = "file-input";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
-      file_input_id = prefix + "-" + file_input_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+      file_input_id = prefix + "__" + file_input_id;
     }
 
     return html`
@@ -910,8 +920,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "undo-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -966,8 +977,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "decrease-indentation-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -1020,8 +1032,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "increase-indentation-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -1071,8 +1084,9 @@ export class TipTapEditor extends TipTapEditorBase {
     let icon_slot_name = "redo-indentation-icon";
 
     if (prefix) {
-      tooltip_slot_name = prefix + "-" + tooltip_slot_name;
-      tooltip_id = prefix + "-" + tooltip_id;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
     }
 
     return html`
@@ -1352,10 +1366,12 @@ export class TipTapEditor extends TipTapEditorBase {
             exportparts="base:bubble-menu__toolbar__base"
             style="font-size: 0.8em; background: Canvas;"
           >
-            ${this.renderBoldButton("bubble-menu")}
-            ${this.renderItalicButton("bubble-menu")}
-            ${this.renderStrikeButton("bubble-menu")}
-            ${this.renderLinkButton("bubble-menu")}
+            <slot name="bubble-menu-toolbar-items">
+              ${this.renderBoldButton("bubble-menu")}
+              ${this.renderItalicButton("bubble-menu")}
+              ${this.renderStrikeButton("bubble-menu")}
+              ${this.renderLinkButton("bubble-menu")}
+            </slot>
           </role-toolbar>
         </slot>
       </role-anchored-region>
