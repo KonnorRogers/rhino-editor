@@ -46,3 +46,19 @@ So, to render a custom file icon, you could do the following:
 
 Notice the slot name is `bubble-menu__strike-icon`, and the regular toolbar is just `strike-icon`.
 
+## Multiple bubble menus
+
+## Disabling the bubble menu
+
+The bubble menu can be disabled by doing the following:
+
+```js
+const rhinoEditor = document.querySelector("rhino-editor")
+function disableBubbleMenu () {
+  rhinoEditor.disableStarterKitOptions("rhinoBubbleMenu")
+}
+
+rhinoEditor.addEventListener("rhino-before-initialize", disableBubbleMenu)
+```
+
+

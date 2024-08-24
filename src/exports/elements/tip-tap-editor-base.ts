@@ -1,5 +1,5 @@
 import { BaseElement } from "../../internal/elements/base-element.js";
-import { Content, Editor, EditorOptions } from "@tiptap/core";
+import { AnyExtension, Content, Editor, EditorOptions } from "@tiptap/core";
 import { tipTapCoreStyles } from "../styles/tip-tap-core-styles.js";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit, { StarterKitOptions } from "@tiptap/starter-kit";
@@ -451,11 +451,38 @@ export class TipTapEditorBase extends BaseElement {
       | EditorOptions["extensions"]
       | Array<EditorOptions["extensions"]>
   ) {
-    if (Array.isArray(extensions)) {
-      extensions = extensions.flat(1);
-    }
+    const ary: EditorOptions["extensions"]  = []
+    extensions.forEach((ext) => {
+      if (Array.isArray(ext)) {
+        ary.push(ext.flat(1) as unknown as AnyExtension)
+        return
+      }
 
-    this.extensions = this.extensions.concat(extensions);
+      ary.push(ext)
+    })
+
+    this.extensions = this.extensions.concat(ary);
+  }
+
+  disableStarterKitOptions(
+    ...options:
+      | Array<keyof RhinoStarterKitOptions>
+      | Array<Array<keyof RhinoStarterKitOptions>>
+  ) {
+    const disabledStarterKitOptions: Record<string, false> = {}
+    options.forEach((ext) => {
+      if (Array.isArray(ext)) {
+        ext.flat(1).forEach((str) => disabledStarterKitOptions[str] = false)
+        return
+      }
+
+      disabledStarterKitOptions[ext] = false
+    })
+
+    this.starterKitOptions = {
+      ...this.starterKitOptions,
+      ...disabledStarterKitOptions
+    }
   }
 
   /**
