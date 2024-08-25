@@ -48,17 +48,42 @@ Notice the slot name is `bubble-menu__strike-icon`, and the regular toolbar is j
 
 ## Multiple bubble menus
 
+<%= render ComingSoon.new %>
+
+## Enable the bubble menu only for certain "node"
+
+<%= render ComingSoon.new %>
+
 ## Disabling the bubble menu
 
 The bubble menu can be disabled by doing the following:
 
-```js
+<% disabled_bubble_menu = capture do %>
 const rhinoEditor = document.querySelector("rhino-editor")
 function disableBubbleMenu () {
   rhinoEditor.disableStarterKitOptions("rhinoBubbleMenu")
 }
 
 rhinoEditor.addEventListener("rhino-before-initialize", disableBubbleMenu)
+<%- end -%>
+
+
+```js
+<%= disabled_bubble_menu %>
 ```
+
+<light-preview
+  preview-mode="shadow-dom"
+  script-scope="shadow-dom"
+  wrap="hard"
+>
+  <script type="text/plain" slot="code">
+    <link rel="stylesheet" href="/rhino-editor/exports/styles/trix.css">
+    <rhino-editor></rhino-editor>
+    <script type="module">
+      <%= disabled_bubble_menu.to_s.gsub(/\n/, "\n      ").chomp.html_safe %>
+    &lt;/script>
+  </script>
+</light-preview>
 
 

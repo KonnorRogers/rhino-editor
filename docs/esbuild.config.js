@@ -1,4 +1,5 @@
 const build = require("./config/esbuild.defaults.js")
+const path = require("path")
 
 // Update this if you need to configure a destination folder other than `output`
 const outputFolder = "output"
@@ -7,7 +8,7 @@ const outputFolder = "output"
 //
 // ```
 // const path = require("path")
-// const esbuildCopy = require('esbuild-plugin-copy').default
+const esbuildCopy = require('esbuild-plugin-copy').default
 // const esbuildOptions = {
 //   plugins: [
 //     esbuildCopy({
@@ -36,7 +37,16 @@ const esbuildOptions = {
     "frontend/javascript/entrypoints/syntax-highlighting.js"
   ],
   splitting: true,
-  format: "esm"
+  format: "esm",
+  plugins: [
+    esbuildCopy({
+      assets: {
+        from: [path.resolve(__dirname, '../exports/styles/trix.css')],
+        to: [path.resolve(__dirname, 'src/rhino-editor/exports/styles/trix.css')],
+      },
+      verbose: false
+    }),
+  ]
 }
 
 build(outputFolder, esbuildOptions)

@@ -1,0 +1,16 @@
+light-preview::before {
+  content: "Preview";
+  background: var(--sl-color-neutral-600);
+  color: var(--sl-color-neutral-0);
+  padding: 4px;
+  padding-inline-start: 16px;
+  display: block;
+}
+light-preview {
+  display: grid;
+  align-items: start;
+}
+
+light-preview::part(base) {
+  border-radius: 0px;
+}
