@@ -93,6 +93,10 @@ import RoleAnchoredRegion from "role-components/exports/components/anchored-regi
  * @slot redo-button
  * @slot after-redo-button
  * @slot toolbar-end
+ *
+ * ## Events
+ * @bubble-menu-show
+ * @bubble-menu-hide
  */
 export class TipTapEditor extends TipTapEditorBase {
   static get styles() {
