@@ -37,3 +37,14 @@ code.highlighter-rouge {
   color: var(--code-color);
 }
 
+:is(h1,h2,h3,h4,h5,h6)[id] a {
+  color: var(--sl-color-neutral-900);
+  text-decoration-color: var(--sl-color-primary-400);
+  text-decoration-thickness: 4px;
+}
+
+
+:is(h1,h2,h3,h4,h5,h6)[id] a:hover {
+  color: var(--sl-color-primary-600);
+}
+

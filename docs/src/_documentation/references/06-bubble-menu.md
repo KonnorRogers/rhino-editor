@@ -46,10 +46,6 @@ So, to render a custom file icon, you could do the following:
 
 Notice the slot name is `bubble-menu__strike-icon`, and the regular toolbar is just `strike-icon`.
 
-## Enable the bubble menu only for certain "node"
-
-<%= render ComingSoon.new %>
-
 ## Multiple bubble menus
 
 It is possible to have multiple bubble menus, and display certain buttons / elements depending on what bubble menu is being shown. The easiest way to do this is to re-use the existing bubble menu and hook into the `bubble-menu-show` event from the editor. Then, you can find the current active node and decide what to display.
@@ -57,12 +53,13 @@ It is possible to have multiple bubble menus, and display certain buttons / elem
 <% multiple_bubble_menus = capture do %>
 const rhinoEditor = document.querySelector("rhino-editor")
 function handleBubbleMenuShow () {
-  const tableToolbar = rhinoEditor.querySelector("#table-toolbar")
+  const listToolbar = rhinoEditor.querySelector("#list-toolbar")
   const defaultToolbar = rhinoEditor.bubbleMenuToolbar
 
-  if (rhinoEditor.isActive("table)) {
-    // We're on a table. Show the table bubble menu.
-    tableToolbar.removeAttribute("hidden")
+  // When the current active node, or a parent of the current active node is a list element, then
+  if (rhinoEditor.editor.isActive("bulletList") || rhinoEditor.editor.isActive("orderedList")) {
+    // We're on a list. Show the list bubble menu.
+    listToolbar.removeAttribute("hidden")
     defaultToolbar.setAttribute("hidden", "")
   } else {
     tableToolbar.setAttribute("hidden", "")
@@ -78,20 +75,24 @@ rhinoEditor.addEventListener("bubble-menu-show", handleBubbleMenuShow)
 <%= multiple_bubble_menus %>
 ```
 
+<% content = "<ul><li><p>Select me and I can indent</p></li></ul><p></p><p>Select me and I'm the default bubble menu.</p>".html_safe %>
+
 <light-preview
   preview-mode="shadow-dom"
   script-scope="shadow-dom"
   wrap="hard"
 >
   <script type="text/plain" slot="code">
-    <rhino-editor></rhino-editor>
+    <input id="input" type="hidden" value="<%= content %>">
+    <rhino-editor input="input"></rhino-editor>
     <script type="module">
       <%= multiple_bubble_menus.to_s.gsub(/\n/, "\n      ").chomp.html_safe %>
     &lt;/script>
   </script>
   <script type="text/plain" slot="preview-html">
     <link rel="stylesheet" href="/rhino-editor/exports/styles/trix.css">
-    <rhino-editor></rhino-editor>
+    <input id="input" type="hidden" value="<%= content %>">
+    <rhino-editor input="input"></rhino-editor>
     <script type="module">
       <%= multiple_bubble_menus.to_s.gsub(/\n/, "\n      ").chomp.html_safe %>
     &lt;/script>

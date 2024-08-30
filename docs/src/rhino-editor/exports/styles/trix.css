@@ -285,4 +285,9 @@
   border-color: var(--rhino-button-disabled-border-color);
   box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
 }
+svg,
+::slotted(svg) {
+  height: var(--rhino-toolbar-icon-size);
+  width: var(--rhino-toolbar-icon-size);
+}
 /*# sourceMappingURL=trix.css.map */

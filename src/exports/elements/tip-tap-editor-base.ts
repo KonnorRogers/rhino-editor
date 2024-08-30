@@ -529,9 +529,11 @@ export class TipTapEditorBase extends BaseElement {
    * Searches for the <input> element in the light dom to write the HTML or JSON to.
    */
   get inputElement(): Maybe<HTMLInputElement> {
-    if (this.input == null) return undefined;
+    if (!this.input) return undefined;
 
-    return document.getElementById(this.input) as Maybe<HTMLInputElement>;
+    const rootNode = (this.getRootNode() || document) as Element
+
+    return rootNode.querySelector(`#${this.input}`) as Maybe<HTMLInputElement>;
   }
 
   async handleFiles(files: File[] | FileList): Promise<AttachmentManager[]> {

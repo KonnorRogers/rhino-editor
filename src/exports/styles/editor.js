@@ -111,6 +111,11 @@ export const toolbarButtonStyles = css`
     border-color: var(--rhino-button-disabled-border-color);
     box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
   }
+
+  svg, ::slotted(svg) {
+    height: var(--rhino-toolbar-icon-size);
+    width: var(--rhino-toolbar-icon-size);
+  }
 `;
 
 export default css`
@@ -123,16 +128,15 @@ export default css`
   }
 
   [part~="toolbar"]::part(base) {
-    overflow: auto;
-  }
-
-  [part~="toolbar"]::part(base) {
     border-color: var(--rhino-border-color);
     border-bottom-color: transparent;
     border-width: 1px;
     border-radius: 4px;
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
+    display: flex;
+    align-items: center;
+    overflow: auto;
   }
 
   [part~="toolbar"][part~="toolbar--bubble-menu"]::part(base) {
@@ -237,5 +241,14 @@ export default css`
     top: 0;
     left: 0;
     font-size: 0.75em;
+    --background: Canvas;
+    color: CanvasText;
+    --border-color: gray;
+  }
+
+  @media screen and (prefers-color-scheme: dark) {
+    role-tooltip {
+      --border-color: rgb(200, 200, 200);
+    }
   }
 `;
