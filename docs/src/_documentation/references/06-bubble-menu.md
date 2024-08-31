@@ -5,13 +5,15 @@ permalink: /references/bubble-menu/
 
 Rhino Editor comes with its own built-in bubble menu.
 
-You can override it entirely like this:
+The reasoning for this is the bubble menu from TipTap requires writing Extensions and `shouldShow` logic and is much more heavily extension based. I wanted something more event and slot based making it a lot easier to customize and add to it (in my opinion).
+
+You can override the bubble menu toolbar entirely like this:
 
 ```html
 <rhino-editor>
-  <div slot="bubble-menu">
+  <role-toolbar slot="bubble-menu-toolbar">
     <!-- You're on your own now -->
-  </div>
+  </role-toolbar>
 </rhino-editor>
 ```
 
@@ -20,12 +22,38 @@ You can override only the inner toolbar items of the bubble menu like so:
 ```html
 <rhino-editor>
   <div slot="bubble-menu-toolbar-items">
-    <button data-role="toolbar-item">Do stuff</button>
+    <button tabindex="-1" data-role="toolbar-item">Do stuff</button>
   </div>
 </rhino-editor>
 ```
 
-Finally, the bubble menu toolbar supports all the same slots as the parent toolbar, just with the `bubble-menu__` prefix.
+You can add additional items:
+
+```html
+<rhino-editor>
+  <div slot="before-bubble-menu-toolbar-items">
+    <button tabindex="-1" data-role="toolbar-item">Do stuff</button>
+  </div>
+  <div slot="after-bubble-menu-toolbar-items">
+    <button tabindex="-1" data-role="toolbar-item">Do stuff</button>
+  </div>
+</rhino-editor>
+```
+
+Or you can add additional toolbars like so:
+
+```html
+<rhino-editor>
+  <role-toolbar id="table-toolbar" slot="additional-bubble-menu-toolbar">
+    <button data-role="toolbar-item" tabindex="-1">Do stuff</button>
+  </role-toolbar>
+  <role-toolbar id="list-toolbar" slot="additional-bubble-menu-toolbar">
+    <button data-role="toolbar-item" tabindex="-1">Do stuff</button>
+  </role-toolbar>
+</rhino-editor>
+```
+
+Finally, the bubble menu toolbar supports all the same slots as the base Rhino Editor toolbar, just with the `bubble-menu__` prefix on the slots and parts.
 
 So, to render a custom file icon, you could do the following:
 
@@ -54,16 +82,16 @@ It is possible to have multiple bubble menus, and display certain buttons / elem
 const rhinoEditor = document.querySelector("rhino-editor")
 function handleBubbleMenuShow () {
   const listToolbar = rhinoEditor.querySelector("#list-toolbar")
-  const defaultToolbar = rhinoEditor.bubbleMenuToolbar
+  const defaultToolbar = rhinoEditor.defaultBubbleMenuToolbar
 
   // When the current active node, or a parent of the current active node is a list element, then
   if (rhinoEditor.editor.isActive("bulletList") || rhinoEditor.editor.isActive("orderedList")) {
     // We're on a list. Show the list bubble menu.
-    listToolbar.removeAttribute("hidden")
-    defaultToolbar.setAttribute("hidden", "")
+    listToolbar.style.display = null
+    defaultToolbar.style.display = "none"
   } else {
-    tableToolbar.setAttribute("hidden", "")
-    defaultToolbar.removeAttribute("hidden", "")
+    listToolbar.style.display = "none"
+    defaultToolbar.style.display = null
   }
 }
 
@@ -77,25 +105,30 @@ rhinoEditor.addEventListener("bubble-menu-show", handleBubbleMenuShow)
 
 <% content = "<ul><li><p>Select me and I can indent</p></li></ul><p></p><p>Select me and I'm the default bubble menu.</p>".html_safe %>
 
+<% html = capture do %>
+    <input id="input" type="hidden" value="<%= content %>">
+    <rhino-editor input="input">
+      <role-toolbar id="list-toolbar" slot="additional-bubble-menu-toolbar">
+        <button>Indent</button>
+        <button>Dedent</button>
+      </role-toolbar>
+    </rhino-editor>
+    <script type="module">
+      <%= multiple_bubble_menus.to_s.gsub(/\n/, "\n      ").chomp.html_safe %>
+    &lt;/script>
+<% end %>
+
 <light-preview
   preview-mode="shadow-dom"
   script-scope="shadow-dom"
   wrap="hard"
 >
   <script type="text/plain" slot="code">
-    <input id="input" type="hidden" value="<%= content %>">
-    <rhino-editor input="input"></rhino-editor>
-    <script type="module">
-      <%= multiple_bubble_menus.to_s.gsub(/\n/, "\n      ").chomp.html_safe %>
-    &lt;/script>
+    <%= html.html_safe %>
   </script>
   <script type="text/plain" slot="preview-html">
     <link rel="stylesheet" href="/rhino-editor/exports/styles/trix.css">
-    <input id="input" type="hidden" value="<%= content %>">
-    <rhino-editor input="input"></rhino-editor>
-    <script type="module">
-      <%= multiple_bubble_menus.to_s.gsub(/\n/, "\n      ").chomp.html_safe %>
-    &lt;/script>
+    <%= html.html_safe %>
   </script>
 </light-preview>
 

@@ -28,3 +28,16 @@ Equivalent Trix Events: <https://github.com/basecamp/trix/blob/main/README.md#ob
 
 - [x] `rhino-attachment-remove` fires when an attachment is removed from the document. You can access the Rhino attachment object through the attachment property on the event. You may wish to use this event to clean up remotely stored files.
 
+## Direct Upload Events
+
+(Thank you Matheus Rich for the inspiration!)
+
+<https://github.com/rails/rails/pull/52680>
+
+Direct Uploads now have the following events you can listen to in the editor. All of the events have the `event.attachmentManager` property which should have all the information you need to react appropriately.
+
+- [ ] - `direct-upload:start` - called when the upload starts.
+- [ ] - `direct-upload:progress` - Called periodically as the editor progesses.
+- [ ] - `direct-upload:error` - Called when the upload errors.
+- [ ] - `direct-upload:end` - Called when the upload has finished. This will not get called if there is an error.
+

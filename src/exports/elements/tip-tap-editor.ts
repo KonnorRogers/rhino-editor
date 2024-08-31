@@ -1342,9 +1342,17 @@ export class TipTapEditor extends TipTapEditorBase {
     </div>`;
   }
 
+  /**
+   * Returns the bubble menu toolbar from the shadow root.
+   */
+  get defaultBubbleMenuToolbar (): RoleToolbar | null | undefined {
+    return this.shadowRoot?.querySelector<RoleToolbar>("[part~='bubble-menu__toolbar']")
+  }
+
   renderBubbleMenuToolbar() {
     return html`
       <role-anchored-region
+        part="bubble-menu__anchored-region"
         @bubble-menu-show=${(e: Event & { clientRect: () => DOMRect }) => {
           const self = e.currentTarget as RoleAnchoredRegion;
           self.anchor = { getBoundingClientRect: e.clientRect };
@@ -1355,29 +1363,26 @@ export class TipTapEditor extends TipTapEditorBase {
           self.anchor = null;
           self.active = false;
         }}
-        style="
-          --background: transparent;
-          --border-color: transparent;
-          color: inherit;
-        "
         anchored-popover-type="manual"
         distance="4"
       >
-        <slot name="bubble-menu">
+        <slot name="bubble-menu-toolbar">
           <role-toolbar
-            part="toolbar toolbar--bubble-menu"
+            part="toolbar bubble-menu__toolbar"
             role="toolbar"
             exportparts="base:bubble-menu__toolbar__base"
-            style="font-size: 0.8em; background: Canvas;"
           >
+            <slot name="after-bubble-menu-toolbar-items"></slot>
             <slot name="bubble-menu-toolbar-items">
               ${this.renderBoldButton("bubble-menu")}
               ${this.renderItalicButton("bubble-menu")}
               ${this.renderStrikeButton("bubble-menu")}
               ${this.renderLinkButton("bubble-menu")}
             </slot>
+            <slot name="after-bubble-menu-toolbar-items"></slot>
           </role-toolbar>
         </slot>
+        <slot name="additional-bubble-menu-toolbar"></slot>
       </role-anchored-region>
     `;
   }

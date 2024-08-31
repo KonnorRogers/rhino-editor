@@ -166,6 +166,11 @@ export default css`
     margin-inline-end: auto;
   }
 
+  role-anchored-region {
+    font-size: 0.8em;
+    --background: Canvas;
+  }
+
   #dialogs {
     position: absolute;
     height: 100%;
