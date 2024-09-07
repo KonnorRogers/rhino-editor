@@ -139,9 +139,10 @@ export default css`
     overflow: auto;
   }
 
-  [part~="toolbar"][part~="toolbar--bubble-menu"]::part(base) {
+  [part~="toolbar"][part~="bubble-menu__toolbar"]::part(base) {
     border: 1px solid var(--rhino-border-color);
     border-radius: 4px;
+    padding: 4px;
   }
 
   [part~="toolbar"]::part(base):is(:focus-visible, :focus-within) {
@@ -169,6 +170,11 @@ export default css`
   role-anchored-region {
     font-size: 0.8em;
     --background: Canvas;
+    --border-color: transparent;
+  }
+
+  role-anchored-region::part(popover) {
+    border: none;
   }
 
   #dialogs {
