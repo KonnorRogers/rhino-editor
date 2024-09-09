@@ -36,8 +36,10 @@ Equivalent Trix Events: <https://github.com/basecamp/trix/blob/main/README.md#ob
 
 Direct Uploads now have the following events you can listen to in the editor. All of the events have the `event.attachmentManager` property which should have all the information you need to react appropriately.
 
-- [ ] - `direct-upload:start` - called when the upload starts.
-- [ ] - `direct-upload:progress` - Called periodically as the editor progesses.
-- [ ] - `direct-upload:error` - Called when the upload errors.
-- [ ] - `direct-upload:end` - Called when the upload has finished. This will not get called if there is an error.
+- [x] - `rhino-direct-upload:start` - called when the upload starts.
+- [x] - `rhino-direct-upload:progress` - Called periodically as the editor progesses.
+- [x] - `rhino-direct-upload:error` - Called when the upload errors.
+- [x] - `rhino-direct-upload:success` - Called when the upload has finished. This will get **NOT** get called if there is an error.
+- [x] - `rhino-direct-upload:complete` - Called when the upload has finished. This will get called even if there is an error.
 
+All of the above have a `event.directUploadInstance` which will contain various properties you need. Such as `.progress`, `.attachment`, etc.

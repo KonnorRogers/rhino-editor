@@ -37,9 +37,7 @@ function AppendCssStyles () {
         const finalString = `/* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
 ${styles.toString()}
 /* src/exports/styles/editor.js:hostStyles */
-.trix-content {
-  ${hostStyles.toString()}
-}
+${hostStyles.toString()}
 
 /* src/exports/styles/editor.js:toolbarButtonStyles */
 ${toolbarButtonStyles.toString()}

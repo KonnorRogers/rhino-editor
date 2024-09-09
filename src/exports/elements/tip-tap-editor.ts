@@ -95,8 +95,8 @@ import RoleAnchoredRegion from "role-components/exports/components/anchored-regi
  * @slot toolbar-end
  *
  * ## Events
- * @bubble-menu-show
- * @bubble-menu-hide
+ * @rhino-bubble-menu-show
+ * @rhino-bubble-menu-hide
  */
 export class TipTapEditor extends TipTapEditorBase {
   static get styles() {
@@ -1353,12 +1353,12 @@ export class TipTapEditor extends TipTapEditorBase {
     return html`
       <role-anchored-region
         part="bubble-menu__anchored-region"
-        @bubble-menu-show=${(e: Event & { clientRect: () => DOMRect }) => {
+        @rhino-bubble-menu-show=${(e: Event & { clientRect: () => DOMRect }) => {
           const self = e.currentTarget as RoleAnchoredRegion;
           self.anchor = { getBoundingClientRect: e.clientRect };
           self.active = true;
         }}
-        @bubble-menu-hide=${(e: Event) => {
+        @rhino-bubble-menu-hide=${(e: Event) => {
           const self = e.currentTarget as RoleAnchoredRegion;
           self.anchor = null;
           self.active = false;

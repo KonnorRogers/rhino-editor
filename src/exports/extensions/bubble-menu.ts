@@ -246,7 +246,7 @@ export class BubbleMenuView {
   };
 
   show(clientRect: () => DOMRect) {
-    const evt = new Event("bubble-menu-show", {
+    const evt = new Event("rhino-bubble-menu-show", {
       bubbles: true,
       composed: true,
     });
@@ -256,7 +256,7 @@ export class BubbleMenuView {
   }
 
   hide() {
-    const evt = new Event("bubble-menu-hide", {
+    const evt = new Event("rhino-bubble-menu-hide", {
       bubbles: true,
       composed: true,
     });

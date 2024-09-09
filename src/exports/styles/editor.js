@@ -2,55 +2,68 @@
 import { css } from "lit";
 
 export const hostStyles = css`
-  /* General tokens */
-  --rhino-focus-ring: 0px 0px 1px 1px var(--rhino-button-active-border-color);
-  --rhino-border-radius: 4px;
+  :host, .trix-content {
+    /* General tokens */
+    --rhino-focus-ring: 0px 0px 1px 1px var(--rhino-button-active-border-color);
+    --rhino-border-radius: 4px;
 
-  --rhino-danger-border-color: red;
-  --rhino-danger-background-color: #ffdddd;
+    --rhino-danger-border-color: red;
+    --rhino-danger-background-color: #ffdddd;
 
-  /* Editor tokens */
-  --rhino-text-color: #374151;
-  --rhino-border-color: #cecece;
-  --rhino-placeholder-text-color: #cecece;
+    /* Editor tokens */
+    --rhino-text-color: #374151;
+    --rhino-dark-text-color: white;
 
-  /* Regular buttons */
-  --rhino-button-text-color: #889;
-  --rhino-button-border-color: #cecece;
+    --rhino-border-color: #cecece;
+    --rhino-placeholder-text-color: #cecece;
+    --rhino-dark-placeholder-text-color: gray;
 
-  /** Disabled Buttons */
-  --rhino-button-disabled-text-color: #d1d5db;
-  --rhino-button-disabled-border-color: #d1d5db;
-  --rhino-button-disabled-background-color: #d1d5db;
+    /* Regular buttons */
+    --rhino-button-text-color: #889;
+    --rhino-button-dark-text-color: #eee;
+    --rhino-button-border-color: #cecece;
 
-  /** Active buttons */
-  --rhino-button-active-border-color: #005a9c;
-  --rhino-button-active-background-color: rgb(226 239 255);
+    /** Disabled Buttons */
+    --rhino-button-disabled-text-color: #d1d5db;
+    --rhino-button-disabled-border-color: #d1d5db;
+    --rhino-button-disabled-background-color: #d1d5db;
 
-  --rhino-toolbar-text-color: hsl(219, 6%, 43%);
-  --rhino-toolbar-icon-size: 1em;
+    /** Active buttons */
+    --rhino-button-active-border-color: #005a9c;
+    --rhino-button-active-background-color: rgb(226 239 255);
 
-  --rhino-dialog-border-color: hsl(
-    var(--rhino-button-focus-background-color-hsl) / 50%
-  );
+    --rhino-toolbar-text-color: hsl(219, 6%, 43%);
+    --rhino-toolbar-icon-size: 1em;
 
-  /** Focus buttons */
-  --rhino-button-focus-background-color: hsl(
-    var(--rhino-button-focus-background-color-hsl)
-  );
+    --rhino-dialog-border-color: hsl(
+      var(--rhino-button-focus-background-color-hsl) / 50%
+    );
 
-  --rhino-button-focus-background-color-hsl: 219 26% 95%;
+    /** Focus buttons */
+    --rhino-button-focus-background-color: hsl(
+      var(--rhino-button-focus-background-color-hsl)
+    );
 
-  display: block;
-  color: var(--rhino-text-color);
+    --rhino-button-focus-background-color-hsl: 219 26% 95%;
+
+    display: block;
+
+    color: var(--rhino-text-color);
+    color: light-dark(var(--rhino-text-color), var(--rhino-dark-text-color));
+
+  }
 `;
 
 export const toolbarButtonStyles = css`
   .rhino-toolbar-button {
+    appearance: none;
+    -webkit-appearance: none;
     border: 1px solid var(--rhino-border-color);
     border-radius: var(--rhino-border-radius);
     padding: 0.4em;
-    color: inherit;
+    color: var(--rhino-button-text-color);
+    color: light-dark(var(--rhino-button-text-color), var(--rhino-button-dark-text-color));
+    background: Canvas;
     font-size: inherit;
     display: inline-grid;
   }
@@ -93,12 +106,14 @@ export const toolbarButtonStyles = css`
       [part~="toolbar__button--active"]
     ) {
     background-color: var(--rhino-button-focus-background-color);
+    background-color: light-dark(var(--rhino-button-focus-background-color), gray);
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled):not(
       [part~="toolbar__button--active"]
     ) {
     color: var(--rhino-button-disabled-text-color);
+    color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
   }
 
@@ -108,8 +123,10 @@ export const toolbarButtonStyles = css`
     ):not([part~="toolbar__button--active"]) {
     outline: transparent;
     color: var(--rhino-button-disabled-text-color);
+    color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
     box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
+    box-shadow: 0 0 0 1px light-dark(var(--rhino-button-disabled-border-color), transparent);
   }
 
   svg, ::slotted(svg) {
@@ -119,9 +136,7 @@ export const toolbarButtonStyles = css`
 `;
 
 export default css`
-  :host {
-    ${hostStyles}
-  }
+  ${hostStyles}
 
   [part~="toolbar"] {
     color: var(--rhino-toolbar-text-color);

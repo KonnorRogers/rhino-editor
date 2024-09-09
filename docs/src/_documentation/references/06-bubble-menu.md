@@ -76,13 +76,28 @@ Notice the slot name is `bubble-menu__strike-icon`, and the regular toolbar is j
 
 ## Multiple bubble menus
 
-It is possible to have multiple bubble menus, and display certain buttons / elements depending on what bubble menu is being shown. The easiest way to do this is to re-use the existing bubble menu and hook into the `bubble-menu-show` event from the editor. Then, you can find the current active node and decide what to display.
+It is possible to have multiple bubble menus, and display certain buttons / elements depending on what bubble menu is being shown. The easiest way to do this is to re-use the existing bubble menu and hook into the `rhino-bubble-menu-show` event from the editor. Then, you can find the current active node and decide what to display.
 
 <% multiple_bubble_menus = capture do %>
 const rhinoEditor = document.querySelector("rhino-editor")
 function handleBubbleMenuShow () {
   const listToolbar = rhinoEditor.querySelector("#list-toolbar")
   const defaultToolbar = rhinoEditor.defaultBubbleMenuToolbar
+
+  const indentButton = rhinoEditor.querySelector(".indent-button")
+  const dedentButton = rhinoEditor.querySelector(".dedent-button")
+
+  indentButton.addEventListener("click", (e) => {
+    if (rhinoEditor.editor.can().sinkListItem("listItem")) {
+      rhinoEditor.editor.chain().focus().sinkListItem("listItem").run();
+    }
+  })
+
+  dedentButton.addEventListener("click", (e) => {
+    if (rhinoEditor.editor.can().liftListItem("listItem")) {
+      rhinoEditor.editor.chain().focus().liftListItem("listItem").run();
+    }
+  })
 
   // When the current active node, or a parent of the current active node is a list element, then
   if (rhinoEditor.editor.isActive("bulletList") || rhinoEditor.editor.isActive("orderedList")) {
@@ -95,7 +110,17 @@ function handleBubbleMenuShow () {
   }
 }
 
-rhinoEditor.addEventListener("bubble-menu-show", handleBubbleMenuShow)
+// Tracks changes to the editor and updates the button.
+function handleRhinoUpdate (e) {
+  const indentButton = rhinoEditor.querySelector(".indent-button")
+  indentButton.toggleAttribute("disabled", !rhinoEditor.editor.can().sinkListItem("listItem"))
+
+  const dedentButton = rhinoEditor.querySelector(".dedent-button")
+  dedentButton.toggleAttribute("disabled", !rhinoEditor.editor.can().liftListItem("listItem"))
+}
+
+rhinoEditor.addEventListener("rhino-update", handleRhinoUpdate)
+rhinoEditor.addEventListener("rhino-bubble-menu-show", handleBubbleMenuShow)
 <%- end -%>
 
 
@@ -103,14 +128,29 @@ rhinoEditor.addEventListener("bubble-menu-show", handleBubbleMenuShow)
 <%= multiple_bubble_menus %>
 ```
 
-<% content = "<ul><li><p>Select me and I can indent</p></li></ul><p></p><p>Select me and I'm the default bubble menu.</p>".html_safe %>
+<% content = "<ul><li><p>I have a different bubble menu.</p></li></ul><p></p><p>Select me and I'm the default bubble menu.</p>".html_safe %>
 
 <% html = capture do %>
+    <style>
+      role-toolbar::part(base) {
+        border-color: gray;
+      }
+    </style>
     <input id="input" type="hidden" value="<%= content %>">
     <rhino-editor input="input">
       <role-toolbar id="list-toolbar" slot="additional-bubble-menu-toolbar">
-        <button>Indent</button>
-        <button>Dedent</button>
+        <button
+          type="button"
+          class="indent-button rhino-toolbar-button"
+          data-role="toolbar-item"
+          tabindex="-1"
+        >Indent</button>
+        <button
+          type="button"
+          class="dedent-button rhino-toolbar-button"
+          data-role="toolbar-item"
+          tabindex="-1"
+        >Dedent</button>
       </role-toolbar>
     </rhino-editor>
     <script type="module">

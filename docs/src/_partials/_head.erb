@@ -3,6 +3,7 @@
 <% resource_title = strip_html(strip_newlines(title)) || site.metadata.title %>
 <title><%= resource_title %></title>
 
+<meta name="env" content="<%= Bridgetown.env %>">
 <meta name="description" content="<%= metadata.description %>" />
 <link rel="modulepreload" href="<%= asset_path "javascript/index.js" %>">
 <link rel="modulepreload" href="<%= asset_path "javascript/defer.js" %>">

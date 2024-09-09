@@ -347,6 +347,7 @@ export class TipTapEditorBase extends BaseElement {
     }
 
     super.updated(changedProperties);
+    this.dispatchEvent(new Event("rhino-update", { bubbles: true, composed: true, cancelable: false }))
   }
 
   /** Used for registering things like <role-toolbar>, <role-tooltip>, <rhino-attachment-editor> */

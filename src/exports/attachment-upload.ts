@@ -3,6 +3,63 @@ import type { Blob, DirectUploadDelegate } from "@rails/activestorage";
 import { AttachmentManager } from "./attachment-manager.js";
 import { LOADING_STATES } from "./elements/attachment-editor.js";
 
+import { BaseEvent } from "./events/base-event.js";
+
+
+class DirectUploadStartEvent<T extends DirectUpload = DirectUpload> extends BaseEvent {
+  static eventName = "rhino-direct-upload:start" as const;
+
+  constructor(public directUploadInstance: T, options?: EventInit | undefined) {
+    super(DirectUploadStartEvent.name, options)
+    this.directUploadInstance = directUploadInstance
+  }
+}
+
+export class DirectUploadProgressEvent<T extends DirectUpload = DirectUpload> extends BaseEvent {
+  static eventName = "rhino-direct-upload:progress" as const;
+
+  constructor(public directUploadInstance: T, options?: EventInit | undefined) {
+    super(DirectUploadProgressEvent.name, options)
+    this.directUploadInstance = directUploadInstance
+  }
+}
+
+export class DirectUploadErrorEvent<T extends DirectUpload = DirectUpload> extends BaseEvent {
+  static eventName = "rhino-direct-upload:error" as const;
+
+  constructor(public directUploadInstance: T, options?: EventInit | undefined) {
+    super(DirectUploadErrorEvent.name, options)
+    this.directUploadInstance = directUploadInstance
+  }
+}
+
+export class DirectUploadSucceedEvent<T extends DirectUpload = DirectUpload> extends BaseEvent {
+  static eventName = "rhino-direct-upload:succeed" as const;
+
+  constructor(public directUploadInstance: T, options?: EventInit | undefined) {
+    super(DirectUploadSucceedEvent.name, options)
+    this.directUploadInstance = directUploadInstance
+  }
+}
+export class DirectUploadCompleteEvent<T extends DirectUpload = DirectUpload> extends BaseEvent {
+  static eventName = "rhino-direct-upload:complete" as const;
+
+  constructor(public directUploadInstance: T, options?: EventInit | undefined) {
+    super(DirectUploadCompleteEvent.name, options)
+    this.directUploadInstance = directUploadInstance
+  }
+}
+
+declare global {
+  interface GlobalEventHandlersEventMap {
+    [DirectUploadStartEvent.eventName]: DirectUploadStartEvent;
+    [DirectUploadProgressEvent.eventName]: DirectUploadProgressEvent;
+    [DirectUploadErrorEvent.eventName]: DirectUploadErrorEvent;
+    [DirectUploadSucceedEvent.eventName]: DirectUploadSucceedEvent;
+    [DirectUploadCompleteEvent.eventName]: DirectUploadCompleteEvent;
+  }
+}
+
 /**
  * An extension of DirectUpload. This is what handles uploading to remote sources
  *   for attachments.
@@ -28,6 +85,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
 
   start() {
     this.directUpload.create(this.directUploadDidComplete.bind(this));
+    this.element.dispatchEvent(new DirectUploadStartEvent(this.directUpload))
   }
 
   directUploadWillStoreFileWithXHR(xhr: XMLHttpRequest) {
@@ -35,6 +93,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
       const progress = (event.loaded / event.total) * 100;
       this.currentProgress = progress;
       this.setUploadProgress();
+      this.element.dispatchEvent(new DirectUploadProgressEvent(this.directUpload))
     });
   }
 
@@ -51,6 +110,8 @@ export class AttachmentUpload implements DirectUploadDelegate {
         });
       }
 
+      this.element.dispatchEvent(new DirectUploadErrorEvent(this.directUpload))
+      this.element.dispatchEvent(new DirectUploadCompleteEvent(this.directUpload))
       throw Error(`Direct upload failed: ${error}`);
     }
 
@@ -61,6 +122,9 @@ export class AttachmentUpload implements DirectUploadDelegate {
 
     this.currentProgress = 100;
     this.setUploadProgress();
+
+    this.element.dispatchEvent(new DirectUploadSucceedEvent(this.directUpload))
+    this.element.dispatchEvent(new DirectUploadCompleteEvent(this.directUpload))
   }
 
   setUploadProgress() {
