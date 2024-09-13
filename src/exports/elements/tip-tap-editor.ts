@@ -1353,6 +1353,16 @@ export class TipTapEditor extends TipTapEditorBase {
     return html`
       <role-anchored-region
         part="bubble-menu__anchored-region"
+        exportparts="
+          popover-base:bubble-menu__popover-base,
+          hover-bridge:bubble-menu__hover-bridge,
+          hover-bridge--visible:bubble-menu__hover-bridge--visible,
+          popover:bubble-menu__popover
+          popover--active:bubble-menu__popover--active,
+          popover--fixed:bubble-menu__popover--fixed,
+          popover--has-arrow:bubble-menu__popover--has-arrow
+          arrow:bubble-menu__arrow
+        "
         @rhino-bubble-menu-show=${(e: Event & { clientRect: () => DOMRect }) => {
           const self = e.currentTarget as RoleAnchoredRegion;
           self.anchor = { getBoundingClientRect: e.clientRect };

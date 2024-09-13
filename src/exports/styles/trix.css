@@ -418,8 +418,8 @@
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled):not(
-      [part~="toolbar__button--active"]
-    ) {
+    [part~="toolbar__button--active"]
+  ) {
     color: var(--rhino-button-disabled-text-color);
     color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);

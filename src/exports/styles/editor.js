@@ -110,8 +110,8 @@ export const toolbarButtonStyles = css`
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled):not(
-      [part~="toolbar__button--active"]
-    ) {
+    [part~="toolbar__button--active"]
+  ) {
     color: var(--rhino-button-disabled-text-color);
     color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
@@ -165,8 +165,8 @@ export default css`
     outline: transparent;
   }
 
-  [part~="toolbar__button--active"],
-  [part~="toolbar__button--active"]:is(:hover, :focus-within) {
+  .rhino-toolbar-button[part~="toolbar__button--active"],
+  .rhino-toolbar-button[part~="toolbar__button--active"]:is(:hover, :focus-within) {
     background-color: var(--rhino-button-active-background-color);
   }
 
