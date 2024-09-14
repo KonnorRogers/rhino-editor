@@ -5,48 +5,72 @@ import { LOADING_STATES } from "./elements/attachment-editor.js";
 
 import { BaseEvent } from "./events/base-event.js";
 
-
-class AttachmentUploadStartEvent<T extends AttachmentUpload = AttachmentUpload> extends BaseEvent {
+class AttachmentUploadStartEvent<
+  T extends AttachmentUpload = AttachmentUpload,
+> extends BaseEvent {
   static eventName = "rhino-direct-upload:start" as const;
 
-  constructor(public attachmentUpload: T, options?: EventInit | undefined) {
-    super(AttachmentUploadStartEvent.name, options)
-    this.attachmentUpload = attachmentUpload
+  constructor(
+    public attachmentUpload: T,
+    options?: EventInit | undefined,
+  ) {
+    super(AttachmentUploadStartEvent.name, options);
+    this.attachmentUpload = attachmentUpload;
   }
 }
 
-export class AttachmentUploadProgressEvent<T extends AttachmentUpload = AttachmentUpload> extends BaseEvent {
+export class AttachmentUploadProgressEvent<
+  T extends AttachmentUpload = AttachmentUpload,
+> extends BaseEvent {
   static eventName = "rhino-direct-upload:progress" as const;
 
-  constructor(public attachmentUpload: T, options?: EventInit | undefined) {
-    super(AttachmentUploadProgressEvent.name, options)
-    this.attachmentUpload = attachmentUpload
+  constructor(
+    public attachmentUpload: T,
+    options?: EventInit | undefined,
+  ) {
+    super(AttachmentUploadProgressEvent.name, options);
+    this.attachmentUpload = attachmentUpload;
   }
 }
 
-export class AttachmentUploadErrorEvent<T extends AttachmentUpload = AttachmentUpload> extends BaseEvent {
+export class AttachmentUploadErrorEvent<
+  T extends AttachmentUpload = AttachmentUpload,
+> extends BaseEvent {
   static eventName = "rhino-direct-upload:error" as const;
 
-  constructor(public attachmentUpload: T, options?: EventInit | undefined) {
-    super(AttachmentUploadErrorEvent.name, options)
-    this.attachmentUpload = attachmentUpload
+  constructor(
+    public attachmentUpload: T,
+    options?: EventInit | undefined,
+  ) {
+    super(AttachmentUploadErrorEvent.name, options);
+    this.attachmentUpload = attachmentUpload;
   }
 }
 
-export class AttachmentUploadSucceedEvent<T extends AttachmentUpload = AttachmentUpload> extends BaseEvent {
+export class AttachmentUploadSucceedEvent<
+  T extends AttachmentUpload = AttachmentUpload,
+> extends BaseEvent {
   static eventName = "rhino-direct-upload:succeed" as const;
 
-  constructor(public attachmentUpload: T, options?: EventInit | undefined) {
-    super(AttachmentUploadSucceedEvent.name, options)
-    this.attachmentUpload = attachmentUpload
+  constructor(
+    public attachmentUpload: T,
+    options?: EventInit | undefined,
+  ) {
+    super(AttachmentUploadSucceedEvent.name, options);
+    this.attachmentUpload = attachmentUpload;
   }
 }
-export class AttachmentUploadCompleteEvent<T extends AttachmentUpload = AttachmentUpload> extends BaseEvent {
+export class AttachmentUploadCompleteEvent<
+  T extends AttachmentUpload = AttachmentUpload,
+> extends BaseEvent {
   static eventName = "rhino-direct-upload:complete" as const;
 
-  constructor(public attachmentUpload: T, options?: EventInit | undefined) {
-    super(AttachmentUploadCompleteEvent.name, options)
-    this.attachmentUpload = attachmentUpload
+  constructor(
+    public attachmentUpload: T,
+    options?: EventInit | undefined,
+  ) {
+    super(AttachmentUploadCompleteEvent.name, options);
+    this.attachmentUpload = attachmentUpload;
   }
 }
 
@@ -85,7 +109,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
 
   start() {
     this.directUpload.create(this.directUploadDidComplete.bind(this));
-    this.element.dispatchEvent(new AttachmentUploadStartEvent(this))
+    this.element.dispatchEvent(new AttachmentUploadStartEvent(this));
   }
 
   directUploadWillStoreFileWithXHR(xhr: XMLHttpRequest) {
@@ -93,7 +117,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
       const progress = (event.loaded / event.total) * 100;
       this.progress = progress;
       this.setUploadProgress();
-      this.element.dispatchEvent(new AttachmentUploadProgressEvent(this))
+      this.element.dispatchEvent(new AttachmentUploadProgressEvent(this));
     });
   }
 
@@ -110,8 +134,8 @@ export class AttachmentUpload implements DirectUploadDelegate {
         });
       }
 
-      this.element.dispatchEvent(new AttachmentUploadErrorEvent(this))
-      this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this))
+      this.element.dispatchEvent(new AttachmentUploadErrorEvent(this));
+      this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
       throw Error(`Direct upload failed: ${error}`);
     }
 
@@ -123,8 +147,8 @@ export class AttachmentUpload implements DirectUploadDelegate {
     this.progress = 100;
     this.setUploadProgress();
 
-    this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this))
-    this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this))
+    this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this));
+    this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
   }
 
   setUploadProgress() {

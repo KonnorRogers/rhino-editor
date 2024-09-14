@@ -94,7 +94,10 @@
   position: absolute;
   pointer-events: none;
   color: var(--rhino-placeholder-text-color);
-  color: light-dark(var(--rhino-placeholder-text-color), var(--rhino-dark-placeholder-text-color));
+  color: light-dark(
+    var(--rhino-placeholder-text-color),
+    var(--rhino-dark-placeholder-text-color)
+  );
   cursor: text;
   content: "";
 }
@@ -107,7 +110,10 @@
   figure[data-trix-attachment].has-focus
   figcaption.is-empty::before {
   color: var(--rhino-placeholder-text-color);
-  color: light-dark(var(--rhino-placeholder-text-color), var(--rhino-dark-placeholder-text-color));
+  color: light-dark(
+    var(--rhino-placeholder-text-color),
+    var(--rhino-dark-placeholder-text-color)
+  );
   content: attr(data-placeholder);
   pointer-events: none;
 }

@@ -347,7 +347,13 @@ export class TipTapEditorBase extends BaseElement {
     }
 
     super.updated(changedProperties);
-    this.dispatchEvent(new Event("rhino-update", { bubbles: true, composed: true, cancelable: false }))
+    this.dispatchEvent(
+      new Event("rhino-update", {
+        bubbles: true,
+        composed: true,
+        cancelable: false,
+      }),
+    );
   }
 
   /** Used for registering things like <role-toolbar>, <role-tooltip>, <rhino-attachment-editor> */
@@ -452,15 +458,15 @@ export class TipTapEditorBase extends BaseElement {
       | EditorOptions["extensions"]
       | Array<EditorOptions["extensions"]>
   ) {
-    const ary: EditorOptions["extensions"]  = []
+    const ary: EditorOptions["extensions"] = [];
     extensions.forEach((ext) => {
       if (Array.isArray(ext)) {
-        ary.push(ext.flat(1) as unknown as AnyExtension)
-        return
+        ary.push(ext.flat(1) as unknown as AnyExtension);
+        return;
       }
 
-      ary.push(ext)
-    })
+      ary.push(ext);
+    });
 
     this.extensions = this.extensions.concat(ary);
   }
@@ -470,20 +476,20 @@ export class TipTapEditorBase extends BaseElement {
       | Array<keyof RhinoStarterKitOptions>
       | Array<Array<keyof RhinoStarterKitOptions>>
   ) {
-    const disabledStarterKitOptions: Record<string, false> = {}
+    const disabledStarterKitOptions: Record<string, false> = {};
     options.forEach((ext) => {
       if (Array.isArray(ext)) {
-        ext.flat(1).forEach((str) => disabledStarterKitOptions[str] = false)
-        return
+        ext.flat(1).forEach((str) => (disabledStarterKitOptions[str] = false));
+        return;
       }
 
-      disabledStarterKitOptions[ext] = false
-    })
+      disabledStarterKitOptions[ext] = false;
+    });
 
     this.starterKitOptions = {
       ...this.starterKitOptions,
-      ...disabledStarterKitOptions
-    }
+      ...disabledStarterKitOptions,
+    };
   }
 
   /**
@@ -532,7 +538,7 @@ export class TipTapEditorBase extends BaseElement {
   get inputElement(): Maybe<HTMLInputElement> {
     if (!this.input) return undefined;
 
-    const rootNode = (this.getRootNode() || document) as Element
+    const rootNode = (this.getRootNode() || document) as Element;
 
     return rootNode.querySelector(`#${this.input}`) as Maybe<HTMLInputElement>;
   }

@@ -1345,8 +1345,10 @@ export class TipTapEditor extends TipTapEditorBase {
   /**
    * Returns the bubble menu toolbar from the shadow root.
    */
-  get defaultBubbleMenuToolbar (): RoleToolbar | null | undefined {
-    return this.shadowRoot?.querySelector<RoleToolbar>("[part~='bubble-menu__toolbar']")
+  get defaultBubbleMenuToolbar(): RoleToolbar | null | undefined {
+    return this.shadowRoot?.querySelector<RoleToolbar>(
+      "[part~='bubble-menu__toolbar']",
+    );
   }
 
   renderBubbleMenuToolbar() {
@@ -1363,7 +1365,9 @@ export class TipTapEditor extends TipTapEditorBase {
           popover--has-arrow:bubble-menu__popover--has-arrow
           arrow:bubble-menu__arrow
         "
-        @rhino-bubble-menu-show=${(e: Event & { clientRect: () => DOMRect }) => {
+        @rhino-bubble-menu-show=${(
+          e: Event & { clientRect: () => DOMRect },
+        ) => {
           const self = e.currentTarget as RoleAnchoredRegion;
           self.anchor = { getBoundingClientRect: e.clientRect };
           self.active = true;

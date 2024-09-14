@@ -2,7 +2,8 @@
 import { css } from "lit";
 
 export const hostStyles = css`
-  :host, .trix-content {
+  :host,
+  .trix-content {
     /* General tokens */
     --rhino-focus-ring: 0px 0px 1px 1px var(--rhino-button-active-border-color);
     --rhino-border-radius: 4px;
@@ -50,7 +51,6 @@ export const hostStyles = css`
 
     color: var(--rhino-text-color);
     color: light-dark(var(--rhino-text-color), var(--rhino-dark-text-color));
-
   }
 `;
 
@@ -62,7 +62,10 @@ export const toolbarButtonStyles = css`
     border-radius: var(--rhino-border-radius);
     padding: 0.4em;
     color: var(--rhino-button-text-color);
-    color: light-dark(var(--rhino-button-text-color), var(--rhino-button-dark-text-color));
+    color: light-dark(
+      var(--rhino-button-text-color),
+      var(--rhino-button-dark-text-color)
+    );
     background: Canvas;
     font-size: inherit;
     display: inline-grid;
@@ -106,12 +109,15 @@ export const toolbarButtonStyles = css`
       [part~="toolbar__button--active"]
     ) {
     background-color: var(--rhino-button-focus-background-color);
-    background-color: light-dark(var(--rhino-button-focus-background-color), gray);
+    background-color: light-dark(
+      var(--rhino-button-focus-background-color),
+      gray
+    );
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled):not(
-    [part~="toolbar__button--active"]
-  ) {
+      [part~="toolbar__button--active"]
+    ) {
     color: var(--rhino-button-disabled-text-color);
     color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
@@ -126,10 +132,12 @@ export const toolbarButtonStyles = css`
     color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
     box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
-    box-shadow: 0 0 0 1px light-dark(var(--rhino-button-disabled-border-color), transparent);
+    box-shadow: 0 0 0 1px
+      light-dark(var(--rhino-button-disabled-border-color), transparent);
   }
 
-  svg, ::slotted(svg) {
+  svg,
+  ::slotted(svg) {
     height: var(--rhino-toolbar-icon-size);
     width: var(--rhino-toolbar-icon-size);
   }
@@ -166,7 +174,10 @@ export default css`
   }
 
   .rhino-toolbar-button[part~="toolbar__button--active"],
-  .rhino-toolbar-button[part~="toolbar__button--active"]:is(:hover, :focus-within) {
+  .rhino-toolbar-button[part~="toolbar__button--active"]:is(
+      :hover,
+      :focus-within
+    ) {
     background-color: var(--rhino-button-active-background-color);
   }
 
