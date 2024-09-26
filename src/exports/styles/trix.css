@@ -315,7 +315,8 @@
 
 /* src/exports/styles/editor.js:hostStyles */
 
-  :host, .trix-content {
+  :host,
+  .trix-content {
     /* General tokens */
     --rhino-focus-ring: 0px 0px 1px 1px var(--rhino-button-active-border-color);
     --rhino-border-radius: 4px;
@@ -363,7 +364,6 @@
 
     color: var(--rhino-text-color);
     color: light-dark(var(--rhino-text-color), var(--rhino-dark-text-color));
-
   }
 
 
@@ -376,7 +376,10 @@
     border-radius: var(--rhino-border-radius);
     padding: 0.4em;
     color: var(--rhino-button-text-color);
-    color: light-dark(var(--rhino-button-text-color), var(--rhino-button-dark-text-color));
+    color: light-dark(
+      var(--rhino-button-text-color),
+      var(--rhino-button-dark-text-color)
+    );
     background: Canvas;
     font-size: inherit;
     display: inline-grid;
@@ -420,12 +423,15 @@
       [part~="toolbar__button--active"]
     ) {
     background-color: var(--rhino-button-focus-background-color);
-    background-color: light-dark(var(--rhino-button-focus-background-color), gray);
+    background-color: light-dark(
+      var(--rhino-button-focus-background-color),
+      gray
+    );
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled):not(
-    [part~="toolbar__button--active"]
-  ) {
+      [part~="toolbar__button--active"]
+    ) {
     color: var(--rhino-button-disabled-text-color);
     color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
@@ -440,10 +446,12 @@
     color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
     box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
-    box-shadow: 0 0 0 1px light-dark(var(--rhino-button-disabled-border-color), transparent);
+    box-shadow: 0 0 0 1px
+      light-dark(var(--rhino-button-disabled-border-color), transparent);
   }
 
-  svg, ::slotted(svg) {
+  svg,
+  ::slotted(svg) {
     height: var(--rhino-toolbar-icon-size);
     width: var(--rhino-toolbar-icon-size);
   }
