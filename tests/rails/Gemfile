@@ -9,7 +9,6 @@ gem "jbuilder"
 gem "image_processing", "~> 1.2"
 gem "puma", "~> 5.0"
 gem "turbo-rails"
-gem "sqlite3", "~> 2.0"
 gem "redis", "~> 4.0"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "vite_rails", "~> 3.0"
@@ -31,3 +30,5 @@ group :collaboration do
   # gem "y-rb_actioncable", github: "y-crdt/yrb-actioncable", glob: "gems/yrb-actioncable/*.gemspec"
   gem "y-rb_actioncable", "~> 0.1.5"
 end
+
+gem "sqlite3", "~> 1.4"
