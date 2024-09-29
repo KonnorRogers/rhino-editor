@@ -7,7 +7,7 @@ class CodeBlockTest < ApplicationSystemTestCase
   end
 
   def code_block_button(str = "")
-    page.locator("rhino-editor [part~='toolbar__button--code-block']#{str}")
+    page.locator("rhino-editor role-toolbar [part~='toolbar__button--code-block']#{str}")
   end
 
   test "Should have aria-pressed when pressed" do

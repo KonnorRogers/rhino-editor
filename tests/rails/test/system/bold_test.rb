@@ -7,7 +7,7 @@ class BoldTest < ApplicationSystemTestCase
   end
 
   def bold_button(str = "")
-    page.locator("rhino-editor [part~='toolbar__button--bold']#{str}")
+    page.locator("rhino-editor role-toolbar [part~='toolbar__button--bold']#{str}")
   end
 
   test "Should have aria-pressed when pressed" do

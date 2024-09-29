@@ -3,7 +3,7 @@ require "application_system_test_case"
 class AttachmentGalleriesTest < ApplicationSystemTestCase
   def attach_files(files)
     rhino_editor = page.expect_file_chooser do
-      page.locator("rhino-editor [part~='toolbar__button--attach-files']").first.click
+      page.locator("rhino-editor role-toolbar [part~='toolbar__button--attach-files']").first.click
     end
 
     files = files.map { |file| file_fixture(file).to_s }
