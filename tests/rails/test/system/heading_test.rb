@@ -7,7 +7,7 @@ class HeadingTest < ApplicationSystemTestCase
   end
 
   def heading_button(str = "")
-    page.locator("rhino-editor role-toolbar [part~='toolbar__button--heading']#{str}")
+    page.locator("rhino-editor slot[name='toolbar'] [part~='toolbar__button--heading']#{str}")
   end
 
   test "Should have aria-pressed when pressed" do

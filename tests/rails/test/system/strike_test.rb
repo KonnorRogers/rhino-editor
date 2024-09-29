@@ -7,7 +7,7 @@ class StrikeTest < ApplicationSystemTestCase
   end
 
   def strike_button(str = "")
-    page.locator("rhino-editor role-toolbar [part~='toolbar__button--strike']#{str}")
+    page.locator("rhino-editor slot[name='toolbar'] [part~='toolbar__button--strike']#{str}")
   end
 
 

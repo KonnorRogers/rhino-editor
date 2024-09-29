@@ -13,7 +13,7 @@ test("Should only allow PNG images to be added via file chooser", async ({ page 
   await page.goto(pagePath)
 
   const fileChooserPromise = page.waitForEvent('filechooser');
-  await page.locator("rhino-editor[accept='image/*'] role-toolbar button[part~='toolbar__button--attach-files']").click()
+  await page.locator("rhino-editor[accept='image/*'] slot[name='toolbar'] button[part~='toolbar__button--attach-files']").click()
   const fileChooser = await fileChooserPromise;
   await fileChooser.setFiles('./tests/fixtures/view-layer-benchmarks.png');
 
@@ -24,7 +24,7 @@ test("Should not allow non-png files to be added via file chooser", async ({ pag
   await page.goto(pagePath)
 
   const fileChooserPromise = page.waitForEvent('filechooser');
-  await page.locator("rhino-editor[accept='image/*'] role-toolbar button[part~='toolbar__button--attach-files']").click()
+  await page.locator("rhino-editor[accept='image/*'] slot[name='toolbar'] button[part~='toolbar__button--attach-files']").click()
   const fileChooser = await fileChooserPromise;
   await fileChooser.setFiles('./tests/fixtures/thing.txt');
   await expect(page.locator("rhino-editor#png-only figure")).not.toBeAttached()

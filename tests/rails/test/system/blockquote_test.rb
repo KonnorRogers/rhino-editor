@@ -7,7 +7,7 @@ class BlockquoteTest < ApplicationSystemTestCase
   end
 
   def block_quote_button(str = "")
-    page.locator("rhino-editor role-toolbar [part~='toolbar__button--blockquote']#{str}")
+    page.locator("rhino-editor slot[name='toolbar'] [part~='toolbar__button--blockquote']#{str}")
   end
 
   test "Should have aria-pressed when pressed" do

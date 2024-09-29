@@ -7,7 +7,7 @@ class BulletListTest < ApplicationSystemTestCase
   end
 
   def bullet_list_button(str = "")
-    page.locator("rhino-editor role-toolbar [part~='toolbar__button--bullet-list']#{str}")
+    page.locator("rhino-editor slot[name='toolbar'] [part~='toolbar__button--bullet-list']#{str}")
   end
 
   test "Should have aria-pressed when pressed" do

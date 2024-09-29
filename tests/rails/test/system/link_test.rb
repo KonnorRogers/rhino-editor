@@ -7,7 +7,7 @@ class LinkTest < ApplicationSystemTestCase
   end
 
   def link_button(str = "")
-    page.locator("rhino-editor role-toolbar [part~='toolbar__button--link']#{str}")
+    page.locator("rhino-editor slot[name='toolbar'] [part~='toolbar__button--link']#{str}")
   end
 
   test "Should have aria-pressed when pressed" do

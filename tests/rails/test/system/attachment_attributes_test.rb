@@ -31,7 +31,7 @@ class AttachmentAttributesTest < ApplicationSystemTestCase
 
   def attach_files(files)
     rhino_editor = page.expect_file_chooser do
-      page.locator("rhino-editor role-toolbar [part~='toolbar__button--attach-files']").first.click
+      page.locator("rhino-editor slot[name='toolbar'] [part~='toolbar__button--attach-files']").first.click
     end
     rhino_editor.set_files(files)
 
