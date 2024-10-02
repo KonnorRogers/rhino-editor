@@ -2,55 +2,73 @@
 import { css } from "lit";
 
 export const hostStyles = css`
-  /* General tokens */
-  --rhino-focus-ring: 0px 0px 4px 1px var(--rhino-button-active-border-color);
-  --rhino-border-radius: 4px;
+  :host,
+  .trix-content {
+    /* General tokens */
+    --rhino-focus-ring: 0px 0px 1px 1px var(--rhino-button-active-border-color);
+    --rhino-border-radius: 4px;
 
-  --rhino-danger-border-color: red;
-  --rhino-danger-background-color: #ffdddd;
+    --rhino-danger-border-color: red;
+    --rhino-danger-background-color: #ffdddd;
 
-  /* Editor tokens */
-  --rhino-text-color: #374151;
-  --rhino-border-color: #cecece;
-  --rhino-placeholder-text-color: #cecece;
+    /* Editor tokens */
+    --rhino-text-color: #374151;
+    --rhino-dark-text-color: white;
 
-  /* Regular buttons */
-  --rhino-button-text-color: #889;
-  --rhino-button-border-color: #cecece;
+    --rhino-border-color: #cecece;
+    --rhino-placeholder-text-color: #cecece;
+    --rhino-dark-placeholder-text-color: gray;
 
-  /** Disabled Buttons */
-  --rhino-button-disabled-text-color: #d1d5db;
-  --rhino-button-disabled-border-color: #d1d5db;
-  --rhino-button-disabled-background-color: #d1d5db;
+    /* Regular buttons */
+    --rhino-button-text-color: #889;
+    --rhino-button-dark-text-color: #eee;
+    --rhino-button-border-color: #cecece;
 
-  /** Active buttons */
-  --rhino-button-active-border-color: #005a9c;
-  --rhino-button-active-background-color: rgb(226 239 255);
+    /** Disabled Buttons */
+    --rhino-button-disabled-text-color: #d1d5db;
+    --rhino-button-disabled-border-color: #d1d5db;
+    --rhino-button-disabled-background-color: #d1d5db;
 
-  --rhino-toolbar-text-color: hsl(219, 6%, 43%);
-  --rhino-toolbar-icon-size: 24px;
+    /** Active buttons */
+    --rhino-button-active-border-color: #005a9c;
+    --rhino-button-active-background-color: rgb(226 239 255);
 
-  --rhino-dialog-border-color: hsl(
-    var(--rhino-button-focus-background-color-hsl) / 50%
-  );
+    --rhino-toolbar-text-color: hsl(219, 6%, 43%);
+    --rhino-toolbar-icon-size: 1em;
 
-  /** Focus buttons */
-  --rhino-button-focus-background-color: hsl(
-    var(--rhino-button-focus-background-color-hsl)
-  );
+    --rhino-dialog-border-color: hsl(
+      var(--rhino-button-focus-background-color-hsl) / 50%
+    );
 
-  --rhino-button-focus-background-color-hsl: 219 26% 95%;
+    /** Focus buttons */
+    --rhino-button-focus-background-color: hsl(
+      var(--rhino-button-focus-background-color-hsl)
+    );
 
-  display: block;
-  color: var(--rhino-text-color);
+    --rhino-button-focus-background-color-hsl: 219 26% 95%;
+
+    display: block;
+
+    color: var(--rhino-text-color);
+    color: light-dark(var(--rhino-text-color), var(--rhino-dark-text-color));
+  }
 `;
 
 export const toolbarButtonStyles = css`
   .rhino-toolbar-button {
+    appearance: none;
+    -webkit-appearance: none;
     border: 1px solid var(--rhino-border-color);
     border-radius: var(--rhino-border-radius);
-    padding: 0.2em 0.4em;
-    color: inherit;
+    padding: 0.4em;
+    color: var(--rhino-button-text-color);
+    color: light-dark(
+      var(--rhino-button-text-color),
+      var(--rhino-button-dark-text-color)
+    );
+    background: Canvas;
+    font-size: inherit;
+    display: inline-grid;
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled) {
@@ -76,24 +94,32 @@ export const toolbarButtonStyles = css`
       :disabled
     ) {
     outline: transparent;
-    box-shadow: var(--rhino-focus-ring);
     border-color: var(--rhino-button-active-border-color);
   }
 
+  .rhino-toolbar-button:is(:focus):not([aria-disabled="true"], :disabled) {
+    box-shadow: var(--rhino-focus-ring);
+  }
+
   /* Only change the background color in certain scenarios */
-  .rhino-toolbar-button:is(:focus, :hover):not(
+  .rhino-toolbar-button:is(:hover):not(
       [aria-disabled="true"],
       :disabled,
       [aria-pressed="true"],
       [part~="toolbar__button--active"]
     ) {
     background-color: var(--rhino-button-focus-background-color);
+    background-color: light-dark(
+      var(--rhino-button-focus-background-color),
+      gray
+    );
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled):not(
       [part~="toolbar__button--active"]
     ) {
     color: var(--rhino-button-disabled-text-color);
+    color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
   }
 
@@ -103,50 +129,78 @@ export const toolbarButtonStyles = css`
     ):not([part~="toolbar__button--active"]) {
     outline: transparent;
     color: var(--rhino-button-disabled-text-color);
+    color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
     box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
+    box-shadow: 0 0 0 1px
+      light-dark(var(--rhino-button-disabled-border-color), transparent);
+  }
+
+  svg,
+  ::slotted(svg) {
+    height: var(--rhino-toolbar-icon-size);
+    width: var(--rhino-toolbar-icon-size);
   }
 `;
 
 export default css`
-  :host {
-    ${hostStyles}
-  }
+  ${hostStyles}
 
-  .toolbar {
+  [part~="toolbar"] {
     color: var(--rhino-toolbar-text-color);
   }
 
-  .toolbar::part(base) {
-    overflow: auto;
-  }
-
-  .toolbar::part(base) {
+  [part~="toolbar"]::part(base) {
     border-color: var(--rhino-border-color);
     border-bottom-color: transparent;
     border-width: 1px;
     border-radius: 4px;
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
+    display: flex;
+    align-items: center;
+    overflow: auto;
   }
 
-  .toolbar::part(base):is(:focus-visible, :focus-within) {
+  [part~="toolbar"][part~="bubble-menu__toolbar"]::part(base) {
+    border: 1px solid var(--rhino-border-color);
+    border-radius: 4px;
+    padding: 4px;
+  }
+
+  [part~="toolbar"]::part(base):is(:focus-visible, :focus-within) {
     border-color: var(--rhino-button-active-border-color);
     outline: transparent;
   }
 
-  [part~="toolbar__button--active"],
-  [part~="toolbar__button--active"]:is(:hover, :focus-within) {
+  .rhino-toolbar-button[part~="toolbar__button--active"],
+  .rhino-toolbar-button[part~="toolbar__button--active"]:is(
+      :hover,
+      :focus-within
+    ) {
     background-color: var(--rhino-button-active-background-color);
   }
 
-  [part~="toolbar__button--link"],
-  [part~="toolbar__button--increase-indentation"] {
+  slot[name="toolbar"]
+    :is(
+      [part~="toolbar__button--link"],
+      [part~="toolbar__button--increase-indentation"]
+    ) {
     margin-inline-end: 1rem;
   }
 
   [part~="toolbar__button--attach-files"] {
     margin-inline-end: auto;
+  }
+
+  role-anchored-region {
+    font-size: 0.8em;
+    --background: Canvas;
+    --border-color: transparent;
+  }
+
+  role-anchored-region::part(popover) {
+    border: none;
   }
 
   #dialogs {
@@ -217,5 +271,21 @@ export default css`
     min-height: 200px;
     outline: transparent;
     white-space: pre-wrap;
+  }
+
+  role-tooltip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 0.75em;
+    --background: Canvas;
+    color: CanvasText;
+    --border-color: gray;
+  }
+
+  @media screen and (prefers-color-scheme: dark) {
+    role-tooltip {
+      --border-color: rgb(200, 200, 200);
+    }
   }
 `;

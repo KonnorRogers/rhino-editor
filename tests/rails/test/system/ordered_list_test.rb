@@ -7,7 +7,7 @@ class OrderedListTest < ApplicationSystemTestCase
   end
 
   def ordered_list_button(str = "")
-    page.locator("rhino-editor [part~='toolbar__button--ordered-list']#{str}")
+    page.locator("rhino-editor slot[name='toolbar'] [part~='toolbar__button--ordered-list']#{str}")
   end
 
   test "Should have aria-pressed when pressed" do

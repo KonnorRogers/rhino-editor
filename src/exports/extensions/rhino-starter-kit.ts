@@ -19,6 +19,9 @@ import Focus, { FocusOptions } from "@tiptap/extension-focus";
 import { StrikeOptions } from "@tiptap/extension-strike";
 import Link, { LinkOptions } from "@tiptap/extension-link";
 import { Paste, PasteOptions } from "./paste.js";
+import { BubbleMenuExtension, BubbleMenuOptions } from "./bubble-menu.js";
+// import BubbleMenu, { BubbleMenuOptions } from '@tiptap/extension-bubble-menu'
+// import { PluginKey } from '@tiptap/pm/state'
 
 export interface RhinoStarterKitOptions {
   /** Funky hack extension for contenteditable in firefox. */
@@ -60,6 +63,8 @@ export interface RhinoStarterKitOptions {
    * Sends a browser event called `rhino-paste-event` everytime a user pastes something into the document.
    */
   rhinoPasteEvent: Partial<PasteOptions> | false;
+
+  rhinoBubbleMenu: Partial<BubbleMenuOptions> | false;
 }
 
 export type TipTapPlugin = Node | Extension | Mark;
@@ -99,6 +104,7 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       ["rhinoLink", Link],
       ["rhinoFocus", Focus],
       ["rhinoPlaceholder", Placeholder],
+      ["rhinoBubbleMenu", BubbleMenuExtension],
     ];
 
     extensions.forEach(([string, extension]) => {

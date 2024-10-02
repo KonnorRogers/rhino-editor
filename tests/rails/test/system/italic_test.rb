@@ -7,7 +7,7 @@ class ItalicTest < ApplicationSystemTestCase
   end
 
   def italic_button(str = "")
-    page.locator("rhino-editor [part~='toolbar__button--italic']#{str}")
+    page.locator("rhino-editor slot[name='toolbar'] [part~='toolbar__button--italic']#{str}")
   end
 
   test "Should have aria-pressed when pressed" do

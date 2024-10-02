@@ -94,6 +94,10 @@
   position: absolute;
   pointer-events: none;
   color: var(--rhino-placeholder-text-color);
+  color: light-dark(
+    var(--rhino-placeholder-text-color),
+    var(--rhino-dark-placeholder-text-color)
+  );
   cursor: text;
   content: "";
 }
@@ -106,6 +110,10 @@
   figure[data-trix-attachment].has-focus
   figcaption.is-empty::before {
   color: var(--rhino-placeholder-text-color);
+  color: light-dark(
+    var(--rhino-placeholder-text-color),
+    var(--rhino-dark-placeholder-text-color)
+  );
   content: attr(data-placeholder);
   pointer-events: none;
 }
@@ -306,59 +314,75 @@
 }
 
 /* src/exports/styles/editor.js:hostStyles */
-.trix-content {
-  
-  /* General tokens */
-  --rhino-focus-ring: 0px 0px 4px 1px var(--rhino-button-active-border-color);
-  --rhino-border-radius: 4px;
 
-  --rhino-danger-border-color: red;
-  --rhino-danger-background-color: #ffdddd;
+  :host,
+  .trix-content {
+    /* General tokens */
+    --rhino-focus-ring: 0px 0px 1px 1px var(--rhino-button-active-border-color);
+    --rhino-border-radius: 4px;
 
-  /* Editor tokens */
-  --rhino-text-color: #374151;
-  --rhino-border-color: #cecece;
-  --rhino-placeholder-text-color: #cecece;
+    --rhino-danger-border-color: red;
+    --rhino-danger-background-color: #ffdddd;
 
-  /* Regular buttons */
-  --rhino-button-text-color: #889;
-  --rhino-button-border-color: #cecece;
+    /* Editor tokens */
+    --rhino-text-color: #374151;
+    --rhino-dark-text-color: white;
 
-  /** Disabled Buttons */
-  --rhino-button-disabled-text-color: #d1d5db;
-  --rhino-button-disabled-border-color: #d1d5db;
-  --rhino-button-disabled-background-color: #d1d5db;
+    --rhino-border-color: #cecece;
+    --rhino-placeholder-text-color: #cecece;
+    --rhino-dark-placeholder-text-color: gray;
 
-  /** Active buttons */
-  --rhino-button-active-border-color: #005a9c;
-  --rhino-button-active-background-color: rgb(226 239 255);
+    /* Regular buttons */
+    --rhino-button-text-color: #889;
+    --rhino-button-dark-text-color: #eee;
+    --rhino-button-border-color: #cecece;
 
-  --rhino-toolbar-text-color: hsl(219, 6%, 43%);
-  --rhino-toolbar-icon-size: 24px;
+    /** Disabled Buttons */
+    --rhino-button-disabled-text-color: #d1d5db;
+    --rhino-button-disabled-border-color: #d1d5db;
+    --rhino-button-disabled-background-color: #d1d5db;
 
-  --rhino-dialog-border-color: hsl(
-    var(--rhino-button-focus-background-color-hsl) / 50%
-  );
+    /** Active buttons */
+    --rhino-button-active-border-color: #005a9c;
+    --rhino-button-active-background-color: rgb(226 239 255);
 
-  /** Focus buttons */
-  --rhino-button-focus-background-color: hsl(
-    var(--rhino-button-focus-background-color-hsl)
-  );
+    --rhino-toolbar-text-color: hsl(219, 6%, 43%);
+    --rhino-toolbar-icon-size: 1em;
 
-  --rhino-button-focus-background-color-hsl: 219 26% 95%;
+    --rhino-dialog-border-color: hsl(
+      var(--rhino-button-focus-background-color-hsl) / 50%
+    );
 
-  display: block;
-  color: var(--rhino-text-color);
+    /** Focus buttons */
+    --rhino-button-focus-background-color: hsl(
+      var(--rhino-button-focus-background-color-hsl)
+    );
 
-}
+    --rhino-button-focus-background-color-hsl: 219 26% 95%;
+
+    display: block;
+
+    color: var(--rhino-text-color);
+    color: light-dark(var(--rhino-text-color), var(--rhino-dark-text-color));
+  }
+
 
 /* src/exports/styles/editor.js:toolbarButtonStyles */
 
   .rhino-toolbar-button {
+    appearance: none;
+    -webkit-appearance: none;
     border: 1px solid var(--rhino-border-color);
     border-radius: var(--rhino-border-radius);
-    padding: 0.2em 0.4em;
-    color: inherit;
+    padding: 0.4em;
+    color: var(--rhino-button-text-color);
+    color: light-dark(
+      var(--rhino-button-text-color),
+      var(--rhino-button-dark-text-color)
+    );
+    background: Canvas;
+    font-size: inherit;
+    display: inline-grid;
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled) {
@@ -384,24 +408,32 @@
       :disabled
     ) {
     outline: transparent;
-    box-shadow: var(--rhino-focus-ring);
     border-color: var(--rhino-button-active-border-color);
   }
 
+  .rhino-toolbar-button:is(:focus):not([aria-disabled="true"], :disabled) {
+    box-shadow: var(--rhino-focus-ring);
+  }
+
   /* Only change the background color in certain scenarios */
-  .rhino-toolbar-button:is(:focus, :hover):not(
+  .rhino-toolbar-button:is(:hover):not(
       [aria-disabled="true"],
       :disabled,
       [aria-pressed="true"],
       [part~="toolbar__button--active"]
     ) {
     background-color: var(--rhino-button-focus-background-color);
+    background-color: light-dark(
+      var(--rhino-button-focus-background-color),
+      gray
+    );
   }
 
   .rhino-toolbar-button:is([aria-disabled="true"], :disabled):not(
       [part~="toolbar__button--active"]
     ) {
     color: var(--rhino-button-disabled-text-color);
+    color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
   }
 
@@ -411,7 +443,16 @@
     ):not([part~="toolbar__button--active"]) {
     outline: transparent;
     color: var(--rhino-button-disabled-text-color);
+    color: light-dark(var(--rhino-button-disabled-text-color), gray);
     border-color: var(--rhino-button-disabled-border-color);
     box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
+    box-shadow: 0 0 0 1px
+      light-dark(var(--rhino-button-disabled-border-color), transparent);
+  }
+
+  svg,
+  ::slotted(svg) {
+    height: var(--rhino-toolbar-icon-size);
+    width: var(--rhino-toolbar-icon-size);
   }
 
