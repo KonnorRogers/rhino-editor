@@ -122,7 +122,7 @@ function BuildTimer () {
       target: "es2020",
       bundle: true,
       external: deps,
-      splitting: false,
+      splitting: true,
       minify: false,
       chunkNames: 'chunks/[name]-[hash]',
       plugins: defaultConfig.plugins.concat([BuildTimer()])
