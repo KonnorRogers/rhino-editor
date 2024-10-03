@@ -4,7 +4,7 @@ import {
 } from "../attachment-manager.js";
 import { LOADING_STATES } from "../elements/attachment-editor.js";
 import type { LoadingState } from "../elements/attachment-editor.js";
-import { CommandProps, mergeAttributes, Node } from "@tiptap/core";
+import { CommandProps, mergeAttributes, Node, NodeViewRenderer } from "@tiptap/core";
 import { selectionToInsertionEnd } from "../../internal/selection-to-insertion-end.js";
 import { Maybe } from "../../types";
 import { findAttribute } from "./find-attribute.js";
@@ -593,7 +593,7 @@ export const Attachment = Node.create<AttachmentOptions>({
   },
 
   addNodeView() {
-    return ({ node, getPos, editor }) => {
+    return (({ node, getPos, editor }) => {
       const {
         content,
         contentType,
@@ -809,7 +809,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           return false;
         },
       };
-    };
+    }) as NodeViewRenderer;
   },
 
   addCommands() {

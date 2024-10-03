@@ -120,8 +120,9 @@ function BuildTimer () {
       outdir: 'exports',
       format: 'esm',
       target: "es2020",
+      bundle: true,
       external: deps,
-      splitting: true,
+      splitting: false,
       minify: false,
       chunkNames: 'chunks/[name]-[hash]',
       plugins: defaultConfig.plugins.concat([BuildTimer()])

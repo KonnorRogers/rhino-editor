@@ -6,7 +6,7 @@ import {
   posToDOMRect,
 } from "@tiptap/core";
 import { EditorState, Plugin, PluginKey } from "@tiptap/pm/state";
-import { EditorView } from "@tiptap/pm/view";
+import type { EditorView } from "@tiptap/pm/view";
 
 export interface BubbleMenuPluginProps {
   /**
