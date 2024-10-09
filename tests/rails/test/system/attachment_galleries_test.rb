@@ -111,8 +111,11 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     # Go back and edit the file and make sure it renders properly in editor
     page.get_by_role('link', name: /Show this post/i).click
     wait_for_network_idle
+    assert page.get_by_text("Back to posts")
+    check
     page.get_by_role('link', name: /Edit raw post/i).click
     assert page.get_by_text("Editing raw post")
+    wait_for_network_idle
     check
   end
 
