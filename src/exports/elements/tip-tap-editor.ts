@@ -141,9 +141,9 @@ export class TipTapEditor extends TipTapEditorBase {
     super();
 
     this.starterKitOptions = Object.assign(this.starterKitOptions, {
-      rhinoPlaceholder: {
-        placeholder: this.translations.placeholder,
-      },
+      // rhinoPlaceholder: {
+      //   placeholder: this.translations.placeholder,
+      // },
       rhinoAttachment: {
         fileUploadErrorMessage: this.translations.fileUploadErrorMessage,
         captionPlaceholder: this.translations.captionPlaceholder,

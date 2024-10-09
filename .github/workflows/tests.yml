@@ -97,7 +97,6 @@ jobs:
         pnpm run test:rails
     - name: Doc Tests
       run: |
-        pnpm exec playwright install --with-deps
         pnpm run test:docs
     - name: Unit Tests
       run: |

@@ -35,7 +35,7 @@ import { RhinoChangeEvent } from "../events/rhino-change-event.js";
 import { SelectionChangeEvent } from "../events/selection-change-event.js";
 import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
 import { DOMSerializer, Slice } from "@tiptap/pm/model";
-import { EditorView } from "@tiptap/pm/view";
+import type { EditorView } from "@tiptap/pm/view";
 
 export type Serializer = "" | "html" | "json";
 
