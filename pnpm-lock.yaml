@@ -76,8 +76,8 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2
       '@playwright/test':
-        specifier: ^1.47.2
-        version: 1.47.2
+        specifier: ~1.37.0
+        version: 1.37.1
       '@types/rails__activestorage':
         specifier: ^7.1.1
         version: 7.1.1
@@ -611,9 +611,10 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@playwright/test@1.47.2':
-    resolution: {integrity: sha512-jTXRsoSPONAs8Za9QEQdyjFn+0ZQFjCiIztAIF6bi1HqhBzG9Ma7g1WotyiGqFSBRZjIEqMdT8RUlbk1QVhzCQ==}
-    engines: {node: '>=18'}
+  '@playwright/test@1.37.1':
+    resolution: {integrity: sha512-bq9zTli3vWJo8S3LwB91U0qDNQDpEXnw7knhxLM0nwDvexQAwx9tO8iKDZSqqneVq+URd/WIoz+BALMqUTgdSg==}
+    engines: {node: '>=16'}
+    deprecated: Please update to the latest version of Playwright to test up-to-date browsers.
     hasBin: true
 
   '@puppeteer/browsers@2.4.0':
@@ -2760,6 +2761,11 @@ packages:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
 
+  playwright-core@1.37.1:
+    resolution: {integrity: sha512-17EuQxlSIYCmEMwzMqusJ2ztDgJePjrbttaefgdsiqeLWidjYz9BxXaTaZWxH1J95SHGk6tjE+dwgWILJoUZfA==}
+    engines: {node: '>=16'}
+    hasBin: true
+
   playwright-core@1.47.2:
     resolution: {integrity: sha512-3JvMfF+9LJfe16l7AbSmU555PaTl2tPyQsVInqm3id16pdDfvZ8TTZ/pyzmkbDrZTQefyzU7AIHlZqQnxpqHVQ==}
     engines: {node: '>=18'}
@@ -4021,9 +4027,12 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@playwright/test@1.47.2':
+  '@playwright/test@1.37.1':
     dependencies:
-      playwright: 1.47.2
+      '@types/node': 22.7.4
+      playwright-core: 1.37.1
+    optionalDependencies:
+      fsevents: 2.3.2
 
   '@puppeteer/browsers@2.4.0':
     dependencies:
@@ -6514,6 +6523,8 @@ snapshots:
   pify@3.0.0: {}
 
   pify@4.0.1: {}
+
+  playwright-core@1.37.1: {}
 
   playwright-core@1.47.2: {}
 

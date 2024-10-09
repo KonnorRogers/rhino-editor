@@ -64,11 +64,11 @@ importers:
         version: 13.6.19
     devDependencies:
       '@playwright/test':
-        specifier: ~1.47.2
-        version: 1.47.2
+        specifier: ~1.37.0
+        version: 1.37.1
       playwright:
-        specifier: ~1.47.2
-        version: 1.47.2
+        specifier: ~1.37.0
+        version: 1.37.1
       vite:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@22.7.4)
@@ -235,9 +235,10 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@playwright/test@1.47.2':
-    resolution: {integrity: sha512-jTXRsoSPONAs8Za9QEQdyjFn+0ZQFjCiIztAIF6bi1HqhBzG9Ma7g1WotyiGqFSBRZjIEqMdT8RUlbk1QVhzCQ==}
-    engines: {node: '>=18'}
+  '@playwright/test@1.37.1':
+    resolution: {integrity: sha512-bq9zTli3vWJo8S3LwB91U0qDNQDpEXnw7knhxLM0nwDvexQAwx9tO8iKDZSqqneVq+URd/WIoz+BALMqUTgdSg==}
+    engines: {node: '>=16'}
+    deprecated: Please update to the latest version of Playwright to test up-to-date browsers.
     hasBin: true
 
   '@rails/actioncable@7.2.100':
@@ -577,14 +578,14 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
-  playwright-core@1.47.2:
-    resolution: {integrity: sha512-3JvMfF+9LJfe16l7AbSmU555PaTl2tPyQsVInqm3id16pdDfvZ8TTZ/pyzmkbDrZTQefyzU7AIHlZqQnxpqHVQ==}
-    engines: {node: '>=18'}
+  playwright-core@1.37.1:
+    resolution: {integrity: sha512-17EuQxlSIYCmEMwzMqusJ2ztDgJePjrbttaefgdsiqeLWidjYz9BxXaTaZWxH1J95SHGk6tjE+dwgWILJoUZfA==}
+    engines: {node: '>=16'}
     hasBin: true
 
-  playwright@1.47.2:
-    resolution: {integrity: sha512-nx1cLMmQWqmA3UsnjaaokyoUpdVaaDhJhMoxX2qj3McpjnsqFHs516QAKYhqHAgOP+oCFTEOCOAaD1RgD/RQfA==}
-    engines: {node: '>=18'}
+  playwright@1.37.1:
+    resolution: {integrity: sha512-bgUXRrQKhT48zHdxDYQTpf//0xDfDd5hLeEhjuSw8rXEGoT9YeElpfvs/izonTNY21IQZ7d3s22jLxYaAnubbQ==}
+    engines: {node: '>=16'}
     hasBin: true
 
   postcss@8.4.47:
@@ -880,9 +881,12 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@playwright/test@1.47.2':
+  '@playwright/test@1.37.1':
     dependencies:
-      playwright: 1.47.2
+      '@types/node': 22.7.4
+      playwright-core: 1.37.1
+    optionalDependencies:
+      fsevents: 2.3.2
 
   '@rails/actioncable@7.2.100': {}
 
@@ -995,7 +999,6 @@ snapshots:
   '@types/node@22.7.4':
     dependencies:
       undici-types: 6.19.8
-    optional: true
 
   '@y-rb/actioncable@0.2.1':
     dependencies:
@@ -1248,13 +1251,11 @@ snapshots:
 
   picomatch@2.3.1: {}
 
-  playwright-core@1.47.2: {}
+  playwright-core@1.37.1: {}
 
-  playwright@1.47.2:
+  playwright@1.37.1:
     dependencies:
-      playwright-core: 1.47.2
-    optionalDependencies:
-      fsevents: 2.3.2
+      playwright-core: 1.37.1
 
   postcss@8.4.47:
     dependencies:
@@ -1429,8 +1430,7 @@ snapshots:
 
   uc.micro@2.1.0: {}
 
-  undici-types@6.19.8:
-    optional: true
+  undici-types@6.19.8: {}
 
   util-deprecate@1.0.2:
     optional: true
