@@ -1,7 +1,7 @@
 {
   "devDependencies": {
-    "@playwright/test": "~1.37.0",
-    "playwright": "~1.37.0",
+    "@playwright/test": "^1.48.0",
+    "playwright": "^1.48.0",
     "vite": "^5.4.8",
     "vite-plugin-ruby": "^5.1.0"
   },

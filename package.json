@@ -43,7 +43,7 @@
     "@custom-elements-manifest/analyzer": "^0.10.3",
     "@esm-bundle/chai": "4.3.4-fix.0",
     "@open-wc/testing": "^3.2.2",
-    "@playwright/test": "~1.37.0",
+    "@playwright/test": "^1.48.0",
     "@types/rails__activestorage": "^7.1.1",
     "@typescript-eslint/parser": "^6.21.0",
     "@web/dev-server": "^0.3.7",
