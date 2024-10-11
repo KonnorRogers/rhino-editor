@@ -85,7 +85,7 @@ jobs:
     - name: Install via pnpm
       run: |
         pnpm run setup
-        pnpm exec playwright install --with-deps
+        pnpm exec playwright install
     - name: Lint
       run: |
         pnpm run lint
