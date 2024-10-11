@@ -87,7 +87,7 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
       "addresses.csv"
     ]
 
-    page.locator("rhino-editor").click
+    page.locator("rhino-editor").nth(0).click
     attach_files(files)
     page.wait_for_selector(".attachment-gallery .attachment[sgid]", state: "visible")
     page.wait_for_selector(":not(.attachment-gallery) .attachment[sgid]", state: "visible")
