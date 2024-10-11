@@ -20,7 +20,6 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
   test "Should allow to insert multiple attachments in the gallery in sequence" do
     page.get_by_role('link', name: /New Post/i).click
 
-
     files = [
       "screenshot-1.png",
     ]
@@ -88,6 +87,7 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
       "addresses.csv"
     ]
 
+    page.locator("rhino-editor").click
     attach_files(files)
     page.wait_for_selector(".attachment-gallery .attachment[sgid]", state: "visible")
     page.wait_for_selector(":not(.attachment-gallery) .attachment[sgid]", state: "visible")
