@@ -1368,11 +1368,13 @@ export class TipTapEditor extends TipTapEditorBase {
         @rhino-bubble-menu-show=${(
           e: Event & { clientRect: () => DOMRect },
         ) => {
+          if (e.defaultPrevented) { return }
           const self = e.currentTarget as RoleAnchoredRegion;
           self.anchor = { getBoundingClientRect: e.clientRect };
           self.active = true;
         }}
         @rhino-bubble-menu-hide=${(e: Event) => {
+          if (e.defaultPrevented) { return }
           const self = e.currentTarget as RoleAnchoredRegion;
           self.anchor = null;
           self.active = false;

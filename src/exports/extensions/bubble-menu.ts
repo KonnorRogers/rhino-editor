@@ -249,6 +249,7 @@ export class BubbleMenuView {
     const evt = new Event("rhino-bubble-menu-show", {
       bubbles: true,
       composed: true,
+      cancelable: true,
     });
     // @ts-expect-error
     evt.clientRect = clientRect;
