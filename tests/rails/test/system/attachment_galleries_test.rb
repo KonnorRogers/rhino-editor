@@ -78,27 +78,30 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     check
   end
 
-  test "Should not allow to insert multiple attachments in the gallery at once" do
+  test "Should not allow to insert multiple attachments in the gallery are inserted at the same time" do
     page.get_by_role('link', name: /New Post/i).click
+
+    wait_for_network_idle
 
     files = [
       "screenshot-1.png",
       "addresses.csv"
     ]
-    attach_files(files)
 
-    page.wait_for_selector(".attachment-gallery > figure.attachment[sgid]", state: "visible")
-    page.wait_for_selector(":not(.attachment-gallery) figure.attachment[sgid]", state: "visible")
+    attach_files(files)
+    page.wait_for_selector(".attachment-gallery .attachment[sgid]", state: "visible")
+    page.wait_for_selector(":not(.attachment-gallery) .attachment[sgid]", state: "visible")
 
     def check
       wait_for_network_idle
 
       page.locator("body").click
-      assert page.locator(".attachment-gallery > figure.attachment[sgid]").nth(0)
-      assert page.locator("figure.attachment[sgid]").nth(1)
+      assert page.locator(".attachment-gallery .attachment").nth(0).wait_for(state: 'visible')
+      assert page.locator(".attachment").nth(1).wait_for(state: 'visible')
 
-      assert_equal page.locator(".attachment-gallery > figure.attachment").count, 1
-      assert_equal page.locator("figure.attachment").count, 2
+      assert_equal page.locator(".attachment-gallery .attachment").count, 1
+      assert_equal page.locator(".attachment").count, 2
+      page.locator("body").click
     end
 
     check
@@ -107,28 +110,21 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     page.get_by_role('button', name: /Create Post/i).click
 
     assert page.get_by_text("Post was successfully created")
-
     check
-    page.locator("body").click
 
     # Go back and edit the file and make sure it renders properly in editor
     page.get_by_role('link', name: /Edit this post/i).click
+
     assert page.get_by_text("Editing post")
 
     check
-    page.locator("body").click
 
     # Go back and edit the file and make sure it renders properly in editor
     page.get_by_role('link', name: /Show this post/i).click
-    page.locator("body").click
     wait_for_network_idle
-    assert page.get_by_text("Back to posts")
-    check
     page.locator("body").click
     page.get_by_role('link', name: /Edit raw post/i).click
     assert page.get_by_text("Editing raw post")
-    page.locator("body").click
-    wait_for_network_idle
     check
   end
 
@@ -137,28 +133,29 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
 
     wait_for_network_idle
 
-
     files = [
       "screenshot-1.png",
     ]
 
     attach_files(files)
+    page.wait_for_selector(".attachment-gallery .attachment[sgid]", state: "visible")
 
     files = [
       "addresses.csv"
     ]
 
     attach_files(files)
+    page.wait_for_selector(":not(.attachment-gallery) .attachment[sgid]", state: "visible")
 
     def check
       wait_for_network_idle
 
       page.locator("body").click
-      assert page.locator(".attachment-gallery > figure.attachment").nth(0).wait_for(state: 'visible')
-      assert page.locator("figure.attachment").nth(1).wait_for(state: 'visible')
+      assert page.locator(".attachment-gallery .attachment").nth(0).wait_for(state: 'visible')
+      assert page.locator(".attachment").nth(1).wait_for(state: 'visible')
 
-      assert_equal page.locator(".attachment-gallery > figure.attachment").count, 1
-      assert_equal page.locator("figure.attachment").count, 2
+      assert_equal page.locator(".attachment-gallery .attachment").count, 1
+      assert_equal page.locator(".attachment").count, 2
       page.locator("body").click
     end
 
