@@ -93,8 +93,9 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     def check
       wait_for_network_idle
 
-      assert page.locator(".attachment-gallery > figure.attachment").nth(0).wait_for(state: "visible")
-      assert page.locator("figure.attachment").nth(1).wait_for(state: "visible")
+      page.locator("body").click
+      assert page.locator(".attachment-gallery > figure.attachment[sgid]").nth(0)
+      assert page.locator("figure.attachment[sgid]").nth(1)
 
       assert_equal page.locator(".attachment-gallery > figure.attachment").count, 1
       assert_equal page.locator("figure.attachment").count, 2
@@ -108,14 +109,16 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     assert page.get_by_text("Post was successfully created")
 
     check
+    page.locator("body").click
 
     # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Edit this post/i).click
-    # assert page.get_by_text("Editing post")
+    page.get_by_role('link', name: /Edit this post/i).click
+    assert page.get_by_text("Editing post")
 
-    # check
+    check
+    page.locator("body").click
 
-    # # Go back and edit the file and make sure it renders properly in editor
+    # Go back and edit the file and make sure it renders properly in editor
     # page.get_by_role('link', name: /Show this post/i).click
     # wait_for_network_idle
     # assert page.get_by_text("Back to posts")
