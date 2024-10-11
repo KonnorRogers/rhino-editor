@@ -119,14 +119,17 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     page.locator("body").click
 
     # Go back and edit the file and make sure it renders properly in editor
-    # page.get_by_role('link', name: /Show this post/i).click
-    # wait_for_network_idle
-    # assert page.get_by_text("Back to posts")
-    # check
-    # page.get_by_role('link', name: /Edit raw post/i).click
-    # assert page.get_by_text("Editing raw post")
-    # wait_for_network_idle
-    # check
+    page.get_by_role('link', name: /Show this post/i).click
+    page.locator("body").click
+    wait_for_network_idle
+    assert page.get_by_text("Back to posts")
+    check
+    page.locator("body").click
+    page.get_by_role('link', name: /Edit raw post/i).click
+    assert page.get_by_text("Editing raw post")
+    page.locator("body").click
+    wait_for_network_idle
+    check
   end
 
   test "Should not allow to insert multiple attachments in the gallery in sequence" do
