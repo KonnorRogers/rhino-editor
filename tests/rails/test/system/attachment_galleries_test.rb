@@ -78,6 +78,7 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
   end
 
   test "Should not allow to insert multiple attachments in the gallery are inserted at the same time" do
+    # skip("For some silly reason, this test only fails in GH Actions") if ENV["CI"] == "true"
     page.get_by_role('link', name: /New Post/i).click
 
     wait_for_network_idle

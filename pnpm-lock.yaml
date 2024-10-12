@@ -117,6 +117,9 @@ importers:
       mocha:
         specifier: ^10.7.3
         version: 10.7.3
+      playwright:
+        specifier: ^1.48.0
+        version: 1.48.0
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -2760,18 +2763,8 @@ packages:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
 
-  playwright-core@1.47.2:
-    resolution: {integrity: sha512-3JvMfF+9LJfe16l7AbSmU555PaTl2tPyQsVInqm3id16pdDfvZ8TTZ/pyzmkbDrZTQefyzU7AIHlZqQnxpqHVQ==}
-    engines: {node: '>=18'}
-    hasBin: true
-
   playwright-core@1.48.0:
     resolution: {integrity: sha512-RBvzjM9rdpP7UUFrQzRwR8L/xR4HyC1QXMzGYTbf1vjw25/ya9NRAVnXi/0fvFopjebvyPzsmoK58xxeEOaVvA==}
-    engines: {node: '>=18'}
-    hasBin: true
-
-  playwright@1.47.2:
-    resolution: {integrity: sha512-nx1cLMmQWqmA3UsnjaaokyoUpdVaaDhJhMoxX2qj3McpjnsqFHs516QAKYhqHAgOP+oCFTEOCOAaD1RgD/RQfA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -4740,7 +4733,7 @@ snapshots:
     dependencies:
       '@web/test-runner-core': 0.13.4
       '@web/test-runner-coverage-v8': 0.8.0
-      playwright: 1.47.2
+      playwright: 1.48.0
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -6525,15 +6518,7 @@ snapshots:
 
   pify@4.0.1: {}
 
-  playwright-core@1.47.2: {}
-
   playwright-core@1.48.0: {}
-
-  playwright@1.47.2:
-    dependencies:
-      playwright-core: 1.47.2
-    optionalDependencies:
-      fsevents: 2.3.2
 
   playwright@1.48.0:
     dependencies:
