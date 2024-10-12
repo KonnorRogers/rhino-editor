@@ -166,6 +166,7 @@ export default css`
     border: 1px solid var(--rhino-border-color);
     border-radius: 4px;
     padding: 4px;
+    background: Canvas;
   }
 
   [part~="toolbar"]::part(base):is(:focus-visible, :focus-within) {
@@ -195,7 +196,7 @@ export default css`
 
   role-anchored-region {
     font-size: 0.8em;
-    --background: Canvas;
+    --background: transparent;
     --border-color: transparent;
   }
 
@@ -278,14 +279,12 @@ export default css`
     top: 0;
     left: 0;
     font-size: 0.75em;
-    --background: Canvas;
-    color: CanvasText;
-    --border-color: gray;
+    --background: CanvasText;
+    color: Canvas;
+    --border-color: CanvasText;
   }
 
-  @media screen and (prefers-color-scheme: dark) {
-    role-tooltip {
-      --border-color: rgb(200, 200, 200);
-    }
+  role-tooltip::part(popover) {
+    padding: 0.4em 0.6em;
   }
 `;
