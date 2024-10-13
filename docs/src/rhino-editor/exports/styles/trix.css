@@ -1,0 +1,308 @@
+/* src/exports/styles/trix.css */
+.trix-content {
+  border: 1px solid var(--rhino-border-color);
+  border-radius: 0px 0px var(--rhino-border-radius) var(--rhino-border-radius);
+  margin: 0;
+  padding: 0.4em 0.6em;
+  min-height: 200px;
+  outline: transparent;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.trix-content[contenteditable=true] {
+  white-space: pre-wrap;
+}
+.trix-content:is(:focus, :focus-within) {
+  border-color: var(--rhino-button-active-border-color);
+}
+.trix-content :is(img, svg, figure) {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.trix-content :is(figure, p) {
+  padding: 0;
+  margin: 0;
+}
+.trix-content figure {
+  position: relative;
+}
+.trix-content figcaption {
+  line-break: anywhere;
+  display: inline-block;
+  white-space: normal;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  color: inherit;
+  text-align: center;
+  vertical-align: top;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.trix-content[contenteditable=true] figcaption {
+  white-space: break-spaces;
+}
+.trix-content .rhino-upload-error {
+  background-color: rgba(255, 0, 0, 0.3);
+}
+.trix-content:not([readonly]) figure:is(:focus-within, :focus, .has-focus) :nth-child(2) {
+  outline: transparent;
+  box-shadow: var(--rhino-focus-ring);
+}
+.rhino-attachment-editor::part(delete-button),
+.rhino-attachment-editor::part(file-metadata) {
+  display: none;
+}
+.trix-content:not([readonly]) figure:is(:focus-within, :focus, .has-focus) .rhino-attachment-editor::part(delete-button),
+.trix-content:not([readonly]) figure:is(:focus-within, :focus, .has-focus) .rhino-attachment-editor::part(file-metadata) {
+  display: flex;
+}
+.trix-content .placeholder {
+  position: absolute;
+  pointer-events: none;
+  color: var(--rhino-placeholder-text-color);
+  color: light-dark(var(--rhino-placeholder-text-color), var(--rhino-dark-placeholder-text-color));
+  cursor: text;
+  content: "";
+}
+.trix-content figure.attachment figcaption {
+  position: relative;
+}
+.trix-content p.is-editor-empty:first-child::before,
+.trix-content figure[data-trix-attachment].has-focus figcaption.is-empty::before {
+  color: var(--rhino-placeholder-text-color);
+  color: light-dark(var(--rhino-placeholder-text-color), var(--rhino-dark-placeholder-text-color));
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+.trix-content figure[data-trix-attachment]:not(.has-focus) figcaption.is-empty::before {
+  content: attr(data-default-caption);
+  pointer-events: none;
+}
+.trix-content ul {
+  list-style: disc;
+}
+.trix-content figure[data-trix-attachment].has-focus figcaption.is-empty::before {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0%);
+}
+.trix-content p.is-editor-empty:first-child::before {
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.trix-content {
+  box-sizing: border-box;
+}
+.trix-content * {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+.trix-content h1 {
+  font-size: 1.2em;
+  line-height: 1.2;
+}
+.trix-content blockquote {
+  border: 0 solid #ccc;
+  border-inline-start-width: 0.3em;
+  margin-inline-start: 0.3em;
+  padding-inline-start: 0.6em;
+}
+.trix-content li {
+  margin-inline-start: 1em;
+}
+.trix-content :where(pre) {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+  font-family: monospace;
+  font-size: 0.9em;
+  padding: 0.5em;
+  white-space: pre;
+  background-color: #eee;
+  overflow-x: auto;
+}
+.trix-content img {
+  max-width: 100%;
+  height: auto;
+}
+.trix-content .attachment {
+  display: block;
+  position: relative;
+  max-width: 100%;
+}
+.trix-content .attachment a {
+  color: inherit;
+  text-decoration: none;
+}
+.trix-content .attachment a:hover,
+.trix-content .attachment a:visited:hover {
+  color: inherit;
+}
+.trix-content .attachment__caption {
+  text-align: center;
+  margin-top: 0.5em;
+}
+.trix-content .attachment__caption .attachment__name + .attachment__size::before {
+  content: " \b7  ";
+}
+.trix-content .attachment--preview {
+  width: 100%;
+  text-align: center;
+  margin: 0.6em 0;
+}
+.trix-content .attachment--preview .attachment__caption {
+  color: #666;
+  font-size: 0.9em;
+  line-height: 1.2;
+}
+.trix-content .attachment.attachment--file {
+  color: #333;
+  line-height: 1;
+  margin: 0 2px 2px 2px;
+  padding: 0.4em 1em;
+  border: 1px solid var(--rhino-border-color);
+  border-radius: var(--rhino-border-radius);
+}
+.trix-content .attachment-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+}
+.trix-content figure.attachment {
+  display: inline-block;
+  position: relative;
+  white-space: normal;
+}
+.trix-content .attachment-gallery > p {
+  width: 0px;
+  padding: 0;
+  flex-basis: 0%;
+  max-width: 0%;
+  flex-shrink: 1;
+  flex-grow: 0;
+}
+.trix-content .attachment-gallery .attachment {
+  flex: 1 0 100%;
+  padding: 0 0.5em;
+  max-width: 100%;
+  white-space: normal;
+}
+.trix-content .attachment-gallery > :is(.attachment--preview, action-text-attachment[previewable=true]) {
+  flex: 1 0 33%;
+  padding: 0 0.5em;
+  max-width: 33%;
+  white-space: normal;
+}
+.trix-content .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1) ~ :is(.attachment, action-text-attachment),
+.trix-content .attachment-gallery > :is(.attachment, action-text-attachment):first-of-type:nth-last-of-type(1) {
+  padding: 0;
+  flex-basis: 100%;
+  max-width: 100%;
+}
+.attachment-gallery > :is(.attachment--preview, action-text-attachment[previewable=true]):first-of-type:nth-last-of-type(2),
+.attachment-gallery > :is(.attachment--preview, action-text-attachment[previewable=true]):first-of-type:nth-last-of-type(2) ~ :is(.attachment--preview, action-text-attachment[previewable=true]),
+.attachment-gallery > :is(.attachment--preview, action-text-attachment[previewable=true]):first-of-type:nth-last-of-type(4),
+.attachment-gallery > :is(.attachment--preview, action-text-attachment[previewable=true]):first-of-type:nth-last-of-type(4) ~ :is(.attachment--preview, action-text-attachment[previewable=true]) {
+  flex-basis: 50%;
+  max-width: 50%;
+}
+.trix-content .attachment-gallery.attachment-gallery--2 action-text-attachment > .attachment,
+.trix-content .attachment-gallery.attachment-gallery--4 action-text-attachment > .attachment,
+.trix-content .attachment-gallery action-text-attachment > .attachment {
+  max-width: 100%;
+}
+:host,
+.trix-content {
+  --rhino-focus-ring: 0px 0px 1px 1px var(--rhino-button-active-border-color);
+  --rhino-border-radius: 4px;
+  --rhino-danger-border-color: red;
+  --rhino-danger-background-color: #ffdddd;
+  --rhino-text-color: #374151;
+  --rhino-dark-text-color: white;
+  --rhino-border-color: #cecece;
+  --rhino-placeholder-text-color: #cecece;
+  --rhino-dark-placeholder-text-color: gray;
+  --rhino-button-text-color: #889;
+  --rhino-button-dark-text-color: #eee;
+  --rhino-button-border-color: #cecece;
+  --rhino-button-disabled-text-color: #d1d5db;
+  --rhino-button-disabled-border-color: #d1d5db;
+  --rhino-button-disabled-background-color: #d1d5db;
+  --rhino-button-active-border-color: #005a9c;
+  --rhino-button-active-background-color: rgb(226 239 255);
+  --rhino-toolbar-text-color: hsl(219, 6%, 43%);
+  --rhino-toolbar-icon-size: 1em;
+  --rhino-dialog-border-color: hsl( var(--rhino-button-focus-background-color-hsl) / 50% );
+  --rhino-button-focus-background-color: hsl( var(--rhino-button-focus-background-color-hsl) );
+  --rhino-button-focus-background-color-hsl: 219 26% 95%;
+  display: block;
+  color: var(--rhino-text-color);
+  color: light-dark(var(--rhino-text-color), var(--rhino-dark-text-color));
+}
+.rhino-toolbar-button {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--rhino-border-color);
+  border-radius: var(--rhino-border-radius);
+  padding: 0.4em;
+  color: var(--rhino-button-text-color);
+  color: light-dark(var(--rhino-button-text-color), var(--rhino-button-dark-text-color));
+  background: Canvas;
+  font-size: inherit;
+  display: inline-grid;
+}
+.rhino-toolbar-button:is([aria-disabled=true], :disabled) {
+  color: var(--rhino-button-disabled-text-color);
+  border-color: var(--rhino-button-disabled-border-color);
+}
+.rhino-toolbar-button[aria-disabled=true]:focus {
+  border-color: var(--rhino-button-disabled-border-color);
+}
+.rhino-toolbar-button svg {
+  min-height: var(--rhino-toolbar-icon-size);
+  min-width: var(--rhino-toolbar-icon-size);
+  max-height: var(--rhino-toolbar-icon-size);
+  max-width: var(--rhino-toolbar-icon-size);
+}
+.rhino-toolbar-button:is(:focus, :hover):not([aria-disabled=true], :disabled) {
+  outline: transparent;
+  border-color: var(--rhino-button-active-border-color);
+}
+.rhino-toolbar-button:is(:focus):not([aria-disabled=true], :disabled) {
+  box-shadow: var(--rhino-focus-ring);
+}
+.rhino-toolbar-button:is(:hover):not([aria-disabled=true], :disabled, [aria-pressed=true], [part~=toolbar__button--active]) {
+  background-color: var(--rhino-button-focus-background-color);
+  background-color: light-dark(var(--rhino-button-focus-background-color), gray);
+}
+.rhino-toolbar-button:is([aria-disabled=true], :disabled):not([part~=toolbar__button--active]) {
+  color: var(--rhino-button-disabled-text-color);
+  color: light-dark(var(--rhino-button-disabled-text-color), gray);
+  border-color: var(--rhino-button-disabled-border-color);
+}
+.rhino-toolbar-button:is(:focus, :hover):is([aria-disabled=true], :disabled):not([part~=toolbar__button--active]) {
+  outline: transparent;
+  color: var(--rhino-button-disabled-text-color);
+  color: light-dark(var(--rhino-button-disabled-text-color), gray);
+  border-color: var(--rhino-button-disabled-border-color);
+  box-shadow: 0 0 0 1px var(--rhino-button-disabled-border-color);
+  box-shadow: 0 0 0 1px light-dark(var(--rhino-button-disabled-border-color), transparent);
+}
+svg,
+::slotted(svg) {
+  height: var(--rhino-toolbar-icon-size);
+  width: var(--rhino-toolbar-icon-size);
+}
+/*# sourceMappingURL=trix.css.map */

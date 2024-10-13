@@ -2,8 +2,10 @@ html {
   box-sizing: border-box;
   height: 100%;
   scrollbar-gutter: stable;
-  /* letter-spacing: 0.025em; */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
+
 
 *, *:before, *:after {
   box-sizing: border-box;
@@ -23,6 +25,11 @@ body {
   margin: 0;
   padding: 0;
   font-size: 115%;
+}
+
+
+light-code {
+  isolation: isolate;
 }
 
 [hidden] {

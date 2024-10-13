@@ -91,6 +91,11 @@ export default function lazyLoader() {
           );
         },
       },
+      "light-preview": {
+        register () {
+          import("light-pen/exports/components/light-preview/light-preview-register.js")
+        }
+      }
     },
   }).start();
 }

@@ -1,6 +1,6 @@
 import { Maybe } from "../types.js";
 import { uuidv4 } from "../internal/uuidv4.js";
-import { EditorView } from "@tiptap/pm/view";
+import type { EditorView } from "@tiptap/pm/view";
 import { LOADING_STATES } from "./elements/attachment-editor.js";
 import { toDefaultCaption } from "../internal/to-default-caption.js";
 

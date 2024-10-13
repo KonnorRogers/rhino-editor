@@ -14,7 +14,7 @@
       <sl-icon class="clipboard__icon--idle" name="clipboard"></sl-icon>
     </clipboard-copy>
 
-    <textarea id="<%= id %>" hidden><%= content %></textarea>
+    <script type="text/plain" id="<%= id %>" hidden><%= content %></script>
 
   </div>
   <%= markdownify("```#{language}" + content + "```") %>

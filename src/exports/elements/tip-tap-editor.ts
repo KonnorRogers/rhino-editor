@@ -4,8 +4,8 @@ import { TipTapEditorBase } from "./tip-tap-editor-base.js";
 import { PropertyDeclarations, PropertyValues, TemplateResult } from "lit";
 
 /** Imports <role-tooltip> and <role-toolbar> */
-import RoleToolbar from "role-components/exports/toolbar/toolbar.js";
-import RoleTooltip from "role-components/exports/tooltip/tooltip.js";
+import RoleToolbar from "role-components/exports/components/toolbar/toolbar.js";
+import RoleTooltip from "role-components/exports/components/tooltip/tooltip.js";
 
 import { isiOS, translations } from "../translations.js";
 
@@ -15,6 +15,7 @@ import { Maybe } from "../../types.js";
 import { html } from "lit/html.js";
 import { stringMap } from "../../internal/string-map.js";
 import { isExactNodeActive } from "../../internal/is-exact-node-active.js";
+import RoleAnchoredRegion from "role-components/exports/components/anchored-region/anchored-region.js";
 
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
@@ -92,6 +93,10 @@ import { isExactNodeActive } from "../../internal/is-exact-node-active.js";
  * @slot redo-button
  * @slot after-redo-button
  * @slot toolbar-end
+ *
+ * ## Events
+ * @rhino-bubble-menu-show
+ * @rhino-bubble-menu-hide
  */
 export class TipTapEditor extends TipTapEditorBase {
   static get styles() {
@@ -129,7 +134,7 @@ export class TipTapEditor extends TipTapEditorBase {
    */
   registerDependencies() {
     super.registerDependencies();
-    [RoleToolbar, RoleTooltip].forEach((el) => el.define());
+    [RoleToolbar, RoleTooltip, RoleAnchoredRegion].forEach((el) => el.define());
   }
 
   constructor() {
@@ -178,6 +183,13 @@ export class TipTapEditor extends TipTapEditorBase {
     super.connectedCallback();
 
     await this.updateComplete;
+
+    this.starterKitOptions = Object.assign(this.starterKitOptions, {
+      rhinoBubbleMenu: {
+        ...this.starterKitOptions.rhinoBubbleMenu,
+        element: this.shadowRoot?.querySelector("role-anchored-region"),
+      },
+    }) as typeof this.starterKitOptions;
 
     if (this.editor) {
       this.editor.on("focus", this.closeLinkDialog);
@@ -244,6 +256,8 @@ export class TipTapEditor extends TipTapEditorBase {
     setTimeout(() => {
       if (inputElement != null) inputElement.focus();
     });
+
+    console.log("showing");
   }
 
   get linkDialog(): Maybe<HTMLDivElement> {
@@ -317,7 +331,7 @@ export class TipTapEditor extends TipTapEditorBase {
     return "base:toolbar__tooltip__base, arrow:toolbar__tooltip__arrow";
   }
 
-  renderBoldButton() {
+  renderBoldButton(prefix = "") {
     const boldEnabled = Boolean(this.editor?.commands.toggleBold);
 
     if (!boldEnabled) return html``;
@@ -325,7 +339,27 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled = this.editor == null || !this.editor.can().toggleBold();
     const isActive = Boolean(this.editor?.isActive("bold"));
 
+    let tooltip_slot_name = "bold-tooltip";
+    let tooltip_id = "bold";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--bold";
+    let icon_slot_name = "bold-icon";
+
+    if (prefix) {
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.bold}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -335,31 +369,21 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="bold"
         aria-disabled=${isDisabled}
         aria-pressed=${isActive}
         data-role="toolbar-item"
+        data-role-tooltip=${tooltip_id}
         @click=${async (e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) return;
           this.editor?.chain().focus().toggleBold().run();
         }}
       >
-        <slot name="bold-tooltip">
-          <role-tooltip
-            id="bold"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--bold"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.bold}
-          </role-tooltip>
-        </slot>
-        <slot name="bold-icon">${this.icons.bold}</slot>
+        <slot name=${icon_slot_name}>${this.icons.bold}</slot>
       </button>
     `;
   }
 
-  renderItalicButton() {
+  renderItalicButton(prefix = "") {
     const italicEnabled = Boolean(this.editor?.commands.toggleItalic);
 
     if (!italicEnabled) return html``;
@@ -367,7 +391,27 @@ export class TipTapEditor extends TipTapEditorBase {
     const isActive = Boolean(this.editor?.isActive("italic"));
     const isDisabled = this.editor == null || !this.editor.can().toggleItalic();
 
+    let tooltip_slot_name = "italics-tooltip";
+    let tooltip_id = "italics";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--italics";
+    let icon_slot_name = "italics-icon";
+
+    if (prefix) {
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.italics}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         tabindex="-1"
@@ -378,10 +422,10 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="italics"
         aria-disabled=${isDisabled}
         aria-pressed=${isActive}
         data-role="toolbar-item"
+        data-role-tooltip=${tooltip_id}
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
             return;
@@ -390,22 +434,12 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().toggleItalic().run();
         }}
       >
-        <slot name="italics-tooltip">
-          <role-tooltip
-            id="italics"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--italics"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.italics}
-          </role-tooltip>
-        </slot>
-        <slot name="italics-icon"> ${this.icons.italics} </slot>
+        <slot name=${icon_slot_name}> ${this.icons.italics} </slot>
       </button>
     `;
   }
 
-  renderStrikeButton() {
+  renderStrikeButton(prefix = "") {
     const strikeEnabled = Boolean(this.editor?.commands.toggleStrike);
 
     if (!strikeEnabled) return html``;
@@ -413,7 +447,27 @@ export class TipTapEditor extends TipTapEditorBase {
     const isActive = Boolean(this.editor?.isActive("rhino-strike"));
     const isDisabled = this.editor == null || !this.editor.can().toggleStrike();
 
+    let tooltip_slot_name = "strike-tooltip";
+    let tooltip_id = "strike";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--strike";
+    let icon_slot_name = "strike-icon";
+
+    if (prefix) {
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.strike}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -424,9 +478,9 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="strike"
         aria-disabled=${isDisabled}
         aria-pressed=${isActive}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -435,22 +489,12 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().toggleStrike().run();
         }}
       >
-        <slot name="strike-tooltip">
-          <role-tooltip
-            id="strike"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--strike"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.strike}
-          </role-tooltip>
-        </slot>
-        <slot name="strike-icon">${this.icons.strike}</slot>
+        <slot name=${icon_slot_name}>${this.icons.strike}</slot>
       </button>
     `;
   }
 
-  renderLinkButton() {
+  renderLinkButton(prefix = "") {
     const linkEnabled = Boolean(this.editor?.commands.setLink);
 
     if (!linkEnabled) return html``;
@@ -459,7 +503,27 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().setLink({ href: "" });
 
+    let tooltip_slot_name = "link-tooltip";
+    let tooltip_id = "link";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--link";
+    let icon_slot_name = "link-icon";
+
+    if (prefix) {
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.link}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -470,34 +534,25 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="link"
         aria-disabled=${isDisabled}
         aria-pressed=${isActive}
         aria-controls="link-dialog"
         data-role="toolbar-item"
+        data-role-tooltip=${tooltip_id}
         @click=${(e: MouseEvent) => {
           if (this.editor == null) return;
           if (elementDisabled(e.currentTarget)) return;
 
+          e.preventDefault();
           this.toggleLinkDialog();
         }}
       >
-        <slot name="link-tooltip">
-          <role-tooltip
-            id="link"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--link"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.link}
-          </role-tooltip>
-        </slot>
-        <slot name="link-icon">${this.icons.link}</slot>
+        <slot name=${icon_slot_name}>${this.icons.link}</slot>
       </button>
     `;
   }
 
-  renderHeadingButton() {
+  renderHeadingButton(prefix = "") {
     const headingEnabled = Boolean(this.editor?.commands.toggleHeading);
 
     if (!headingEnabled) return html``;
@@ -506,7 +561,27 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().toggleHeading({ level: 1 });
 
+    let tooltip_slot_name = "heading-tooltip";
+    let tooltip_id = "heading";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--heading";
+    let icon_slot_name = "heading-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.heading}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -517,10 +592,10 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="heading"
         aria-disabled=${isDisabled}
         aria-pressed=${isActive}
         data-role="toolbar-item"
+        data-role-tooltip=${tooltip_id}
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
             return;
@@ -529,22 +604,12 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().toggleHeading({ level: 1 }).run();
         }}
       >
-        <slot name="heading-tooltip">
-          <role-tooltip
-            id="heading"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--heading"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.heading}
-          </role-tooltip>
-        </slot>
-        <slot name="heading-icon">${this.icons.heading}</slot>
+        <slot name=${icon_slot_name}>${this.icons.heading}</slot>
       </button>
     `;
   }
 
-  renderBlockquoteButton() {
+  renderBlockquoteButton(prefix = "") {
     const blockQuoteEnabled = Boolean(this.editor?.commands.toggleBlockquote);
 
     if (!blockQuoteEnabled) return html``;
@@ -553,7 +618,27 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().toggleBlockquote();
 
+    let tooltip_slot_name = "blockquote-tooltip";
+    let tooltip_id = "blockquote";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--blockquote";
+    let icon_slot_name = "blockquote-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.blockQuote}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -564,9 +649,9 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="blockquote"
         aria-disabled=${isDisabled}
         aria-pressed=${isActive}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -576,22 +661,12 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().toggleBlockquote().run();
         }}
       >
-        <slot name="blockquote-tooltip">
-          <role-tooltip
-            id="blockquote"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--blockquote"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.blockQuote}
-          </role-tooltip>
-        </slot>
-        <slot name="blockquote-icon">${this.icons.blockQuote}</slot>
+        <slot name=${icon_slot_name}>${this.icons.blockQuote}</slot>
       </button>
     `;
   }
 
-  renderCodeBlockButton() {
+  renderCodeBlockButton(prefix = "") {
     const codeBlockEnabled = Boolean(this.editor?.commands.toggleCodeBlock);
 
     if (!codeBlockEnabled) return html``;
@@ -600,7 +675,27 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().toggleCodeBlock();
 
+    let tooltip_slot_name = "code-block-tooltip";
+    let tooltip_id = "code-block";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--code-block";
+    let icon_slot_name = "code-block-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.codeBlock}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -611,9 +706,9 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="code-block"
         aria-disabled=${isDisabled}
         aria-pressed=${isActive}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -622,22 +717,12 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().toggleCodeBlock().run();
         }}
       >
-        <slot name="code-block-tooltip">
-          <role-tooltip
-            id="code-block"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--code-block"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.codeBlock}
-          </role-tooltip>
-        </slot>
-        <slot name="code-block-icon">${this.icons.codeBlock}</slot>
+        <slot name=${icon_slot_name}>${this.icons.codeBlock}</slot>
       </button>
     `;
   }
 
-  renderBulletListButton() {
+  renderBulletListButton(prefix = "") {
     const bulletListEnabled = Boolean(this.editor?.commands.toggleBulletList);
 
     if (!bulletListEnabled) return html``;
@@ -653,7 +738,27 @@ export class TipTapEditor extends TipTapEditorBase {
       this.editor != null && isExactNodeActive(this.editor.state, "bulletList"),
     );
 
+    let tooltip_slot_name = "bullet-list-tooltip";
+    let tooltip_id = "bullet-list";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--bullet-list";
+    let icon_slot_name = "bullet-list-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.bulletList}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -664,9 +769,9 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="bullet-list"
         aria-disabled=${isDisabled}
         aria-pressed=${isActive}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -675,22 +780,12 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().toggleBulletList().run();
         }}
       >
-        <slot name="bullet-list-tooltip">
-          <role-tooltip
-            id="bullet-list"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--bullet-list"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.bulletList}
-          </role-tooltip>
-        </slot>
-        <slot name="bullet-list-icon">${this.icons.bulletList}</slot>
+        <slot name=${icon_slot_name}>${this.icons.bulletList}</slot>
       </button>
     `;
   }
 
-  renderOrderedListButton() {
+  renderOrderedListButton(prefix = "") {
     const orderedListEnabled = Boolean(this.editor?.commands.toggleOrderedList);
 
     if (!orderedListEnabled) return html``;
@@ -707,7 +802,27 @@ export class TipTapEditor extends TipTapEditorBase {
         isExactNodeActive(this.editor.state, "orderedList"),
     );
 
+    let tooltip_slot_name = "ordered-list-tooltip";
+    let tooltip_id = "ordered-list";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--ordered-list";
+    let icon_slot_name = "ordered-list-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.orderedList}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -718,9 +833,9 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--active": isActive,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="ordered-list"
         aria-disabled=${isDisabled}
         aria-pressed=${isActive}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -730,29 +845,41 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().toggleOrderedList().run();
         }}
       >
-        <slot name="ordered-list-tooltip">
-          <role-tooltip
-            id="ordered-list"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--ordered-list"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.orderedList}
-          </role-tooltip>
-        </slot>
-        <slot name="ordered-list-icon">${this.icons.orderedList}</slot>
+        <slot name=${icon_slot_name}>${this.icons.orderedList}</slot>
       </button>
     `;
   }
 
-  renderAttachmentButton() {
+  renderAttachmentButton(prefix = "") {
     const attachmentEnabled = Boolean(this.editor?.commands.setAttachment);
 
     if (!attachmentEnabled) return html``;
 
     const isDisabled = this.editor == null;
 
+    let tooltip_slot_name = "attach-files-tooltip";
+    let tooltip_id = "attach-files";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--attach-files";
+    let icon_slot_name = "attach-files-icon";
+    let file_input_id = "file-input";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+      file_input_id = prefix + "__" + file_input_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.attachFiles}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         tabindex="-1"
@@ -762,27 +889,17 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--attach-files": true,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="attach-files"
         aria-disabled=${isDisabled}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${this.attachFiles}
       >
-        <slot name="attach-files-tooltip">
-          <role-tooltip
-            id="attach-files"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--attach-files"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.attachFiles}
-          </role-tooltip>
-        </slot>
-        <slot name="attach-files-icon">${this.icons.attachFiles}</slot>
+        <slot name=${icon_slot_name}>${this.icons.attachFiles}</slot>
 
         <!-- @TODO: Write documentation. Hookup onchange to the slotted elements? -->
         <slot name="attach-files-input">
           <input
-            id="file-input"
+            id=${file_input_id}
             type="file"
             hidden
             multiple
@@ -794,14 +911,34 @@ export class TipTapEditor extends TipTapEditorBase {
     `;
   }
 
-  renderUndoButton() {
+  renderUndoButton(prefix = "") {
     const undoEnabled = Boolean(this.editor?.commands.undo);
 
     if (!undoEnabled) return html``;
 
     const isDisabled = this.editor == null || !this.editor.can().undo();
 
+    let tooltip_slot_name = "undo-tooltip";
+    let tooltip_id = "undo";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--undo";
+    let icon_slot_name = "undo-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.undo}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -811,8 +948,8 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--undo": true,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="undo"
         aria-disabled=${isDisabled}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -821,22 +958,12 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().undo().run();
         }}
       >
-        <slot name="undo-tooltip">
-          <role-tooltip
-            id="undo"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--undo"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.undo}
-          </role-tooltip>
-        </slot>
-        <slot name="undo-icon">${this.icons.undo}</slot>
+        <slot name=${icon_slot_name}>${this.icons.undo}</slot>
       </button>
     `;
   }
 
-  renderDecreaseIndentation() {
+  renderDecreaseIndentation(prefix = "") {
     // Decrease / increase indentation are special cases in that they rely on built-in editor
     // commands and not commands added by extensions.
     const decreaseIndentationNotEnabled =
@@ -847,7 +974,28 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().liftListItem("listItem");
 
+    let tooltip_slot_name = "decrease-indentation-tooltip";
+    let tooltip_id = "decrease-indentation";
+    let tooltip_parts =
+      "toolbar__tooltip toolbar__tooltip--decrease-indentation";
+    let icon_slot_name = "decrease-indentation-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.decreaseIndentation}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -857,8 +1005,8 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--decrease-indentation": true,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="decrease-indentation"
         aria-disabled=${isDisabled}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -867,23 +1015,12 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().liftListItem("listItem").run();
         }}
       >
-        <slot name="decrease-indentation-tooltip">
-          <role-tooltip
-            id="decrease-indentation"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--decrease-indentation"
-          >
-            ${this.translations.decreaseIndentation}
-          </role-tooltip>
-        </slot>
-        <slot name="decrease-indentation"
-          >${this.icons.decreaseIndentation}</slot
-        >
+        <slot name=${icon_slot_name}> ${this.icons.decreaseIndentation} </slot>
       </button>
     `;
   }
 
-  renderIncreaseIndentation() {
+  renderIncreaseIndentation(prefix = "") {
     const increaseIndentationNotEnabled =
       this.starterKitOptions.increaseIndentation == false;
 
@@ -892,7 +1029,28 @@ export class TipTapEditor extends TipTapEditorBase {
     const isDisabled =
       this.editor == null || !this.editor.can().sinkListItem("listItem");
 
+    let tooltip_slot_name = "increase-indentation-tooltip";
+    let tooltip_id = "increase-indentation";
+    let tooltip_parts =
+      "toolbar__tooltip toolbar__tooltip--increase-indentation";
+    let icon_slot_name = "increase-indentation-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.increaseIndentation}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         type="button"
@@ -902,8 +1060,8 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--increase-indentation": true,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="increase-indentation"
         aria-disabled=${isDisabled}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -912,31 +1070,39 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().sinkListItem("listItem").run();
         }}
       >
-        <slot name="increase-indentation-tooltip">
-          <role-tooltip
-            id="increase-indentation"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--increase-indentation"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.increaseIndentation}
-          </role-tooltip>
-        </slot>
-        <slot name="increase-indentation"
-          >${this.icons.increaseIndentation}</slot
-        >
+        <slot name=${icon_slot_name}> ${this.icons.increaseIndentation} </slot>
       </button>
     `;
   }
 
-  renderRedoButton() {
+  renderRedoButton(prefix = "") {
     const redoEnabled = Boolean(this.editor?.commands.redo);
 
     if (!redoEnabled) return html``;
 
     const isDisabled = this.editor == null || !this.editor.can().redo?.();
 
+    let tooltip_slot_name = "redo-indentation-tooltip";
+    let tooltip_id = "redo-indentation";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--redo-indentation";
+    let icon_slot_name = "redo-indentation-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
     return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.redo}
+        </role-tooltip>
+      </slot>
       <button
         class="toolbar__button rhino-toolbar-button"
         tabindex="-1"
@@ -946,8 +1112,8 @@ export class TipTapEditor extends TipTapEditorBase {
           "toolbar__button--redo": true,
           "toolbar__button--disabled": isDisabled,
         })}
-        aria-describedby="redo"
         aria-disabled=${isDisabled}
+        data-role-tooltip=${tooltip_id}
         data-role="toolbar-item"
         @click=${(e: MouseEvent) => {
           if (elementDisabled(e.currentTarget)) {
@@ -956,17 +1122,7 @@ export class TipTapEditor extends TipTapEditorBase {
           this.editor?.chain().focus().redo().run();
         }}
       >
-        <slot name="redo-tooltip">
-          <role-tooltip
-            id="redo"
-            hoist
-            part="toolbar__tooltip toolbar__tooltip--redo"
-            exportparts=${this.__tooltipExportParts}
-          >
-            ${this.translations.redo}
-          </role-tooltip>
-        </slot>
-        <slot name="redo-icon">${this.icons.redo}</slot>
+        <slot name=${icon_slot_name}>${this.icons.redo}</slot>
       </button>
     `;
   }
@@ -985,7 +1141,6 @@ export class TipTapEditor extends TipTapEditorBase {
     return html`
       <slot name="toolbar">
         <role-toolbar
-          class="toolbar"
           part="toolbar"
           role="toolbar"
           exportparts="base:toolbar__base"
@@ -1074,6 +1229,8 @@ export class TipTapEditor extends TipTapEditorBase {
           <slot name="toolbar-end">${this.renderToolbarEnd()}</slot>
         </role-toolbar>
       </slot>
+
+      ${this.renderBubbleMenuToolbar()}
     `;
   }
 
@@ -1081,6 +1238,10 @@ export class TipTapEditor extends TipTapEditorBase {
    * @private
    */
   private __handleLinkDialogClick = (e: Event) => {
+    if (e.defaultPrevented) {
+      return;
+    }
+
     const linkDialogContainer = this.shadowRoot?.querySelector(
       ".link-dialog__container",
     );
@@ -1179,6 +1340,71 @@ export class TipTapEditor extends TipTapEditorBase {
         </div>
       </div>
     </div>`;
+  }
+
+  /**
+   * Returns the bubble menu toolbar from the shadow root.
+   */
+  get defaultBubbleMenuToolbar(): RoleToolbar | null | undefined {
+    return this.shadowRoot?.querySelector<RoleToolbar>(
+      "[part~='bubble-menu__toolbar']",
+    );
+  }
+
+  renderBubbleMenuToolbar() {
+    return html`
+      <role-anchored-region
+        part="bubble-menu__anchored-region"
+        exportparts="
+          popover-base:bubble-menu__popover-base,
+          hover-bridge:bubble-menu__hover-bridge,
+          hover-bridge--visible:bubble-menu__hover-bridge--visible,
+          popover:bubble-menu__popover
+          popover--active:bubble-menu__popover--active,
+          popover--fixed:bubble-menu__popover--fixed,
+          popover--has-arrow:bubble-menu__popover--has-arrow
+          arrow:bubble-menu__arrow
+        "
+        @rhino-bubble-menu-show=${(
+          e: Event & { clientRect: () => DOMRect },
+        ) => {
+          if (e.defaultPrevented) {
+            return;
+          }
+          const self = e.currentTarget as RoleAnchoredRegion;
+          self.anchor = { getBoundingClientRect: e.clientRect };
+          self.active = true;
+        }}
+        @rhino-bubble-menu-hide=${(e: Event) => {
+          if (e.defaultPrevented) {
+            return;
+          }
+          const self = e.currentTarget as RoleAnchoredRegion;
+          self.anchor = null;
+          self.active = false;
+        }}
+        anchored-popover-type="manual"
+        distance="4"
+      >
+        <slot name="bubble-menu-toolbar">
+          <role-toolbar
+            part="toolbar bubble-menu__toolbar"
+            role="toolbar"
+            exportparts="base:bubble-menu__toolbar__base"
+          >
+            <slot name="after-bubble-menu-toolbar-items"></slot>
+            <slot name="bubble-menu-toolbar-items">
+              ${this.renderBoldButton("bubble-menu")}
+              ${this.renderItalicButton("bubble-menu")}
+              ${this.renderStrikeButton("bubble-menu")}
+              ${this.renderLinkButton("bubble-menu")}
+            </slot>
+            <slot name="after-bubble-menu-toolbar-items"></slot>
+          </role-toolbar>
+        </slot>
+        <slot name="additional-bubble-menu-toolbar"></slot>
+      </role-anchored-region>
+    `;
   }
 }
 

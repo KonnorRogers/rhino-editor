@@ -3,6 +3,7 @@
 <% resource_title = strip_html(strip_newlines(title)) || site.metadata.title %>
 <title><%= resource_title %></title>
 
+<meta name="env" content="<%= Bridgetown.env %>">
 <meta name="description" content="<%= metadata.description %>" />
 <link rel="modulepreload" href="<%= asset_path "javascript/index.js" %>">
 <link rel="modulepreload" href="<%= asset_path "javascript/defer.js" %>">
@@ -78,4 +79,30 @@
   }
 
   applyTheme(getTheme())
+</script>
+
+<%= live_reload_dev_js %>
+
+<script type="module">
+  (() => {
+    const env = document.querySelector("meta[name='env']")?.content
+    if (env !== "development") { return }
+
+    try {
+      function storeScroll () {
+        const scrollTop = document.documentElement.scrollTop
+        sessionStorage.setItem("scroll-height", scrollTop.toString())
+      }
+
+      function restoreScroll () {
+          const scrollHeight = Number(sessionStorage.getItem("scroll-height")) || 0
+          document.documentElement.scrollTop = scrollHeight
+      }
+
+      window.addEventListener("beforeunload", storeScroll)
+      <%# window.addEventListener("unload", storeScroll) %>
+      window.addEventListener("pageshow", restoreScroll)
+      document.addEventListener("DOMContentLoaded", restoreScroll)
+    } catch (_e) {}
+  })()
 </script>

@@ -22,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby: ['2.7', '3.0', '3.1']
+        ruby: ['3.2', '3.1']
         node-version: [20.x]
 
     services:
@@ -85,6 +85,7 @@ jobs:
     - name: Install via pnpm
       run: |
         pnpm run setup
+        pnpm exec playwright install
     - name: Lint
       run: |
         pnpm run lint
@@ -97,7 +98,6 @@ jobs:
         pnpm run test:rails
     - name: Doc Tests
       run: |
-        pnpm exec playwright install --with-deps
         pnpm run test:docs
     - name: Unit Tests
       run: |
