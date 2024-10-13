@@ -1,6 +1,6 @@
 ---
 title: Add Additional Attributes onto the Editor
-permalink: /add-additional-attributes-onto-the-editor/
+permalink: /how-tos/add-additional-attributes-onto-the-editor/
 ---
 
 Sometimes you may want to add additional attributes directly onto the `contenteditable` of RhinoEditor.
