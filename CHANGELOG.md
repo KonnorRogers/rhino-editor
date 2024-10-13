@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.11.0
+
+### Minor Changes
+
+- [#199](https://github.com/KonnorRogers/rhino-editor/pull/199) [`7de4762`](https://github.com/KonnorRogers/rhino-editor/commit/7de4762741b5e6bb1e6ed01493aa6932a83b5ca1) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Added `rhinoBubbleMenu` to the default list of extensions.
+
+- [#199](https://github.com/KonnorRogers/rhino-editor/pull/199) [`7de4762`](https://github.com/KonnorRogers/rhino-editor/commit/7de4762741b5e6bb1e6ed01493aa6932a83b5ca1) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Feature: Added some CSS fallbacks for dark color schemes
+
+- [#199](https://github.com/KonnorRogers/rhino-editor/pull/199) [`7de4762`](https://github.com/KonnorRogers/rhino-editor/commit/7de4762741b5e6bb1e6ed01493aa6932a83b5ca1) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Feature: added events for direct upload in the form of `rhino-direct-upload:*`, you can read more in the editor events section.
+
+- [#201](https://github.com/KonnorRogers/rhino-editor/pull/201) [`0611c16`](https://github.com/KonnorRogers/rhino-editor/commit/0611c16a209a909a6ed6f37f2cfc26f0b97e2124) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Update package versions
+
+- [#199](https://github.com/KonnorRogers/rhino-editor/pull/199) [`7de4762`](https://github.com/KonnorRogers/rhino-editor/commit/7de4762741b5e6bb1e6ed01493aa6932a83b5ca1) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Feature: added the `rhino-update` event. Useful for tracking when the component has updated.
+
+### Patch Changes
+
+- [#199](https://github.com/KonnorRogers/rhino-editor/pull/199) [`7de4762`](https://github.com/KonnorRogers/rhino-editor/commit/7de4762741b5e6bb1e6ed01493aa6932a83b5ca1) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Feature: Added the `rhino-update` event for tracking updates to the editor
+
+- [#199](https://github.com/KonnorRogers/rhino-editor/pull/199) [`7de4762`](https://github.com/KonnorRogers/rhino-editor/commit/7de4762741b5e6bb1e6ed01493aa6932a83b5ca1) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a bug where rhino editor would not find inputs if loaded in the shadow dom
+
 ## 0.10.2
 
 ### Patch Changes
