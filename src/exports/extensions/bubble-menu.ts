@@ -117,17 +117,20 @@ export class BubbleMenuView {
     return true;
   };
 
-  public determineNodeViewAnchor: Exclude<BubbleMenuPluginProps["determineNodeViewAnchor"], null> = ({
-    view,
-    from,
-  }) => {
+  public determineNodeViewAnchor: Exclude<
+    BubbleMenuPluginProps["determineNodeViewAnchor"],
+    null
+  > = ({ view, from }) => {
     let node = view.nodeDOM(from) as HTMLElement;
 
     // Attachment node views are special, we dont want to show text editing operations.
     // Perhaps in the future we may have a default bubble menu for attachment transforms??
-    if (this.editor.isActive("attachment-figure") || this.editor.isActive("previewable-attachment-figure")) {
-      const figcaption = node.querySelector("figcaption")
-      node = figcaption || node
+    if (
+      this.editor.isActive("attachment-figure") ||
+      this.editor.isActive("previewable-attachment-figure")
+    ) {
+      const figcaption = node.querySelector("figcaption");
+      node = figcaption || node;
     }
 
     let nodeViewWrapper = node.dataset.nodeViewWrapper
@@ -138,9 +141,8 @@ export class BubbleMenuView {
       node = nodeViewWrapper.firstChild as HTMLElement;
     }
 
-    return node
-  }
-
+    return node;
+  };
 
   constructor({
     editor,
@@ -161,7 +163,7 @@ export class BubbleMenuView {
     }
 
     if (determineNodeViewAnchor) {
-      this.determineNodeViewAnchor = determineNodeViewAnchor
+      this.determineNodeViewAnchor = determineNodeViewAnchor;
     }
 
     this.view.dom.addEventListener("dragstart", this.dragstartHandler);
@@ -267,14 +269,15 @@ export class BubbleMenuView {
     let clientRect: null | (() => DOMRect) = null;
 
     if (isNodeSelection(state.selection)) {
-      const node = this.determineNodeViewAnchor?.({
-        editor: this.editor,
-        view,
-        state,
-        oldState,
-        from,
-        to,
-      }) || view.nodeDOM(from) as HTMLElement;
+      const node =
+        this.determineNodeViewAnchor?.({
+          editor: this.editor,
+          view,
+          state,
+          oldState,
+          from,
+          to,
+        }) || (view.nodeDOM(from) as HTMLElement);
 
       if (node) {
         clientRect = () => node.getBoundingClientRect();
@@ -358,7 +361,7 @@ export const BubbleMenuExtension = Extension.create<BubbleMenuOptions>({
         element: this.options.element,
         updateDelay: this.options.updateDelay,
         shouldShow: this.options.shouldShow,
-        determineNodeViewAnchor: this.options.determineNodeViewAnchor
+        determineNodeViewAnchor: this.options.determineNodeViewAnchor,
       }),
     ];
   },
