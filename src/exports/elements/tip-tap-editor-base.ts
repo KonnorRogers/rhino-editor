@@ -66,7 +66,11 @@ export class TipTapEditorBase extends BaseElement {
       class: { reflect: true },
       accept: { reflect: true },
       serializer: { reflect: true },
-      deferInitialize: { type: Boolean, attribute: "defer-initialize", reflect: true },
+      deferInitialize: {
+        type: Boolean,
+        attribute: "defer-initialize",
+        reflect: true,
+      },
 
       // Properties
       editor: { state: true },
@@ -130,8 +134,7 @@ export class TipTapEditorBase extends BaseElement {
   /**
    * When the `defer-initialize` attribute is present, it will wait to start the TipTap editor until the attribute has been removed.
    */
-  deferInitialize = false
-
+  deferInitialize = false;
 
   /**
    * @internal
@@ -323,7 +326,7 @@ export class TipTapEditorBase extends BaseElement {
     changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (changedProperties.has("deferInitialize") && !this.deferInitialize) {
-      this.startEditor()
+      this.startEditor();
     }
 
     if (changedProperties.has("class")) {
@@ -399,11 +402,11 @@ export class TipTapEditorBase extends BaseElement {
     this.classList.add("rhino-editor");
 
     if (!this.deferInitialize) {
-      this.startEditor()
+      this.startEditor();
     }
   }
 
-  async startEditor () {
+  async startEditor() {
     await this.updateComplete;
 
     setTimeout(() => {
