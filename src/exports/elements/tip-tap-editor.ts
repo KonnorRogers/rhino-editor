@@ -191,11 +191,18 @@ export class TipTapEditor extends TipTapEditorBase {
       },
     }) as typeof this.starterKitOptions;
 
+    document.addEventListener("click", this.__handleLinkDialogClick);
+  }
+
+  /**
+   * @override
+   */
+  async startEditor() {
+    await super.startEditor();
+
     if (this.editor) {
       this.editor.on("focus", this.closeLinkDialog);
     }
-
-    document.addEventListener("click", this.__handleLinkDialogClick);
   }
 
   disconnectedCallback() {
@@ -256,8 +263,6 @@ export class TipTapEditor extends TipTapEditorBase {
     setTimeout(() => {
       if (inputElement != null) inputElement.focus();
     });
-
-    console.log("showing");
   }
 
   get linkDialog(): Maybe<HTMLDivElement> {
@@ -332,7 +337,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderBoldButton(prefix = "") {
-    const boldEnabled = Boolean(this.editor?.commands.toggleBold);
+    const boldEnabled =
+      this.starterKitOptions.bold !== false ||
+      Boolean(this.editor?.commands.toggleBold);
 
     if (!boldEnabled) return html``;
 
@@ -384,7 +391,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderItalicButton(prefix = "") {
-    const italicEnabled = Boolean(this.editor?.commands.toggleItalic);
+    const italicEnabled =
+      this.starterKitOptions.italic !== false ||
+      Boolean(this.editor?.commands.toggleItalic);
 
     if (!italicEnabled) return html``;
 
@@ -440,7 +449,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderStrikeButton(prefix = "") {
-    const strikeEnabled = Boolean(this.editor?.commands.toggleStrike);
+    const strikeEnabled =
+      this.starterKitOptions.rhinoStrike !== false ||
+      Boolean(this.editor?.commands.toggleStrike);
 
     if (!strikeEnabled) return html``;
 
@@ -495,7 +506,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderLinkButton(prefix = "") {
-    const linkEnabled = Boolean(this.editor?.commands.setLink);
+    const linkEnabled =
+      this.starterKitOptions.rhinoLink !== false ||
+      Boolean(this.editor?.commands.setLink);
 
     if (!linkEnabled) return html``;
 
@@ -553,7 +566,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderHeadingButton(prefix = "") {
-    const headingEnabled = Boolean(this.editor?.commands.toggleHeading);
+    const headingEnabled =
+      this.starterKitOptions.heading !== false ||
+      Boolean(this.editor?.commands.toggleHeading);
 
     if (!headingEnabled) return html``;
 
@@ -610,7 +625,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderBlockquoteButton(prefix = "") {
-    const blockQuoteEnabled = Boolean(this.editor?.commands.toggleBlockquote);
+    const blockQuoteEnabled =
+      this.starterKitOptions.blockquote !== false ||
+      Boolean(this.editor?.commands.toggleBlockquote);
 
     if (!blockQuoteEnabled) return html``;
 
@@ -667,7 +684,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderCodeBlockButton(prefix = "") {
-    const codeBlockEnabled = Boolean(this.editor?.commands.toggleCodeBlock);
+    const codeBlockEnabled =
+      this.starterKitOptions.codeBlock !== false ||
+      Boolean(this.editor?.commands.toggleCodeBlock);
 
     if (!codeBlockEnabled) return html``;
 
@@ -723,7 +742,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderBulletListButton(prefix = "") {
-    const bulletListEnabled = Boolean(this.editor?.commands.toggleBulletList);
+    const bulletListEnabled =
+      this.starterKitOptions.bulletList !== false ||
+      Boolean(this.editor?.commands.toggleBulletList);
 
     if (!bulletListEnabled) return html``;
 
@@ -786,7 +807,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderOrderedListButton(prefix = "") {
-    const orderedListEnabled = Boolean(this.editor?.commands.toggleOrderedList);
+    const orderedListEnabled =
+      this.starterKitOptions.orderedList !== false ||
+      Boolean(this.editor?.commands.toggleOrderedList);
 
     if (!orderedListEnabled) return html``;
 
@@ -851,7 +874,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderAttachmentButton(prefix = "") {
-    const attachmentEnabled = Boolean(this.editor?.commands.setAttachment);
+    const attachmentEnabled =
+      this.starterKitOptions.rhinoAttachment !== false ||
+      Boolean(this.editor?.commands.setAttachment);
 
     if (!attachmentEnabled) return html``;
 
@@ -912,7 +937,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderUndoButton(prefix = "") {
-    const undoEnabled = Boolean(this.editor?.commands.undo);
+    const undoEnabled =
+      this.starterKitOptions.history !== false ||
+      Boolean(this.editor?.commands.undo);
 
     if (!undoEnabled) return html``;
 
@@ -966,10 +993,10 @@ export class TipTapEditor extends TipTapEditorBase {
   renderDecreaseIndentation(prefix = "") {
     // Decrease / increase indentation are special cases in that they rely on built-in editor
     // commands and not commands added by extensions.
-    const decreaseIndentationNotEnabled =
-      this.starterKitOptions.decreaseIndentation == false;
+    const decreaseIndentationEnabled =
+      this.starterKitOptions.decreaseIndentation !== false; // || Boolean(this.editor?.commands.liftListItem);
 
-    if (decreaseIndentationNotEnabled) return html``;
+    if (!decreaseIndentationEnabled) return html``;
 
     const isDisabled =
       this.editor == null || !this.editor.can().liftListItem("listItem");
@@ -1021,10 +1048,12 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderIncreaseIndentation(prefix = "") {
-    const increaseIndentationNotEnabled =
-      this.starterKitOptions.increaseIndentation == false;
+    // Decrease / increase indentation are special cases in that they rely on built-in editor
+    // commands and not commands added by extensions.
+    const increaseIndentationEnabled =
+      this.starterKitOptions.increaseIndentation !== false; // || Boolean(this.editor?.commands.sinkListItem);
 
-    if (increaseIndentationNotEnabled) return html``;
+    if (!increaseIndentationEnabled) return html``;
 
     const isDisabled =
       this.editor == null || !this.editor.can().sinkListItem("listItem");
@@ -1076,7 +1105,9 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   renderRedoButton(prefix = "") {
-    const redoEnabled = Boolean(this.editor?.commands.redo);
+    const redoEnabled =
+      this.starterKitOptions.history !== false ||
+      Boolean(this.editor?.commands.redo);
 
     if (!redoEnabled) return html``;
 

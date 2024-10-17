@@ -70,8 +70,14 @@
 
 /* Attachments */
 .trix-content:not([readonly])
-  figure:is(:focus-within, :focus, .has-focus)
-  :nth-child(2) {
+  .attachment--preview:is(:focus-within, :focus, .has-focus)
+  :is(img) {
+  outline: transparent;
+  box-shadow: var(--rhino-focus-ring);
+}
+
+.trix-content:not([readonly])
+  .attachment:not(.attachment--preview):is(:focus-within, :focus, .has-focus) {
   outline: transparent;
   box-shadow: var(--rhino-focus-ring);
 }
