@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.12.0
+
+### Minor Changes
+
+- [#205](https://github.com/KonnorRogers/rhino-editor/pull/205) [`f4c64a7`](https://github.com/KonnorRogers/rhino-editor/commit/f4c64a7f67c16e66b9ccc7588be1804e172349d7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Feature: Added the `determineNodeViewAnchor` to the bubble menu extension
+
+- [#205](https://github.com/KonnorRogers/rhino-editor/pull/205) [`f4c64a7`](https://github.com/KonnorRogers/rhino-editor/commit/f4c64a7f67c16e66b9ccc7588be1804e172349d7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Feature: Add the `defer-initialize` attribute for more reliable initialization events.
+
+### Patch Changes
+
+- [#205](https://github.com/KonnorRogers/rhino-editor/pull/205) [`f4c64a7`](https://github.com/KonnorRogers/rhino-editor/commit/f4c64a7f67c16e66b9ccc7588be1804e172349d7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug fix: bubble menu will now anchor the `<figcaption>` or an attachment.
+
+- [#205](https://github.com/KonnorRogers/rhino-editor/pull/205) [`f4c64a7`](https://github.com/KonnorRogers/rhino-editor/commit/f4c64a7f67c16e66b9ccc7588be1804e172349d7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Style fix: attachments without previews no longer have weird empty border lines
+
+- [#205](https://github.com/KonnorRogers/rhino-editor/pull/205) [`f4c64a7`](https://github.com/KonnorRogers/rhino-editor/commit/f4c64a7f67c16e66b9ccc7588be1804e172349d7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug Fix: no longer generate an empty `<img>` for non-previewable attachments.
+
 ## 0.11.0
 
 ### Minor Changes
