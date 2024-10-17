@@ -1,6 +1,6 @@
 // @ts-check
 import "rhino-editor"
-import { assert, aTimeout, waitUntil } from "@open-wc/testing"
+import { assert, aTimeout, fixture, waitUntil } from "@open-wc/testing"
 import { html } from "lit"
 import { readFile, sendKeys } from '@web/test-runner-commands';
 import sinon from "sinon"
@@ -256,3 +256,31 @@ test("rhino-paste", async () => {
   document.removeEventListener("rhino-paste", handleEvent)
 })
 
+test("Should not fire initialize and before-initialize events until after defer-initialize is removed", async () => {
+  const beforeInitializeSpy = sinon.spy()
+  const initializeSpy = sinon.spy()
+
+  function handleBeforeInitialize () { beforeInitializeSpy() }
+  function handleInitialize () { initializeSpy() }
+
+  document.addEventListener("rhino-before-initialize", handleBeforeInitialize)
+  document.addEventListener("rhino-initialize", handleInitialize)
+
+  const rhinoEditor = await fixture(html`<rhino-editor defer-initialize></rhino-editor>`)
+
+  await rhinoEditor.updateComplete
+  await aTimeout(10)
+
+  assert.isTrue(beforeInitializeSpy.notCalled)
+  assert.isTrue(initializeSpy.notCalled)
+
+  rhinoEditor.removeAttribute("defer-initialize")
+  await rhinoEditor.updateComplete
+  await aTimeout(10)
+
+  assert.isTrue(beforeInitializeSpy.calledOnce)
+  assert.isTrue(initializeSpy.calledOnce)
+
+  document.removeEventListener("rhino-before-initialize", handleBeforeInitialize)
+  document.removeEventListener("rhino-initialize", handleInitialize)
+})
