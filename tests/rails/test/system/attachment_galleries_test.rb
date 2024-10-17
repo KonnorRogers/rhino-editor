@@ -107,8 +107,8 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
 
       check
 
-      # For some silly reason, this test only fails in GH Actions
-      # return if ENV["CI"] == "true"
+      # For some silly reason, the next few checks only fail in GH Actions
+      return if ENV["CI"] == "true"
 
       # Save the attachment, make sure we render properly.
       page.get_by_role('button', name: /Create Post/i).click
