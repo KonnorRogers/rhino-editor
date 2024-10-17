@@ -756,12 +756,16 @@ export const Attachment = Node.create<AttachmentOptions>({
           </rhino-attachment-editor>
 
           ${when(
-            content && !isPreviewable,
+            content,
             /* This is really not great. This is how Trix does it, but it feels very unsafe.
                https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/views/attachment_view.js#L36
             */
             () => html`${unsafeHTML(content)}`,
-            () => html`
+            () => html``
+          )}
+
+          ${when(isPreviewable && !content,
+              () => html`
               <img
                 class=${loadingState === LOADING_STATES.error
                   ? "rhino-upload-error"
@@ -770,8 +774,8 @@ export const Attachment = Node.create<AttachmentOptions>({
                 height=${String(height)}
                 src=${ifDefined(imgSrc)}
                 contenteditable="false"
-              />
-            `,
+              />`,
+              () => html``
           )}
 
           <figcaption

@@ -256,8 +256,6 @@ export class TipTapEditor extends TipTapEditorBase {
     setTimeout(() => {
       if (inputElement != null) inputElement.focus();
     });
-
-    console.log("showing");
   }
 
   get linkDialog(): Maybe<HTMLDivElement> {
