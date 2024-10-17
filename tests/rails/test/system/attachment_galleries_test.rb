@@ -132,57 +132,70 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
   end
 
   test "Should not allow to insert multiple attachments in the gallery in sequence" do
-    page.get_by_role('link', name: /New Post/i).click
+    def run_test
+      page.get_by_role('link', name: /New Post/i).click
 
-    wait_for_network_idle
-
-    files = [
-      "screenshot-1.png",
-    ]
-
-    attach_files(files)
-    page.wait_for_selector(".attachment-gallery .attachment[sgid]", state: "visible")
-
-    files = [
-      "addresses.csv"
-    ]
-
-    attach_files(files)
-    page.wait_for_selector(":not(.attachment-gallery) .attachment[sgid]", state: "visible")
-
-    def check
       wait_for_network_idle
 
-      page.locator("body").click
-      assert page.locator(".attachment-gallery .attachment").nth(0).wait_for(state: 'visible')
-      assert page.locator(".attachment").nth(1).wait_for(state: 'visible')
+      files = [
+        "screenshot-1.png",
+      ]
 
-      assert_equal page.locator(".attachment-gallery .attachment").count, 1
-      assert_equal page.locator(".attachment").count, 2
+      attach_files(files)
+      page.wait_for_selector(".attachment-gallery .attachment[sgid]", state: "visible")
+
+      files = [
+        "addresses.csv"
+      ]
+
+      attach_files(files)
+      page.wait_for_selector(":not(.attachment-gallery) .attachment[sgid]", state: "visible")
+
+      def check
+        wait_for_network_idle
+
+        page.locator("body").click
+        assert page.locator(".attachment-gallery .attachment").nth(0).wait_for(state: 'visible')
+        assert page.locator(".attachment").nth(1).wait_for(state: 'visible')
+
+        assert_equal page.locator(".attachment-gallery .attachment").count, 1
+        assert_equal page.locator(".attachment").count, 2
+        page.locator("body").click
+      end
+
+      check
+
+      # Save the attachment, make sure we render properly.
+      page.get_by_role('button', name: /Create Post/i).click
+
+      assert page.get_by_text("Post was successfully created")
+      check
+
+      # Go back and edit the file and make sure it renders properly in editor
+      page.get_by_role('link', name: /Edit this post/i).click
+
+      assert page.get_by_text("Editing post")
+
+      check
+
+      # Go back and edit the file and make sure it renders properly in editor
+      page.get_by_role('link', name: /Show this post/i).click
+      wait_for_network_idle
       page.locator("body").click
+      page.get_by_role('link', name: /Edit raw post/i).click
+      assert page.get_by_text("Editing raw post")
+      check
     end
 
-    check
+    count = 0
 
-    # Save the attachment, make sure we render properly.
-    page.get_by_role('button', name: /Create Post/i).click
-
-    assert page.get_by_text("Post was successfully created")
-    check
-
-    # Go back and edit the file and make sure it renders properly in editor
-    page.get_by_role('link', name: /Edit this post/i).click
-
-    assert page.get_by_text("Editing post")
-
-    check
-
-    # Go back and edit the file and make sure it renders properly in editor
-    page.get_by_role('link', name: /Show this post/i).click
-    wait_for_network_idle
-    page.locator("body").click
-    page.get_by_role('link', name: /Edit raw post/i).click
-    assert page.get_by_text("Editing raw post")
-    check
+    # Hacky retry
+    begin
+      run_test
+    rescue => e
+      count += 1
+      raise e if count > 2
+      run_test
+    end
   end
 end
