@@ -50,7 +50,7 @@ customElements.whenDefined("rhino-editor").then(() => {
 
 Sometimes it can be quite challenging to catch either the `rhino-initialize` or `rhino-before-initialize` events due to load order of your JavaScript.
 
-If you add the `defer-initialization` attribute to your editor, the editor will not start until you remove that attribute.
+If you add the `defer-initialize` attribute to your editor, the editor will not start until you remove that attribute.
 
 Like so:
 
