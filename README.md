@@ -19,15 +19,20 @@ We have a test suite using Ruby on Rails and is intended to
 provide a good demonstration of how this package can hook
 into ActionText.
 
+Contributions should be made on a feature branch in a 
+forked repository.
+
 ### Prerequisites
 
 - Ruby 3.1.2
 - Rails 7.0.4
 - PNPM (`npm install -g pnpm`)
-- Playwright
+- Playwright (`npm install -g playwright`)
 - Node >= 16
 - Docker (Used to run a simulated S3 server)
-- Overmind (Preferred, not needed)
+- A Docker virtualizer ([Orbstack](https://orbstack.dev/) or
+  [Docker Desktop](https://www.docker.com/products/docker-desktop/))
+- Overmind (Preferred, not needed `npm install -g overmind`)
 
 ### Installation
 
@@ -42,9 +47,19 @@ pnpm run setup
 
 ### Running the server
 
-The easiest way to run the server is using [Overmind](https://github.com/DarthSim/overmind)
+The easiest way to run the server is using [Overmind](https://github.com/DarthSim/overmind).
+First start up your Docker virtualizer, then in two termainals…
+
+Terminal 1:
 
 ```bash
+pnpm run start
+```
+
+Terminal 2:
+
+```bash
+cd tests/rails
 overmind start -f Procfile.dev
 ```
 
@@ -53,7 +68,7 @@ Then navigate to `localhost:5100`
 
 #### Without Overmind
 
-To run the server without overmind do the following in
+To run the server without Overmind do the following in
 seperate terminals:
 
 ```bash
