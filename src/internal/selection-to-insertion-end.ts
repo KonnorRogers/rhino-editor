@@ -1,5 +1,5 @@
-import { Selection, Transaction } from "@tiptap/pm/state";
-import { ReplaceAroundStep, ReplaceStep } from "@tiptap/pm/transform";
+import { Selection, Transaction } from "prosemirror-state";
+import { ReplaceAroundStep, ReplaceStep } from "prosemirror-transform";
 
 // source: https://github.com/ueberdosis/tiptap/blob/8c6751f0c638effb22110b62b40a1632ea6867c9/packages/core/src/helpers/selectionToInsertionEnd.ts
 export function selectionToInsertionEnd(

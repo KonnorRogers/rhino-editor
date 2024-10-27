@@ -1,5 +1,5 @@
 import { Extension, Mark, Node } from "@tiptap/core";
-import { Plugin } from "@tiptap/pm/state";
+import { Plugin } from "prosemirror-state";
 // import {
 //   FirefoxCaretFixPlugin,
 //   FirefoxCaretPluginOptions,
@@ -21,8 +21,6 @@ import Link, { LinkOptions } from "@tiptap/extension-link";
 import { Paste, PasteOptions } from "./paste.js";
 import { BubbleMenuExtension, BubbleMenuOptions } from "./bubble-menu.js";
 import { InlineCodePlugin, InlineCodePluginOptions } from "./inline-code.js";
-// import BubbleMenu, { BubbleMenuOptions } from '@tiptap/extension-bubble-menu'
-// import { PluginKey } from '@tiptap/pm/state'
 
 export interface RhinoStarterKitOptions {
   /** Funky hack extension for contenteditable in firefox. */

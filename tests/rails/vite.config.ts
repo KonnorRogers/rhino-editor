@@ -8,6 +8,14 @@ export default defineConfig({
       strict: false
     }
   },
+  // optimizeDeps: {
+  //   include: [
+  //     'prosemirror-state',
+  //     'prosemirror-transform',
+  //     'prosemirror-model',
+  //     'prosemirror-view'
+  //   ]
+  // },
   plugins: [
     RubyPlugin(),
   ],

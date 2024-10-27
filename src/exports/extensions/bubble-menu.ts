@@ -5,8 +5,8 @@ import {
   isTextSelection,
   posToDOMRect,
 } from "@tiptap/core";
-import { EditorState, Plugin, PluginKey } from "@tiptap/pm/state";
-import type { EditorView } from "@tiptap/pm/view";
+import { EditorState, Plugin, PluginKey } from "prosemirror-state";
+import type { EditorView } from "prosemirror-view";
 
 export interface BubbleMenuPluginProps {
   /**

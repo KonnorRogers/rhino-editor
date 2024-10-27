@@ -1,4 +1,4 @@
-import { Plugin } from "@tiptap/pm/state";
+import { Plugin } from "prosemirror-state";
 
 export interface FirefoxCaretPluginOptions {}
 

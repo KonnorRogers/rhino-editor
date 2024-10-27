@@ -1,4 +1,4 @@
-import { Plugin, PluginKey } from "@tiptap/pm/state";
+import { Plugin, PluginKey } from "prosemirror-state";
 import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
 
 export interface PasteOptions {}

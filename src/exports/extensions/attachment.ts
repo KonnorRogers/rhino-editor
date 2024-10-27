@@ -33,12 +33,12 @@ import {
   PluginKey,
   TextSelection,
   Transaction,
-} from "@tiptap/pm/state";
+} from "prosemirror-state";
 import {
   DOMSerializer,
   Node as ProseMirrorNode,
   ResolvedPos,
-} from "@tiptap/pm/model";
+} from "prosemirror-model";
 
 interface AttachmentAttrs extends AttachmentManagerAttributes {
   loadingState: LoadingState;

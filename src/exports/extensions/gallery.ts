@@ -1,13 +1,13 @@
 import { mergeAttributes, Node, selectionToInsertionEnd } from "@tiptap/core";
-import { EditorState, Plugin, Transaction } from "@tiptap/pm/state";
+import { EditorState, Plugin, Transaction } from "prosemirror-state";
 import {
   chainCommands,
   createParagraphNear,
   // liftEmptyBlock,
   // newlineInCode,
   // selectNodeForward,
-} from "@tiptap/pm/commands";
-import { Node as ProseMirrorNode } from "@tiptap/pm/model";
+} from "prosemirror-commands";
+import { Node as ProseMirrorNode } from "prosemirror-model";
 import { findParentNodeOfTypeClosestToPos } from "prosemirror-utils";
 import { figureTypes } from "./attachment";
 

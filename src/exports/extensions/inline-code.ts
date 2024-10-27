@@ -1,8 +1,7 @@
 import { Extension } from '@tiptap/core';
 import codemark from 'prosemirror-codemark';
-import { type MarkType } from '@tiptap/pm/model';
-import { PluginKey } from '@tiptap/pm/state';
-
+import Code from '@tiptap/extension-code'
+import { type MarkType } from 'prosemirror-model';
 
 export interface InlineCodePluginOptions {
   markType?: null | undefined | MarkType
@@ -12,16 +11,13 @@ export interface InlineCodePluginOptions {
  * Uses https://github.com/curvenote/editor/tree/main/packages/prosemirror-codemark to make inline code much nicer to use.
  */
 export const InlineCodePlugin = Extension.create({
-    name: 'rhino-inline-code',
-    addProseMirrorPlugins() {
-      let markType = this.options.markType
-      if (!markType) {
-        console.log(this.editor.schema.marks.code)
-        markType = this.editor.schema.marks.code
-      }
-
-      return codemark({
-          markType
-      })
-    },
-  })
+  name: 'rhino-inline-code',
+  addExtensions () {
+    return [
+      Code
+    ]
+  },
+  addProseMirrorPlugins() {
+    return codemark({ markType: this.editor.schema.marks.code });
+  },
+});

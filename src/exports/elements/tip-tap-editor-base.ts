@@ -34,8 +34,8 @@ import { RhinoBlurEvent } from "../events/rhino-blur-event.js";
 import { RhinoChangeEvent } from "../events/rhino-change-event.js";
 import { SelectionChangeEvent } from "../events/selection-change-event.js";
 import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
-import { DOMSerializer, Slice } from "@tiptap/pm/model";
-import type { EditorView } from "@tiptap/pm/view";
+import { DOMSerializer, Slice } from "prosemirror-model";
+import type { EditorView } from "prosemirror-view";
 
 export type Serializer = "" | "html" | "json";
 
@@ -799,7 +799,7 @@ export class TipTapEditorBase extends BaseElement {
       } catch (e) {}
     }
 
-    const extensions = this.__starterKitExtensions__// .concat(this.extensions)
+    const extensions = this.__starterKitExtensions__.concat(this.extensions)
 
     return {
       injectCSS: false,

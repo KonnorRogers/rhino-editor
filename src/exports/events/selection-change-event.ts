@@ -1,4 +1,4 @@
-import { Transaction } from "@tiptap/pm/state";
+import { Transaction } from "prosemirror-state";
 import { BaseEvent } from "./base-event.js";
 
 export interface SelectionChangeProps {
