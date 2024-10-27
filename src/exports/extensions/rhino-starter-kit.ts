@@ -20,6 +20,7 @@ import { StrikeOptions } from "@tiptap/extension-strike";
 import Link, { LinkOptions } from "@tiptap/extension-link";
 import { Paste, PasteOptions } from "./paste.js";
 import { BubbleMenuExtension, BubbleMenuOptions } from "./bubble-menu.js";
+import { InlineCodePlugin, InlineCodePluginOptions } from "./inline-code.js";
 // import BubbleMenu, { BubbleMenuOptions } from '@tiptap/extension-bubble-menu'
 // import { PluginKey } from '@tiptap/pm/state'
 
@@ -65,6 +66,8 @@ export interface RhinoStarterKitOptions {
   rhinoPasteEvent: Partial<PasteOptions> | false;
 
   rhinoBubbleMenu: Partial<BubbleMenuOptions> | false;
+
+  rhinoInlineCode: Partial<InlineCodePluginOptions> | false
 }
 
 export type TipTapPlugin = Node | Extension | Mark;
@@ -74,7 +77,7 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
   addProseMirrorPlugins() {
     const loadedExtensions: Plugin[] = [];
 
-    const extensions: [
+    const proseMirrorExtensions: [
       keyof RhinoStarterKitOptions,
       (options: Record<string, unknown>) => Plugin,
     ][] = [
@@ -82,7 +85,7 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       ["rhinoPasteEvent", Paste],
     ];
 
-    extensions.forEach(([string, extension]) => {
+    proseMirrorExtensions.forEach(([string, extension]) => {
       const options = this.options[string];
       if (options !== false) {
         loadedExtensions.push(extension(options));
@@ -105,6 +108,7 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       ["rhinoFocus", Focus],
       ["rhinoPlaceholder", Placeholder],
       ["rhinoBubbleMenu", BubbleMenuExtension],
+      ["rhinoInlineCode", InlineCodePlugin]
     ];
 
     extensions.forEach(([string, extension]) => {

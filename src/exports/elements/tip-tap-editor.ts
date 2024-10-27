@@ -255,13 +255,14 @@ export class TipTapEditor extends TipTapEditorBase {
     const inputElement = this.linkInputRef.value;
 
     if (inputElement != null) {
-      inputElement.value = "";
+      inputElement.value = this.editor?.getAttributes("link").href || "";
+      inputElement.setSelectionRange(0, inputElement.value.length)
     }
 
     this.__invalidLink__ = false;
     this.linkDialogExpanded = true;
     setTimeout(() => {
-      if (inputElement != null) inputElement.focus();
+      if (inputElement != null) { inputElement.focus(); }
     });
   }
 
@@ -512,7 +513,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
     if (!linkEnabled) return html``;
 
-    const isActive = Boolean(this.linkDialogExpanded);
+    const isActive = Boolean(this.editor?.isActive("link") || this.linkDialogExpanded);
     const isDisabled =
       this.editor == null || !this.editor.can().setLink({ href: "" });
 

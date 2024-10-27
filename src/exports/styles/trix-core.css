@@ -170,17 +170,34 @@
 .trix-content li {
   margin-inline-start: 1em;
 }
-.trix-content :where(pre) {
+
+/** This is for `` inline code code elements. */
+.trix-content :where(:not(pre code)) code {
   display: inline-block;
+  background-color: #eee;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 0.85em;
+  white-space: break-spaces;
+  border-radius: 4px;
+}
+
+.trix-content code,
+.trix-content pre {
+  box-decoration-break: clone;
+}
+
+.trix-content pre {
+  display: block;
   width: 100%;
-  vertical-align: top;
   font-family: monospace;
-  font-size: 0.9em;
   padding: 0.5em;
   white-space: pre;
-  background-color: #eee;
   overflow-x: auto;
+  background-color: #eee;
+  font-size: 0.9em;
 }
+
 .trix-content img {
   max-width: 100%;
   height: auto;
@@ -190,14 +207,20 @@
   position: relative;
   max-width: 100%;
 }
-.trix-content .attachment a {
-  color: inherit;
-  text-decoration: none;
+
+/** Overrides Trix's link CSS */
+.trix-content .attachment figcaption a,
+.trix-content .attachment figcaption a:hover {
+  color: LinkText;
 }
-.trix-content .attachment a:hover,
-.trix-content .attachment a:visited:hover {
-  color: inherit;
+
+/** Overrides Trix's link CSS */
+.trix-content .attachment figcaption a:visited,
+.trix-content .attachment figcaption a:hover:visited {
+  color: VisitedText;
 }
+
+
 .trix-content .attachment__caption {
   text-align: center;
   margin-top: 0.5em;

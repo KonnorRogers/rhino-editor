@@ -47,6 +47,9 @@ importers:
       lit:
         specifier: ^3.2.0
         version: 3.2.0
+      prosemirror-codemark:
+        specifier: ^0.4.2
+        version: 0.4.2(prosemirror-inputrules@1.4.0)(prosemirror-model@1.22.3)(prosemirror-state@1.4.3)(prosemirror-view@1.28.3)
       prosemirror-utils:
         specifier: ^1.2.2
         version: 1.2.2(prosemirror-model@1.22.3)(prosemirror-state@1.4.3)
@@ -2806,6 +2809,14 @@ packages:
 
   prosemirror-changeset@2.2.1:
     resolution: {integrity: sha512-J7msc6wbxB4ekDFj+n9gTW/jav/p53kdlivvuppHsrZXCaQdVgRghoZbSS3kwrRyAstRVQ4/+u5k7YfLgkkQvQ==}
+
+  prosemirror-codemark@0.4.2:
+    resolution: {integrity: sha512-4n+PnGQToa/vTjn0OiivUvE8/moLtguUAfry8UA4Q8p47MhqT2Qpf2zBLustX5Upi4mSp3z1ZYBqLLovZC6abA==}
+    peerDependencies:
+      prosemirror-inputrules: ^1.2.0
+      prosemirror-model: ^1.18.1
+      prosemirror-state: ^1.4.1
+      prosemirror-view: ~1.28.0
 
   prosemirror-collab@1.3.1:
     resolution: {integrity: sha512-4SnynYR9TTYaQVXd/ieUvsVV4PDMBzrq2xPUWutHivDuOshZXqQ5rGbZM84HEaXKbLdItse7weMGOUdDVcLKEQ==}
@@ -6555,6 +6566,13 @@ snapshots:
   prosemirror-changeset@2.2.1:
     dependencies:
       prosemirror-transform: 1.10.0
+
+  prosemirror-codemark@0.4.2(prosemirror-inputrules@1.4.0)(prosemirror-model@1.22.3)(prosemirror-state@1.4.3)(prosemirror-view@1.28.3):
+    dependencies:
+      prosemirror-inputrules: 1.4.0
+      prosemirror-model: 1.22.3
+      prosemirror-state: 1.4.3
+      prosemirror-view: 1.28.3
 
   prosemirror-collab@1.3.1:
     dependencies:
