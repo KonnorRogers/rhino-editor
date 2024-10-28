@@ -20,7 +20,7 @@ import { StrikeOptions } from "@tiptap/extension-strike";
 import Link, { LinkOptions } from "@tiptap/extension-link";
 import { Paste, PasteOptions } from "./paste.js";
 import { BubbleMenuExtension, BubbleMenuOptions } from "./bubble-menu.js";
-import { InlineCodePlugin, InlineCodePluginOptions } from "./inline-code.js";
+import { CodemarkPlugin } from "./codemark-plugin.js";
 
 export interface RhinoStarterKitOptions {
   /** Funky hack extension for contenteditable in firefox. */
@@ -65,7 +65,10 @@ export interface RhinoStarterKitOptions {
 
   rhinoBubbleMenu: Partial<BubbleMenuOptions> | false;
 
-  rhinoInlineCode: Partial<InlineCodePluginOptions> | false
+  /**
+   * A TipTap wrapper extension for https://github.com/curvenote/editor/tree/main/packages/prosemirror-codemark
+   */
+  rhinoCodemarkPlugin: Partial<{}> | false
 }
 
 export type TipTapPlugin = Node | Extension | Mark;
@@ -106,7 +109,7 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       ["rhinoFocus", Focus],
       ["rhinoPlaceholder", Placeholder],
       ["rhinoBubbleMenu", BubbleMenuExtension],
-      ["rhinoInlineCode", InlineCodePlugin]
+      ["rhinoCodemarkPlugin", CodemarkPlugin]
     ];
 
     extensions.forEach(([string, extension]) => {

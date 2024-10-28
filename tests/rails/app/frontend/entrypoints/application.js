@@ -2,7 +2,7 @@ import "@hotwired/turbo"
 import * as ActiveStorage from '@rails/activestorage'
 import "@rails/actiontext"
 import * as Trix from "trix"
-import "rhino-editor/exports/index.js"
+import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css";
 import "trix/dist/trix.css";
 import { Application } from "@hotwired/stimulus"

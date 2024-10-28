@@ -121,11 +121,6 @@ export class TipTapEditorBase extends BaseElement {
   starterKitOptions: Partial<RhinoEditorStarterKitOptions> = {
     // We don't use the native strike since it requires configuring ActionText.
     strike: false,
-    /**
-     * We don't use TipTap's code. We use the Prosemirror Codemark plugin.
-     * https://github.com/curvenote/editor/tree/main/packages/prosemirror-codemark
-     */
-    code: false,
     rhinoLink: {
       openOnClick: false,
     },
