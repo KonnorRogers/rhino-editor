@@ -175,7 +175,9 @@ export class TipTapEditorBase extends BaseElement {
     this.__getInitialAttributes();
 
     // Make sure we dont render the editor more than once.
-    if (this.editor) this.editor.destroy();
+    if (this.editor) {
+      this.editor.destroy();
+    }
 
     editors.forEach((el) => {
       // @ts-expect-error
@@ -478,14 +480,21 @@ export class TipTapEditorBase extends BaseElement {
       | EditorOptions["extensions"]
       | Array<EditorOptions["extensions"]>
   ) {
-    const ary: EditorOptions["extensions"] = [];
+    let ary: EditorOptions["extensions"] = [];
     extensions.forEach((ext) => {
       if (Array.isArray(ext)) {
-        ary.push(ext.flat(1) as unknown as AnyExtension);
+        ary = ary.concat(ext.flat(1) as unknown as AnyExtension);
         return;
       }
 
       ary.push(ext);
+    });
+
+    const existingExtensions = this.extensions.map((ext) => ext.name);
+
+    // Make sure we're not pushing duplicate extensions.
+    ary = ary.filter((ext) => {
+      return !existingExtensions.includes(ext.name);
     });
 
     this.extensions = this.extensions.concat(ary);
@@ -691,7 +700,9 @@ export class TipTapEditorBase extends BaseElement {
     return html``;
   }
 
-  renderDialog() {}
+  renderDialog() {
+    return html``;
+  }
 
   render(): TemplateResult {
     return html`
@@ -708,10 +719,10 @@ export class TipTapEditorBase extends BaseElement {
   }
 
   allOptions(element: Element) {
-    return Object.assign(
-      this.__defaultOptions(element),
-      this.editorOptions(element),
-    );
+    return {
+      ...this.__defaultOptions(element),
+      ...this.editorOptions(element),
+    };
   }
 
   /**
@@ -792,9 +803,11 @@ export class TipTapEditorBase extends BaseElement {
       } catch (e) {}
     }
 
+    const extensions = this.__starterKitExtensions__.concat(this.extensions);
+
     return {
       injectCSS: false,
-      extensions: this.__starterKitExtensions__.concat(this.extensions),
+      extensions,
       autofocus: false,
       element,
       content,

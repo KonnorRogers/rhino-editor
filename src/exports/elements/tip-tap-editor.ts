@@ -1,7 +1,7 @@
 import { ref, createRef, Ref } from "lit/directives/ref.js";
 import { toolbarButtonStyles } from "../styles/editor.js";
 import { TipTapEditorBase } from "./tip-tap-editor-base.js";
-import { PropertyDeclarations, PropertyValues, TemplateResult } from "lit";
+import { PropertyDeclarations, PropertyValues } from "lit";
 
 /** Imports <role-tooltip> and <role-toolbar> */
 import RoleToolbar from "role-components/exports/components/toolbar/toolbar.js";
@@ -16,6 +16,8 @@ import { html } from "lit/html.js";
 import { stringMap } from "../../internal/string-map.js";
 import { isExactNodeActive } from "../../internal/is-exact-node-active.js";
 import RoleAnchoredRegion from "role-components/exports/components/anchored-region/anchored-region.js";
+import { findNodeViewAnchor } from "../extensions/bubble-menu.js";
+import { isNodeSelection, posToDOMRect } from "@tiptap/core";
 
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
@@ -105,7 +107,11 @@ export class TipTapEditor extends TipTapEditorBase {
 
   static get properties(): PropertyDeclarations {
     return Object.assign(TipTapEditorBase.properties, {
-      linkDialogExpanded: { type: Boolean },
+      linkDialogExpanded: {
+        type: Boolean,
+        reflect: true,
+        attribute: "link-dialog-expanded",
+      },
       linkInputRef: { state: true },
       translations: { state: true },
       __invalidLink__: { state: true, type: Boolean },
@@ -244,24 +250,23 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   closeLinkDialog(): void {
-    if (this.linkDialog == null) return;
-
     this.linkDialogExpanded = false;
   }
 
   showLinkDialog(): void {
-    if (this.linkDialog == null) return;
-
     const inputElement = this.linkInputRef.value;
 
     if (inputElement != null) {
-      inputElement.value = "";
+      inputElement.value = this.editor?.getAttributes("link").href || "";
+      inputElement.setSelectionRange(0, inputElement.value.length);
     }
 
     this.__invalidLink__ = false;
     this.linkDialogExpanded = true;
     setTimeout(() => {
-      if (inputElement != null) inputElement.focus();
+      if (inputElement != null) {
+        inputElement.focus();
+      }
     });
   }
 
@@ -512,7 +517,9 @@ export class TipTapEditor extends TipTapEditorBase {
 
     if (!linkEnabled) return html``;
 
-    const isActive = Boolean(this.linkDialogExpanded);
+    const isActive = Boolean(
+      this.editor?.isActive("link") || this.linkDialogExpanded,
+    );
     const isDisabled =
       this.editor == null || !this.editor.can().setLink({ href: "" });
 
@@ -679,6 +686,63 @@ export class TipTapEditor extends TipTapEditorBase {
         }}
       >
         <slot name=${icon_slot_name}>${this.icons.blockQuote}</slot>
+      </button>
+    `;
+  }
+
+  renderCodeButton(prefix = "") {
+    const codeEnabled =
+      this.starterKitOptions.code !== false ||
+      Boolean(this.editor?.commands.toggleCode);
+
+    if (!codeEnabled) return html``;
+
+    const isActive = Boolean(this.editor?.isActive("code"));
+    const isDisabled = this.editor == null || !this.editor.can().toggleCode();
+
+    let tooltip_slot_name = "code-tooltip";
+    let tooltip_id = "code";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--code";
+    let icon_slot_name = "code-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
+    return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.code}
+        </role-tooltip>
+      </slot>
+      <button
+        class="toolbar__button rhino-toolbar-button"
+        type="button"
+        tabindex="-1"
+        part=${stringMap({
+          toolbar__button: true,
+          "toolbar__button--code": true,
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
+        })}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
+        data-role-tooltip=${tooltip_id}
+        data-role="toolbar-item"
+        @click=${(e: MouseEvent) => {
+          if (elementDisabled(e.currentTarget)) {
+            return;
+          }
+          this.editor?.chain().focus().toggleCode().run();
+        }}
+      >
+        <slot name=${icon_slot_name}>${this.icons.code}</slot>
       </button>
     `;
   }
@@ -1193,6 +1257,11 @@ export class TipTapEditor extends TipTapEditorBase {
           <slot name="strike-button">${this.renderStrikeButton()}</slot>
           <slot name="after-strike-button"></slot>
 
+          <!-- Code -->
+          <slot name="before-code-button"></slot>
+          <slot name="code-button">${this.renderCodeButton()}</slot>
+          <slot name="after-code-button"></slot>
+
           <!-- Link -->
           <slot name="before-link-button"></slot>
           <slot name="link-button">${this.renderLinkButton()}</slot>
@@ -1261,7 +1330,7 @@ export class TipTapEditor extends TipTapEditorBase {
         </role-toolbar>
       </slot>
 
-      ${this.renderBubbleMenuToolbar()}
+      ${this.renderBubbleMenuToolbar()} ${this.renderLinkDialogAnchoredRegion()}
     `;
   }
 
@@ -1297,17 +1366,95 @@ export class TipTapEditor extends TipTapEditorBase {
     this.linkDialogExpanded = false;
   };
 
+  renderLinkDialogAnchoredRegion() {
+    const findClientRect = () => {
+      const editor = this.editor;
+      if (!editor) {
+        return null;
+      }
+
+      const state = editor.state;
+      const { selection } = state;
+      const view = editor.view;
+
+      if (view.composing) {
+        return null;
+      }
+
+      // support for CellSelections
+      const { ranges } = selection;
+      const from = Math.min(...ranges.map((range) => range.$from.pos));
+      const to = Math.max(...ranges.map((range) => range.$to.pos));
+
+      let clientRect: null | (() => DOMRect) = null;
+
+      if (isNodeSelection(state.selection)) {
+        const node =
+          findNodeViewAnchor({
+            view,
+            from,
+            editor,
+          }) || (view.nodeDOM(from) as HTMLElement);
+
+        if (node) {
+          const domRect = node.getBoundingClientRect();
+          clientRect = () =>
+            Object.assign(domRect, {
+              // Center it.
+              x: domRect.x - domRect.width / 2,
+            });
+        }
+      } else {
+        const domRect = posToDOMRect(view, from, to);
+        clientRect = () =>
+          Object.assign(domRect, {
+            // Center it.
+            x: domRect.x - domRect.width / 2,
+          });
+      }
+
+      return clientRect;
+    };
+    const clientRect = this.linkDialogExpanded ? findClientRect() : null;
+
+    return html`
+      <role-anchored-region
+        part="link-bubble-menu__anchored-region"
+        exportparts="
+          popover-base:link-bubble-menu__popover-base,
+          hover-bridge:link-bubble-menu__hover-bridge,
+          hover-bridge--visible:link-bubble-menu__hover-bridge--visible,
+          popover:link-bubble-menu__popover
+          popover--active:link-bubble-menu__popover--active,
+          popover--fixed:link-bubble-menu__popover--fixed,
+          popover--has-arrow:link-bubble-menu__popover--has-arrow
+          arrow:link-bubble-menu__arrow
+        "
+        anchored-popover-type="manual"
+        distance="4"
+        .active=${this.linkDialogExpanded}
+        .shiftBoundary=${this.querySelector(".ProseMirror") || this}
+        .anchor=${typeof clientRect === "function"
+          ? { getBoundingClientRect: clientRect }
+          : null}
+      >
+        <slot name="link-bubble-menu-dialog"> ${this.renderLinkDialog()} </slot>
+      </role-anchored-region>
+    `;
+  }
+
   /** @TODO: Lets think of a more friendly way to render dialogs for users to extend. */
-  renderDialog(): TemplateResult {
+  renderLinkDialog() {
     if (this.readonly) {
       return html``;
     }
 
     return html` <div
       id="link-dialog"
-      class="link-dialog"
-      part="link-dialog"
-      ?hidden=${!this.linkDialogExpanded}
+      part=${stringMap({
+        "link-dialog": true,
+        "link-dialog--expanded": this.linkDialogExpanded,
+      })}
     >
       <div class="link-dialog__container" part="link-dialog__container">
         <input
@@ -1358,6 +1505,7 @@ export class TipTapEditor extends TipTapEditorBase {
             class="rhino-toolbar-button link-dialog__button"
             part="link-dialog__button link-dialog__button--unlink"
             @click=${() => {
+              this.linkDialogExpanded = false;
               this.editor
                 ?.chain()
                 .focus()
@@ -1402,14 +1550,17 @@ export class TipTapEditor extends TipTapEditorBase {
           if (e.defaultPrevented) {
             return;
           }
+
           const self = e.currentTarget as RoleAnchoredRegion;
           self.anchor = { getBoundingClientRect: e.clientRect };
+          self.shiftBoundary = this.querySelector(".ProseMirror") || this;
           self.active = true;
         }}
         @rhino-bubble-menu-hide=${(e: Event) => {
           if (e.defaultPrevented) {
             return;
           }
+
           const self = e.currentTarget as RoleAnchoredRegion;
           self.anchor = null;
           self.active = false;
@@ -1428,6 +1579,7 @@ export class TipTapEditor extends TipTapEditorBase {
               ${this.renderBoldButton("bubble-menu")}
               ${this.renderItalicButton("bubble-menu")}
               ${this.renderStrikeButton("bubble-menu")}
+              ${this.renderCodeButton("bubble-menu")}
               ${this.renderLinkButton("bubble-menu")}
             </slot>
             <slot name="after-bubble-menu-toolbar-items"></slot>

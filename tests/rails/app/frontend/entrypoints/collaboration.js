@@ -6,15 +6,15 @@ import Collaboration from '@tiptap/extension-collaboration'
 import * as Y from 'yjs'
 import { TipTapEditor } from 'rhino-editor/exports/elements/tip-tap-editor.js'
 import "rhino-editor/exports/styles/trix.css"
-import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+// import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 
 import {WebsocketProvider} from "@y-rb/actioncable";
 
-const document = new Y.Doc();
+const yDocument = new Y.Doc();
 import consumer from '../channels/consumer'
 
 const provider = new WebsocketProvider(
-  document,
+  yDocument,
   consumer,
   "SyncChannel",
   {id: "1"}
@@ -46,16 +46,23 @@ class CollaborationEditor extends TipTapEditor {
     }
 
     this.addExtensions(
-      Collaboration.configure({document}),
-      CollaborationCursor.configure({
-        provider,
-        user: {
-          name,
-          color: '#f783ac',
-        },
-      })
+      Collaboration.configure({document: yDocument}),
+      // CollaborationCursor.configure({
+      //   provider,
+      //   user: {
+      //     name,
+      //     color: '#f783ac',
+      //   },
+      // })
     )
   }
 }
 
 CollaborationEditor.define("rhino-collaboration-editor")
+
+;(async () => {
+  await customElements.whenDefined("rhino-collaboration-editor")
+  const editor = document.querySelector("rhino-collaboration-editor")
+  await editor.updateComplete
+  editor.removeAttribute("defer-initialize")
+})()
