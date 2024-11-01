@@ -490,12 +490,12 @@ export class TipTapEditorBase extends BaseElement {
       ary.push(ext);
     });
 
-    const existingExtensions = this.extensions.map((ext) => ext.name)
+    const existingExtensions = this.extensions.map((ext) => ext.name);
 
     // Make sure we're not pushing duplicate extensions.
     ary = ary.filter((ext) => {
-      return !existingExtensions.includes(ext.name)
-    })
+      return !existingExtensions.includes(ext.name);
+    });
 
     this.extensions = this.extensions.concat(ary);
   }
@@ -701,7 +701,7 @@ export class TipTapEditorBase extends BaseElement {
   }
 
   renderDialog() {
-    return html``
+    return html``;
   }
 
   render(): TemplateResult {
@@ -803,7 +803,7 @@ export class TipTapEditorBase extends BaseElement {
       } catch (e) {}
     }
 
-    const extensions = this.__starterKitExtensions__.concat(this.extensions)
+    const extensions = this.__starterKitExtensions__.concat(this.extensions);
 
     return {
       injectCSS: false,

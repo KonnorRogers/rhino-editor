@@ -68,7 +68,7 @@ export interface RhinoStarterKitOptions {
   /**
    * A TipTap wrapper extension for https://github.com/curvenote/editor/tree/main/packages/prosemirror-codemark
    */
-  rhinoCodemarkPlugin: Partial<{}> | false
+  rhinoCodemarkPlugin: Partial<{}> | false;
 }
 
 export type TipTapPlugin = Node | Extension | Mark;
@@ -109,7 +109,7 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       ["rhinoFocus", Focus],
       ["rhinoPlaceholder", Placeholder],
       ["rhinoBubbleMenu", BubbleMenuExtension],
-      ["rhinoCodemarkPlugin", CodemarkPlugin]
+      ["rhinoCodemarkPlugin", CodemarkPlugin],
     ];
 
     extensions.forEach(([string, extension]) => {
