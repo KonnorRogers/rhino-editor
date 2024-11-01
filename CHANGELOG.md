@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.13.0
+
+### Minor Changes
+
+- [#216](https://github.com/KonnorRogers/rhino-editor/pull/216) [`0031ec1`](https://github.com/KonnorRogers/rhino-editor/commit/0031ec1b8f939593724460e7929d531bd5c29ab7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Styles: blockquote has had its icon changed to represent a block code icon.
+
+- [#216](https://github.com/KonnorRogers/rhino-editor/pull/216) [`0031ec1`](https://github.com/KonnorRogers/rhino-editor/commit/0031ec1b8f939593724460e7929d531bd5c29ab7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Styling of link dialogs has changed now that it follows the selection cursor.
+
+- [#216](https://github.com/KonnorRogers/rhino-editor/pull/216) [`0031ec1`](https://github.com/KonnorRogers/rhino-editor/commit/0031ec1b8f939593724460e7929d531bd5c29ab7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix: code blocks now properly display their correct keybinding
+
+- [#216](https://github.com/KonnorRogers/rhino-editor/pull/216) [`0031ec1`](https://github.com/KonnorRogers/rhino-editor/commit/0031ec1b8f939593724460e7929d531bd5c29ab7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Feature: Added an "inline code" toolbar button, bubble menu buttons, and default styles.
+
+- [#216](https://github.com/KonnorRogers/rhino-editor/pull/216) [`0031ec1`](https://github.com/KonnorRogers/rhino-editor/commit/0031ec1b8f939593724460e7929d531bd5c29ab7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Feature: Link dialogs now follow your selection cursor instead of always being in the top left of the editor
+
+### Patch Changes
+
+- [#216](https://github.com/KonnorRogers/rhino-editor/pull/216) [`0031ec1`](https://github.com/KonnorRogers/rhino-editor/commit/0031ec1b8f939593724460e7929d531bd5c29ab7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix: behavior around cursors with inline-code using Codemark plugin.
+
+- [#216](https://github.com/KonnorRogers/rhino-editor/pull/216) [`0031ec1`](https://github.com/KonnorRogers/rhino-editor/commit/0031ec1b8f939593724460e7929d531bd5c29ab7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix: links now properly render inside of `<figcaption>`
+
+- [#216](https://github.com/KonnorRogers/rhino-editor/pull/216) [`0031ec1`](https://github.com/KonnorRogers/rhino-editor/commit/0031ec1b8f939593724460e7929d531bd5c29ab7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix: double error extension registration has been fixed
+
+- [#216](https://github.com/KonnorRogers/rhino-editor/pull/216) [`0031ec1`](https://github.com/KonnorRogers/rhino-editor/commit/0031ec1b8f939593724460e7929d531bd5c29ab7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix: keybindings now swap to using "option" instead of "alt" for iOS / MacOS.
+
 ## 0.12.0
 
 ### Minor Changes
