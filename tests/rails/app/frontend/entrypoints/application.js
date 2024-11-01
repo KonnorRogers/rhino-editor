@@ -2,9 +2,9 @@ import "@hotwired/turbo"
 import * as ActiveStorage from '@rails/activestorage'
 import "@rails/actiontext"
 import * as Trix from "trix"
-import "rhino-editor/exports/index.js"
-import "trix/dist/trix.css";
+import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css";
+import "trix/dist/trix.css";
 import { Application } from "@hotwired/stimulus"
 import EmbedController from "../controllers/embed_controller.js"
 import TipTapMirrorController from "../controllers/tip_tap_mirror_controller.js"
@@ -73,3 +73,13 @@ ActiveStorage.start()
     });
   }
 })()
+
+document.addEventListener("turbo:before-fetch-response", (e) => {
+  const response = e.detail.fetchResponse.response
+  const url = response.url
+  const hash = response.headers
+
+  if (hash) {
+    console.log(hash)
+  }
+})

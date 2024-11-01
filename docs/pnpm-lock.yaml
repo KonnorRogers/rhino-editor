@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  prosemirror-view: ^1.34.3
-
 importers:
 
   .:
@@ -26,9 +23,6 @@ importers:
       '@shoelace-style/shoelace':
         specifier: ^2.17.1
         version: 2.17.1(@types/react@18.3.3)
-      '@tiptap/core':
-        specifier: ^2.8.0
-        version: 2.8.0(@tiptap/pm@2.8.0)
       '@tiptap/extension-character-count':
         specifier: ^2.8.0
         version: 2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.8.0))(@tiptap/pm@2.8.0)
@@ -38,9 +32,6 @@ importers:
       '@tiptap/extension-code-block-lowlight':
         specifier: ^2.8.0
         version: 2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.8.0))(@tiptap/extension-code-block@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.8.0))(@tiptap/pm@2.8.0))(@tiptap/pm@2.8.0)(highlight.js@11.9.0)(lowlight@3.1.0)
-      '@tiptap/pm':
-        specifier: ^2.8.0
-        version: 2.8.0
       bridgetown-quick-search:
         specifier: 3.0.3
         version: 3.0.3
@@ -59,9 +50,6 @@ importers:
       prism-esm:
         specifier: 1.29.0-fix.6
         version: 1.29.0-fix.6
-      prosemirror-view:
-        specifier: ^1.34.3
-        version: 1.34.3
       read-cache:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1652,7 +1640,7 @@ packages:
     peerDependencies:
       prosemirror-model: ^1.22.1
       prosemirror-state: ^1.4.2
-      prosemirror-view: ^1.34.3
+      prosemirror-view: ^1.33.8
 
   prosemirror-transform@1.10.0:
     resolution: {integrity: sha512-9UOgFSgN6Gj2ekQH5CTDJ8Rp/fnKR2IkYfGdzzp5zQMFsS4zDllLVx/+jGcX86YlACpG7UR5fwAXiWzxqWtBTg==}

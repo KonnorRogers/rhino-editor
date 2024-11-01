@@ -161,6 +161,9 @@ docs/.bridgetown-cache
 
 .DS_Store
 
+# Ignore RubyMine files.
+.idea/
+
 /exports
 /internal
 /cdn

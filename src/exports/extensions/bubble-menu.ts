@@ -76,6 +76,38 @@ export type BubbleMenuViewProps = BubbleMenuPluginProps & {
   view: EditorView;
 };
 
+export function findNodeViewAnchor({
+  view,
+  from,
+  editor,
+}: {
+  view: EditorView;
+  from: number;
+  editor: Editor;
+}) {
+  let node = view.nodeDOM(from) as HTMLElement;
+
+  // Attachment node views are special, we dont want to show text editing operations.
+  // Perhaps in the future we may have a default bubble menu for attachment transforms??
+  if (
+    editor.isActive("attachment-figure") ||
+    editor.isActive("previewable-attachment-figure")
+  ) {
+    const figcaption = node.querySelector("figcaption");
+    node = figcaption || node;
+  }
+
+  let nodeViewWrapper = node.dataset.nodeViewWrapper
+    ? node
+    : node.querySelector("[data-node-view-wrapper]");
+
+  if (nodeViewWrapper) {
+    node = nodeViewWrapper.firstChild as HTMLElement;
+  }
+
+  return node;
+}
+
 export class BubbleMenuView {
   public editor: Editor;
   public element: HTMLElement;
@@ -121,27 +153,7 @@ export class BubbleMenuView {
     BubbleMenuPluginProps["determineNodeViewAnchor"],
     null
   > = ({ view, from }) => {
-    let node = view.nodeDOM(from) as HTMLElement;
-
-    // Attachment node views are special, we dont want to show text editing operations.
-    // Perhaps in the future we may have a default bubble menu for attachment transforms??
-    if (
-      this.editor.isActive("attachment-figure") ||
-      this.editor.isActive("previewable-attachment-figure")
-    ) {
-      const figcaption = node.querySelector("figcaption");
-      node = figcaption || node;
-    }
-
-    let nodeViewWrapper = node.dataset.nodeViewWrapper
-      ? node
-      : node.querySelector("[data-node-view-wrapper]");
-
-    if (nodeViewWrapper) {
-      node = nodeViewWrapper.firstChild as HTMLElement;
-    }
-
-    return node;
+    return findNodeViewAnchor({ view, from, editor: this.editor });
   };
 
   constructor({
@@ -280,10 +292,19 @@ export class BubbleMenuView {
         }) || (view.nodeDOM(from) as HTMLElement);
 
       if (node) {
-        clientRect = () => node.getBoundingClientRect();
+        clientRect = () => {
+          const rect = node.getBoundingClientRect();
+          rect.x = rect.x - rect.width / 2;
+          return rect;
+        };
       }
     } else {
-      clientRect = () => posToDOMRect(view, from, to);
+      clientRect = () => {
+        const rect = posToDOMRect(view, from, to);
+
+        rect.x = rect.x - rect.width / 2;
+        return rect;
+      };
     }
 
     if (clientRect) {

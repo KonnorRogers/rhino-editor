@@ -104,7 +104,7 @@ GEM
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
-    dry-cli (1.1.0)
+    dry-cli (1.2.0)
     erubi (1.13.0)
     evil_systems (1.1.5)
       capybara
@@ -129,7 +129,7 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     logger (1.6.1)
-    loofah (2.22.0)
+    loofah (2.23.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     mail (2.8.1)
@@ -185,7 +185,7 @@ GEM
     puma (5.6.9)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (2.2.9)
+    rack (2.2.10)
     rack-proxy (0.7.7)
       rack
     rack-test (2.1.0)
@@ -243,11 +243,12 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    vite_rails (3.0.17)
-      railties (>= 5.1, < 8)
+    vite_rails (3.0.18)
+      railties (>= 5.1, < 9)
       vite_ruby (~> 3.0, >= 3.2.2)
-    vite_ruby (3.8.2)
+    vite_ruby (3.9.0)
       dry-cli (>= 0.7, < 2)
+      logger (~> 1.6)
       rack-proxy (~> 0.6, >= 0.6.1)
       zeitwerk (~> 2.2)
     web-console (4.2.1)
@@ -275,7 +276,7 @@ GEM
     y-rb_actioncable (0.1.7)
       rails (>= 7.0.4)
       y-rb (>= 0.4.5)
-    zeitwerk (2.6.18)
+    zeitwerk (2.7.1)
 
 PLATFORMS
   arm64-darwin-21
@@ -305,4 +306,4 @@ DEPENDENCIES
   y-rb_actioncable (~> 0.1.5)
 
 BUNDLED WITH
-   2.3.22
+   2.5.11
