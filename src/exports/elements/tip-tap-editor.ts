@@ -1585,6 +1585,7 @@ export class TipTapEditor extends TipTapEditorBase {
             <slot name="after-bubble-menu-toolbar-items"></slot>
           </role-toolbar>
         </slot>
+        <slot name="additional-bubble-menu-toolbar"></slot>
       </role-anchored-region>
     `;
   }
