@@ -18,7 +18,7 @@ import { fileUploadErrorMessage, captionPlaceholder } from "../translations.js";
 import {
   findChildrenByType,
   findParentNodeOfTypeClosestToPos,
-} from "@tiptap/pm/utils";
+} from "prosemirror-utils";
 import { AttachmentRemoveEvent } from "../events/attachment-remove-event.js";
 
 import { render, html } from "lit/html.js";
