@@ -1,5 +1,5 @@
 import { Extension, Mark, Node } from "@tiptap/core";
-import { Plugin } from "prosemirror-state";
+import { Plugin } from "@tiptap/pm/state";
 // import {
 //   FirefoxCaretFixPlugin,
 //   FirefoxCaretPluginOptions,

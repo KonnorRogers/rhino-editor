@@ -204,30 +204,14 @@ export default css`
     border: none;
   }
 
-  #dialogs {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    pointer-events: none;
-  }
-
-  .link-dialog {
-    position: absolute;
-    z-index: 1;
-    height: 100%;
-    width: 100%;
-    padding: 1px;
-  }
-
   .link-dialog__container {
     display: flex;
     align-items: center;
-    background: white;
-    box-shadow: 0 0.3em 1em #ccc;
     max-width: 600px;
-    padding: 0.75rem 0.4rem;
+    border: 1px solid gray;
+    padding: 0.4em;
+    background: Canvas;
     border-radius: 8px;
-    border-top: 2px solid var(--rhino-border-color);
   }
 
   .link-dialog__input {
@@ -256,8 +240,7 @@ export default css`
   }
 
   .link-dialog__buttons {
-    margin-right: 0.5em;
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
   }
 
   .editor-wrapper {

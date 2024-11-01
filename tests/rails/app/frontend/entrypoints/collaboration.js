@@ -6,7 +6,7 @@ import Collaboration from '@tiptap/extension-collaboration'
 import * as Y from 'yjs'
 import { TipTapEditor } from 'rhino-editor/exports/elements/tip-tap-editor.js'
 import "rhino-editor/exports/styles/trix.css"
-import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+// import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 
 import {WebsocketProvider} from "@y-rb/actioncable";
 
@@ -47,13 +47,13 @@ class CollaborationEditor extends TipTapEditor {
 
     this.addExtensions(
       Collaboration.configure({document: yDocument}),
-      CollaborationCursor.configure({
-        provider,
-        user: {
-          name,
-          color: '#f783ac',
-        },
-      })
+      // CollaborationCursor.configure({
+      //   provider,
+      //   user: {
+      //     name,
+      //     color: '#f783ac',
+      //   },
+      // })
     )
   }
 }

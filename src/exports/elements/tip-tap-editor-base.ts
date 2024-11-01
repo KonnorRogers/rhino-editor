@@ -34,8 +34,8 @@ import { RhinoBlurEvent } from "../events/rhino-blur-event.js";
 import { RhinoChangeEvent } from "../events/rhino-change-event.js";
 import { SelectionChangeEvent } from "../events/selection-change-event.js";
 import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
-import { DOMSerializer, Slice } from "prosemirror-model";
-import type { EditorView } from "prosemirror-view";
+import { DOMSerializer, Slice } from "@tiptap/pm/model";
+import type { EditorView } from "@tiptap/pm/view";
 
 export type Serializer = "" | "html" | "json";
 
@@ -490,6 +490,13 @@ export class TipTapEditorBase extends BaseElement {
       ary.push(ext);
     });
 
+    const existingExtensions = this.extensions.map((ext) => ext.name)
+
+    // Make sure we're not pushing duplicate extensions.
+    ary = ary.filter((ext) => {
+      return !existingExtensions.includes(ext.name)
+    })
+
     this.extensions = this.extensions.concat(ary);
   }
 
@@ -693,7 +700,9 @@ export class TipTapEditorBase extends BaseElement {
     return html``;
   }
 
-  renderDialog() {}
+  renderDialog() {
+    return html``
+  }
 
   render(): TemplateResult {
     return html`

@@ -18,7 +18,7 @@ import { fileUploadErrorMessage, captionPlaceholder } from "../translations.js";
 import {
   findChildrenByType,
   findParentNodeOfTypeClosestToPos,
-} from "prosemirror-utils";
+} from "@tiptap/pm/utils";
 import { AttachmentRemoveEvent } from "../events/attachment-remove-event.js";
 
 import { render, html } from "lit/html.js";
@@ -33,12 +33,12 @@ import {
   PluginKey,
   TextSelection,
   Transaction,
-} from "prosemirror-state";
+} from "@tiptap/pm/state";
 import {
   DOMSerializer,
   Node as ProseMirrorNode,
   ResolvedPos,
-} from "prosemirror-model";
+} from "@tiptap/pm/model";
 
 interface AttachmentAttrs extends AttachmentManagerAttributes {
   loadingState: LoadingState;

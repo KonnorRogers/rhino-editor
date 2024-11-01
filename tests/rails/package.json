@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.48.2",
     "playwright": "^1.48.2",
@@ -8,18 +9,24 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo": "^8.0.12",
-    "@rails/actioncable": "^7.2.102",
-    "@rails/actiontext": "^7.2.102",
-    "@rails/activestorage": "^7.2.102",
+    "@rails/actioncable": "^7.2.200",
+    "@rails/actiontext": "^7.2.200",
+    "@rails/activestorage": "^7.2.200",
     "@tiptap/extension-collaboration": "^2.9.1",
     "@tiptap/extension-collaboration-cursor": "^2.9.1",
     "@y-rb/actioncable": "^0.2.1",
+    "prosemirror-view": "~1.28.0",
     "rhino-editor": "link:../..",
-    "trix": "^2.1.7",
+    "trix": "^2.1.8",
     "y-prosemirror": "^1.2.12",
     "y-protocols": "^1.0.6",
     "y-websocket": "^2.0.4",
     "yjs": "13.6.20"
+  },
+  "pnpm": {
+    "overrides": {
+      "prosemirror-view": "~1.28.0"
+    }
   },
   "scripts": {
     "playwright": "playwright"

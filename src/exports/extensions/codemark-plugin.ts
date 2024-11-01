@@ -1,6 +1,6 @@
 import { Extension } from '@tiptap/core';
 import codemark from 'prosemirror-codemark';
-import { type MarkType } from 'prosemirror-model';
+import { type MarkType } from '@tiptap/pm/model';
 
 export interface InlineCodePluginOptions {
   markType?: null | undefined | MarkType
