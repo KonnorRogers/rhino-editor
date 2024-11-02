@@ -33,15 +33,21 @@ export default class EmbedController extends Controller {
   }
 
   async embed() {
-  	const attrs = await this.fetch()
-  	console.log(attrs)
-    let trixAttachment = new Trix.Attachment({ ...attrs })
-    const trix = document.querySelector("trix-editor")
-    trix.editor.insertAttachment(trixAttachment)
-    trix.focus()
+    const isRhino = this.element.closest("rhino-editor")
+    const isTrix = this.element.parentElement.querySelector("trix-editor")
+    const attrs = await this.fetch()
 
-		let attachment = new AttachmentManager({...attrs})
-    const tiptap = document.querySelector("rhino-editor")
-    tiptap.editor.chain().focus().setAttachment(attachment).run();
-	}
+    if (isTrix) {
+    	let trixAttachment = new Trix.Attachment({ ...attrs })
+    	const trix = document.querySelector("trix-editor")
+    	trix.editor.insertAttachment(trixAttachment)
+    	trix.focus()
+    }
+
+    if (isRhino) {
+    	let attachment = new AttachmentManager({...attrs})
+    	const tiptap = document.querySelector("rhino-editor")
+    	tiptap.editor.chain().focus().setAttachment(attachment).run();
+    }
+  }
 }
