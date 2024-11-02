@@ -203,7 +203,7 @@
 }
 
 /** This is for `` inline code code elements. */
-.trix-content :where(:not(pre code)) code {
+.trix-content :not(pre) code {
   background-color: #eee;
   border-radius: 2px;
   padding: 2px;
