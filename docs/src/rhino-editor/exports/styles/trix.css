@@ -151,7 +151,7 @@
 .trix-content li {
   margin-inline-start: 1em;
 }
-.trix-content :where(:not(pre code)) code {
+.trix-content :not(pre) code {
   background-color: #eee;
   border-radius: 2px;
   padding: 2px;

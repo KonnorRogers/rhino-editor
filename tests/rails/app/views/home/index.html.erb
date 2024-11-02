@@ -2,6 +2,13 @@
 
 <%= link_to "Posts", posts_path %>
 
+    <style>
+      .rhino-editor::part(editor) {
+        max-height: 400px;
+        overflow: auto;
+      }
+    </style>
+
 <h2>TipTap Editor</h2>
 <form>
   <input id="y" type="hidden" name="content">

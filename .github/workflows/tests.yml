@@ -22,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby: ['3.2', '3.1']
+        ruby: ['3.3', '3.2']
         node-version: [20.x]
 
     services:
