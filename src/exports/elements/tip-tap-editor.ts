@@ -51,7 +51,6 @@ function findElement(editor: Editor) {
       node.scrollIntoView({ block: "nearest" });
       clientRect = () => {
         const rect = node.getBoundingClientRect();
-        rect.x = rect.x - rect.width / 2;
         return rect;
       };
     }
