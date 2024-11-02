@@ -10,13 +10,13 @@
     border-color: Canvas;
   }
 }
-.no-cursor {
+.rhino-editor .no-cursor {
   caret-color: transparent;
 }
-.fake-cursor {
+.rhino-editor .fake-cursor {
   margin: 0;
   padding: 0;
-  margin-left: -1px;
+  margin-right: -1px;
   border-left-width: 1px;
   border-left-style: solid;
   animation: blink 1s;
@@ -151,13 +151,13 @@
 .trix-content li {
   margin-inline-start: 1em;
 }
-.trix-content :where(:not(pre code)) code {
+.trix-content :not(pre) code {
   background-color: #eee;
   border-radius: 2px;
   padding: 2px;
   margin: 0 1px;
   border: 1px solid rgba(192, 192, 192, 0.5);
-  display: inline-block;
+  display: inline;
 }
 .trix-content code,
 .trix-content pre {

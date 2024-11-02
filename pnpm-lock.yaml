@@ -53,6 +53,9 @@ importers:
       prosemirror-utils:
         specifier: ^1.2.2
         version: 1.2.2(prosemirror-model@1.23.0)(prosemirror-state@1.4.3)
+      prosemirror-view:
+        specifier: ^1.0.0
+        version: 1.35.0
       role-components:
         specifier: ^3.1.0
         version: 3.1.0

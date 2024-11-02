@@ -17,7 +17,59 @@ import { stringMap } from "../../internal/string-map.js";
 import { isExactNodeActive } from "../../internal/is-exact-node-active.js";
 import RoleAnchoredRegion from "role-components/exports/components/anchored-region/anchored-region.js";
 import { findNodeViewAnchor } from "../extensions/bubble-menu.js";
-import { isNodeSelection, posToDOMRect } from "@tiptap/core";
+import { Editor, isNodeSelection, posToDOMRect } from "@tiptap/core";
+
+function findElement(editor: Editor) {
+  if (!editor) {
+    return null;
+  }
+
+  const state = editor.state;
+  const { selection } = state;
+  const view = editor.view;
+
+  if (view.composing) {
+    return null;
+  }
+
+  // support for CellSelections
+  const { ranges } = selection;
+  const from = Math.min(...ranges.map((range) => range.$from.pos));
+  const to = Math.max(...ranges.map((range) => range.$to.pos));
+
+  let clientRect: null | (() => DOMRect) = null;
+
+  if (isNodeSelection(state.selection)) {
+    const node =
+      findNodeViewAnchor?.({
+        editor,
+        view,
+        from,
+      }) || (view.nodeDOM(from) as HTMLElement);
+
+    if (node) {
+      node.scrollIntoView({ block: "nearest" });
+      clientRect = () => {
+        const rect = node.getBoundingClientRect();
+        return rect;
+      };
+    }
+  } else {
+    const toNode = view.domAtPos(to).node;
+    if (toNode instanceof HTMLElement) {
+      // Scroll it into view so we can see the bubble menu
+      toNode.scrollIntoView({ block: "nearest" });
+    }
+
+    clientRect = () => {
+      const rect = posToDOMRect(view, from, to);
+      rect.x = rect.x - rect.width / 2;
+      return rect;
+    };
+  }
+
+  return clientRect;
+}
 
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
@@ -264,9 +316,11 @@ export class TipTapEditor extends TipTapEditorBase {
     this.__invalidLink__ = false;
     this.linkDialogExpanded = true;
     setTimeout(() => {
-      if (inputElement != null) {
-        inputElement.focus();
-      }
+      requestAnimationFrame(() => {
+        if (inputElement != null) {
+          inputElement.focus();
+        }
+      });
     });
   }
 
@@ -1367,55 +1421,9 @@ export class TipTapEditor extends TipTapEditorBase {
   };
 
   renderLinkDialogAnchoredRegion() {
-    const findClientRect = () => {
-      const editor = this.editor;
-      if (!editor) {
-        return null;
-      }
-
-      const state = editor.state;
-      const { selection } = state;
-      const view = editor.view;
-
-      if (view.composing) {
-        return null;
-      }
-
-      // support for CellSelections
-      const { ranges } = selection;
-      const from = Math.min(...ranges.map((range) => range.$from.pos));
-      const to = Math.max(...ranges.map((range) => range.$to.pos));
-
-      let clientRect: null | (() => DOMRect) = null;
-
-      if (isNodeSelection(state.selection)) {
-        const node =
-          findNodeViewAnchor({
-            view,
-            from,
-            editor,
-          }) || (view.nodeDOM(from) as HTMLElement);
-
-        if (node) {
-          const domRect = node.getBoundingClientRect();
-          clientRect = () =>
-            Object.assign(domRect, {
-              // Center it.
-              x: domRect.x - domRect.width / 2,
-            });
-        }
-      } else {
-        const domRect = posToDOMRect(view, from, to);
-        clientRect = () =>
-          Object.assign(domRect, {
-            // Center it.
-            x: domRect.x - domRect.width / 2,
-          });
-      }
-
-      return clientRect;
-    };
-    const clientRect = this.linkDialogExpanded ? findClientRect() : null;
+    const clientRect = this.linkDialogExpanded
+      ? findElement(this.editor as Editor)
+      : null;
 
     return html`
       <role-anchored-region
@@ -1434,6 +1442,7 @@ export class TipTapEditor extends TipTapEditorBase {
         distance="4"
         .active=${this.linkDialogExpanded}
         .shiftBoundary=${this.querySelector(".ProseMirror") || this}
+        .flipBoundary=${this.querySelector(".ProseMirror") || this}
         .anchor=${typeof clientRect === "function"
           ? { getBoundingClientRect: clientRect }
           : null}
@@ -1550,20 +1559,24 @@ export class TipTapEditor extends TipTapEditorBase {
           if (e.defaultPrevented) {
             return;
           }
+          console.log("show");
 
-          const self = e.currentTarget as RoleAnchoredRegion;
-          self.anchor = { getBoundingClientRect: e.clientRect };
-          self.shiftBoundary = this.querySelector(".ProseMirror") || this;
-          self.active = true;
+          const anchoredRegion = e.currentTarget as RoleAnchoredRegion;
+          anchoredRegion.anchor = { getBoundingClientRect: e.clientRect };
+          anchoredRegion.shiftBoundary =
+            this.querySelector(".ProseMirror") || this;
+          anchoredRegion.flipBoundary =
+            this.querySelector(".ProseMirror") || this;
+          anchoredRegion.active = true;
         }}
         @rhino-bubble-menu-hide=${(e: Event) => {
           if (e.defaultPrevented) {
             return;
           }
 
-          const self = e.currentTarget as RoleAnchoredRegion;
-          self.anchor = null;
-          self.active = false;
+          const anchoredRegion = e.currentTarget as RoleAnchoredRegion;
+          anchoredRegion.anchor = null;
+          anchoredRegion.active = false;
         }}
         anchored-popover-type="manual"
         distance="4"

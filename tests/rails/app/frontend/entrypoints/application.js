@@ -74,12 +74,3 @@ ActiveStorage.start()
   }
 })()
 
-document.addEventListener("turbo:before-fetch-response", (e) => {
-  const response = e.detail.fetchResponse.response
-  const url = response.url
-  const hash = response.headers
-
-  if (hash) {
-    console.log(hash)
-  }
-})
