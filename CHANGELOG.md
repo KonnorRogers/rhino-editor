@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.1
+
+### Patch Changes
+
+- [`61241c0`](https://github.com/KonnorRogers/rhino-editor/commit/61241c0d9706b1ccfe6857853730876e047f08b0) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix some bugs around prosemirror-view versioning
+
 ## 0.13.0
 
 ### Minor Changes
