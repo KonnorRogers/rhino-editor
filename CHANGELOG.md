@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.13.2
+
+### Patch Changes
+
+- [#220](https://github.com/KonnorRogers/rhino-editor/pull/220) [`5fcb5ac`](https://github.com/KonnorRogers/rhino-editor/commit/5fcb5aca2f8e6b99eb419badfd5bfabe017a8bab) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a CSS bug with inline code
+
+- [#220](https://github.com/KonnorRogers/rhino-editor/pull/220) [`5fcb5ac`](https://github.com/KonnorRogers/rhino-editor/commit/5fcb5aca2f8e6b99eb419badfd5bfabe017a8bab) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed link dialogs not showing when the selection is not in view
+
 ## 0.13.1
 
 ### Patch Changes
