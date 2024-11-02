@@ -19,8 +19,7 @@ import RoleAnchoredRegion from "role-components/exports/components/anchored-regi
 import { findNodeViewAnchor } from "../extensions/bubble-menu.js";
 import { Editor, isNodeSelection, posToDOMRect } from "@tiptap/core";
 
-
-function findElement (editor: Editor) {
+function findElement(editor: Editor) {
   if (!editor) {
     return null;
   }
@@ -49,7 +48,7 @@ function findElement (editor: Editor) {
       }) || (view.nodeDOM(from) as HTMLElement);
 
     if (node) {
-      node.scrollIntoView({ block: "nearest" })
+      node.scrollIntoView({ block: "nearest" });
       clientRect = () => {
         const rect = node.getBoundingClientRect();
         rect.x = rect.x - rect.width / 2;
@@ -57,10 +56,10 @@ function findElement (editor: Editor) {
       };
     }
   } else {
-    const toNode = view.domAtPos(to).node
+    const toNode = view.domAtPos(to).node;
     if (toNode instanceof HTMLElement) {
       // Scroll it into view so we can see the bubble menu
-      toNode.scrollIntoView({ block: "nearest" })
+      toNode.scrollIntoView({ block: "nearest" });
     }
 
     clientRect = () => {
@@ -71,7 +70,7 @@ function findElement (editor: Editor) {
   }
 
   return clientRect;
-};
+}
 
 /**
  * This is the meat and potatoes. This is the <rhino-editor> element you'll
@@ -322,7 +321,7 @@ export class TipTapEditor extends TipTapEditorBase {
         if (inputElement != null) {
           inputElement.focus();
         }
-      })
+      });
     });
   }
 
@@ -1423,7 +1422,9 @@ export class TipTapEditor extends TipTapEditorBase {
   };
 
   renderLinkDialogAnchoredRegion() {
-    const clientRect = this.linkDialogExpanded ? findElement(this.editor as Editor) : null;
+    const clientRect = this.linkDialogExpanded
+      ? findElement(this.editor as Editor)
+      : null;
 
     return html`
       <role-anchored-region
@@ -1559,12 +1560,14 @@ export class TipTapEditor extends TipTapEditorBase {
           if (e.defaultPrevented) {
             return;
           }
-          console.log("show")
+          console.log("show");
 
           const anchoredRegion = e.currentTarget as RoleAnchoredRegion;
           anchoredRegion.anchor = { getBoundingClientRect: e.clientRect };
-          anchoredRegion.shiftBoundary = this.querySelector(".ProseMirror") || this;
-          anchoredRegion.flipBoundary= this.querySelector(".ProseMirror") || this
+          anchoredRegion.shiftBoundary =
+            this.querySelector(".ProseMirror") || this;
+          anchoredRegion.flipBoundary =
+            this.querySelector(".ProseMirror") || this;
           anchoredRegion.active = true;
         }}
         @rhino-bubble-menu-hide=${(e: Event) => {
