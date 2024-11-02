@@ -19,7 +19,7 @@ import RoleAnchoredRegion from "role-components/exports/components/anchored-regi
 import { findNodeViewAnchor } from "../extensions/bubble-menu.js";
 import { Editor, isNodeSelection, posToDOMRect } from "@tiptap/core";
 
-function findElement(editor: Editor) {
+function findClientRect(editor: Editor) {
   if (!editor) {
     return null;
   }
@@ -51,7 +51,6 @@ function findElement(editor: Editor) {
       node.scrollIntoView({ block: "nearest" });
       clientRect = () => {
         const rect = node.getBoundingClientRect();
-        rect.x = rect.x - rect.width / 2;
         return rect;
       };
     }
@@ -1423,7 +1422,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
   renderLinkDialogAnchoredRegion() {
     const clientRect = this.linkDialogExpanded
-      ? findElement(this.editor as Editor)
+      ? findClientRect(this.editor as Editor)
       : null;
 
     return html`

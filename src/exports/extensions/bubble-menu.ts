@@ -294,7 +294,6 @@ export class BubbleMenuView {
       if (node) {
         clientRect = () => {
           const rect = node.getBoundingClientRect();
-          rect.x = rect.x - rect.width / 2;
           return rect;
         };
       }
