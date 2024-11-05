@@ -275,8 +275,10 @@ test("Should not fire initialize and before-initialize events until after defer-
   assert.isTrue(initializeSpy.notCalled)
 
   rhinoEditor.removeAttribute("defer-initialize")
-  await rhinoEditor.updateComplete
-  await aTimeout(10)
+
+  await waitUntil(() => {
+    return beforeInitializeSpy.called && initializeSpy.called
+  })
 
   assert.isTrue(beforeInitializeSpy.calledOnce)
   assert.isTrue(initializeSpy.calledOnce)

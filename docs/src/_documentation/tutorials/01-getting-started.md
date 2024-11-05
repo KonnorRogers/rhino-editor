@@ -9,17 +9,17 @@ You can either [install with npm](#install-with-npm) or [install with importmaps
 
 ## Install with npm
 
-<%= render Syntax.new("bash") do %>
+```bash
 npm install rhino-editor
-<% end %>
+```
 
 After installing, we can import it in our project.
 
-<%= render Syntax.new("js") do %>
+```js
 // index.js
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css"
-<% end %>
+```
 
 The above will auto-register the `<rhino-editor>` element for you.
 For more ways to initialize the editor, checkout the [Setup](/tutorials/setup) page.
@@ -79,9 +79,9 @@ And you should be ready to go!
 
 To see Rhino Editor appear on your page you can write the following HTML:
 
-<%= render Syntax.new("html") do %>
+```html
 <rhino-editor></rhino-editor>
-<% end %>
+```
 
 And you're on your way! But you're not done yet!
 

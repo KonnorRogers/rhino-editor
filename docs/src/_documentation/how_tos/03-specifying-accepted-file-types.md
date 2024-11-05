@@ -8,9 +8,9 @@ get forwarded to a hidden `<input type="file">` in the shadow root.
 
 <% text = %(<rhino-editor accept="image/*"></rhino-editor>) %>
 
-<%= render Syntax.new("html") do %>
+```html
 <%= markdownify(text) %>
-<% end %>
+```
 
 <%= text.html_safe %>
 
@@ -36,9 +36,9 @@ function pngOnly (event) {
 document.querySelector("#png-only").addEventListener('rhino-file-accept', pngOnly)
 <% end %>
 
-<%= render Syntax.new("js") do %>
+```js
 <%= text.html_safe %>
-<% end %>
+```
 
 <script type="module">
   <%= text.html_safe %>
@@ -46,9 +46,9 @@ document.querySelector("#png-only").addEventListener('rhino-file-accept', pngOnl
 
 
 <% text = %(<rhino-editor id="png-only"></rhino-editor>) %>
-<%= render Syntax.new("html") do %>
+```html
 <%= markdownify(text) %>
-<% end %>
+```
 
 <%= text.html_safe %>
 

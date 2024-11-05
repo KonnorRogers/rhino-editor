@@ -6,7 +6,7 @@ permalink: /how-tos/change-the-placeholder/
 Perhaps you read the [Setup](/tutorials/setup) sections that describe modifying the
 default behavior of the `starterKitOptions`. While you could do the following to modify the placeholder:
 
-<%= render Syntax.new("js") do %>
+```js
 import "rhino-editor/exports/styles/trix.css"
 import { TipTapEditor } from "rhino-editor/exports/elements/tip-tap-editor"
 
@@ -21,12 +21,12 @@ class ExtendedEditor extends TipTapEditor {
     }
   }
 }
-<% end %>
+```
 
 there is actually an easier way if you're only looking to change the placeholder text
 and dont need any additional hooks into the placeholder extension.
 
-<%= render Syntax.new("js") do %>
+```js
 import "rhino-editor/exports/styles/trix.css"
 import { TipTapEditor } from "rhino-editor/exports/elements/tip-tap-editor"
 
@@ -38,4 +38,4 @@ class ExtendedEditor extends TipTapEditor {
     })
   }
 }
-<% end %>
+```

@@ -12,7 +12,7 @@
     "esbuild": "^0.21.5",
     "glob": "^8.1.0",
     "hast-util-to-html": "^9.0.3",
-    "light-pen": "^4.1.0",
+    "light-pen": "^4.2.0",
     "postcss": "^8.4.47",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^14.1.0",
