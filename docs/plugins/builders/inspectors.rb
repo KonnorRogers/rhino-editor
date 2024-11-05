@@ -1,6 +1,14 @@
 require "cgi"
 
 class Builders::Inspectors < SiteBuilder
+  module Syntax
+    def self.full_language(language)
+      return "" if language.nil?
+
+      Rouge::Lexer.find(language).title || language.titleize
+    end
+  end
+
   def build
     inspect_html do |document|
       grab_headers(document)
