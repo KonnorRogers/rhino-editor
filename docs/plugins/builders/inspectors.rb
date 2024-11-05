@@ -6,6 +6,7 @@ class Builders::Inspectors < SiteBuilder
       grab_headers(document)
       mark_external(document)
       syntax_highlight(document)
+      wrap_light_code(document)
     end
   end
 
@@ -23,15 +24,12 @@ class Builders::Inspectors < SiteBuilder
     end
   end
 
-  def syntax_highlight(document)
-    document.css(":not(.syntax-block) > div.highlighter-rouge").each do |el|
-      text = el.inner_text
-      lang = el["class"].scan(/\s?language-.*\s/).last
-
-      lang = lang.strip.split("-")[1] if lang
-
+  def wrap_light_code(document)
+    document.css("light-code").each do |el|
+      lang = el["language"].to_s === "" ? "html" : el["language"]
       lang = Syntax.full_language(lang)
-      id = SecureRandom.uuid
+      id = el["id"] || "code-block-" + SecureRandom.uuid
+      el["id"] = id
 
       el.wrap("<div class='syntax-block'></div>")
 
@@ -41,15 +39,54 @@ class Builders::Inspectors < SiteBuilder
             #{lang}
           </div>
 
-          <clipboard-copy
-            for='#{id}'
-            class='button clipboard clipboard--idle syntax-block__clipboard'
-            aria-label='Copy to clipboard'
-            data-controller='clipboard'
-          >
-            <sl-icon class='clipboard__icon--success' name='clipboard-check'></sl-icon>
-            <sl-icon class='clipboard__icon--idle' name='clipboard'></sl-icon>
-          </clipboard-copy>
+          <sl-tooltip content="Copy">
+            <button
+              for='#{id}'
+              class='button clipboard clipboard--idle syntax-block__clipboard'
+              aria-label='Copy to clipboard'
+              data-controller='clipboard'
+              type="button"
+            >
+              <sl-icon class='clipboard__icon--success' name='clipboard-check'></sl-icon>
+              <sl-icon class='clipboard__icon--idle' name='clipboard'></sl-icon>
+            </button>
+          </sl-tooltip>
+        </div>
+      HTML
+
+      el.add_previous_sibling(actions)
+    end
+  end
+
+  def syntax_highlight(document)
+    document.css("div.highlighter-rouge").each do |el|
+      text = el.inner_text
+      lang = el["class"].scan(/\s?language-.*\s/).last
+
+      lang = lang.strip.split("-")[1] if lang
+
+      lang = Syntax.full_language(lang)
+      id = "code-block-" + SecureRandom.uuid
+
+      el.wrap("<div class='syntax-block'></div>")
+
+      actions = <<-HTML
+        <div class='syntax-block__actions'>
+          <div class='syntax-block__badge'>
+            #{lang}
+          </div>
+
+          <sl-tooltip content="Copy">
+            <clipboard-copy
+              for='#{id}'
+              class='button clipboard clipboard--idle syntax-block__clipboard'
+              aria-label='Copy to clipboard'
+              data-controller='clipboard'
+            >
+              <sl-icon class='clipboard__icon--success' name='clipboard-check'></sl-icon>
+              <sl-icon class='clipboard__icon--idle' name='clipboard'></sl-icon>
+            </clipboard-copy>
+          </sl-tooltip>
 
           <script type="text/plain" id='#{id}' hidden>#{CGI.escape_html(text)}</script>
         </div>
