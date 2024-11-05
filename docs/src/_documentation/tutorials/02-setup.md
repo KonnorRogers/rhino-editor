@@ -44,10 +44,10 @@ If you plan to do the same thing across the entire app and may have many instanc
 RhinoEditor running, it may be worth extending
 the RhinoEditor base class and adding your additional functionality.
 
-<%= render Syntax.new("js") do %>
+```js
 import "rhino-editor/exports/styles/trix.css"
 import { TipTapEditor } from "rhino-editor/exports/elements/tip-tap-editor.js"
-<% end %>
+```
 
 You'll notice we don't want to auto-register the
 `<rhino-editor>` component. Instead, we want to extend it,
@@ -73,10 +73,10 @@ Now let's see how we would add extensions:
 <%= File.read("./frontend/javascript/entrypoints/character-counter.js").chomp.html_safe %>
 ```
 
-<%= render Syntax.new("html") do %>
+```html
 <!-- index.html -->
 <extended-rhino-editor></extended-rhino-editor>
-<% end %>
+```
 
 The above will now have a character counter in place for
 the editor! This can be applied to any extensions. You

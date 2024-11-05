@@ -8,10 +8,10 @@ instead looking to serialize / deserialize JSON. This
 can be done by rendering the editor with `serializer="json"`
 
 
-<%= render Syntax.new("html") do %>
+```html
 <input id="content" name="content">
 <rhino-editor input="content" serializer="json"></rhino-editor>
-<% end %>
+```
 
 <h2 id="caveats">
   <a href="#caveats">
