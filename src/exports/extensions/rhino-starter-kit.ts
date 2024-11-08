@@ -21,6 +21,7 @@ import Link, { LinkOptions } from "@tiptap/extension-link";
 import { Paste, PasteOptions } from "./paste.js";
 import { BubbleMenuExtension, BubbleMenuOptions } from "./bubble-menu.js";
 import { CodemarkPlugin } from "./codemark-plugin.js";
+import { LinkSelectionPlugin } from "./link-selection.js";
 
 export interface RhinoStarterKitOptions {
   /** Funky hack extension for contenteditable in firefox. */
@@ -69,6 +70,8 @@ export interface RhinoStarterKitOptions {
    * A TipTap wrapper extension for https://github.com/curvenote/editor/tree/main/packages/prosemirror-codemark
    */
   rhinoCodemarkPlugin: Partial<{}> | false;
+
+  rhinoLinkSelection: Partial<{}> | false;
 }
 
 export type TipTapPlugin = Node | Extension | Mark;
@@ -110,6 +113,7 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       ["rhinoPlaceholder", Placeholder],
       ["rhinoBubbleMenu", BubbleMenuExtension],
       ["rhinoCodemarkPlugin", CodemarkPlugin],
+      ["rhinoLinkSelection", LinkSelectionPlugin]
     ];
 
     extensions.forEach(([string, extension]) => {
