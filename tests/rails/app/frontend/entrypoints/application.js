@@ -8,6 +8,7 @@ import "trix/dist/trix.css";
 import { Application } from "@hotwired/stimulus"
 import EmbedController from "../controllers/embed_controller.js"
 import TipTapMirrorController from "../controllers/tip_tap_mirror_controller.js"
+import { MarkdownLink } from "../controllers/markdown_link.js"
 window.Stimulus = Application.start()
 window.Stimulus.debug = true
 Stimulus.register("embed", EmbedController)
@@ -31,6 +32,11 @@ ActiveStorage.start()
 
   if (trixHtmlMirror) Prism.highlightElement(trixHtmlMirror)
   if (tipTapHtmlMirror) Prism.highlightElement(tipTapHtmlMirror)
+
+  const rhinoEditor = document.querySelector("rhino-editor[input=y]")
+  rhinoEditor.addExtensions(
+    MarkdownLink,
+  )
 
   const escapeHTML = (str) => {
     const p = document.createElement("p");

@@ -276,7 +276,7 @@ GEM
     y-rb_actioncable (0.1.7)
       rails (>= 7.0.4)
       y-rb (>= 0.4.5)
-    zeitwerk (2.7.1)
+    zeitwerk (2.6.18)
 
 PLATFORMS
   arm64-darwin-21
