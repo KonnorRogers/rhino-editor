@@ -154,7 +154,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
 
     if (blob.attachable_sgid) {
       const blobUrl = this.createBlobUrl(blob.signed_id, blob.filename);
-      this.attachment.directUpload = this
+      this.attachment.directUpload = this;
       this.attachment.setAttributes({
         sgid: blob.attachable_sgid,
         url: blobUrl,
