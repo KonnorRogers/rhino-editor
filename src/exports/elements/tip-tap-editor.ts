@@ -357,18 +357,19 @@ export class TipTapEditor extends TipTapEditorBase {
     if (href) {
       this.closeLinkDialog();
       inputElement.value = "";
+
+      if (this.editor.state.selection.empty && !this.editor.getAttributes('link').href) {
+        const from = this.editor.state.selection.anchor;
+        this.editor.commands.insertContent(href);
+        const to = this.editor.state.selection.anchor;
+        this.editor.commands.setTextSelection({from, to});
+      }
+
       const chain = this.editor
         ?.chain()
         .extendMarkRange("link")
-        .setLink({ href });
-
-      if (chain && this.editor?.state.selection.empty) {
-        chain.insertContent(href);
-      }
-
-      if (chain) {
-        chain.run();
-      }
+        .setLink({ href })
+        .run();
     }
   }
 
