@@ -351,6 +351,7 @@ export class TipTapEditor extends TipTapEditorBase {
     } catch (error) {
       inputElement.setCustomValidity("Not a valid URL");
       this.__invalidLink__ = true;
+      inputElement.reportValidity();
       return;
     }
 
