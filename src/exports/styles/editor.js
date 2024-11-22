@@ -47,6 +47,11 @@ export const hostStyles = css`
 
     --rhino-button-focus-background-color-hsl: 219 26% 95%;
 
+    /**
+     * Override "--rhino-fake-selection-color" to change the color of .rhino-selection when the editor is not focused.
+     */
+    --rhino-fake-selection-color: rgb(220, 220, 220);
+
     display: block;
 
     color: var(--rhino-text-color);
