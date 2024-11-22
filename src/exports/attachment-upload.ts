@@ -159,13 +159,13 @@ export class AttachmentUpload implements DirectUploadDelegate {
     });
 
     // TODO: This may create problems for non-images, could use something like an `<object src="<url>">` instead.
-    const template = document.createElement("template")
+    const template = document.createElement("template");
     const obj = document.createElement("object");
-    obj.toggleAttribute("hidden", true)
-    template.append(obj)
+    obj.toggleAttribute("hidden", true);
+    template.append(obj);
 
     obj.onload = () => {
-      template.remove()
+      template.remove();
       this.progress = 100;
       this.setUploadProgress();
       this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this));
@@ -173,13 +173,13 @@ export class AttachmentUpload implements DirectUploadDelegate {
     };
 
     obj.onerror = () => {
-      template.remove()
+      template.remove();
       this.handleError();
     };
 
     obj.data = blobUrl;
     // Needs to append to for onerror / onload to fire.
-    document.body.append(template)
+    document.body.append(template);
   }
 
   setUploadProgress() {

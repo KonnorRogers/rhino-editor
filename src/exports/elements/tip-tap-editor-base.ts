@@ -16,7 +16,11 @@ import {
   TemplateResult,
 } from "lit";
 
-import { AttachmentUpload, AttachmentUploadCompleteEvent, AttachmentUploadStartEvent } from "../attachment-upload.js";
+import {
+  AttachmentUpload,
+  AttachmentUploadCompleteEvent,
+  AttachmentUploadStartEvent,
+} from "../attachment-upload.js";
 import { AttachmentManager } from "../attachment-manager.js";
 
 import { normalize } from "../styles/normalize.js";
@@ -98,7 +102,7 @@ export class TipTapEditorBase extends BaseElement {
   /**
    * An array of "AttachmentUploads" added via direct upload. Check this for any attachment uploads that have not completed.
    */
-  pendingAttachments: AttachmentUpload[] = []
+  pendingAttachments: AttachmentUpload[] = [];
 
   /**
    * The hidden input to attach to
@@ -392,29 +396,35 @@ export class TipTapEditorBase extends BaseElement {
     this.registerDependencies();
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
 
-    this.__addPendingAttachment = this.__addPendingAttachment.bind(this)
-    this.__removePendingAttachment = this.__removePendingAttachment.bind(this)
+    this.__addPendingAttachment = this.__addPendingAttachment.bind(this);
+    this.__removePendingAttachment = this.__removePendingAttachment.bind(this);
 
-    this.addEventListener(AttachmentUploadStartEvent.eventName, this.__addPendingAttachment)
-    this.addEventListener(AttachmentUploadCompleteEvent.eventName, this.__removePendingAttachment)
+    this.addEventListener(
+      AttachmentUploadStartEvent.eventName,
+      this.__addPendingAttachment,
+    );
+    this.addEventListener(
+      AttachmentUploadCompleteEvent.eventName,
+      this.__removePendingAttachment,
+    );
 
     this.addEventListener("drop", this.handleNativeDrop);
     this.addEventListener("rhino-paste", this.handlePaste);
     this.addEventListener("rhino-file-accept", this.handleFileAccept);
   }
 
-  __addPendingAttachment (e: { attachmentUpload: AttachmentUpload }) {
-    this.pendingAttachments.push(e.attachmentUpload)
+  __addPendingAttachment(e: { attachmentUpload: AttachmentUpload }) {
+    this.pendingAttachments.push(e.attachmentUpload);
   }
 
-  __removePendingAttachment (e: { attachmentUpload: AttachmentUpload }) {
+  __removePendingAttachment(e: { attachmentUpload: AttachmentUpload }) {
     const index = this.pendingAttachments.findIndex((attachment) => {
-      return attachment === e.attachmentUpload
-    })
+      return attachment === e.attachmentUpload;
+    });
 
-    console.log("complete")
+    console.log("complete");
     if (index > -1) {
-      this.pendingAttachments.splice(index, 1)
+      this.pendingAttachments.splice(index, 1);
     }
   }
 
