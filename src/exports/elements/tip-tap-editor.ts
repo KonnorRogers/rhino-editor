@@ -355,24 +355,25 @@ export class TipTapEditor extends TipTapEditorBase {
       return;
     }
 
-    if (!this.editor) { return }
+    if (!this.editor) {
+      return;
+    }
 
     if (href) {
       this.closeLinkDialog();
       inputElement.value = "";
 
-      if (this.editor.state.selection.empty && !this.editor.getAttributes('link').href) {
+      if (
+        this.editor.state.selection.empty &&
+        !this.editor.getAttributes("link").href
+      ) {
         const from = this.editor.state.selection.anchor;
         this.editor.commands.insertContent(href);
         const to = this.editor.state.selection.anchor;
-        this.editor.commands.setTextSelection({from, to});
+        this.editor.commands.setTextSelection({ from, to });
       }
 
-      this.editor
-        ?.chain()
-        .extendMarkRange("link")
-        .setLink({ href })
-        .run();
+      this.editor?.chain().extendMarkRange("link").setLink({ href }).run();
     }
   }
 
