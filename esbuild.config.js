@@ -53,7 +53,7 @@ ${toolbarButtonStyles.toString()}
         ${editorCSS}
 `.trim()
 
-        await fsPromises.writeFile(path.join(process.cwd(), "src", "exports", "styles", "trix.css"), banner + trixCSS)
+        await fsPromises.writeFile(path.join(process.cwd(), "src", "exports", "styles", "trix.css"), banner + "\n\n" + trixCSS)
         await fsPromises.writeFile(path.join(process.cwd(), "src", "exports", "styles", "rhino-editor.css"), banner + editorCSS)
       })
     }
