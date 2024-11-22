@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.14.1
+
+### Patch Changes
+
+- [#231](https://github.com/KonnorRogers/rhino-editor/pull/231) [`01dbfbf`](https://github.com/KonnorRogers/rhino-editor/commit/01dbfbf01a421fe07f38ac005c2073f900c03ad8) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix the hacky workaround for slow / unstable connections
+
+- [#231](https://github.com/KonnorRogers/rhino-editor/pull/231) [`01dbfbf`](https://github.com/KonnorRogers/rhino-editor/commit/01dbfbf01a421fe07f38ac005c2073f900c03ad8) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - remove unnecessary console.log
+
+- [#230](https://github.com/KonnorRogers/rhino-editor/pull/230) [`588abba`](https://github.com/KonnorRogers/rhino-editor/commit/588abba117d2fe2257b874832c94a0a91d274362) Thanks [@bjhess](https://github.com/bjhess)! - Fix the UX of link insertions
+
 ## 0.14.0
 
 ### Minor Changes
