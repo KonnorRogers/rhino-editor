@@ -133,9 +133,10 @@ export class AttachmentManager implements AttachmentManagerAttributes {
   }
 
   handleSuccess() {
+    this.setUploadProgress(100);
     const upload = this.directUpload;
+
     if (upload) {
-      this.setUploadProgress(100);
       upload.element.dispatchEvent(new AttachmentUploadSucceedEvent(upload));
       upload.element.dispatchEvent(new AttachmentUploadCompleteEvent(upload));
     }
