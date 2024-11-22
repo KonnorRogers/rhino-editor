@@ -303,6 +303,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
   closeLinkDialog(): void {
     this.linkDialogExpanded = false;
+    this.editor.commands.focus();
   }
 
   showLinkDialog(): void {
