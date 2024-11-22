@@ -80,9 +80,12 @@ test("Should allow swapping between list-items and sinking them appropriately", 
   assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--disabled"), false)
   assert.equal(orderedListButton.getAttribute("part").includes("toolbar__button--active"), true)
 
+  tiptap().focus()
+  await aTimeout(1)
   // Add a new line
   await sendKeys({ press: "Enter" })
   await elementUpdated(rhinoEditor)
+  await aTimeout(1)
 
   // Now we can nest
   assert.equal(increaseIndentation.getAttribute("aria-disabled"), "false")
