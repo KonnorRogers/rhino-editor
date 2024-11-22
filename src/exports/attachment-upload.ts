@@ -113,17 +113,20 @@ export class AttachmentUpload implements DirectUploadDelegate {
   }
 
   directUploadWillStoreFileWithXHR(xhr: XMLHttpRequest) {
-    const maxPossibleProgress = 90
+    const maxPossibleProgress = 90;
     xhr.upload.addEventListener("progress", (event) => {
       // Cap upload progress to 90%. The last 10% needs to be filled by a successful load.
-      const progress = Math.min((event.loaded / event.total) * 100, maxPossibleProgress);
+      const progress = Math.min(
+        (event.loaded / event.total) * 100,
+        maxPossibleProgress,
+      );
       this.progress = progress;
       this.setUploadProgress();
       this.element.dispatchEvent(new AttachmentUploadProgressEvent(this));
     });
   }
 
-  handleError (error?: Error) {
+  handleError(error?: Error) {
     this.progress = 0;
     if (this.attachment.content == null) {
       this.attachment.setNodeMarkup({
@@ -145,32 +148,32 @@ export class AttachmentUpload implements DirectUploadDelegate {
     blob: Blob & { attachable_sgid?: string },
   ) {
     if (error) {
-      this.handleError(error)
-      return
+      this.handleError(error);
+      return;
     }
 
-    const blobUrl = this.createBlobUrl(blob.signed_id, blob.filename)
+    const blobUrl = this.createBlobUrl(blob.signed_id, blob.filename);
     this.attachment.setAttributes({
       sgid: blob.attachable_sgid ?? "",
       url: blobUrl,
     });
 
     // TODO: This may create problems for non-images, could use something like an `<object src="<url>">` instead.
-    const obj = document.createElement("object")
+    const obj = document.createElement("object");
 
     obj.onload = () => {
-      this.progress = 100
+      this.progress = 100;
       this.setUploadProgress();
       this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this));
       this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
-    }
+    };
 
     obj.onerror = () => {
-      this.handleError()
-    }
+      this.handleError();
+    };
 
     // obj.type = new MimeType()
-    obj.data = blobUrl
+    obj.data = blobUrl;
   }
 
   setUploadProgress() {

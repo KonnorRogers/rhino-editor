@@ -72,11 +72,10 @@ export interface RhinoStarterKitOptions {
    */
   rhinoCodemarkPlugin: Partial<{}> | false;
 
-
   /**
-  * A plugin that maintains selection "highlighting" even while the editor does not have focus.
-  *   This is useful for things like entering in links.
-  */
+   * A plugin that maintains selection "highlighting" even while the editor does not have focus.
+   *   This is useful for things like entering in links.
+   */
   rhinoSelection: Partial<RhinoSelectionOptions> | false;
 }
 
@@ -119,7 +118,7 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
       ["rhinoPlaceholder", Placeholder],
       ["rhinoBubbleMenu", BubbleMenuExtension],
       ["rhinoCodemarkPlugin", CodemarkPlugin],
-      ["rhinoSelection", SelectionPlugin]
+      ["rhinoSelection", SelectionPlugin],
     ];
 
     extensions.forEach(([string, extension]) => {
