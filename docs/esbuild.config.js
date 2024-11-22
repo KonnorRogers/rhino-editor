@@ -43,6 +43,8 @@ const esbuildOptions = {
       assets: {
         from: [path.resolve(__dirname, '../exports/styles/trix.css')],
         to: [path.resolve(__dirname, 'src/rhino-editor/exports/styles/trix.css')],
+        from: [path.resolve(__dirname, '../exports/styles/rhino-editor.css')],
+        to: [path.resolve(__dirname, 'src/rhino-editor/exports/styles/rhino-editor.css')],
       },
       verbose: false,
       watch: true,

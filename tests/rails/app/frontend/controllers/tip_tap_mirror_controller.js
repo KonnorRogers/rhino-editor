@@ -5,12 +5,12 @@ export default class TipTapMirrorController extends Controller {
 	  return document.querySelector("trix-editor")
   }
   connect () {
-    this.trixInput.addEventListener("trix-change", this.handleChange)
+    this.trixInput?.addEventListener("trix-change", this.handleChange)
 
   }
 
   disconnect () {
-    this.trixInput.removeEventListener("trix-change", this.handleChange)
+    this.trixInput?.removeEventListener("trix-change", this.handleChange)
   }
 
 

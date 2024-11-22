@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.14.0
+
+### Minor Changes
+
+- [#227](https://github.com/KonnorRogers/rhino-editor/pull/227) [`924d0ff`](https://github.com/KonnorRogers/rhino-editor/commit/924d0ffe176c7a987d5c625b49f72645d580c255) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Added a "faux selection" for link insertions to give a visual indicator of insertion / replacement points for links.
+
+- [#227](https://github.com/KonnorRogers/rhino-editor/pull/227) [`924d0ff`](https://github.com/KonnorRogers/rhino-editor/commit/924d0ffe176c7a987d5c625b49f72645d580c255) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add a `rhino-editor.css` which is a more minimal `trix.css` and has no styles on the editor content.
+
+### Patch Changes
+
+- [#227](https://github.com/KonnorRogers/rhino-editor/pull/227) [`924d0ff`](https://github.com/KonnorRogers/rhino-editor/commit/924d0ffe176c7a987d5c625b49f72645d580c255) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a bug around "progress" finishing prematurely
+
+- [#227](https://github.com/KonnorRogers/rhino-editor/pull/227) [`924d0ff`](https://github.com/KonnorRogers/rhino-editor/commit/924d0ffe176c7a987d5c625b49f72645d580c255) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a bug with direct upload events not dispatching under the proper name
+
 ## 0.13.2
 
 ### Patch Changes

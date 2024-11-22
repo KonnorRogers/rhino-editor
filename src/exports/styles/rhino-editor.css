@@ -1,7 +1,7 @@
-// @ts-check
-import { css } from "lit";
+/* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
 
-export const hostStyles = css`
+/* src/exports/styles/editor.js:hostStyles */
+
   :host,
   .trix-content {
     /* General tokens */
@@ -57,10 +57,10 @@ export const hostStyles = css`
     color: var(--rhino-text-color);
     color: light-dark(var(--rhino-text-color), var(--rhino-dark-text-color));
   }
-`;
 
-// TODO: Should these cursor styles be made a separate CSS files? I worry about having too many external stylesheets, but I know some users are not using `trix.css` and will miss out on these.
-export const cursorStyles = css`
+
+/* src/exports/styles/editor.js:toolbarButtonStyles */
+
   /**
  * Cursor styles that are useful for providing a more "pleasant" editor experience.
  */
@@ -124,9 +124,10 @@ This is used for showing a fake cursor for selections like link insertions
   .ProseMirror-separator {
     display: none !important;
   }
-`;
 
-export const toolbarButtonStyles = css`
+
+/* src/exports/styles/editor.js:toolbarButtonStyles */
+
   .rhino-toolbar-button {
     appearance: none;
     -webkit-appearance: none;
@@ -213,133 +214,3 @@ export const toolbarButtonStyles = css`
     height: var(--rhino-toolbar-icon-size);
     width: var(--rhino-toolbar-icon-size);
   }
-`;
-
-export default css`
-  ${hostStyles}
-
-  [part~="toolbar"] {
-    color: var(--rhino-toolbar-text-color);
-  }
-
-  [part~="toolbar"]::part(base) {
-    border-color: var(--rhino-border-color);
-    border-bottom-color: transparent;
-    border-width: 1px;
-    border-radius: 4px;
-    border-bottom-right-radius: 0px;
-    border-bottom-left-radius: 0px;
-    display: flex;
-    align-items: center;
-    overflow: auto;
-  }
-
-  [part~="toolbar"][part~="bubble-menu__toolbar"]::part(base) {
-    border: 1px solid var(--rhino-border-color);
-    border-radius: 4px;
-    padding: 4px;
-    background: Canvas;
-  }
-
-  [part~="toolbar"]::part(base):is(:focus-visible, :focus-within) {
-    border-color: var(--rhino-button-active-border-color);
-    outline: transparent;
-  }
-
-  .rhino-toolbar-button[part~="toolbar__button--active"],
-  .rhino-toolbar-button[part~="toolbar__button--active"]:is(
-      :hover,
-      :focus-within
-    ) {
-    background-color: var(--rhino-button-active-background-color);
-  }
-
-  slot[name="toolbar"]
-    :is(
-      [part~="toolbar__button--link"],
-      [part~="toolbar__button--increase-indentation"]
-    ) {
-    margin-inline-end: 1rem;
-  }
-
-  [part~="toolbar__button--attach-files"] {
-    margin-inline-end: auto;
-  }
-
-  role-anchored-region {
-    font-size: 0.8em;
-    --background: transparent;
-    --border-color: transparent;
-  }
-
-  role-anchored-region::part(popover) {
-    border: none;
-  }
-
-  .link-dialog__container {
-    display: flex;
-    align-items: center;
-    max-width: 600px;
-    border: 1px solid gray;
-    padding: 0.4em;
-    background: Canvas;
-    border-radius: 8px;
-  }
-
-  .link-dialog__input {
-    border: 1px solid var(--rhino-border-color);
-    border-radius: var(--rhino-border-radius);
-    padding: 0.4em 0.6em;
-    flex: 1 1 auto;
-  }
-
-  .link-dialog__input:is(:focus) {
-    outline: transparent;
-    border-color: var(--rhino-button-active-border-color);
-  }
-
-  .link-validate:invalid {
-    outline: transparent;
-    background-color: var(--rhino-danger-background-color);
-    border-color: var(--rhino-danger-border-color);
-    box-shadow: none;
-  }
-
-  .rhino-toolbar-button.link-dialog__button {
-    padding: 0.4em 0.6em;
-    border: 1px solid var(--rhino-button-border-color);
-    border-radius: var(--rhino-border-radius);
-  }
-
-  .link-dialog__buttons {
-    margin-inline-start: 0.5em;
-  }
-
-  .editor-wrapper {
-    position: relative;
-  }
-
-  .trix-content {
-    border: 1px solid var(--rhino-border-color);
-    border-radius: 0px 0px var(--rhino-border-radius) var(--rhino-border-radius);
-    margin: 0;
-    padding: 0.4em 0.6em;
-    min-height: 200px;
-    outline: transparent;
-    white-space: pre-wrap;
-  }
-
-  role-tooltip {
-    position: fixed;
-    top: 0;
-    left: 0;
-    font-size: 0.75em;
-    --background: CanvasText;
-    color: Canvas;
-    --border-color: CanvasText;
-  }
-
-  role-tooltip::part(popover) {
-    padding: 0.4em 0.6em;
-  }
-`;

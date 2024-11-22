@@ -5,7 +5,7 @@ import { LOADING_STATES } from "./elements/attachment-editor.js";
 
 import { BaseEvent } from "./events/base-event.js";
 
-class AttachmentUploadStartEvent<
+export class AttachmentUploadStartEvent<
   T extends AttachmentUpload = AttachmentUpload,
 > extends BaseEvent {
   static eventName = "rhino-direct-upload:start" as const;
@@ -14,7 +14,7 @@ class AttachmentUploadStartEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadStartEvent.name, options);
+    super(AttachmentUploadStartEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -28,7 +28,7 @@ export class AttachmentUploadProgressEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadProgressEvent.name, options);
+    super(AttachmentUploadProgressEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -42,7 +42,7 @@ export class AttachmentUploadErrorEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadErrorEvent.name, options);
+    super(AttachmentUploadErrorEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -56,7 +56,7 @@ export class AttachmentUploadSucceedEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadSucceedEvent.name, options);
+    super(AttachmentUploadSucceedEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -69,7 +69,7 @@ export class AttachmentUploadCompleteEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadCompleteEvent.name, options);
+    super(AttachmentUploadCompleteEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -113,12 +113,34 @@ export class AttachmentUpload implements DirectUploadDelegate {
   }
 
   directUploadWillStoreFileWithXHR(xhr: XMLHttpRequest) {
+    const maxPossibleProgress = 90;
     xhr.upload.addEventListener("progress", (event) => {
-      const progress = (event.loaded / event.total) * 100;
+      // Cap upload progress to 90%. The last 10% needs to be filled by a successful load.
+      const progress = Math.min(
+        (event.loaded / event.total) * 100,
+        maxPossibleProgress,
+      );
       this.progress = progress;
       this.setUploadProgress();
       this.element.dispatchEvent(new AttachmentUploadProgressEvent(this));
     });
+  }
+
+  handleError(error?: Error) {
+    this.progress = 0;
+    if (this.attachment.content == null) {
+      this.attachment.setNodeMarkup({
+        progress: 0,
+        loadingState: LOADING_STATES.error,
+      });
+    }
+
+    this.element.dispatchEvent(new AttachmentUploadErrorEvent(this));
+    this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
+
+    if (error) {
+      throw Error(`Direct upload failed: ${error}`);
+    }
   }
 
   directUploadDidComplete(
@@ -126,29 +148,38 @@ export class AttachmentUpload implements DirectUploadDelegate {
     blob: Blob & { attachable_sgid?: string },
   ) {
     if (error) {
-      this.progress = 0;
-      if (this.attachment.content == null) {
-        this.attachment.setNodeMarkup({
-          progress: 0,
-          loadingState: LOADING_STATES.error,
-        });
-      }
-
-      this.element.dispatchEvent(new AttachmentUploadErrorEvent(this));
-      this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
-      throw Error(`Direct upload failed: ${error}`);
+      this.handleError(error);
+      return;
     }
 
+    const blobUrl = this.createBlobUrl(blob.signed_id, blob.filename);
     this.attachment.setAttributes({
       sgid: blob.attachable_sgid ?? "",
-      url: this.createBlobUrl(blob.signed_id, blob.filename),
+      url: blobUrl,
     });
 
-    this.progress = 100;
-    this.setUploadProgress();
+    // TODO: This may create problems for non-images, could use something like an `<object src="<url>">` instead.
+    const template = document.createElement("template");
+    const obj = document.createElement("object");
+    obj.toggleAttribute("hidden", true);
+    template.append(obj);
 
-    this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this));
-    this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
+    obj.onload = () => {
+      template.remove();
+      this.progress = 100;
+      this.setUploadProgress();
+      this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this));
+      this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
+    };
+
+    obj.onerror = () => {
+      template.remove();
+      this.handleError();
+    };
+
+    obj.data = blobUrl;
+    // Needs to append to for onerror / onload to fire.
+    document.body.append(template);
   }
 
   setUploadProgress() {

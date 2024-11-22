@@ -747,7 +747,13 @@ export const Attachment = Node.create<AttachmentOptions>({
             file-name=${fileName || ""}
             file-size=${String(fileSize || 0)}
             loading-state=${loadingState || LOADING_STATES.notStarted}
-            progress=${String(sgid || content || !fileSize ? 100 : progress)}
+            progress=${String(
+              progress
+                ? progress
+                : sgid || content || !fileSize
+                  ? 100
+                  : progress,
+            )}
             contenteditable="false"
             ?show-metadata=${isPreviewable}
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
