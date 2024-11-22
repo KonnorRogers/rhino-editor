@@ -303,7 +303,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
   closeLinkDialog(): void {
     this.linkDialogExpanded = false;
-    this.editor.commands.focus();
+    this.editor?.commands.focus();
   }
 
   showLinkDialog(): void {
@@ -355,6 +355,8 @@ export class TipTapEditor extends TipTapEditorBase {
       return;
     }
 
+    if (!this.editor) { return }
+
     if (href) {
       this.closeLinkDialog();
       inputElement.value = "";
@@ -366,7 +368,7 @@ export class TipTapEditor extends TipTapEditorBase {
         this.editor.commands.setTextSelection({from, to});
       }
 
-      const chain = this.editor
+      this.editor
         ?.chain()
         .extendMarkRange("link")
         .setLink({ href })
