@@ -113,12 +113,31 @@ export class AttachmentUpload implements DirectUploadDelegate {
   }
 
   directUploadWillStoreFileWithXHR(xhr: XMLHttpRequest) {
+    const maxPossibleProgress = 90
     xhr.upload.addEventListener("progress", (event) => {
-      const progress = (event.loaded / event.total) * 100;
+      // Cap upload progress to 90%. The last 10% needs to be filled by a successful load.
+      const progress = Math.min((event.loaded / event.total) * 100, maxPossibleProgress);
       this.progress = progress;
       this.setUploadProgress();
       this.element.dispatchEvent(new AttachmentUploadProgressEvent(this));
     });
+  }
+
+  handleError (error?: Error) {
+    this.progress = 0;
+    if (this.attachment.content == null) {
+      this.attachment.setNodeMarkup({
+        progress: 0,
+        loadingState: LOADING_STATES.error,
+      });
+    }
+
+    this.element.dispatchEvent(new AttachmentUploadErrorEvent(this));
+    this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
+
+    if (error) {
+      throw Error(`Direct upload failed: ${error}`);
+    }
   }
 
   directUploadDidComplete(
@@ -126,29 +145,32 @@ export class AttachmentUpload implements DirectUploadDelegate {
     blob: Blob & { attachable_sgid?: string },
   ) {
     if (error) {
-      this.progress = 0;
-      if (this.attachment.content == null) {
-        this.attachment.setNodeMarkup({
-          progress: 0,
-          loadingState: LOADING_STATES.error,
-        });
-      }
-
-      this.element.dispatchEvent(new AttachmentUploadErrorEvent(this));
-      this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
-      throw Error(`Direct upload failed: ${error}`);
+      this.handleError(error)
+      return
     }
 
+    const blobUrl = this.createBlobUrl(blob.signed_id, blob.filename)
     this.attachment.setAttributes({
       sgid: blob.attachable_sgid ?? "",
-      url: this.createBlobUrl(blob.signed_id, blob.filename),
+      url: blobUrl,
     });
 
-    this.progress = 100;
-    this.setUploadProgress();
+    // TODO: This may create problems for non-images, could use something like an `<object src="<url>">` instead.
+    const obj = document.createElement("object")
 
-    this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this));
-    this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
+    obj.onload = () => {
+      this.progress = 100
+      this.setUploadProgress();
+      this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this));
+      this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
+    }
+
+    obj.onerror = () => {
+      this.handleError()
+    }
+
+    // obj.type = new MimeType()
+    obj.data = blobUrl
   }
 
   setUploadProgress() {

@@ -10,8 +10,6 @@ export type RhinoSelectionOptions = {
 const selectionPlugin = (options: RhinoSelectionOptions) => {
   return new Plugin({
     key: new PluginKey("rhino-selection"),
-    // view: () => {
-    // },
     state: {
       init() {
         return DecorationSet.empty
@@ -24,7 +22,6 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
         // if (!tr.selectionSet) {
         //   return set
         // }
-
 
         // Whether selection was explicitly updated by this transaction.
         const { doc, selection } = tr
@@ -42,10 +39,6 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
           widget.setAttribute("readonly", "")
           widget.setAttribute("contenteditable", "false")
           deco = Decoration.widget(selection.to, widget, {})
-
-        //   //   side: -1,
-        //   //   ignoreSelection: true,
-        //   // })
         }
 
         if (deco) {
@@ -57,35 +50,37 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
     },
     props: {
       decorations(state) { return this.getState(state) },
-      // handleDOMEvents: {
-      //   keydown (view, event) {
-      //     if (event.key === "ArrowLeft") {
-      //       const { selection } = view.state
-      //       const pos = selection.$from;
+      handleDOMEvents: {
+        keydown (view, event) {
+          if (event.key === "ArrowLeft") {
+            const { selection } = view.state
+            const pos = selection.$from;
 
-      //       // This really bizarre piece of code is to "fix" some weird issue with Decorations and Firefox getting "stuck" on them.
-      //       // Basically if youre on a line like this:
-      //       // Hello
-      //       // And your cursor is before the H in Hello, and you hit the "LeftArrow" in Firefox, it will loop to the front. Like so:
-      //       // |Hello -> "LeftArrow" -> Hello|
-      //       // ^ initial cursor position     ^ new cursor position
-      //       if (selection.empty && pos.parentOffset === 0) {
-      //         if (selection.from - 2 <= 0) {
-      //           // Call `event.preventDefault()` so that the cursor doesn't jump to front if we're at start of document.
-      //           event.preventDefault()
-      //           return false
-      //         }
+            // This really bizarre piece of code is to "fix" some weird issue with Decorations and Firefox getting "stuck" on them.
+            // Basically if youre on a line like this:
+            // -> Hello
+            // And your cursor is before the H in Hello, and you hit the "LeftArrow" in Firefox, it will loop to the front. Like so:
+            // Hi
+            // |Hello -> "LeftArrow" -> Hello|
+            // ^ initial cursor position     ^ new cursor position
+            // instead of moving up to the line that says "Hi"
+            if (selection.empty && pos.parentOffset === 0) {
+              if (selection.from - 2 <= 0) {
+                // Call `event.preventDefault()` so that the cursor doesn't jump to front if we're at start of document.
+                event.preventDefault()
+                return false
+              }
 
-      //         const tr = view.state.tr.setSelection(
-      //           TextSelection.create(view.state.doc, Math.max(selection.from - 2, 0), selection.from)
-      //         );
-      //         view.dispatch(tr);
-      //         return true;
-      //       }
-      //     }
-      //     return false;
-      //   }
-      // }
+              const tr = view.state.tr.setSelection(
+                TextSelection.create(view.state.doc, Math.max(selection.from - 2, 0), selection.from)
+              );
+              view.dispatch(tr);
+              return true;
+            }
+          }
+          return false;
+        }
+      }
     }
   })
 }
