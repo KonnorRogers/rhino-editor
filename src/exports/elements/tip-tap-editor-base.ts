@@ -422,7 +422,6 @@ export class TipTapEditorBase extends BaseElement {
       return attachment === e.attachmentUpload;
     });
 
-    console.log("complete");
     if (index > -1) {
       this.pendingAttachments.splice(index, 1);
     }

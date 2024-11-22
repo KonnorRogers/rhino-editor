@@ -303,6 +303,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
   closeLinkDialog(): void {
     this.linkDialogExpanded = false;
+    this.editor?.commands.focus();
   }
 
   showLinkDialog(): void {
@@ -350,24 +351,29 @@ export class TipTapEditor extends TipTapEditorBase {
     } catch (error) {
       inputElement.setCustomValidity("Not a valid URL");
       this.__invalidLink__ = true;
+      inputElement.reportValidity();
+      return;
+    }
+
+    if (!this.editor) {
       return;
     }
 
     if (href) {
       this.closeLinkDialog();
       inputElement.value = "";
-      const chain = this.editor
-        ?.chain()
-        .extendMarkRange("link")
-        .setLink({ href });
 
-      if (chain && this.editor?.state.selection.empty) {
-        chain.insertContent(href);
+      if (
+        this.editor.state.selection.empty &&
+        !this.editor.getAttributes("link").href
+      ) {
+        const from = this.editor.state.selection.anchor;
+        this.editor.commands.insertContent(href);
+        const to = this.editor.state.selection.anchor;
+        this.editor.commands.setTextSelection({ from, to });
       }
 
-      if (chain) {
-        chain.run();
-      }
+      this.editor?.chain().extendMarkRange("link").setLink({ href }).run();
     }
   }
 
@@ -1559,7 +1565,6 @@ export class TipTapEditor extends TipTapEditorBase {
           if (e.defaultPrevented) {
             return;
           }
-          console.log("show");
 
           const anchoredRegion = e.currentTarget as RoleAnchoredRegion;
           anchoredRegion.anchor = { getBoundingClientRect: e.clientRect };
