@@ -35,8 +35,9 @@ function AppendCssStyles () {
           cursorStyles
         } = await import(`./src/exports/styles/editor.js?cache=${date.toString()}`)
 
-        const finalString = `/* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
-${styles.toString()}
+        const banner = `/* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */`
+
+        const editorCSS = `
 /* src/exports/styles/editor.js:hostStyles */
 ${hostStyles.toString()}
 
@@ -45,10 +46,15 @@ ${cursorStyles.toString()}
 
 /* src/exports/styles/editor.js:toolbarButtonStyles */
 ${toolbarButtonStyles.toString()}
-`
+`.trim()
 
-        await fsPromises.writeFile(path.join(process.cwd(), "src", "exports", "styles", "trix.css"), finalString)
-        // await fsPromises.writeFile(path.join(process.cwd(), "exports", "styles", "trix.css"), finalString)
+        const trixCSS = `
+        ${styles.toString()}
+        ${editorCSS}
+`.trim()
+
+        await fsPromises.writeFile(path.join(process.cwd(), "src", "exports", "styles", "trix.css"), banner + trixCSS)
+        await fsPromises.writeFile(path.join(process.cwd(), "src", "exports", "styles", "rhino-editor.css"), banner + editorCSS)
       })
     }
   }

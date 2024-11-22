@@ -39,7 +39,7 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
           // Show a fake cursor.
           let widget = document.createElement("placeholder");
           // TODO: Make this configurable.
-          widget.setAttribute("class", "rhino-fake-cursor-selection");
+          widget.setAttribute("class", "rhino-insertion-placeholder");
           widget.setAttribute("readonly", "");
           widget.setAttribute("contenteditable", "false");
           deco = Decoration.widget(selection.to, widget, {});
