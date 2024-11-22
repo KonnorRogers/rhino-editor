@@ -399,6 +399,11 @@
     color: light-dark(var(--rhino-text-color), var(--rhino-dark-text-color));
   }
 
+  .rhino-hidden-object {
+    /* Cannot be display: none; because it will never load. */
+    visibility: collapse;
+  }
+
 
 /* src/exports/styles/editor.js:toolbarButtonStyles */
 

@@ -3,6 +3,7 @@ import { uuidv4 } from "../internal/uuidv4.js";
 import type { EditorView } from "@tiptap/pm/view";
 import { LOADING_STATES } from "./elements/attachment-editor.js";
 import { toDefaultCaption } from "../internal/to-default-caption.js";
+import { AttachmentUpload, AttachmentUploadCompleteEvent, AttachmentUploadSucceedEvent } from "./attachment-upload.js";
 
 export interface AttachmentManagerAttributes {
   src: string;
@@ -30,6 +31,7 @@ export interface AttachmentManagerAttributes {
 export class AttachmentManager implements AttachmentManagerAttributes {
   attributes: AttachmentManagerAttributes;
   editorView: EditorView;
+  directUpload?: AttachmentUpload
 
   static get previewableRegex() {
     return /^image(\/(gif|png|jpe?g)|$)/;
@@ -77,6 +79,8 @@ export class AttachmentManager implements AttachmentManagerAttributes {
         previewable: this.isPreviewable,
       });
 
+      this.handleSuccess()
+
       return;
     }
 
@@ -107,6 +111,7 @@ export class AttachmentManager implements AttachmentManagerAttributes {
           previewable: this.isPreviewable,
         });
         image.remove();
+        this.handleSuccess()
       };
       return;
     }
@@ -120,6 +125,17 @@ export class AttachmentManager implements AttachmentManagerAttributes {
       contentType: this.contentType,
       previewable: this.isPreviewable,
     });
+    this.handleSuccess()
+  }
+
+  handleSuccess () {
+      const upload = this.directUpload
+      if (upload) {
+        this.setUploadProgress(100)
+        console.log(upload.element)
+        upload.element.dispatchEvent(new AttachmentUploadSucceedEvent(upload));
+        upload.element.dispatchEvent(new AttachmentUploadCompleteEvent(upload));
+      }
   }
 
   /**
