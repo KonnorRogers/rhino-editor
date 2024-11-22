@@ -1559,7 +1559,6 @@ export class TipTapEditor extends TipTapEditorBase {
           if (e.defaultPrevented) {
             return;
           }
-          console.log("show");
 
           const anchoredRegion = e.currentTarget as RoleAnchoredRegion;
           anchoredRegion.anchor = { getBoundingClientRect: e.clientRect };

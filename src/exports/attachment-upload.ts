@@ -152,34 +152,14 @@ export class AttachmentUpload implements DirectUploadDelegate {
       return;
     }
 
-    const blobUrl = this.createBlobUrl(blob.signed_id, blob.filename);
-    this.attachment.setAttributes({
-      sgid: blob.attachable_sgid ?? "",
-      url: blobUrl,
-    });
-
-    // TODO: This may create problems for non-images, could use something like an `<object src="<url>">` instead.
-    const template = document.createElement("template");
-    const obj = document.createElement("object");
-    obj.toggleAttribute("hidden", true);
-    template.append(obj);
-
-    obj.onload = () => {
-      template.remove();
-      this.progress = 100;
-      this.setUploadProgress();
-      this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this));
-      this.element.dispatchEvent(new AttachmentUploadCompleteEvent(this));
-    };
-
-    obj.onerror = () => {
-      template.remove();
-      this.handleError();
-    };
-
-    obj.data = blobUrl;
-    // Needs to append to for onerror / onload to fire.
-    document.body.append(template);
+    if (blob.attachable_sgid) {
+      const blobUrl = this.createBlobUrl(blob.signed_id, blob.filename);
+      this.attachment.directUpload = this;
+      this.attachment.setAttributes({
+        sgid: blob.attachable_sgid,
+        url: blobUrl,
+      });
+    }
   }
 
   setUploadProgress() {
