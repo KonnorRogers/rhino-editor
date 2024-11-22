@@ -5,7 +5,7 @@ import { LOADING_STATES } from "./elements/attachment-editor.js";
 
 import { BaseEvent } from "./events/base-event.js";
 
-class AttachmentUploadStartEvent<
+export class AttachmentUploadStartEvent<
   T extends AttachmentUpload = AttachmentUpload,
 > extends BaseEvent {
   static eventName = "rhino-direct-upload:start" as const;
@@ -14,7 +14,7 @@ class AttachmentUploadStartEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadStartEvent.name, options);
+    super(AttachmentUploadStartEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -28,7 +28,7 @@ export class AttachmentUploadProgressEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadProgressEvent.name, options);
+    super(AttachmentUploadProgressEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -42,7 +42,7 @@ export class AttachmentUploadErrorEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadErrorEvent.name, options);
+    super(AttachmentUploadErrorEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -56,7 +56,7 @@ export class AttachmentUploadSucceedEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadSucceedEvent.name, options);
+    super(AttachmentUploadSucceedEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -69,7 +69,7 @@ export class AttachmentUploadCompleteEvent<
     public attachmentUpload: T,
     options?: EventInit | undefined,
   ) {
-    super(AttachmentUploadCompleteEvent.name, options);
+    super(AttachmentUploadCompleteEvent.eventName, options);
     this.attachmentUpload = attachmentUpload;
   }
 }
@@ -159,9 +159,13 @@ export class AttachmentUpload implements DirectUploadDelegate {
     });
 
     // TODO: This may create problems for non-images, could use something like an `<object src="<url>">` instead.
+    const template = document.createElement("template")
     const obj = document.createElement("object");
+    obj.toggleAttribute("hidden", true)
+    template.append(obj)
 
     obj.onload = () => {
+      template.remove()
       this.progress = 100;
       this.setUploadProgress();
       this.element.dispatchEvent(new AttachmentUploadSucceedEvent(this));
@@ -169,11 +173,13 @@ export class AttachmentUpload implements DirectUploadDelegate {
     };
 
     obj.onerror = () => {
+      template.remove()
       this.handleError();
     };
 
-    // obj.type = new MimeType()
     obj.data = blobUrl;
+    // Needs to append to for onerror / onload to fire.
+    document.body.append(template)
   }
 
   setUploadProgress() {

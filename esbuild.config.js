@@ -31,13 +31,17 @@ function AppendCssStyles () {
 
         const {
           hostStyles,
-          toolbarButtonStyles
+          toolbarButtonStyles,
+          cursorStyles
         } = await import(`./src/exports/styles/editor.js?cache=${date.toString()}`)
 
         const finalString = `/* THIS FILE IS AUTO-GENERATED. DO NOT EDIT BY HAND! */
 ${styles.toString()}
 /* src/exports/styles/editor.js:hostStyles */
 ${hostStyles.toString()}
+
+/* src/exports/styles/editor.js:toolbarButtonStyles */
+${cursorStyles.toString()}
 
 /* src/exports/styles/editor.js:toolbarButtonStyles */
 ${toolbarButtonStyles.toString()}

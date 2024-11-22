@@ -19,11 +19,11 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
 
         set = set.remove(set.find());
 
+        // Whether selection was explicitly updated by this transaction.
         // if (!tr.selectionSet) {
         //   return set
         // }
 
-        // Whether selection was explicitly updated by this transaction.
         const { doc, selection } = tr;
 
         let deco: Decoration | null = null;
@@ -38,7 +38,8 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
         } else {
           // Show a fake cursor.
           let widget = document.createElement("placeholder");
-          widget.setAttribute("class", "fake-cursor-selection");
+          // TODO: Make this configurable.
+          widget.setAttribute("class", "rhino-fake-cursor-selection");
           widget.setAttribute("readonly", "");
           widget.setAttribute("contenteditable", "false");
           deco = Decoration.widget(selection.to, widget, {});

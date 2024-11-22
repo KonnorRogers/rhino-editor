@@ -59,6 +59,73 @@ export const hostStyles = css`
   }
 `;
 
+// TODO: Should these cursor styles be made a separate CSS files? I worry about having too many external stylesheets, but I know some users are not using `trix.css` and will miss out on these.
+export const cursorStyles = css`
+/**
+ * Cursor styles that are useful for providing a more "pleasant" editor experience.
+ */
+/**
+* https://github.com/curvenote/editor/blob/main/packages/prosemirror-codemark/src/codemark.css
+*/
+@keyframes rhino-blink {
+  49% {
+    border-color: unset;
+  }
+  50% {
+    border-color: Canvas;
+  }
+  99% {
+    border-color: Canvas;
+  }
+}
+.rhino-editor .no-cursor {
+  caret-color: transparent;
+}
+
+:where(.rhino-editor) .fake-cursor {
+  margin: 0;
+  padding: 0;
+  margin-right: -1px;
+  border-left-width: 1px;
+  border-left-style: solid;
+  animation: rhino-blink 1s;
+  animation-iteration-count: infinite;
+  position: relative;
+  z-index: 1;
+}
+
+/** This is for actual "selection" which are highlighting more than 1 character. */
+:where(.rhino-editor .ProseMirror):not(:focus-within) .rhino-selection {
+  background: var(--rhino-fake-selection-color);
+}
+
+/** .fake-cursor-selection is for link "insertions" without selected text. */
+:where(.rhino-editor) .rhino-fake-cursor-selection {
+  display: none;
+  user-select: none;
+}
+
+/**
+This is used for showing a fake cursor for selections like link insertions
+*/
+:where(.rhino-editor)[link-dialog-expanded] .rhino-fake-cursor-selection {
+  margin: 0;
+  padding: 0;
+  margin-right: -1px;
+  margin-left: -2px;
+  border-left-width: 4px;
+  border-left-style: solid;
+  border-color: Highlight;
+  position: relative;
+  z-index: 1;
+  display: inline;
+}
+
+.ProseMirror-separator {
+  display: none !important;
+}
+`
+
 export const toolbarButtonStyles = css`
   .rhino-toolbar-button {
     appearance: none;
