@@ -57,11 +57,6 @@ export const hostStyles = css`
     color: var(--rhino-text-color);
     color: light-dark(var(--rhino-text-color), var(--rhino-dark-text-color));
   }
-
-  .rhino-hidden-object {
-    /* Cannot be display: none; because it will never load. */
-    visibility: collapse;
-  }
 `;
 
 // TODO: Should these cursor styles be made a separate CSS files? I worry about having too many external stylesheets, but I know some users are not using `trix.css` and will miss out on these.
