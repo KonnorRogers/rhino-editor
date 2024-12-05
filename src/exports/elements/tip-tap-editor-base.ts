@@ -397,7 +397,6 @@ export class TipTapEditorBase extends BaseElement {
     this.__addPendingAttachment = this.__addPendingAttachment.bind(this);
     this.__removePendingAttachment = this.__removePendingAttachment.bind(this);
 
-
     this.registerDependencies();
     this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
 
@@ -426,13 +425,15 @@ export class TipTapEditorBase extends BaseElement {
     this.pendingAttachments.push(e.attachmentUpload);
   }
 
-
   /**
    * @private
    */
-  __removePendingAttachment(e: { attachment: AttachmentManager } | { attachmentUpload: AttachmentUpload }) {
+  __removePendingAttachment(
+    e:
+      | { attachment: AttachmentManager }
+      | { attachmentUpload: AttachmentUpload },
+  ) {
     const index = this.pendingAttachments.findIndex((attachment) => {
-
       // This is what you get from an attachment upload finishing.
       if ("attachmentUpload" in e) {
         return attachment === e.attachmentUpload;
@@ -443,7 +444,7 @@ export class TipTapEditorBase extends BaseElement {
         return attachment.attachment.attachmentId === e.attachment.attachmentId;
       }
 
-      return false
+      return false;
     });
 
     if (index > -1) {
