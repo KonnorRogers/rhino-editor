@@ -40,6 +40,7 @@ import { SelectionChangeEvent } from "../events/selection-change-event.js";
 import { RhinoPasteEvent } from "../events/rhino-paste-event.js";
 import { DOMSerializer, Slice } from "@tiptap/pm/model";
 import type { EditorView } from "@tiptap/pm/view";
+import { AttachmentRemoveEvent } from "../events/attachment-remove-event.js";
 
 export type Serializer = "" | "html" | "json";
 
@@ -393,11 +394,11 @@ export class TipTapEditorBase extends BaseElement {
   constructor() {
     super();
 
-    this.registerDependencies();
-    this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
-
     this.__addPendingAttachment = this.__addPendingAttachment.bind(this);
     this.__removePendingAttachment = this.__removePendingAttachment.bind(this);
+
+    this.registerDependencies();
+    this.addEventListener(AddAttachmentEvent.eventName, this.handleAttachment);
 
     this.addEventListener(
       AttachmentUploadStartEvent.eventName,
@@ -407,19 +408,43 @@ export class TipTapEditorBase extends BaseElement {
       AttachmentUploadCompleteEvent.eventName,
       this.__removePendingAttachment,
     );
+    this.addEventListener(
+      AttachmentRemoveEvent.eventName,
+      this.__removePendingAttachment,
+    );
 
     this.addEventListener("drop", this.handleNativeDrop);
     this.addEventListener("rhino-paste", this.handlePaste);
     this.addEventListener("rhino-file-accept", this.handleFileAccept);
   }
 
+  /**
+   * @private
+   */
   __addPendingAttachment(e: { attachmentUpload: AttachmentUpload }) {
     this.pendingAttachments.push(e.attachmentUpload);
   }
 
-  __removePendingAttachment(e: { attachmentUpload: AttachmentUpload }) {
+  /**
+   * @private
+   */
+  __removePendingAttachment(
+    e:
+      | { attachment: AttachmentManager }
+      | { attachmentUpload: AttachmentUpload },
+  ) {
     const index = this.pendingAttachments.findIndex((attachment) => {
-      return attachment === e.attachmentUpload;
+      // This is what you get from an attachment upload finishing.
+      if ("attachmentUpload" in e) {
+        return attachment === e.attachmentUpload;
+      }
+
+      // This is what you get from a generic "remove" event when an attachment is removed from the editor, this may not always be an upload.
+      if ("attachment" in e) {
+        return attachment.attachment.attachmentId === e.attachment.attachmentId;
+      }
+
+      return false;
     });
 
     if (index > -1) {
