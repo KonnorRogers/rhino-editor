@@ -54,7 +54,7 @@ document.querySelector("rhino-editor").addEventListener("rhino-direct-upload:pro
 
 ## Waiting to submit a form until direct uploads finish
 
-Also of note, the `direct-upload` attachments will also add a `.pendingAttachmentUploads` to Rhino Editor.
+Also of note, the `direct-upload` attachments will also add a `.pendingAttachments` to Rhino Editor.
 
 This can be useful for stopping form submissions until all uploads have finished.
 
@@ -62,7 +62,7 @@ Here's an example of how you could stop form submissions:
 
 ```js
 form.addEventListener("submit", (e) => {
-  if (rhinoEditor.pendingAttachmentUploads.length > 0) {
+  if (rhinoEditor.pendingAttachments.length > 0) {
     // There are still pending uploads, so preventDefault() to stop the submission
     e.preventDefault()
   }
