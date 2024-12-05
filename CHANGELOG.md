@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.14.2
+
+### Patch Changes
+
+- [#237](https://github.com/KonnorRogers/rhino-editor/pull/237) [`1c395c5`](https://github.com/KonnorRogers/rhino-editor/commit/1c395c55a1ac867f7c8ac8387acf570ff5bac925) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix pendingAttachments not clearing attachments that get cancelled
+
 ## 0.14.1
 
 ### Patch Changes
