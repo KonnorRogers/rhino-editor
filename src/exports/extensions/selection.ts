@@ -20,9 +20,6 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
         set = set.remove(set.find());
 
         // Whether selection was explicitly updated by this transaction.
-        // if (!tr.selectionSet) {
-        //   return set
-        // }
 
         const { doc, selection } = tr;
 
@@ -37,12 +34,12 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
           );
         } else {
           // Show a fake cursor.
-          let widget = document.createElement("placeholder");
+          let widget = document.createElement("span");
           // TODO: Make this configurable.
           widget.setAttribute("class", "rhino-insertion-placeholder");
           widget.setAttribute("readonly", "");
           widget.setAttribute("contenteditable", "false");
-          deco = Decoration.widget(selection.to, widget, {});
+          deco = Decoration.widget(selection.to, widget, {key: selection.to.toString()});
         }
 
         if (deco) {
