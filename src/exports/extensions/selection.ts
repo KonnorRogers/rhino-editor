@@ -36,7 +36,7 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
           return DecorationSet.create(doc, [deco]);
         }
 
-        return DecorationSet.empty
+        return DecorationSet.empty;
       },
     },
     props: {
