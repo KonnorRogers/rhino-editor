@@ -99,28 +99,6 @@
     background: var(--rhino-fake-selection-color);
   }
 
-  /** .fake-cursor-selection is for link "insertions" without selected text. */
-  :where(.rhino-editor) .rhino-insertion-placeholder {
-    display: none;
-    user-select: none;
-  }
-
-  /**
-This is used for showing a fake cursor for selections like link insertions
-*/
-  :where(.rhino-editor)[link-dialog-expanded] .rhino-insertion-placeholder {
-    margin: 0;
-    padding: 0;
-    margin-right: -1px;
-    margin-left: -2px;
-    border-left-width: 4px;
-    border-left-style: solid;
-    border-color: Highlight;
-    position: relative;
-    z-index: 1;
-    display: inline;
-  }
-
   .ProseMirror-separator {
     display: none !important;
   }
