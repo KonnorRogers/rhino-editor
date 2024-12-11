@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.14.3
+
+### Patch Changes
+
+- [#240](https://github.com/KonnorRogers/rhino-editor/pull/240) [`9922d58`](https://github.com/KonnorRogers/rhino-editor/commit/9922d584df3fca76960a1a603a169c2c597a0bce) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix: Remove the cursor placeholder for inserting links due to regressions in mobile browsers.
+
 ## 0.14.2
 
 ### Patch Changes
