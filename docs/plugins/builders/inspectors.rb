@@ -85,15 +85,16 @@ class Builders::Inspectors < SiteBuilder
           </div>
 
           <sl-tooltip content="Copy">
-            <clipboard-copy
+            <button
               for='#{id}'
               class='button clipboard clipboard--idle syntax-block__clipboard'
               aria-label='Copy to clipboard'
               data-controller='clipboard'
+              type="button"
             >
               <sl-icon class='clipboard__icon--success' name='clipboard-check'></sl-icon>
               <sl-icon class='clipboard__icon--idle' name='clipboard'></sl-icon>
-            </clipboard-copy>
+            </button>
           </sl-tooltip>
 
           <script type="text/plain" id='#{id}' hidden>#{CGI.escape_html(text)}</script>
