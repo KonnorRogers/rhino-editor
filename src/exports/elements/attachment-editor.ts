@@ -1,4 +1,4 @@
-import { css, html, TemplateResult } from "lit";
+import { css, html, PropertyValues, TemplateResult } from "lit";
 
 import { close } from "../../internal/icons.js";
 import { toMemorySize } from "../../internal/to-memory-size.js";
@@ -27,12 +27,16 @@ export class AttachmentEditor extends BaseElement {
   fileUploadErrorMessage?: TemplateResult | string;
   removeFigure: () => void;
 
+  showAltTextDialog: boolean;
+  imgSrc: string = ""
+
   constructor() {
     super();
     this.loadingState = "not-started";
     this.fileUploadErrorMessage = fileUploadErrorMessage;
 
     this.removeFigure = () => {};
+    this.showAltTextDialog = false
   }
 
   static baseName = "rhino-attachment-editor";
@@ -49,6 +53,9 @@ export class AttachmentEditor extends BaseElement {
       class: { attribute: "class", type: String },
       loadingState: { attribute: "loading-state" },
       fileUploadErrorMessage: { state: true },
+      // This cannot reflect or ProseMirror overwrites it.
+      showAltTextDialog: { attribute: "show-alt-text-dialog", type: Boolean },
+      imgSrc: { attribute: "img-src" },
       showMetadata: {
         attribute: "show-metadata",
         reflect: true,
@@ -82,15 +89,33 @@ export class AttachmentEditor extends BaseElement {
       button {
         background-color: white;
         border: 1px solid var(--rhino-button-active-border-color);
-        border-radius: 9999px;
         display: flex;
         align-items: center;
-        padding: 0.15rem;
+        pointer-events: all;
+        padding: 0.4em 0.6em;
+      }
+
+      button[part~="delete-button"] {
         position: absolute;
         top: 0;
         right: 50%;
         transform: translate(50%, -20px);
-        pointer-events: all;
+        border-radius: 9999px;
+        padding: 0.15rem;
+      }
+
+      button[part~="alt-text-button"] {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border-radius: 4px;
+      }
+
+      button[part~="alt-text-button"]:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
+        outline: transparent;
+        background-color: rgba(0, 0, 0, 0.74);
       }
 
       button svg {
@@ -193,6 +218,12 @@ export class AttachmentEditor extends BaseElement {
         opacity: 0;
         visibility: hidden;
       }
+
+      dialog img {
+        display: block;
+        height: auto;
+        width: 100%;
+      }
     `;
   }
 
@@ -200,6 +231,21 @@ export class AttachmentEditor extends BaseElement {
     if (this.fileSize) return toMemorySize(this.fileSize);
 
     return "";
+  }
+
+  protected updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has("showAltTextDialog")) {
+      const dialog = this.shadowRoot?.querySelector("dialog")
+      if (dialog) {
+        if (this.showAltTextDialog) {
+          dialog.showModal()
+        } else {
+          dialog.close()
+        }
+      }
+    }
+
+    super.updated(changedProperties)
   }
 
   render() {
@@ -211,9 +257,34 @@ export class AttachmentEditor extends BaseElement {
           e.preventDefault();
           this.removeFigure();
         }}
+        type="button"
       >
         ${this.close()}
       </button>
+
+      <button
+        part="alt-text-button"
+        @pointerdown=${(e: PointerEvent) => {
+          e.preventDefault();
+          this.showAltTextDialog = true
+
+          console.log(this.showAltTextDialog)
+        }}
+        type="button"
+      >
+        Alt
+      </button>
+
+      <dialog @close=${(e: Event) => {
+        // in case of bubbling.
+        if (e.target !== e.currentTarget) { return }
+
+        this.showAltTextDialog = false
+      }}>
+        <img src="${this.imgSrc}">
+
+        <textarea></textarea>
+      </dialog>
 
       <span
         part="file-metadata"

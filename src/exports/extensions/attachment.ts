@@ -747,6 +747,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             file-name=${fileName || ""}
             file-size=${String(fileSize || 0)}
             loading-state=${loadingState || LOADING_STATES.notStarted}
+            img-src=${ifDefined(imgSrc)}
             progress=${String(
               progress
                 ? progress
