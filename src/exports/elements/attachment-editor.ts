@@ -37,6 +37,22 @@ export class AttachmentEditor extends BaseElement {
 
     this.removeFigure = () => {};
     this.showAltTextDialog = false
+
+    // Need to handle dialog close stuff here because the attachment editor lives as part of ProseMirror, so it catches Escape / Click events and prevents them, so this is us "overriding" that behavior because "close" will never fire for the dialog.
+    document.addEventListener("click", (e) => {
+      // No need to check unless the dialog is open.
+      if (!this.showAltTextDialog) { return }
+
+      const composedPath = e.composedPath()
+      composedPath.includes(this)
+    })
+    document.addEventListener("keydown", (e) => {
+      // No need to check unless the dialog is open.
+      if (!this.showAltTextDialog) { return }
+
+      const composedPath = e.composedPath()
+      composedPath.includes(this)
+    })
   }
 
   static baseName = "rhino-attachment-editor";
@@ -76,7 +92,6 @@ export class AttachmentEditor extends BaseElement {
       :host {
         position: absolute;
         width: 100%;
-        pointer-events: none;
         top: 0;
         left: 0;
         height: 100%;
@@ -236,16 +251,13 @@ export class AttachmentEditor extends BaseElement {
   protected updated(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has("showAltTextDialog")) {
       const dialog = this.shadowRoot?.querySelector("dialog")
+
       if (dialog) {
-        if (this.showAltTextDialog) {
-          dialog.showModal()
-        } else {
-          dialog.close()
-        }
+        this.showAltTextDialog ? dialog.showModal() : "" // dialog.close()
       }
     }
 
-    super.updated(changedProperties)
+    return super.updated(changedProperties)
   }
 
   render() {
@@ -267,8 +279,6 @@ export class AttachmentEditor extends BaseElement {
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
           this.showAltTextDialog = true
-
-          console.log(this.showAltTextDialog)
         }}
         type="button"
       >
@@ -276,6 +286,7 @@ export class AttachmentEditor extends BaseElement {
       </button>
 
       <dialog @close=${(e: Event) => {
+        console.log(e)
         // in case of bubbling.
         if (e.target !== e.currentTarget) { return }
 
