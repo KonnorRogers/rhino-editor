@@ -29,6 +29,11 @@
     "types.d.ts",
     "custom-elements.json"
   ],
+  "exports": {
+    ".": "./exports/index.js",
+    "./exports/*": "./exports/*",
+    "./cdn/*": "./cdn/*"
+  },
   "keywords": [
     "tiptap",
     "prosemirror",
