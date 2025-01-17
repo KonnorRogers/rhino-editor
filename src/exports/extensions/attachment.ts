@@ -48,6 +48,7 @@ interface AttachmentAttrs extends AttachmentManagerAttributes {
   // Image
   width?: Maybe<number>;
   height?: Maybe<number>;
+  alt: string;
 
   [key: string]: unknown;
 }
@@ -57,6 +58,12 @@ export interface AttachmentOptions {
   fileUploadErrorMessage: string;
   captionPlaceholder: string;
   previewable: boolean;
+  /**
+   * A function for determining whether or not to have ProseMirror / TipTap handle an event.
+   * return `true` to have ProseMirror ignore it, `false` to have ProseMirror handle it.
+   * <https://prosemirror.net/docs/ref/#view.NodeView.stopEvent>
+   */
+  shouldStopEvent: (e: Event) => boolean
 }
 
 declare module "@tiptap/core" {
@@ -357,6 +364,16 @@ export const Attachment = Node.create<AttachmentOptions>({
       fileUploadErrorMessage: fileUploadErrorMessage,
       captionPlaceholder: captionPlaceholder,
       previewable: false,
+      shouldStopEvent: (event: Event) => {
+          const composedPath = event.composedPath()
+          const isInAttachmentEditor = composedPath.find((el) => (el as HTMLElement)?.tagName?.toLowerCase() === "rhino-attachment-editor")
+          // This is hacky and inconvenient, but required for the `<textarea>` to function properly.
+          if (isInAttachmentEditor) {
+            return true
+          }
+
+          return false
+      }
     };
   },
 
@@ -420,6 +437,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       src,
       width,
       height,
+      alt,
     } = node.attrs as AttachmentAttrs;
 
     const attachmentAttrs = {
@@ -433,6 +451,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       sgid,
       url,
       src,
+      alt ,
     };
 
     const figure = [
@@ -449,7 +468,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         "data-trix-attributes": JSON.stringify({
           caption,
           ...(canPreview(previewable, contentType)
-            ? { presentation: "gallery" }
+            ? { alt, presentation: "gallery" }
             : {}),
         }),
       }),
@@ -473,6 +492,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           contenteditable: false,
           width,
           height,
+          alt,
         },
       ),
     ];
@@ -512,6 +532,12 @@ export const Attachment = Node.create<AttachmentOptions>({
           findAttribute(element, "sgid")
             ? LOADING_STATES.success
             : LOADING_STATES.notStarted,
+      },
+      alt: {
+        default: "",
+        parseHTML: (element) => {
+          return findAttribute(element, "alt") || element.querySelector("img")?.getAttribute("alt") || ""
+        }
       },
       sgid: {
         default: "",
@@ -606,6 +632,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         fileName,
         progress,
         fileSize,
+        alt,
         url,
         src,
         width,
@@ -630,7 +657,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       const isPreviewable = canPreview(previewable, contentType);
 
       const trixAttributes = JSON.stringify({
-        ...(isPreviewable ? { presentation: "gallery" } : {}),
+        ...(isPreviewable ? { alt, presentation: "gallery" } : {}),
         caption,
       });
 
@@ -643,11 +670,15 @@ export const Attachment = Node.create<AttachmentOptions>({
       function handleFigureClick(e: Event) {
         const target = e.currentTarget as HTMLElement;
         const figcaption = target.querySelector("figcaption");
+        const attachmentEditor = target.querySelector("rhino-attachment-editor");
 
-        if (figcaption == null) return;
-
-        if (e.composedPath().includes(figcaption)) {
+        const composedPath = e.composedPath()
+        if (figcaption && composedPath.includes(figcaption)) {
           return;
+        }
+
+        if (attachmentEditor && composedPath.includes(attachmentEditor)) {
+          return
         }
 
         if (typeof getPos === "function") {
@@ -691,7 +722,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         // We need to give this a second just so we dont mess with "click" behavior.
         mouseTimeout = setTimeout(() => {
           mouseIsDown = true;
-        }, 10);
+        }, 20);
       };
 
       const handleMouseUp = (_e: MouseEvent) => {
@@ -711,6 +742,21 @@ export const Attachment = Node.create<AttachmentOptions>({
           );
         }
       };
+
+      function updateAltText (str: string) {
+        if (typeof getPos === "function") {
+          const { view } = editor;
+
+          const { tr } = view.state;
+
+          const pos = getPos();
+          tr.setNodeMarkup(pos, null, {
+            ...node.attrs,
+            alt: str
+          })
+          view.dispatch(tr);
+        }
+      }
 
       function removeFigure(this: HTMLElement) {
         if (typeof getPos === "function") {
@@ -756,9 +802,12 @@ export const Attachment = Node.create<AttachmentOptions>({
                   : progress,
             )}
             contenteditable="false"
+            ?previewable=${isPreviewable}
             ?show-metadata=${isPreviewable}
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
             .removeFigure=${removeFigure}
+            .updateAltText=${updateAltText}
+            alt-text=${alt}
           >
           </rhino-attachment-editor>
 
@@ -780,6 +829,7 @@ export const Attachment = Node.create<AttachmentOptions>({
                 width=${String(width)}
                 height=${String(height)}
                 src=${ifDefined(imgSrc)}
+                alt=${alt}
                 contenteditable="false"
               />`,
             () => html``,
@@ -804,10 +854,14 @@ export const Attachment = Node.create<AttachmentOptions>({
       const contentDOM = dom?.querySelector("figcaption");
 
       let srcRevoked = false;
+      const shouldStopEvent = this.options.shouldStopEvent
 
       return {
         dom,
         contentDOM,
+        stopEvent(event) {
+          return shouldStopEvent(event)
+        },
         update(node) {
           if (node.type.name !== "attachment") return false;
 

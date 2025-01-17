@@ -1,6 +1,7 @@
 import { css, html, PropertyValues, TemplateResult } from "lit";
+import { live } from "lit/directives/live.js"
 
-import { close } from "../../internal/icons.js";
+import { close as closeIcon, warning as warningIcon } from "../../internal/icons.js";
 import { toMemorySize } from "../../internal/to-memory-size.js";
 import { normalize } from "../styles/normalize.js";
 import { BaseElement } from "../../internal/elements/base-element.js";
@@ -23,11 +24,14 @@ export class AttachmentEditor extends BaseElement {
   fileSize?: number;
   progress?: number;
   showMetadata?: boolean;
+  previewable?: boolean;
   loadingState?: LoadingState;
   fileUploadErrorMessage?: TemplateResult | string;
   removeFigure: () => void;
+  updateAltText: (str: string) => void;
 
   showAltTextDialog: boolean;
+  altText: string = ""
   imgSrc: string = ""
 
   constructor() {
@@ -36,29 +40,18 @@ export class AttachmentEditor extends BaseElement {
     this.fileUploadErrorMessage = fileUploadErrorMessage;
 
     this.removeFigure = () => {};
+    this.updateAltText = (_str: string) => {}
     this.showAltTextDialog = false
-
-    // Need to handle dialog close stuff here because the attachment editor lives as part of ProseMirror, so it catches Escape / Click events and prevents them, so this is us "overriding" that behavior because "close" will never fire for the dialog.
-    document.addEventListener("click", (e) => {
-      // No need to check unless the dialog is open.
-      if (!this.showAltTextDialog) { return }
-
-      const composedPath = e.composedPath()
-      composedPath.includes(this)
-    })
-    document.addEventListener("keydown", (e) => {
-      // No need to check unless the dialog is open.
-      if (!this.showAltTextDialog) { return }
-
-      const composedPath = e.composedPath()
-      composedPath.includes(this)
-    })
   }
 
   static baseName = "rhino-attachment-editor";
 
-  close() {
-    return html`${close}`;
+  closeIcon() {
+    return html`${closeIcon}`;
+  }
+
+  warningIcon () {
+    return html`${warningIcon}`
   }
 
   static get properties() {
@@ -77,12 +70,61 @@ export class AttachmentEditor extends BaseElement {
         reflect: true,
         type: Boolean,
       },
+      altText: { attribute: "alt-text" },
+      previewable: {
+        reflect: true,
+        type: Boolean,
+      },
     };
+  }
+
+  handleClick = (e: Event) => {
+    const composedPath = e.composedPath()
+    console.log(composedPath)
+
+    const altTextButton = this.shadowRoot?.querySelector("[part~='alt-text-button']")
+    if (altTextButton && composedPath.includes(altTextButton)) {
+      this.showAltTextDialog = true
+      e.preventDefault()
+      return
+    }
+
+    // No need to check unless the dialog is open.
+    if (!this.showAltTextDialog) {
+      return
+    }
+
+    const dialog = this.shadowRoot?.querySelector("dialog")
+
+    if (!dialog) { return }
+
+    if (dialog && !composedPath.includes(dialog)) {
+      this.showAltTextDialog = false
+    }
+  }
+
+  handleKeydown = (e: KeyboardEvent) => {
+    // No need to check unless the dialog is open.
+    if (!this.showAltTextDialog) { return }
+
+    if (e.key === "Escape") {
+      this.showAltTextDialog = false
+    }
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.classList.add("rhino-attachment-editor");
+
+    document.addEventListener("click", this.handleClick)
+    document.addEventListener("keydown", this.handleKeydown)
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+
+    document.removeEventListener("click", this.handleClick)
+    document.removeEventListener("keydown", this.handleKeydown)
   }
 
   static get styles() {
@@ -110,6 +152,10 @@ export class AttachmentEditor extends BaseElement {
         padding: 0.4em 0.6em;
       }
 
+      dialog[open]::backdrop {
+        pointer-events: none;
+      }
+
       button[part~="delete-button"] {
         position: absolute;
         top: 0;
@@ -117,6 +163,10 @@ export class AttachmentEditor extends BaseElement {
         transform: translate(50%, -20px);
         border-radius: 9999px;
         padding: 0.15rem;
+      }
+
+      :host(:not([previewable])) button[part~="alt-text-button"] {
+        display: none;
       }
 
       button[part~="alt-text-button"] {
@@ -239,6 +289,18 @@ export class AttachmentEditor extends BaseElement {
         height: auto;
         width: 100%;
       }
+
+      textarea {
+        width: 100%;
+        resize: none;
+        height: 100px;
+        font-size: 1.25em;
+        border: 1px solid dodgerblue;
+        padding: 8px;
+        border-radius: 8px;
+        outline: 2px solid var(--rhino-button-active-border-color);
+        outline-offset: 3px;
+      }
     `;
   }
 
@@ -253,7 +315,11 @@ export class AttachmentEditor extends BaseElement {
       const dialog = this.shadowRoot?.querySelector("dialog")
 
       if (dialog) {
-        this.showAltTextDialog ? dialog.showModal() : "" // dialog.close()
+        try {
+          this.showAltTextDialog ? dialog.showModal() : dialog.close()
+        } catch (_e) {
+          // We don't care if the showModal / close fail.
+        }
       }
     }
 
@@ -271,30 +337,43 @@ export class AttachmentEditor extends BaseElement {
         }}
         type="button"
       >
-        ${this.close()}
+        ${this.closeIcon()}
       </button>
 
       <button
         part="alt-text-button"
-        @pointerdown=${(e: PointerEvent) => {
-          e.preventDefault();
-          this.showAltTextDialog = true
-        }}
         type="button"
+        @mousedown=${(e: Event) => {
+          e.preventDefault()
+        }}
       >
+        ${this.altText ? html`` : this.warningIcon()}
         Alt
       </button>
 
       <dialog @close=${(e: Event) => {
-        console.log(e)
         // in case of bubbling.
-        if (e.target !== e.currentTarget) { return }
+        if (e.target !== e.currentTarget) {
+          return
+        }
 
-        this.showAltTextDialog = false
+        // console.log("close")
+        // this.showAltTextDialog = false
       }}>
         <img src="${this.imgSrc}">
 
-        <textarea></textarea>
+        <label for="alt-text-editor">Image alt text</label>
+        <textarea id="alt-text-editor" .value=${live(this.altText)}></textarea>
+
+        <button
+          part="save-button"
+          type="button"
+          @click=${() => {
+            this.updateAltText(this.shadowRoot?.querySelector("textarea")?.value || "")
+          }}
+        >
+          Save
+        </button>
       </dialog>
 
       <span
