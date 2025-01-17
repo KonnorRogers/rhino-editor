@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.0
+
+### Minor Changes
+
+- [#243](https://github.com/KonnorRogers/rhino-editor/pull/243) [`d71e2db`](https://github.com/KonnorRogers/rhino-editor/commit/d71e2db5bab0f6abcd54c0e171b207113c19b91c) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add exportmaps to appease JSPM for importmaps
+
 ## 0.14.3
 
 ### Patch Changes
