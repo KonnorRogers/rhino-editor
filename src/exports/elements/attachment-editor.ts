@@ -1,7 +1,7 @@
 import { css, html, PropertyValues, TemplateResult } from "lit";
 import { live } from "lit/directives/live.js"
 
-import { close as closeIcon, warning as warningIcon } from "../../internal/icons.js";
+import { closeSvgPath, toSvg, warningSvgPath } from "../../internal/icons.js";
 import { toMemorySize } from "../../internal/to-memory-size.js";
 import { normalize } from "../styles/normalize.js";
 import { BaseElement } from "../../internal/elements/base-element.js";
@@ -47,11 +47,11 @@ export class AttachmentEditor extends BaseElement {
   static baseName = "rhino-attachment-editor";
 
   closeIcon() {
-    return html`${closeIcon}`;
+    return html`${toSvg(closeSvgPath, 16, [])}`;
   }
 
   warningIcon () {
-    return html`${warningIcon}`
+    return html`${toSvg(warningSvgPath, 16, [])}`
   }
 
   static get properties() {
@@ -152,10 +152,6 @@ export class AttachmentEditor extends BaseElement {
         padding: 0.4em 0.6em;
       }
 
-      dialog[open]::backdrop {
-        pointer-events: none;
-      }
-
       button[part~="delete-button"] {
         position: absolute;
         top: 0;
@@ -172,18 +168,34 @@ export class AttachmentEditor extends BaseElement {
       button[part~="alt-text-button"] {
         position: absolute;
         top: 4px;
-        left: 4px;
+        left: 14px;
         background: rgba(0, 0, 0, 0.8);
         color: white;
+        border: 2px solid white;
         border-radius: 4px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
       }
 
-      button[part~="alt-text-button"]:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
-        outline: transparent;
+      button[part~="alt-text-button"]:hover:not([aria-disabled="true"], :disabled) {
+        border-color: var(--rhino-button-active-border-color);
         background-color: rgba(0, 0, 0, 0.74);
       }
 
+      button[part~="alt-text-button"]:focus:not([aria-disabled="true"], :disabled) {
+        background-color: rgba(0, 0, 0, 0.74);
+        outline: 2px dashed var(--rhino-button-active-border-color);
+      }
+
       button svg {
+        flex: 0 1 auto;
+        height: 1em;
+        width: 1em;
+      }
+
+      button[part~="delete-button"] svg {
         height: 1.5rem;
         width: 1.5rem;
       }
@@ -284,6 +296,16 @@ export class AttachmentEditor extends BaseElement {
         visibility: hidden;
       }
 
+      dialog[open]::backdrop {
+        pointer-events: none;
+      }
+
+      dialog {
+        border: 1px solid gray;
+        border-radius: 4px;
+        width: clamp(200px, 75vw, 800px);
+      }
+
       dialog img {
         display: block;
         height: auto;
@@ -295,9 +317,19 @@ export class AttachmentEditor extends BaseElement {
         resize: none;
         height: 100px;
         font-size: 1.25em;
-        border: 1px solid dodgerblue;
+        border: 1px solid var(--rhino-border-color);
         padding: 8px;
         border-radius: 8px;
+      }
+
+      label {
+        margin-top: 1rem;
+        display: block;
+        text-align: start;
+      }
+
+      textarea:focus {
+        border-color: dodgerblue;
         outline: 2px solid var(--rhino-button-active-border-color);
         outline-offset: 3px;
       }
@@ -356,9 +388,6 @@ export class AttachmentEditor extends BaseElement {
         if (e.target !== e.currentTarget) {
           return
         }
-
-        // console.log("close")
-        // this.showAltTextDialog = false
       }}>
         <img src="${this.imgSrc}">
 
