@@ -29,8 +29,9 @@ export class AttachmentEditor extends BaseElement {
   fileUploadErrorMessage?: TemplateResult | string;
   removeFigure: () => void;
   updateAltText: (str: string) => void;
+  updateDialogState: (bool: boolean) => void
 
-  showAltTextDialog: boolean;
+  altTextDialogOpen: boolean;
   altText: string = ""
   imgSrc: string = ""
 
@@ -41,7 +42,8 @@ export class AttachmentEditor extends BaseElement {
 
     this.removeFigure = () => {};
     this.updateAltText = (_str: string) => {}
-    this.showAltTextDialog = false
+    this.updateDialogState = (_bool: boolean) => {}
+    this.altTextDialogOpen = false
   }
 
   static baseName = "rhino-attachment-editor";
@@ -63,7 +65,7 @@ export class AttachmentEditor extends BaseElement {
       loadingState: { attribute: "loading-state" },
       fileUploadErrorMessage: { state: true },
       // This cannot reflect or ProseMirror overwrites it.
-      showAltTextDialog: { attribute: "show-alt-text-dialog", type: Boolean },
+      altTextDialogOpen: { attribute: "show-alt-text-dialog", type: Boolean },
       imgSrc: { attribute: "img-src" },
       showMetadata: {
         attribute: "show-metadata",
@@ -79,18 +81,20 @@ export class AttachmentEditor extends BaseElement {
   }
 
   handleClick = (e: Event) => {
+    if (e.defaultPrevented) { return }
+
     const composedPath = e.composedPath()
-    console.log(composedPath)
 
     const altTextButton = this.shadowRoot?.querySelector("[part~='alt-text-button']")
     if (altTextButton && composedPath.includes(altTextButton)) {
-      this.showAltTextDialog = true
+      this.altTextDialogOpen = true
+      this.updateDialogState(this.altTextDialogOpen)
       e.preventDefault()
       return
     }
 
     // No need to check unless the dialog is open.
-    if (!this.showAltTextDialog) {
+    if (!this.altTextDialogOpen) {
       return
     }
 
@@ -99,16 +103,18 @@ export class AttachmentEditor extends BaseElement {
     if (!dialog) { return }
 
     if (dialog && !composedPath.includes(dialog)) {
-      this.showAltTextDialog = false
+      this.altTextDialogOpen = false
+      this.updateDialogState(this.altTextDialogOpen)
     }
   }
 
   handleKeydown = (e: KeyboardEvent) => {
     // No need to check unless the dialog is open.
-    if (!this.showAltTextDialog) { return }
+    if (!this.altTextDialogOpen) { return }
 
     if (e.key === "Escape") {
-      this.showAltTextDialog = false
+      this.altTextDialogOpen = false
+      this.updateDialogState(this.altTextDialogOpen)
     }
   }
 
@@ -132,6 +138,8 @@ export class AttachmentEditor extends BaseElement {
       ${normalize}
 
       :host {
+        /* Set to none because we need height / width set. */
+        pointer-events: none;
         position: absolute;
         width: 100%;
         top: 0;
@@ -143,6 +151,10 @@ export class AttachmentEditor extends BaseElement {
         --rhino-error-border-color: hsl(0 66% 30%);
       }
 
+      * {
+        pointer-events: initial;
+      }
+
       button {
         background-color: white;
         border: 1px solid var(--rhino-button-active-border-color);
@@ -150,6 +162,16 @@ export class AttachmentEditor extends BaseElement {
         align-items: center;
         pointer-events: all;
         padding: 0.4em 0.6em;
+      }
+
+      button[part~="save-button"] {
+        display: block;
+        margin: 0 auto;
+        margin-top: 1rem;
+        width: 50%;
+        font-size: 1.15rem;
+        text-align: center;
+        border-radius: 8px;
       }
 
       button[part~="delete-button"] {
@@ -190,7 +212,7 @@ export class AttachmentEditor extends BaseElement {
       }
 
       button svg {
-        flex: 0 1 auto;
+        flex: 1 1 auto;
         height: 1em;
         width: 1em;
       }
@@ -245,6 +267,7 @@ export class AttachmentEditor extends BaseElement {
         width: 90%;
         position: absolute;
         z-index: 1;
+        pointer-events: none;
       }
 
       .file-progress {
@@ -306,10 +329,17 @@ export class AttachmentEditor extends BaseElement {
         width: clamp(200px, 75vw, 800px);
       }
 
-      dialog img {
+      img {
         display: block;
         height: auto;
         width: 100%;
+        /* Image is scaled to fit within the container. */
+        /* Aspect ratio IS maintained */
+        object-fit: contain;
+        aspect-ratio: 16 / 9;
+        background: lightgray;
+        border: 2px solid gray;
+        border-radius: 8px;
       }
 
       textarea {
@@ -343,13 +373,14 @@ export class AttachmentEditor extends BaseElement {
   }
 
   protected updated(changedProperties: PropertyValues<this>): void {
-    if (changedProperties.has("showAltTextDialog")) {
+    if (changedProperties.has("altTextDialogOpen")) {
       const dialog = this.shadowRoot?.querySelector("dialog")
 
       if (dialog) {
         try {
-          this.showAltTextDialog ? dialog.showModal() : dialog.close()
+          this.altTextDialogOpen ? dialog.showModal() : dialog.close()
         } catch (_e) {
+          // console.error(_e)
           // We don't care if the showModal / close fail.
         }
       }
@@ -375,12 +406,13 @@ export class AttachmentEditor extends BaseElement {
       <button
         part="alt-text-button"
         type="button"
-        @mousedown=${(e: Event) => {
-          e.preventDefault()
+        @pointerdown=${(_e: Event) => {
+          this.altTextDialogOpen = true
+          this.updateDialogState(true)
         }}
       >
         ${this.altText ? html`` : this.warningIcon()}
-        Alt
+        <span style="flex: 1 1 auto;">Alt</span>
       </button>
 
       <dialog @close=${(e: Event) => {
@@ -391,7 +423,7 @@ export class AttachmentEditor extends BaseElement {
       }}>
         <img src="${this.imgSrc}">
 
-        <label for="alt-text-editor">Image alt text</label>
+        <label for="alt-text-editor">Descriptive alt text</label>
         <textarea id="alt-text-editor" .value=${live(this.altText)}></textarea>
 
         <button
@@ -399,6 +431,8 @@ export class AttachmentEditor extends BaseElement {
           type="button"
           @click=${() => {
             this.updateAltText(this.shadowRoot?.querySelector("textarea")?.value || "")
+            this.altTextDialogOpen = false
+            this.updateDialogState(this.altTextDialogOpen)
           }}
         >
           Save

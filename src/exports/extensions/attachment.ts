@@ -49,6 +49,7 @@ interface AttachmentAttrs extends AttachmentManagerAttributes {
   width?: Maybe<number>;
   height?: Maybe<number>;
   alt: string;
+  altTextDialogOpen: boolean;
 
   [key: string]: unknown;
 }
@@ -507,6 +508,7 @@ export const Attachment = Node.create<AttachmentOptions>({
   addAttributes() {
     return {
       attachmentId: { default: null },
+      altTextDialogOpen: { default: false },
       caption: {
         default: "",
         parseHTML: (element) => {
@@ -640,6 +642,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         caption,
         previewable,
         loadingState,
+        altTextDialogOpen,
       } = node.attrs as AttachmentAttrs;
 
       const trixAttachment = JSON.stringify({
@@ -758,6 +761,21 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
       }
 
+      function updateDialogState (bool: boolean) {
+        if (typeof getPos === "function") {
+          const { view } = editor;
+
+          const { tr } = view.state;
+
+          const pos = getPos();
+          tr.setNodeMarkup(pos, null, {
+            ...node.attrs,
+            altTextDialogOpen: bool
+          })
+          view.dispatch(tr);
+        }
+      }
+
       function removeFigure(this: HTMLElement) {
         if (typeof getPos === "function") {
           const { view } = editor;
@@ -807,6 +825,8 @@ export const Attachment = Node.create<AttachmentOptions>({
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
             .removeFigure=${removeFigure}
             .updateAltText=${updateAltText}
+            .updateDialogState=${updateDialogState}
+            .altTextDialogOpen=${altTextDialogOpen}
             alt-text=${alt}
           >
           </rhino-attachment-editor>
