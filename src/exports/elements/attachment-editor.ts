@@ -162,7 +162,7 @@ export class AttachmentEditor extends BaseElement {
       }
 
       button {
-        background-color: white;
+        background-color: var(--rhino-button-background-color);
         border: 1px solid var(--rhino-button-active-border-color);
         display: flex;
         align-items: center;
@@ -323,6 +323,11 @@ export class AttachmentEditor extends BaseElement {
       .file-progress[value="100"] {
         opacity: 0;
         visibility: hidden;
+      }
+
+      dialog::backdrop {
+        background: rgba(0,0,0,0.8);
+        filter: blur(20px);
       }
 
       dialog[open]::backdrop {
