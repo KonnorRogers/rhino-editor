@@ -746,7 +746,10 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
       };
 
-      function updateAltText (str: string) {
+      function setNodeAttributes (attrs: Partial<{
+        alt: string;
+        altTextDialogOpen: boolean;
+      }>) {
         if (typeof getPos === "function") {
           const { view } = editor;
 
@@ -755,22 +758,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           const pos = getPos();
           tr.setNodeMarkup(pos, null, {
             ...node.attrs,
-            alt: str
-          })
-          view.dispatch(tr);
-        }
-      }
-
-      function updateDialogState (bool: boolean) {
-        if (typeof getPos === "function") {
-          const { view } = editor;
-
-          const { tr } = view.state;
-
-          const pos = getPos();
-          tr.setNodeMarkup(pos, null, {
-            ...node.attrs,
-            altTextDialogOpen: bool
+            ...attrs,
           })
           view.dispatch(tr);
         }
@@ -824,8 +812,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             ?show-metadata=${isPreviewable}
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
             .removeFigure=${removeFigure}
-            .updateAltText=${updateAltText}
-            .updateDialogState=${updateDialogState}
+            .setNodeAttributes=${setNodeAttributes}
             .altTextDialogOpen=${altTextDialogOpen}
             alt-text=${alt}
           >

@@ -28,32 +28,37 @@ export class AttachmentEditor extends BaseElement {
   loadingState?: LoadingState;
   fileUploadErrorMessage?: TemplateResult | string;
   removeFigure: () => void;
-  updateAltText: (str: string) => void;
-  updateDialogState: (bool: boolean) => void
+  setNodeAttributes: (attrs: Partial<{
+    altTextDialogOpen: boolean
+    alt: string
+  }>) => void;
 
   altTextDialogOpen: boolean;
   altText: string = ""
   imgSrc: string = ""
+  altTextMaxLength: number
+  altTextMinLength: number
 
   constructor() {
     super();
     this.loadingState = "not-started";
     this.fileUploadErrorMessage = fileUploadErrorMessage;
 
+    this.altTextMaxLength = 2000
+    this.altTextMinLength = 1
     this.removeFigure = () => {};
-    this.updateAltText = (_str: string) => {}
-    this.updateDialogState = (_bool: boolean) => {}
+    this.setNodeAttributes = (_attrs) => {}
     this.altTextDialogOpen = false
   }
 
   static baseName = "rhino-attachment-editor";
 
-  closeIcon() {
-    return html`${toSvg(closeSvgPath, 16, [])}`;
+  closeIcon(parts = ["icon", "close-icon"]) {
+    return html`${toSvg(closeSvgPath, 16, parts)}`;
   }
 
   warningIcon () {
-    return html`${toSvg(warningSvgPath, 16, [])}`
+    return html`${toSvg(warningSvgPath, 16, ["icon", "warning-icon"])}`
   }
 
   static get properties() {
@@ -66,6 +71,7 @@ export class AttachmentEditor extends BaseElement {
       fileUploadErrorMessage: { state: true },
       // This cannot reflect or ProseMirror overwrites it.
       altTextDialogOpen: { attribute: "show-alt-text-dialog", type: Boolean },
+      altTextMaxLength: { type: Number },
       imgSrc: { attribute: "img-src" },
       showMetadata: {
         attribute: "show-metadata",
@@ -88,7 +94,7 @@ export class AttachmentEditor extends BaseElement {
     const altTextButton = this.shadowRoot?.querySelector("[part~='alt-text-button']")
     if (altTextButton && composedPath.includes(altTextButton)) {
       this.altTextDialogOpen = true
-      this.updateDialogState(this.altTextDialogOpen)
+      this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen })
       e.preventDefault()
       return
     }
@@ -104,7 +110,7 @@ export class AttachmentEditor extends BaseElement {
 
     if (dialog && !composedPath.includes(dialog)) {
       this.altTextDialogOpen = false
-      this.updateDialogState(this.altTextDialogOpen)
+      this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen })
     }
   }
 
@@ -114,7 +120,7 @@ export class AttachmentEditor extends BaseElement {
 
     if (e.key === "Escape") {
       this.altTextDialogOpen = false
-      this.updateDialogState(this.altTextDialogOpen)
+      this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen })
     }
   }
 
@@ -164,7 +170,7 @@ export class AttachmentEditor extends BaseElement {
         padding: 0.4em 0.6em;
       }
 
-      button[part~="save-button"] {
+      button[part~="alt-text-save-button"] {
         display: block;
         margin: 0 auto;
         margin-top: 1rem;
@@ -386,6 +392,15 @@ export class AttachmentEditor extends BaseElement {
       }
     }
 
+    if (changedProperties.has("altText")) {
+      if (this.altText.length >= this.altTextMinLength && this.altText.length <= this.altTextMaxLength) {
+        this.deleteCustomState("invalid-alt-text")
+      } else {
+        // rhino-attachment-editor:state(invalid-alt-text) {}
+        this.addCustomState("invalid-alt-text")
+      }
+    }
+
     return super.updated(changedProperties)
   }
 
@@ -403,41 +418,8 @@ export class AttachmentEditor extends BaseElement {
         ${this.closeIcon()}
       </button>
 
-      <button
-        part="alt-text-button"
-        type="button"
-        @pointerdown=${(_e: Event) => {
-          this.altTextDialogOpen = true
-          this.updateDialogState(true)
-        }}
-      >
-        ${this.altText ? html`` : this.warningIcon()}
-        <span style="flex: 1 1 auto;">Alt</span>
-      </button>
-
-      <dialog @close=${(e: Event) => {
-        // in case of bubbling.
-        if (e.target !== e.currentTarget) {
-          return
-        }
-      }}>
-        <img src="${this.imgSrc}">
-
-        <label for="alt-text-editor">Descriptive alt text</label>
-        <textarea id="alt-text-editor" .value=${live(this.altText)}></textarea>
-
-        <button
-          part="save-button"
-          type="button"
-          @click=${() => {
-            this.updateAltText(this.shadowRoot?.querySelector("textarea")?.value || "")
-            this.altTextDialogOpen = false
-            this.updateDialogState(this.altTextDialogOpen)
-          }}
-        >
-          Save
-        </button>
-      </dialog>
+      ${this.renderAltTextButton()}
+      ${this.renderAltTextDialog()}
 
       <span
         part="file-metadata"
@@ -465,5 +447,79 @@ export class AttachmentEditor extends BaseElement {
         </label>
       </div>
     `;
+  }
+
+  renderAltTextButton () {
+    return html`
+      <button
+        part="alt-text-button"
+        type="button"
+        @pointerdown=${(_e: Event) => {
+          // this needs to be done on pointerdown, "click" is too late because ProseMirror replaces the element.
+          this.altTextDialogOpen = true
+          this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen })
+        }}
+      >
+        ${this.altText ? html`` : this.warningIcon()}
+        <span part="alt-text-button-label">Alt</span>
+      </button>
+    `
+  }
+
+  renderAltTextDialog () {
+    return html`
+      <dialog
+        @close=${(e: Event) => {
+          // in case of bubbling.
+          if (e.target !== e.currentTarget) {
+            return
+          }
+        }}
+      >
+        <div style="display: flex; justify-content: space-between;">
+          <span></span>
+          <button
+            part="dialog-close-button"
+            @mousedown=${(e: Event) => e.preventDefault()}
+            @click=${(e: Event) => {
+              e.preventDefault()
+              this.altTextDialogOpen = false
+              this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen })
+            }}
+          >
+            ${this.closeIcon()}
+          </button>
+        </div>
+        <img part="alt-text-image" src="${this.imgSrc}">
+
+        <label part="alt-text-editor-label" for="alt-text-editor">Descriptive alt text</label>
+        <textarea
+          part="alt-text-editor"
+          id="alt-text-editor"
+          .value=${live(this.altText)}
+          maxlength="${this.altTextMaxLength}"
+          minlength="${this.altTextMinLength}"
+        ></textarea>
+
+        <button
+          part="alt-text-save-button"
+          type="button"
+          @pointerdown=${(e: Event) => e.preventDefault()}
+          @click=${(e: Event) => {
+            e.preventDefault()
+            const altText = this.shadowRoot?.querySelector("textarea")?.value || ""
+            this.altText = altText
+            this.altTextDialogOpen = false
+
+            this.setNodeAttributes({
+              alt: this.altText,
+              altTextDialogOpen: this.altTextDialogOpen
+            })
+          }}
+        >
+          Save
+        </button>
+      </dialog>
+    `
   }
 }
