@@ -162,12 +162,20 @@ export class AttachmentEditor extends BaseElement {
       }
 
       button {
-        background-color: var(--rhino-button-background-color);
-        border: 1px solid var(--rhino-button-active-border-color);
+        background: Canvas;
+        border: 2px solid var(--rhino-button-border-color);
         display: flex;
         align-items: center;
         pointer-events: all;
         padding: 0.4em 0.6em;
+      }
+
+      button:is(
+        :hover,
+        :focus-within
+      ) {
+        background: var(--rhino-button-active-background-color);
+        border-color: var(--rhino-button-active-border-color);
       }
 
       button[part~="alt-text-save-button"] {
@@ -207,14 +215,9 @@ export class AttachmentEditor extends BaseElement {
         gap: 4px;
       }
 
-      button[part~="alt-text-button"]:hover:not([aria-disabled="true"], :disabled) {
+      button[part~="alt-text-button"]:is(:focus-within, :focus, :hover):not([aria-disabled="true"], :disabled) {
         border-color: var(--rhino-button-active-border-color);
         background-color: rgba(0, 0, 0, 0.74);
-      }
-
-      button[part~="alt-text-button"]:focus:not([aria-disabled="true"], :disabled) {
-        background-color: rgba(0, 0, 0, 0.74);
-        outline: 2px dashed var(--rhino-button-active-border-color);
       }
 
       button svg {
@@ -228,8 +231,13 @@ export class AttachmentEditor extends BaseElement {
         width: 1.5rem;
       }
 
-      button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
-        outline: transparent;
+      button:is(:focus, :focus-within):not([aria-disabled="true"], :disabled) {
+        outline: 2px solid var(--rhino-button-active-border-color);
+        outline-offset: 3px;
+        background-color: rgb(240, 240, 240);
+      }
+
+      button:is(:focus-within, :focus, :hover):not([aria-disabled="true"], :disabled) {
         background-color: rgb(240, 240, 240);
       }
 
@@ -413,7 +421,7 @@ export class AttachmentEditor extends BaseElement {
     return html`
       <button
         class="delete-button"
-        part="delete-button"
+        part="button delete-button"
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
           this.removeFigure();
@@ -457,7 +465,7 @@ export class AttachmentEditor extends BaseElement {
   renderAltTextButton () {
     return html`
       <button
-        part="alt-text-button"
+        part="button alt-text-button"
         type="button"
         @pointerdown=${(_e: Event) => {
           // this needs to be done on pointerdown, "click" is too late because ProseMirror replaces the element.
@@ -484,7 +492,7 @@ export class AttachmentEditor extends BaseElement {
         <div style="display: flex; justify-content: space-between;">
           <span></span>
           <button
-            part="dialog-close-button"
+            part="button dialog-close-button"
             @mousedown=${(e: Event) => e.preventDefault()}
             @click=${(e: Event) => {
               e.preventDefault()
@@ -507,7 +515,7 @@ export class AttachmentEditor extends BaseElement {
         ></textarea>
 
         <button
-          part="alt-text-save-button"
+          part="button alt-text-save-button"
           type="button"
           @pointerdown=${(e: Event) => e.preventDefault()}
           @click=${(e: Event) => {
