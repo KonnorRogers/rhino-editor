@@ -6,6 +6,7 @@ import { toMemorySize } from "../../internal/to-memory-size.js";
 import { normalize } from "../styles/normalize.js";
 import { BaseElement } from "../../internal/elements/base-element.js";
 import { fileUploadErrorMessage } from "../translations.js";
+import { when } from "lit/directives/when.js";
 
 export const LOADING_STATES = Object.freeze({
   notStarted: "not-started",
@@ -33,9 +34,14 @@ export class AttachmentEditor extends BaseElement {
     alt: string
   }>) => void;
 
-  altTextDialogOpen: boolean;
+  /**
+   * Whether or not to enable the alt text editor for images on attachments.
+   */
+  editableAltText: boolean = true
+  altTextDialogOpen: boolean = false;
   altText: string = ""
   imgSrc: string = ""
+  editorValue: string | null = null
   altTextMaxLength: number
   altTextMinLength: number
 
@@ -48,7 +54,6 @@ export class AttachmentEditor extends BaseElement {
     this.altTextMinLength = 1
     this.removeFigure = () => {};
     this.setNodeAttributes = (_attrs) => {}
-    this.altTextDialogOpen = false
   }
 
   static baseName = "rhino-attachment-editor";
@@ -78,6 +83,7 @@ export class AttachmentEditor extends BaseElement {
         reflect: true,
         type: Boolean,
       },
+      editorValue: {},
       altText: { attribute: "alt-text" },
       previewable: {
         reflect: true,
@@ -132,6 +138,10 @@ export class AttachmentEditor extends BaseElement {
     document.addEventListener("keydown", this.handleKeydown)
   }
 
+  protected firstUpdated(_changedProperties: PropertyValues): void {
+      this.editorValue = this.altText
+  }
+
   disconnectedCallback(): void {
     super.disconnectedCallback()
 
@@ -173,7 +183,6 @@ export class AttachmentEditor extends BaseElement {
       button:is(
         :focus-within
       ) {
-        background: var(--rhino-button-active-background-color);
         border-color: var(--rhino-button-active-border-color);
       }
 
@@ -198,6 +207,10 @@ export class AttachmentEditor extends BaseElement {
       }
 
       :host(:not([previewable])) button[part~="alt-text-button"] {
+        display: none;
+      }
+
+      :host(:state(image-error)) button[part~="alt-text-button"] {
         display: none;
       }
 
@@ -250,7 +263,7 @@ export class AttachmentEditor extends BaseElement {
       }
 
       button:is(:hover):not([aria-disabled="true"], :disabled) {
-        background-color: rgb(240, 240, 240);
+        background-color: var(--rhino-button-active-background-color);
       }
 
       .file-metadata {
@@ -442,8 +455,13 @@ export class AttachmentEditor extends BaseElement {
         ${this.closeIcon()}
       </button>
 
-      ${this.renderAltTextButton()}
-      ${this.renderAltTextDialog()}
+      ${when(this.editableAltText,
+          () => html`
+            ${this.renderAltTextButton()}
+            ${this.renderAltTextDialog()}
+          `,
+          () => html``
+        )}
 
       <span
         part="file-metadata"
@@ -451,6 +469,7 @@ export class AttachmentEditor extends BaseElement {
         ?hidden=${!this.showMetadata || !(this.fileName || this.toFileSize())}
       >
         <span class="file-name" part="file-name">${this.fileName}</span>
+        <br>
         <span class="file-size" part="file-size">${this.toFileSize()}</span>
       </span>
       <div class="file-progress-container" part="file-progress-container">
@@ -490,6 +509,8 @@ export class AttachmentEditor extends BaseElement {
     `
   }
 
+
+
   renderAltTextDialog () {
     return html`
       <dialog
@@ -514,13 +535,28 @@ export class AttachmentEditor extends BaseElement {
             ${this.closeIcon()}
           </button>
         </div>
-        <img part="alt-text-image" src="${this.imgSrc}">
+        <img
+          part="alt-text-image"
+          src="${this.imgSrc}"
+          @load=${() => {
+            this.deleteCustomState("image-error")
+          }}
+          @error=${() => {
+            this.addCustomState("image-error")
+          }}
+        >
 
-        <label part="alt-text-editor-label" for="alt-text-editor">Descriptive alt text</label>
+        <label part="alt-text-editor-label" for="alt-text-editor" style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span>
+            Descriptive alt text
+          </span>
+          <span>${this.editorValue?.length || 0} / ${this.altTextMaxLength}</span>
+        </label>
         <textarea
           part="alt-text-editor"
           id="alt-text-editor"
-          .value=${live(this.altText)}
+          .value=${this.altText}
+          @input=${(e: Event) => this.editorValue = (e.currentTarget as HTMLTextAreaElement).value}
           maxlength="${this.altTextMaxLength}"
           minlength="${this.altTextMinLength}"
         ></textarea>
@@ -528,8 +564,12 @@ export class AttachmentEditor extends BaseElement {
         <button
           part="button alt-text-save-button"
           type="button"
-          @pointerdown=${(e: Event) => e.preventDefault()}
+          @pointerdown=${(e: Event) => {
+            if ((e.currentTarget as HTMLButtonElement).ariaDisabled === "true") { return }
+            e.preventDefault()
+          }}
           @click=${(e: Event) => {
+            if ((e.currentTarget as HTMLButtonElement).ariaDisabled === "true") { return }
             e.preventDefault()
             const altText = this.shadowRoot?.querySelector("textarea")?.value || ""
             this.altText = altText
@@ -540,6 +580,11 @@ export class AttachmentEditor extends BaseElement {
               altTextDialogOpen: this.altTextDialogOpen
             })
           }}
+          ?aria-disabled=${
+            this.altText === this.shadowRoot?.querySelector("textarea")?.value
+            || (this.editorValue?.length || 0) > this.altTextMaxLength
+            || (this.editorValue?.length || 0) < this.altTextMinLength
+          }
         >
           Save
         </button>

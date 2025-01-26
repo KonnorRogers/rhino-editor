@@ -721,7 +721,7 @@ export const Attachment = Node.create<AttachmentOptions>({
 
       // This is a very simple drag handler. This allows us to drag non-previewable nodes.
       // https://discuss.prosemirror.net/t/dragndrop-a-drag-handle-element/4563
-      const handleMouseDown = (_e: MouseEvent) => {
+      const handleMouseDown = (e: MouseEvent) => {
         // We need to give this a second just so we dont mess with "click" behavior.
         mouseTimeout = setTimeout(() => {
           mouseIsDown = true;
