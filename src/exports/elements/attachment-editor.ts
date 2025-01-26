@@ -171,7 +171,6 @@ export class AttachmentEditor extends BaseElement {
       }
 
       button:is(
-        :hover,
         :focus-within
       ) {
         background: var(--rhino-button-active-background-color);
@@ -195,6 +194,7 @@ export class AttachmentEditor extends BaseElement {
         transform: translate(50%, -20px);
         border-radius: 9999px;
         padding: 0.15rem;
+        border-color: Highlight;
       }
 
       :host(:not([previewable])) button[part~="alt-text-button"] {
@@ -220,24 +220,36 @@ export class AttachmentEditor extends BaseElement {
         background-color: rgba(0, 0, 0, 0.74);
       }
 
+      :host(:state(invalid-alt-text)) [part~="alt-text-button"] {
+        color: orange;
+        border-color: orange;
+      }
+
       button svg {
         flex: 1 1 auto;
         height: 1em;
         width: 1em;
       }
 
-      button[part~="delete-button"] svg {
+      button:is([part~="delete-button"], [part~="dialog-close-button"]) svg {
         height: 1.5rem;
         width: 1.5rem;
+      }
+
+
+      button[part~="dialog-close-button"] {
+        border-color: transparent;
+        border-radius: 50%;
+        outline-offset: 0 !important;
+        padding: 0.1em;
       }
 
       button:is(:focus, :focus-within):not([aria-disabled="true"], :disabled) {
         outline: 2px solid var(--rhino-button-active-border-color);
         outline-offset: 3px;
-        background-color: rgb(240, 240, 240);
       }
 
-      button:is(:focus-within, :focus, :hover):not([aria-disabled="true"], :disabled) {
+      button:is(:hover):not([aria-disabled="true"], :disabled) {
         background-color: rgb(240, 240, 240);
       }
 
@@ -335,7 +347,6 @@ export class AttachmentEditor extends BaseElement {
 
       dialog::backdrop {
         background: rgba(0,0,0,0.8);
-        filter: blur(20px);
       }
 
       dialog[open]::backdrop {
@@ -489,8 +500,8 @@ export class AttachmentEditor extends BaseElement {
           }
         }}
       >
-        <div style="display: flex; justify-content: space-between;">
-          <span></span>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+          <h2 style="font-size: 1.5rem; margin: 0;">Add alt text</h2>
           <button
             part="button dialog-close-button"
             @mousedown=${(e: Event) => e.preventDefault()}

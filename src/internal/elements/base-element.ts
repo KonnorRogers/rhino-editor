@@ -40,7 +40,7 @@ export class BaseElement extends LitElement {
 
   deleteCustomState (state: string) {
     try {
-      this.internals?.states.add(state)
+      this.internals?.states.delete(state)
     } catch (_e) {
       // probably not supported, not a big deal.
     }
