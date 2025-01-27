@@ -26,6 +26,10 @@ light-code::part(code) {
   border-top: 1px solid var(--divider-color);
 }
 
+light-code::part(gutter-cell-deleted) {
+  background: #fceaed;
+}
+
 light-code:defined > [slot="code"] {
   display: none;
 }
