@@ -59,6 +59,14 @@ export interface AttachmentOptions {
   fileUploadErrorMessage: string;
   captionPlaceholder: string;
   previewable: boolean;
+
+  experimental: {
+    /**
+     * Whether or not to enable to the experimental alt text editor.
+     */
+    altTextEditor: boolean
+  }
+
   /**
    * A function for determining whether or not to have ProseMirror / TipTap handle an event.
    * return `true` to have ProseMirror ignore it, `false` to have ProseMirror handle it.
@@ -365,6 +373,9 @@ export const Attachment = Node.create<AttachmentOptions>({
       fileUploadErrorMessage: fileUploadErrorMessage,
       captionPlaceholder: captionPlaceholder,
       previewable: false,
+      experimental: {
+        altTextEditor: false
+      },
       shouldStopEvent: (event: Event) => {
           const composedPath = event.composedPath()
           const isInAttachmentEditor = composedPath.find((el) => (el as HTMLElement)?.tagName?.toLowerCase() === "rhino-attachment-editor")
@@ -452,7 +463,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       sgid,
       url,
       src,
-      alt ,
+      alt,
     };
 
     const figure = [
@@ -469,7 +480,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         "data-trix-attributes": JSON.stringify({
           caption,
           ...(canPreview(previewable, contentType)
-            ? { alt, presentation: "gallery" }
+            ? { presentation: "gallery" }
             : {}),
         }),
       }),
@@ -634,7 +645,6 @@ export const Attachment = Node.create<AttachmentOptions>({
         fileName,
         progress,
         fileSize,
-        alt,
         url,
         src,
         width,
@@ -642,6 +652,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         caption,
         previewable,
         loadingState,
+        alt,
         altTextDialogOpen,
       } = node.attrs as AttachmentAttrs;
 
@@ -650,6 +661,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         content,
         filename: fileName,
         filesize: fileSize,
+        alt,
         height,
         width,
         sgid,
@@ -660,7 +672,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       const isPreviewable = canPreview(previewable, contentType);
 
       const trixAttributes = JSON.stringify({
-        ...(isPreviewable ? { alt, presentation: "gallery" } : {}),
+        ...(isPreviewable ? { presentation: "gallery" } : {}),
         caption,
       });
 
@@ -721,7 +733,7 @@ export const Attachment = Node.create<AttachmentOptions>({
 
       // This is a very simple drag handler. This allows us to drag non-previewable nodes.
       // https://discuss.prosemirror.net/t/dragndrop-a-drag-handle-element/4563
-      const handleMouseDown = (e: MouseEvent) => {
+      const handleMouseDown = (_e: MouseEvent) => {
         // We need to give this a second just so we dont mess with "click" behavior.
         mouseTimeout = setTimeout(() => {
           mouseIsDown = true;
@@ -814,6 +826,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             .removeFigure=${removeFigure}
             .setNodeAttributes=${setNodeAttributes}
             .altTextDialogOpen=${altTextDialogOpen}
+            .altTextEditor=${Boolean(this.options.experimental.altTextEditor)}
             alt-text=${alt}
           >
           </rhino-attachment-editor>

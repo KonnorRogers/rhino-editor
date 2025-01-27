@@ -1,5 +1,4 @@
 import { css, html, PropertyValues, TemplateResult } from "lit";
-import { live } from "lit/directives/live.js"
 
 import { closeSvgPath, toSvg, warningSvgPath } from "../../internal/icons.js";
 import { toMemorySize } from "../../internal/to-memory-size.js";
@@ -37,7 +36,7 @@ export class AttachmentEditor extends BaseElement {
   /**
    * Whether or not to enable the alt text editor for images on attachments.
    */
-  editableAltText: boolean = true
+  altTextEditor: boolean = false
   altTextDialogOpen: boolean = false;
   altText: string = ""
   imgSrc: string = ""
@@ -455,7 +454,7 @@ export class AttachmentEditor extends BaseElement {
         ${this.closeIcon()}
       </button>
 
-      ${when(this.editableAltText,
+      ${when(this.altTextEditor,
           () => html`
             ${this.renderAltTextButton()}
             ${this.renderAltTextDialog()}

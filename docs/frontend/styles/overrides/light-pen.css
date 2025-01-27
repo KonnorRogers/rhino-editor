@@ -22,6 +22,7 @@ light-preview::part(base) {
 light-code::part(code) {
   font-size: 0.85rem;
   padding-top: 4px;
+  padding-bottom: 4px;
   border-top: 1px solid var(--divider-color);
 }
 
