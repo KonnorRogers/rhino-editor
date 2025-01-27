@@ -18,58 +18,55 @@ export class BaseElement extends LitElement {
     this.customElementRegistry.define(name, toAnonymousClass(ctor), options);
   }
 
-  internals?: ElementInternals
+  internals?: ElementInternals;
 
-  constructor () {
-    super()
+  constructor() {
+    super();
 
     try {
-      this.internals = this.attachInternals()
+      this.internals = this.attachInternals();
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   }
 
-  addCustomState (state: string) {
+  addCustomState(state: string) {
     try {
-      this.internals?.states.add(state)
+      this.internals?.states.add(state);
     } catch (_e) {
       // probably not supported, not a big deal.
     }
   }
 
-  deleteCustomState (state: string) {
+  deleteCustomState(state: string) {
     try {
-      this.internals?.states.delete(state)
+      this.internals?.states.delete(state);
     } catch (_e) {
       // probably not supported, not a big deal.
     }
   }
 
-  hasCustomState (state: string) {
+  hasCustomState(state: string) {
     try {
-      return this.internals?.states.has(state)
+      return this.internals?.states.has(state);
     } catch (_e) {
       // Probably not supported. Just return false.
-      return false
+      return false;
     }
   }
 
-  toggleCustomState (state: string, force?: boolean) {
+  toggleCustomState(state: string, force?: boolean) {
     if (force == null) {
       if (this.hasCustomState(state)) {
-        this.deleteCustomState(state)
+        this.deleteCustomState(state);
       } else {
-        this.addCustomState(state)
+        this.addCustomState(state);
       }
-      return
+      return;
     }
 
-    force === true ? this.addCustomState(state) : this.deleteCustomState(state)
+    force === true ? this.addCustomState(state) : this.deleteCustomState(state);
   }
-
-
-
 }
 
 export type Constructor = new (...args: any[]) => {};

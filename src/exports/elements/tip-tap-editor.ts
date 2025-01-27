@@ -230,10 +230,10 @@ export class TipTapEditor extends TipTapEditorBase {
             ...this.starterKitOptions.rhinoAttachment,
             experimental: {
               ...(this.starterKitOptions?.rhinoAttachment?.experimental || {}),
-              altTextEditor: this.experimentalAltTextEditor
-            }
-          }
-        }
+              altTextEditor: this.experimentalAltTextEditor,
+            },
+          },
+        };
       }
     }
 

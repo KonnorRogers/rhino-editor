@@ -64,15 +64,15 @@ export interface AttachmentOptions {
     /**
      * Whether or not to enable to the experimental alt text editor.
      */
-    altTextEditor: boolean
-  }
+    altTextEditor: boolean;
+  };
 
   /**
    * A function for determining whether or not to have ProseMirror / TipTap handle an event.
    * return `true` to have ProseMirror ignore it, `false` to have ProseMirror handle it.
    * <https://prosemirror.net/docs/ref/#view.NodeView.stopEvent>
    */
-  shouldStopEvent: (e: Event) => boolean
+  shouldStopEvent: (e: Event) => boolean;
 }
 
 declare module "@tiptap/core" {
@@ -374,18 +374,22 @@ export const Attachment = Node.create<AttachmentOptions>({
       captionPlaceholder: captionPlaceholder,
       previewable: false,
       experimental: {
-        altTextEditor: false
+        altTextEditor: false,
       },
       shouldStopEvent: (event: Event) => {
-          const composedPath = event.composedPath()
-          const isInAttachmentEditor = composedPath.find((el) => (el as HTMLElement)?.tagName?.toLowerCase() === "rhino-attachment-editor")
-          // This is hacky and inconvenient, but required for the `<textarea>` to function properly.
-          if (isInAttachmentEditor) {
-            return true
-          }
+        const composedPath = event.composedPath();
+        const isInAttachmentEditor = composedPath.find(
+          (el) =>
+            (el as HTMLElement)?.tagName?.toLowerCase() ===
+            "rhino-attachment-editor",
+        );
+        // This is hacky and inconvenient, but required for the `<textarea>` to function properly.
+        if (isInAttachmentEditor) {
+          return true;
+        }
 
-          return false
-      }
+        return false;
+      },
     };
   },
 
@@ -549,8 +553,12 @@ export const Attachment = Node.create<AttachmentOptions>({
       alt: {
         default: "",
         parseHTML: (element) => {
-          return findAttribute(element, "alt") || element.querySelector("img")?.getAttribute("alt") || ""
-        }
+          return (
+            findAttribute(element, "alt") ||
+            element.querySelector("img")?.getAttribute("alt") ||
+            ""
+          );
+        },
       },
       sgid: {
         default: "",
@@ -685,15 +693,17 @@ export const Attachment = Node.create<AttachmentOptions>({
       function handleFigureClick(e: Event) {
         const target = e.currentTarget as HTMLElement;
         const figcaption = target.querySelector("figcaption");
-        const attachmentEditor = target.querySelector("rhino-attachment-editor");
+        const attachmentEditor = target.querySelector(
+          "rhino-attachment-editor",
+        );
 
-        const composedPath = e.composedPath()
+        const composedPath = e.composedPath();
         if (figcaption && composedPath.includes(figcaption)) {
           return;
         }
 
         if (attachmentEditor && composedPath.includes(attachmentEditor)) {
-          return
+          return;
         }
 
         if (typeof getPos === "function") {
@@ -758,10 +768,12 @@ export const Attachment = Node.create<AttachmentOptions>({
         }
       };
 
-      function setNodeAttributes (attrs: Partial<{
-        alt: string;
-        altTextDialogOpen: boolean;
-      }>) {
+      function setNodeAttributes(
+        attrs: Partial<{
+          alt: string;
+          altTextDialogOpen: boolean;
+        }>,
+      ) {
         if (typeof getPos === "function") {
           const { view } = editor;
 
@@ -771,7 +783,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           tr.setNodeMarkup(pos, null, {
             ...node.attrs,
             ...attrs,
-          })
+          });
           view.dispatch(tr);
         }
       }
@@ -874,13 +886,13 @@ export const Attachment = Node.create<AttachmentOptions>({
       const contentDOM = dom?.querySelector("figcaption");
 
       let srcRevoked = false;
-      const shouldStopEvent = this.options.shouldStopEvent
+      const shouldStopEvent = this.options.shouldStopEvent;
 
       return {
         dom,
         contentDOM,
         stopEvent(event) {
-          return shouldStopEvent(event)
+          return shouldStopEvent(event);
         },
         update(node) {
           if (node.type.name !== "attachment") return false;
