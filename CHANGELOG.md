@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.16.0
+
+### Minor Changes
+
+- [`d0edd19`](https://github.com/KonnorRogers/rhino-editor/commit/d0edd19c6d9480c6b727edb9202018955f1c42c6) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add an optional alt text editor
+
+### Patch Changes
+
+- [`d0edd19`](https://github.com/KonnorRogers/rhino-editor/commit/d0edd19c6d9480c6b727edb9202018955f1c42c6) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Remove unnecessary placeholder styles
+
 ## 0.15.0
 
 ### Minor Changes
