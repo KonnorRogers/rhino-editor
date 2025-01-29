@@ -3,15 +3,17 @@ title: Adding alt text to images
 permalink: /how-tos/adding-alt-text-to-images/
 ---
 
-Adding alt text to "previewable attachments" is quite a challenge. Rhino Editor comes with support built in. It requires patching ActionText, so it is not part of the default experience.
+Adding alt text to "previewable attachments" is quite a challenge. Rhino Editor comes with support built in, but it requires patching ActionText, so it is not part of the default experience.
 
 To start, lets configure ActionText to allow us to add the `"alt"` attribute to attachments.
 
 <%= render Alert.new(type: :warning) do %>
- I have tried using attributes names such as "alt-text", "altText", and "alt_text" but ActionText / ActiveStorage seems to sanitize it away.
+ I have tried using other attribute names such as "alt-text", "altText", and "alt_text" but ActionText / ActiveStorage seem to sanitize it away.
+
+ <https://github.com/rails/rails/discussions/54179>
 <% end %>
 
-To do configure we can create a file at `config/initializers/actiontext_patch.rb` and add the following contents:
+To configure ActionText, we can create a file at `config/initializers/actiontext_patch.rb` and add the following content:
 
 ```rb
 # config/initializers/actiontext_patch.rb
@@ -23,29 +25,29 @@ attributes = ActionText::Attachment::ATTRIBUTES + ["alt"]
 ActionText::Attachment.const_set("ATTRIBUTES", attributes)
 ```
 
-If this looks funky to you, thats because it is. I filed an issue with Rails about proper `mattr_accessor` support like other Rails modules.
+If this looks funky to you, thats because it is. I filed an issue with Rails about proper `mattr_accessor` support like other Rails modules to make this API nicer to work with.
 
 <https://github.com/rails/rails/discussions/54179>
 
-Moving on. Now that ActionText can accept the "alt" attribute, we have to configure our frontend to enable the experimental alt text editor.
+Moving on, now that ActionText can accept the "alt" attribute, we have to configure Rhino Editor to enable the experimental alt text editor.
 
 ## Enabling alt text editor
 
-To do so we can do the following:
+To enable the alt text editor, we can do the following:
 
 <%- code = capture do -%>
 <rhino-editor experimental-alt-text-editor></rhino-editor>
 <%- end.html_safe -%>
-
-## Alt text editor example
-
-Add an attachment below to test out the attachment editor.
 
 <light-code language="html">
   <script slot="code" type="text/plain">
     <%= code %>
   </script>
 </light-code>
+
+## Alt text editor example
+
+Add an attachment below to test out the attachment editor.
 
 <%= code %>
 
