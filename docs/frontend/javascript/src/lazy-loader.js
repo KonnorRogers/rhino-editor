@@ -100,7 +100,13 @@ export default function lazyLoader() {
         register () {
           import("light-pen/exports/components/light-preview/light-preview-register.js")
         }
+      },
+      "light-code": {
+        register () {
+          import("light-pen/exports/components/light-code/light-code-register.js")
+        }
       }
+
     },
   }).start();
 }

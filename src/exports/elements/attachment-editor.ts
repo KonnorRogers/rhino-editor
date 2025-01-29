@@ -1,10 +1,11 @@
-import { css, html, TemplateResult } from "lit";
+import { css, html, PropertyValues, TemplateResult } from "lit";
 
-import { close } from "../../internal/icons.js";
+import { closeSvgPath, toSvg, warningSvgPath } from "../../internal/icons.js";
 import { toMemorySize } from "../../internal/to-memory-size.js";
 import { normalize } from "../styles/normalize.js";
 import { BaseElement } from "../../internal/elements/base-element.js";
 import { fileUploadErrorMessage } from "../translations.js";
+import { when } from "lit/directives/when.js";
 
 export const LOADING_STATES = Object.freeze({
   notStarted: "not-started",
@@ -23,22 +24,47 @@ export class AttachmentEditor extends BaseElement {
   fileSize?: number;
   progress?: number;
   showMetadata?: boolean;
+  previewable?: boolean;
   loadingState?: LoadingState;
   fileUploadErrorMessage?: TemplateResult | string;
   removeFigure: () => void;
+  setNodeAttributes: (
+    attrs: Partial<{
+      altTextDialogOpen: boolean;
+      alt: string;
+    }>,
+  ) => void;
+
+  /**
+   * Whether or not to enable the alt text editor for images on attachments.
+   */
+  altTextEditor: boolean = false;
+  altTextDialogOpen: boolean = false;
+  altText: string = "";
+  imgSrc: string = "";
+  editorValue: string | null = null;
+  altTextMaxLength: number;
+  altTextMinLength: number;
 
   constructor() {
     super();
     this.loadingState = "not-started";
     this.fileUploadErrorMessage = fileUploadErrorMessage;
 
+    this.altTextMaxLength = 2000;
+    this.altTextMinLength = 1;
     this.removeFigure = () => {};
+    this.setNodeAttributes = (_attrs) => {};
   }
 
   static baseName = "rhino-attachment-editor";
 
-  close() {
-    return html`${close}`;
+  closeIcon(parts = ["icon", "close-icon"]) {
+    return html`${toSvg(closeSvgPath, 16, parts)}`;
+  }
+
+  warningIcon() {
+    return html`${toSvg(warningSvgPath, 16, ["icon", "warning-icon"])}`;
   }
 
   static get properties() {
@@ -49,17 +75,87 @@ export class AttachmentEditor extends BaseElement {
       class: { attribute: "class", type: String },
       loadingState: { attribute: "loading-state" },
       fileUploadErrorMessage: { state: true },
+      // This cannot reflect or ProseMirror overwrites it.
+      altTextDialogOpen: { attribute: "show-alt-text-dialog", type: Boolean },
+      altTextMaxLength: { type: Number },
+      imgSrc: { attribute: "img-src" },
       showMetadata: {
         attribute: "show-metadata",
+        reflect: true,
+        type: Boolean,
+      },
+      editorValue: {},
+      altText: { attribute: "alt-text" },
+      previewable: {
         reflect: true,
         type: Boolean,
       },
     };
   }
 
+  handleClick = (e: Event) => {
+    if (e.defaultPrevented) {
+      return;
+    }
+
+    const composedPath = e.composedPath();
+
+    const altTextButton = this.shadowRoot?.querySelector(
+      "[part~='alt-text-button']",
+    );
+    if (altTextButton && composedPath.includes(altTextButton)) {
+      this.altTextDialogOpen = true;
+      this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen });
+      e.preventDefault();
+      return;
+    }
+
+    // No need to check unless the dialog is open.
+    if (!this.altTextDialogOpen) {
+      return;
+    }
+
+    const dialog = this.shadowRoot?.querySelector("dialog");
+
+    if (!dialog) {
+      return;
+    }
+
+    if (dialog && !composedPath.includes(dialog)) {
+      this.altTextDialogOpen = false;
+      this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen });
+    }
+  };
+
+  handleKeydown = (e: KeyboardEvent) => {
+    // No need to check unless the dialog is open.
+    if (!this.altTextDialogOpen) {
+      return;
+    }
+
+    if (e.key === "Escape") {
+      this.altTextDialogOpen = false;
+      this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen });
+    }
+  };
+
   connectedCallback() {
     super.connectedCallback();
     this.classList.add("rhino-attachment-editor");
+
+    document.addEventListener("click", this.handleClick);
+    document.addEventListener("keydown", this.handleKeydown);
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues): void {
+    this.editorValue = this.altText;
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+
+    document.removeEventListener("click", this.handleClick);
+    document.removeEventListener("keydown", this.handleKeydown);
   }
 
   static get styles() {
@@ -67,9 +163,10 @@ export class AttachmentEditor extends BaseElement {
       ${normalize}
 
       :host {
+        /* Set to none because we need height / width set. */
+        pointer-events: none;
         position: absolute;
         width: 100%;
-        pointer-events: none;
         top: 0;
         left: 0;
         height: 100%;
@@ -79,28 +176,108 @@ export class AttachmentEditor extends BaseElement {
         --rhino-error-border-color: hsl(0 66% 30%);
       }
 
+      * {
+        pointer-events: initial;
+      }
+
       button {
-        background-color: white;
-        border: 1px solid var(--rhino-button-active-border-color);
-        border-radius: 9999px;
+        background: Canvas;
+        border: 2px solid var(--rhino-button-border-color);
         display: flex;
         align-items: center;
-        padding: 0.15rem;
+        pointer-events: all;
+        padding: 0.4em 0.6em;
+      }
+
+      button:is(:focus-within) {
+        border-color: var(--rhino-button-active-border-color);
+      }
+
+      button[part~="alt-text-save-button"] {
+        display: block;
+        margin: 0 auto;
+        margin-top: 1rem;
+        width: 50%;
+        font-size: 1.15rem;
+        text-align: center;
+        border-radius: 8px;
+      }
+
+      button[part~="delete-button"] {
         position: absolute;
         top: 0;
         right: 50%;
         transform: translate(50%, -20px);
-        pointer-events: all;
+        border-radius: 9999px;
+        padding: 0.15rem;
+        border-color: Highlight;
+      }
+
+      :host(:not([previewable])) button[part~="alt-text-button"] {
+        display: none;
+      }
+
+      :host(:state(image-error)) button[part~="alt-text-button"] {
+        display: none;
+      }
+
+      button[part~="alt-text-button"] {
+        position: absolute;
+        top: 4px;
+        left: 14px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: 2px solid white;
+        border-radius: 4px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+      }
+
+      button[part~="alt-text-button"]:is(:focus-within, :focus, :hover):not(
+          [aria-disabled="true"],
+          :disabled
+        ) {
+        border-color: var(--rhino-button-active-border-color);
+        background-color: rgba(0, 0, 0, 0.74);
+      }
+
+      :host(:state(invalid-alt-text)) [part~="alt-text-button"] {
+        color: orange;
+        border-color: orange;
       }
 
       button svg {
+        flex: 1 1 auto;
+        height: 1em;
+        width: 1em;
+      }
+
+      button:is([part~="delete-button"], [part~="dialog-close-button"]) svg {
         height: 1.5rem;
         width: 1.5rem;
       }
 
-      button:is(:focus, :hover):not([aria-disabled="true"], :disabled) {
-        outline: transparent;
-        background-color: rgb(240, 240, 240);
+      button:is(:disabled, [aria-disabled="true"]) {
+        border-color: var(--rhino-button-border-color);
+        color: var(--rhino-button-disabled-text-color);
+      }
+
+      button[part~="dialog-close-button"] {
+        border-color: transparent;
+        border-radius: 50%;
+        outline-offset: 0 !important;
+        padding: 0.1em;
+      }
+
+      button:is(:focus, :focus-within):not([aria-disabled="true"], :disabled) {
+        outline: 2px solid var(--rhino-button-active-border-color);
+        outline-offset: 3px;
+      }
+
+      button:is(:hover):not([aria-disabled="true"], :disabled) {
+        background-color: var(--rhino-button-active-background-color);
       }
 
       .file-metadata {
@@ -143,6 +320,7 @@ export class AttachmentEditor extends BaseElement {
         width: 90%;
         position: absolute;
         z-index: 1;
+        pointer-events: none;
       }
 
       .file-progress {
@@ -193,6 +371,55 @@ export class AttachmentEditor extends BaseElement {
         opacity: 0;
         visibility: hidden;
       }
+
+      dialog::backdrop {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      dialog[open]::backdrop {
+        pointer-events: none;
+      }
+
+      dialog {
+        border: 1px solid gray;
+        border-radius: 4px;
+        width: clamp(200px, 75vw, 800px);
+      }
+
+      img {
+        display: block;
+        height: auto;
+        width: 100%;
+        /* Image is scaled to fit within the container. */
+        /* Aspect ratio IS maintained */
+        object-fit: contain;
+        aspect-ratio: 16 / 9;
+        background: lightgray;
+        border: 2px solid gray;
+        border-radius: 8px;
+      }
+
+      textarea {
+        width: 100%;
+        resize: none;
+        height: 100px;
+        font-size: 1.25em;
+        border: 1px solid var(--rhino-border-color);
+        padding: 8px;
+        border-radius: 8px;
+      }
+
+      label {
+        margin-top: 1rem;
+        display: block;
+        text-align: start;
+      }
+
+      textarea:focus {
+        border-color: dodgerblue;
+        outline: 2px solid var(--rhino-button-active-border-color);
+        outline-offset: 3px;
+      }
     `;
   }
 
@@ -202,18 +429,56 @@ export class AttachmentEditor extends BaseElement {
     return "";
   }
 
+  protected updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has("altTextDialogOpen")) {
+      const dialog = this.shadowRoot?.querySelector("dialog");
+
+      if (dialog) {
+        try {
+          this.altTextDialogOpen ? dialog.showModal() : dialog.close();
+        } catch (_e) {
+          // console.error(_e)
+          // We don't care if the showModal / close fail.
+        }
+      }
+    }
+
+    if (changedProperties.has("altText")) {
+      if (
+        this.altText.length >= this.altTextMinLength &&
+        this.altText.length <= this.altTextMaxLength
+      ) {
+        this.deleteCustomState("invalid-alt-text");
+      } else {
+        // rhino-attachment-editor:state(invalid-alt-text) {}
+        this.addCustomState("invalid-alt-text");
+      }
+    }
+
+    return super.updated(changedProperties);
+  }
+
   render() {
     return html`
       <button
         class="delete-button"
-        part="delete-button"
+        part="button delete-button"
         @pointerdown=${(e: PointerEvent) => {
           e.preventDefault();
           this.removeFigure();
         }}
+        type="button"
       >
-        ${this.close()}
+        ${this.closeIcon()}
       </button>
+
+      ${when(
+        this.altTextEditor,
+        () => html`
+          ${this.renderAltTextButton()} ${this.renderAltTextDialog()}
+        `,
+        () => html``,
+      )}
 
       <span
         part="file-metadata"
@@ -221,6 +486,7 @@ export class AttachmentEditor extends BaseElement {
         ?hidden=${!this.showMetadata || !(this.fileName || this.toFileSize())}
       >
         <span class="file-name" part="file-name">${this.fileName}</span>
+        <br />
         <span class="file-size" part="file-size">${this.toFileSize()}</span>
       </span>
       <div class="file-progress-container" part="file-progress-container">
@@ -240,6 +506,121 @@ export class AttachmentEditor extends BaseElement {
           ${this.loadingState === "error" ? this.fileUploadErrorMessage : null}
         </label>
       </div>
+    `;
+  }
+
+  renderAltTextButton() {
+    return html`
+      <button
+        part="button alt-text-button"
+        type="button"
+        @pointerdown=${(_e: Event) => {
+          // this needs to be done on pointerdown, "click" is too late because ProseMirror replaces the element.
+          this.altTextDialogOpen = true;
+          this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen });
+        }}
+      >
+        ${this.altText ? html`` : this.warningIcon()}
+        <span part="alt-text-button-label">Alt</span>
+      </button>
+    `;
+  }
+
+  renderAltTextDialog() {
+    return html`
+      <dialog
+        @close=${(e: Event) => {
+          // in case of bubbling.
+          if (e.target !== e.currentTarget) {
+            return;
+          }
+        }}
+      >
+        <div
+          style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;"
+        >
+          <h2 style="font-size: 1.5rem; margin: 0;">Add alt text</h2>
+          <button
+            part="button dialog-close-button"
+            @mousedown=${(e: Event) => e.preventDefault()}
+            @click=${(e: Event) => {
+              e.preventDefault();
+              this.altTextDialogOpen = false;
+              this.setNodeAttributes({
+                altTextDialogOpen: this.altTextDialogOpen,
+              });
+            }}
+          >
+            ${this.closeIcon()}
+          </button>
+        </div>
+        <img
+          part="alt-text-image"
+          src="${this.imgSrc}"
+          @load=${() => {
+            this.deleteCustomState("image-error");
+          }}
+          @error=${() => {
+            this.addCustomState("image-error");
+          }}
+        />
+
+        <label
+          part="alt-text-editor-label"
+          for="alt-text-editor"
+          style="display: flex; justify-content: space-between; align-items: baseline;"
+        >
+          <span> Descriptive alt text </span>
+          <span
+            >${this.editorValue?.length || 0} / ${this.altTextMaxLength}</span
+          >
+        </label>
+        <textarea
+          part="alt-text-editor"
+          id="alt-text-editor"
+          .value=${this.altText}
+          @input=${(e: Event) =>
+            (this.editorValue = (e.currentTarget as HTMLTextAreaElement).value)}
+          maxlength="${this.altTextMaxLength}"
+          minlength="${this.altTextMinLength}"
+        ></textarea>
+
+        <button
+          part="button alt-text-save-button"
+          type="button"
+          @pointerdown=${(e: Event) => {
+            if (
+              (e.currentTarget as HTMLButtonElement).ariaDisabled === "true"
+            ) {
+              return;
+            }
+            e.preventDefault();
+          }}
+          @click=${(e: Event) => {
+            if (
+              (e.currentTarget as HTMLButtonElement).ariaDisabled === "true"
+            ) {
+              return;
+            }
+            e.preventDefault();
+            const altText =
+              this.shadowRoot?.querySelector("textarea")?.value || "";
+            this.altText = altText;
+            this.altTextDialogOpen = false;
+
+            this.setNodeAttributes({
+              alt: this.altText,
+              altTextDialogOpen: this.altTextDialogOpen,
+            });
+          }}
+          aria-disabled=${this.altText ===
+            this.shadowRoot?.querySelector("textarea")?.value ||
+          (this.editorValue?.length || 0) > this.altTextMaxLength ||
+          (this.editorValue?.length || 0) < this.altTextMinLength}
+        >
+          Save
+        </button>
+      </dialog>
     `;
   }
 }

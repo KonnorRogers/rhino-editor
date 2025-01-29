@@ -164,11 +164,21 @@ export class TipTapEditor extends TipTapEditorBase {
         reflect: true,
         attribute: "link-dialog-expanded",
       },
+      altTextEditor: {
+        type: Boolean,
+        reflect: true,
+        attribute: "alt-text-editor",
+      },
       linkInputRef: { state: true },
       translations: { state: true },
       __invalidLink__: { state: true, type: Boolean },
     });
   }
+
+  /**
+   * Whether or not to enable the alt text editor.
+   */
+  altTextEditor = false;
 
   /**
    * Translations for various aspects of the editor.
@@ -212,6 +222,18 @@ export class TipTapEditor extends TipTapEditorBase {
   }
 
   protected updated(changedProperties: PropertyValues<this>): void {
+    if (changedProperties.has("altTextEditor")) {
+      if (this.starterKitOptions.rhinoAttachment !== false) {
+        this.starterKitOptions = {
+          ...this.starterKitOptions,
+          rhinoAttachment: {
+            ...this.starterKitOptions.rhinoAttachment,
+            altTextEditor: this.altTextEditor,
+          },
+        };
+      }
+    }
+
     if (!this.hasInitialized) {
       return super.updated(changedProperties);
     }
