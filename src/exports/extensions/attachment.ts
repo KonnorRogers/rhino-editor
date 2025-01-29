@@ -60,12 +60,10 @@ export interface AttachmentOptions {
   captionPlaceholder: string;
   previewable: boolean;
 
-  experimental: {
-    /**
-     * Whether or not to enable to the experimental alt text editor.
-     */
-    altTextEditor: boolean;
-  };
+  /**
+    * Whether or not to enable  the alt text editor.
+    */
+  altTextEditor: boolean;
 
   /**
    * A function for determining whether or not to have ProseMirror / TipTap handle an event.
@@ -373,9 +371,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       fileUploadErrorMessage: fileUploadErrorMessage,
       captionPlaceholder: captionPlaceholder,
       previewable: false,
-      experimental: {
-        altTextEditor: false,
-      },
+      altTextEditor: false,
       shouldStopEvent: (event: Event) => {
         const composedPath = event.composedPath();
         const isInAttachmentEditor = composedPath.find(
@@ -838,7 +834,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             .removeFigure=${removeFigure}
             .setNodeAttributes=${setNodeAttributes}
             .altTextDialogOpen=${altTextDialogOpen}
-            .altTextEditor=${Boolean(this.options.experimental.altTextEditor)}
+            .altTextEditor=${Boolean(this.options.altTextEditor)}
             alt-text=${alt}
           >
           </rhino-attachment-editor>

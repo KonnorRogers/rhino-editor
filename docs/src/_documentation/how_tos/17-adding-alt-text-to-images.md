@@ -29,14 +29,14 @@ If this looks funky to you, thats because it is. I filed an issue with Rails abo
 
 <https://github.com/rails/rails/discussions/54179>
 
-Moving on, now that ActionText can accept the "alt" attribute, we have to configure Rhino Editor to enable the experimental alt text editor.
+Moving on, now that ActionText can accept the "alt" attribute, we have to configure Rhino Editor to enable the alt text editor.
 
 ## Enabling alt text editor
 
 To enable the alt text editor, we can do the following:
 
 <%- code = capture do -%>
-<rhino-editor experimental-alt-text-editor></rhino-editor>
+<rhino-editor alt-text-editor></rhino-editor>
 <%- end.html_safe -%>
 
 <light-code language="html">
