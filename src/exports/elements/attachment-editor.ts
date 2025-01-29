@@ -259,6 +259,11 @@ export class AttachmentEditor extends BaseElement {
         width: 1.5rem;
       }
 
+      button:is(:disabled, [aria-disabled="true"]) {
+        border-color: var(--rhino-button-border-color);
+        color: var(--rhino-button-disabled-text-color);
+      }
+
       button[part~="dialog-close-button"] {
         border-color: transparent;
         border-radius: 50%;
@@ -608,7 +613,7 @@ export class AttachmentEditor extends BaseElement {
               altTextDialogOpen: this.altTextDialogOpen,
             });
           }}
-          ?aria-disabled=${this.altText ===
+          aria-disabled=${this.altText ===
             this.shadowRoot?.querySelector("textarea")?.value ||
           (this.editorValue?.length || 0) > this.altTextMaxLength ||
           (this.editorValue?.length || 0) < this.altTextMinLength}
