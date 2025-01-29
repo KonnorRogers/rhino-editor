@@ -12,7 +12,7 @@ export function Paste() {
         const { clipboardData } = event;
 
         if (event.defaultPrevented) {
-          return true
+          return true;
         }
 
         const rhinoPasteEvent = new RhinoPasteEvent(clipboardData);
