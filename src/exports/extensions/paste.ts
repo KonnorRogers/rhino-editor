@@ -11,12 +11,14 @@ export function Paste() {
       handlePaste(view, event) {
         const { clipboardData } = event;
 
+        if (event.defaultPrevented) {
+          return true;
+        }
+
         const rhinoPasteEvent = new RhinoPasteEvent(clipboardData);
         view.dom.dispatchEvent(rhinoPasteEvent);
 
-        if (rhinoPasteEvent.defaultPrevented) {
-          return;
-        }
+        return true;
 
         // @TODO: Future enhancements for pasting
         // https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/controllers/level_0_input_controller.js#L39

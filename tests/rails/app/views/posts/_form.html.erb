@@ -30,6 +30,7 @@
         id="main-tip-tap-editor"
         data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
         data-direct-upload-url="<%= rails_direct_uploads_url %>"
+        alt-text-editor
       >
         <%# <button type="button" slot="bold-button" data-role="toolbar-item">Bold</button> %>
         <%# <button type="button" slot="italic-button" data-role="toolbar-item">Italics</button> %>
@@ -58,6 +59,7 @@
         <rhino-editor
           style="margin-top: 2rem;"
           input="trix-tip-tap-mirror"
+          alt-text-editor
           data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
           data-direct-upload-url="<%= rails_direct_uploads_url %>"
           data-controller="tip-tap-mirror"

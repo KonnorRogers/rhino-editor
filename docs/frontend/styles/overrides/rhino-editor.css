@@ -14,13 +14,18 @@
   color: white;
 }
 
-
-.sl-theme-dark .rhino-editor::part(toolbar__button):is(:focus, :hover) {
+.sl-theme-light .rhino-editor::part(toolbar__button):is(:focus, :focus-within, :hover) {
   color: black;
 }
 
-.sl-theme-dark .rhino-editor::part(toolbar__button toolbar__button--active):is(:focus, :hover) {
+.sl-theme-dark .rhino-editor::part(toolbar__button toolbar__button--active):is(:focus-within, :focus, :hover) {
   color: white;
+  background: black;
+}
+
+.sl-theme-dark .rhino-editor rhino-attachment-editor::part(button):is(:focus-within, :focus, :hover) {
+  color: white;
+  background: black;
 }
 
 
@@ -28,9 +33,6 @@
   color: var(--sl-color-primary-800);
 }
 
-.sl-theme-dark .rhino-editor::part(toolbar__button toolbar__button--disabled):is(:focus, :hover) {
-  color: var(--sl-color-neutral-300);
-}
 
 .sl-theme-dark .rhino-editor::part(link-dialog__container) {
   background-color: black;
@@ -53,10 +55,6 @@
 
 .sl-theme-dark .trix-content .attachment--preview .attachment__caption {
   color: var(--sl-color-neutral-700);
-}
-
-.sl-theme-dark rhino-attachment-editor::part(delete-button) {
-  color: black;
 }
 
 .sl-theme-dark .trix-content pre {

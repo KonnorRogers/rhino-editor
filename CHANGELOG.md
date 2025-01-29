@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.16.1
+
+### Patch Changes
+
+- [#248](https://github.com/KonnorRogers/rhino-editor/pull/248) [`390af06`](https://github.com/KonnorRogers/rhino-editor/commit/390af067210762d9678dbf3fc79ba558d948ef4a) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix a bug with paste event happening twice
+
+- [#248](https://github.com/KonnorRogers/rhino-editor/pull/248) [`390af06`](https://github.com/KonnorRogers/rhino-editor/commit/390af067210762d9678dbf3fc79ba558d948ef4a) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix attachment and html pasting to behave like it should have all along
+
+## 0.16.0
+
+### Minor Changes
+
+- [`d0edd19`](https://github.com/KonnorRogers/rhino-editor/commit/d0edd19c6d9480c6b727edb9202018955f1c42c6) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add an optional alt text editor
+
+### Patch Changes
+
+- [`d0edd19`](https://github.com/KonnorRogers/rhino-editor/commit/d0edd19c6d9480c6b727edb9202018955f1c42c6) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Remove unnecessary placeholder styles
+
+## 0.15.0
+
+### Minor Changes
+
+- [#243](https://github.com/KonnorRogers/rhino-editor/pull/243) [`d71e2db`](https://github.com/KonnorRogers/rhino-editor/commit/d71e2db5bab0f6abcd54c0e171b207113c19b91c) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add exportmaps to appease JSPM for importmaps
+
 ## 0.14.3
 
 ### Patch Changes

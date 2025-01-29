@@ -48,6 +48,8 @@ interface AttachmentAttrs extends AttachmentManagerAttributes {
   // Image
   width?: Maybe<number>;
   height?: Maybe<number>;
+  alt: string;
+  altTextDialogOpen: boolean;
 
   [key: string]: unknown;
 }
@@ -57,6 +59,18 @@ export interface AttachmentOptions {
   fileUploadErrorMessage: string;
   captionPlaceholder: string;
   previewable: boolean;
+
+  /**
+   * Whether or not to enable  the alt text editor.
+   */
+  altTextEditor: boolean;
+
+  /**
+   * A function for determining whether or not to have ProseMirror / TipTap handle an event.
+   * return `true` to have ProseMirror ignore it, `false` to have ProseMirror handle it.
+   * <https://prosemirror.net/docs/ref/#view.NodeView.stopEvent>
+   */
+  shouldStopEvent: (e: Event) => boolean;
 }
 
 declare module "@tiptap/core" {
@@ -357,6 +371,21 @@ export const Attachment = Node.create<AttachmentOptions>({
       fileUploadErrorMessage: fileUploadErrorMessage,
       captionPlaceholder: captionPlaceholder,
       previewable: false,
+      altTextEditor: false,
+      shouldStopEvent: (event: Event) => {
+        const composedPath = event.composedPath();
+        const isInAttachmentEditor = composedPath.find(
+          (el) =>
+            (el as HTMLElement)?.tagName?.toLowerCase() ===
+            "rhino-attachment-editor",
+        );
+        // This is hacky and inconvenient, but required for the `<textarea>` to function properly.
+        if (isInAttachmentEditor) {
+          return true;
+        }
+
+        return false;
+      },
     };
   },
 
@@ -420,6 +449,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       src,
       width,
       height,
+      alt,
     } = node.attrs as AttachmentAttrs;
 
     const attachmentAttrs = {
@@ -433,6 +463,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       sgid,
       url,
       src,
+      alt,
     };
 
     const figure = [
@@ -473,6 +504,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           contenteditable: false,
           width,
           height,
+          alt,
         },
       ),
     ];
@@ -487,6 +519,7 @@ export const Attachment = Node.create<AttachmentOptions>({
   addAttributes() {
     return {
       attachmentId: { default: null },
+      altTextDialogOpen: { default: false },
       caption: {
         default: "",
         parseHTML: (element) => {
@@ -512,6 +545,16 @@ export const Attachment = Node.create<AttachmentOptions>({
           findAttribute(element, "sgid")
             ? LOADING_STATES.success
             : LOADING_STATES.notStarted,
+      },
+      alt: {
+        default: "",
+        parseHTML: (element) => {
+          return (
+            findAttribute(element, "alt") ||
+            element.querySelector("img")?.getAttribute("alt") ||
+            ""
+          );
+        },
       },
       sgid: {
         default: "",
@@ -613,6 +656,8 @@ export const Attachment = Node.create<AttachmentOptions>({
         caption,
         previewable,
         loadingState,
+        alt,
+        altTextDialogOpen,
       } = node.attrs as AttachmentAttrs;
 
       const trixAttachment = JSON.stringify({
@@ -620,6 +665,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         content,
         filename: fileName,
         filesize: fileSize,
+        alt,
         height,
         width,
         sgid,
@@ -643,10 +689,16 @@ export const Attachment = Node.create<AttachmentOptions>({
       function handleFigureClick(e: Event) {
         const target = e.currentTarget as HTMLElement;
         const figcaption = target.querySelector("figcaption");
+        const attachmentEditor = target.querySelector(
+          "rhino-attachment-editor",
+        );
 
-        if (figcaption == null) return;
+        const composedPath = e.composedPath();
+        if (figcaption && composedPath.includes(figcaption)) {
+          return;
+        }
 
-        if (e.composedPath().includes(figcaption)) {
+        if (attachmentEditor && composedPath.includes(attachmentEditor)) {
           return;
         }
 
@@ -691,7 +743,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         // We need to give this a second just so we dont mess with "click" behavior.
         mouseTimeout = setTimeout(() => {
           mouseIsDown = true;
-        }, 10);
+        }, 20);
       };
 
       const handleMouseUp = (_e: MouseEvent) => {
@@ -711,6 +763,26 @@ export const Attachment = Node.create<AttachmentOptions>({
           );
         }
       };
+
+      function setNodeAttributes(
+        attrs: Partial<{
+          alt: string;
+          altTextDialogOpen: boolean;
+        }>,
+      ) {
+        if (typeof getPos === "function") {
+          const { view } = editor;
+
+          const { tr } = view.state;
+
+          const pos = getPos();
+          tr.setNodeMarkup(pos, null, {
+            ...node.attrs,
+            ...attrs,
+          });
+          view.dispatch(tr);
+        }
+      }
 
       function removeFigure(this: HTMLElement) {
         if (typeof getPos === "function") {
@@ -747,6 +819,7 @@ export const Attachment = Node.create<AttachmentOptions>({
             file-name=${fileName || ""}
             file-size=${String(fileSize || 0)}
             loading-state=${loadingState || LOADING_STATES.notStarted}
+            img-src=${ifDefined(imgSrc)}
             progress=${String(
               progress
                 ? progress
@@ -755,9 +828,14 @@ export const Attachment = Node.create<AttachmentOptions>({
                   : progress,
             )}
             contenteditable="false"
+            ?previewable=${isPreviewable}
             ?show-metadata=${isPreviewable}
             .fileUploadErrorMessage=${this.options.fileUploadErrorMessage}
             .removeFigure=${removeFigure}
+            .setNodeAttributes=${setNodeAttributes}
+            .altTextDialogOpen=${altTextDialogOpen}
+            .altTextEditor=${Boolean(this.options.altTextEditor)}
+            alt-text=${alt}
           >
           </rhino-attachment-editor>
 
@@ -779,6 +857,7 @@ export const Attachment = Node.create<AttachmentOptions>({
                 width=${String(width)}
                 height=${String(height)}
                 src=${ifDefined(imgSrc)}
+                alt=${alt}
                 contenteditable="false"
               />`,
             () => html``,
@@ -803,10 +882,14 @@ export const Attachment = Node.create<AttachmentOptions>({
       const contentDOM = dom?.querySelector("figcaption");
 
       let srcRevoked = false;
+      const shouldStopEvent = this.options.shouldStopEvent;
 
       return {
         dom,
         contentDOM,
+        stopEvent(event) {
+          return shouldStopEvent(event);
+        },
         update(node) {
           if (node.type.name !== "attachment") return false;
 

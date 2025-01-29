@@ -712,21 +712,32 @@ export class TipTapEditorBase extends BaseElement {
   handlePaste = async (event: RhinoPasteEvent) => {
     if (this.editor == null) return;
     if (event == null) return;
-    if (!(event instanceof ClipboardEvent)) return;
 
     const { clipboardData } = event;
+
     if (clipboardData == null) return;
 
     const hasFiles = clipboardData.files?.length > 0;
-    if (!hasFiles) return;
 
-    event.preventDefault();
+    if (!hasFiles && clipboardData.items?.length > 0) {
+      event.preventDefault();
 
-    // This inserts the file name, this is consistent with Trix, but can feel weird.
-    this.editor.commands.insertContent(clipboardData.items);
+      let dataType = "text/plain";
+
+      if (clipboardData.types.includes("text/html")) {
+        dataType = "text/html";
+      }
+
+      const string = clipboardData.getData(dataType);
+
+      this.editor.chain().focus().insertContent(string).run();
+      return;
+    }
+
     const attachments = await this.handleFiles(clipboardData.files);
 
     if (attachments.length > 0) {
+      event.preventDefault();
       this.editor?.chain().focus().setAttachment(attachments).run();
     }
   };
