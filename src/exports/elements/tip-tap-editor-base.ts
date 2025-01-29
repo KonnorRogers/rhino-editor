@@ -714,7 +714,6 @@ export class TipTapEditorBase extends BaseElement {
     if (event == null) return;
 
     const { clipboardData } = event;
-    console.log(event)
 
     if (clipboardData == null) return;
 
@@ -722,28 +721,16 @@ export class TipTapEditorBase extends BaseElement {
 
     if (!hasFiles && clipboardData.items?.length > 0) {
       event.preventDefault();
-      const data = clipboardData.items
-      let promises: Promise<string>[] = []
-      for (let i = 0; i < data.length; i += 1) {
-        promises.push(new Promise<string>((resolve) => {
-          const item = data[i]
-          if (item.kind === "string" && item.type.match("^text")) {
-            item.getAsString((str) => {
-              resolve(str)
-            })
-          }
-        }))
+
+      let dataType = "text/plain"
+
+      if (clipboardData.types.includes("text/html")) {
+        dataType = "text/html"
       }
 
-      const strings: string[] = []
-      const settledPromises = await Promise.allSettled(promises)
-      settledPromises.forEach((promise) => {
-        if (promise.status === "fulfilled") {
-          strings.push(promise.value)
-        }
-      })
+      const string = clipboardData.getData(dataType)
 
-      this.editor.chain().focus().insertContent(strings.join(" ")).run()
+      this.editor.chain().focus().insertContent(string).run()
       return;
     }
 
