@@ -61,8 +61,8 @@ export interface AttachmentOptions {
   previewable: boolean;
 
   /**
-    * Whether or not to enable  the alt text editor.
-    */
+   * Whether or not to enable  the alt text editor.
+   */
   altTextEditor: boolean;
 
   /**

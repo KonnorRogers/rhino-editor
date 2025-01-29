@@ -228,7 +228,7 @@ export class TipTapEditor extends TipTapEditorBase {
           ...this.starterKitOptions,
           rhinoAttachment: {
             ...this.starterKitOptions.rhinoAttachment,
-            altTextEditor: this.altTextEditor
+            altTextEditor: this.altTextEditor,
           },
         };
       }
