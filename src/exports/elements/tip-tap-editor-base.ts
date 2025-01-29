@@ -722,15 +722,15 @@ export class TipTapEditorBase extends BaseElement {
     if (!hasFiles && clipboardData.items?.length > 0) {
       event.preventDefault();
 
-      let dataType = "text/plain"
+      let dataType = "text/plain";
 
       if (clipboardData.types.includes("text/html")) {
-        dataType = "text/html"
+        dataType = "text/html";
       }
 
-      const string = clipboardData.getData(dataType)
+      const string = clipboardData.getData(dataType);
 
-      this.editor.chain().focus().insertContent(string).run()
+      this.editor.chain().focus().insertContent(string).run();
       return;
     }
 
