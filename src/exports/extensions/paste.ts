@@ -11,9 +11,9 @@ export function Paste() {
       handlePaste(view, event) {
         const { clipboardData } = event;
 
-        // if (event.defaultPrevented) {
-        //   return true
-        // }
+        if (event.defaultPrevented) {
+          return true
+        }
 
         const rhinoPasteEvent = new RhinoPasteEvent(clipboardData);
         view.dom.dispatchEvent(rhinoPasteEvent);
