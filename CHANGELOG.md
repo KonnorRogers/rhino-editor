@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.16.1
+
+### Patch Changes
+
+- [#248](https://github.com/KonnorRogers/rhino-editor/pull/248) [`390af06`](https://github.com/KonnorRogers/rhino-editor/commit/390af067210762d9678dbf3fc79ba558d948ef4a) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix a bug with paste event happening twice
+
+- [#248](https://github.com/KonnorRogers/rhino-editor/pull/248) [`390af06`](https://github.com/KonnorRogers/rhino-editor/commit/390af067210762d9678dbf3fc79ba558d948ef4a) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix attachment and html pasting to behave like it should have all along
+
 ## 0.16.0
 
 ### Minor Changes
