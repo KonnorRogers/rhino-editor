@@ -712,21 +712,45 @@ export class TipTapEditorBase extends BaseElement {
   handlePaste = async (event: RhinoPasteEvent) => {
     if (this.editor == null) return;
     if (event == null) return;
-    if (!(event instanceof ClipboardEvent)) return;
 
     const { clipboardData } = event;
+    console.log(event)
+
     if (clipboardData == null) return;
 
     const hasFiles = clipboardData.files?.length > 0;
-    if (!hasFiles) return;
 
-    event.preventDefault();
+    if (!hasFiles && clipboardData.items?.length > 0) {
+      event.preventDefault();
+      const data = clipboardData.items
+      let promises: Promise<string>[] = []
+      for (let i = 0; i < data.length; i += 1) {
+        promises.push(new Promise<string>((resolve) => {
+          const item = data[i]
+          if (item.kind === "string" && item.type.match("^text")) {
+            item.getAsString((str) => {
+              resolve(str)
+            })
+          }
+        }))
+      }
 
-    // This inserts the file name, this is consistent with Trix, but can feel weird.
-    this.editor.commands.insertContent(clipboardData.items);
+      const strings: string[] = []
+      const settledPromises = await Promise.allSettled(promises)
+      settledPromises.forEach((promise) => {
+        if (promise.status === "fulfilled") {
+          strings.push(promise.value)
+        }
+      })
+
+      this.editor.chain().focus().insertContent(strings.join(" ")).run()
+      return;
+    }
+
     const attachments = await this.handleFiles(clipboardData.files);
 
     if (attachments.length > 0) {
+      event.preventDefault();
       this.editor?.chain().focus().setAttachment(attachments).run();
     }
   };
