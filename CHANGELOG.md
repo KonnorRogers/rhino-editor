@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.16.2
+
+### Patch Changes
+
+- [#251](https://github.com/KonnorRogers/rhino-editor/pull/251) [`4c19e0f`](https://github.com/KonnorRogers/rhino-editor/commit/4c19e0ff1d4fb990fc685ab1623ed05e34310c5e) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix a bug with alt text editor where you could not change it to empty.
+
+- [#251](https://github.com/KonnorRogers/rhino-editor/pull/251) [`4c19e0f`](https://github.com/KonnorRogers/rhino-editor/commit/4c19e0ff1d4fb990fc685ab1623ed05e34310c5e) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add additional parts onto alt text editor elements
+
 ## 0.16.1
 
 ### Patch Changes
