@@ -629,10 +629,10 @@ export class AttachmentEditor extends BaseElement {
               altTextDialogOpen: this.altTextDialogOpen,
             });
           }}
-          aria-disabled=${this.altText ===
-            this.shadowRoot?.querySelector("textarea")?.value ||
-          (this.editorValue?.length || 0) > this.altTextMaxLength ||
-          (this.editorValue?.length || 0) < this.altTextMinLength}
+          aria-disabled=${
+            (this.editorValue?.length || 0) > this.altTextMaxLength ||
+            (this.editorValue?.length || 0) < this.altTextMinLength
+          }}
         >
           Save
         </button>
