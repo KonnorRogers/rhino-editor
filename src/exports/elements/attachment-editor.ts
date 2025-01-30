@@ -427,10 +427,10 @@ export class AttachmentEditor extends BaseElement {
       }
 
       [part~="dialog-heading-wrapper"] {
-          display: flex;
-          justify-content: space-between;
-          align-items: baseline;
-          margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 8px;
       }
 
       [part~="alt-text-editor-label"] {
@@ -581,14 +581,10 @@ export class AttachmentEditor extends BaseElement {
           }}
         />
 
-        <label
-          part="alt-text-editor-label"
-          for="alt-text-editor"
-        >
+        <label part="alt-text-editor-label" for="alt-text-editor">
           <span part="alt-text-editor-label-text"> Descriptive alt text </span>
-          <span
-            part="alt-text-editor-label-counter"
-          >${this.editorValue?.length || 0} / ${this.altTextMaxLength}</span
+          <span part="alt-text-editor-label-counter"
+            >${this.editorValue?.length || 0} / ${this.altTextMaxLength}</span
           >
         </label>
         <textarea
@@ -629,10 +625,9 @@ export class AttachmentEditor extends BaseElement {
               altTextDialogOpen: this.altTextDialogOpen,
             });
           }}
-          aria-disabled=${
-            (this.editorValue?.length || 0) > this.altTextMaxLength ||
-            (this.editorValue?.length || 0) < this.altTextMinLength
-          }}
+          aria-disabled="${(this.editorValue?.length || 0) >
+            this.altTextMaxLength ||
+          (this.editorValue?.length || 0) < this.altTextMinLength}}"
         >
           Save
         </button>
