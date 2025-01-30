@@ -420,6 +420,24 @@ export class AttachmentEditor extends BaseElement {
         outline: 2px solid var(--rhino-button-active-border-color);
         outline-offset: 3px;
       }
+
+      [part~="dialog-heading"] {
+        font-size: 1.5rem;
+        margin: 0;
+      }
+
+      [part~="dialog-heading-wrapper"] {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 8px;
+      }
+
+      [part~="alt-text-editor-label"] {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
     `;
   }
 
@@ -536,10 +554,8 @@ export class AttachmentEditor extends BaseElement {
           }
         }}
       >
-        <div
-          style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;"
-        >
-          <h2 style="font-size: 1.5rem; margin: 0;">Add alt text</h2>
+        <div part="dialog-heading-wrapper">
+          <h2 part="dialog-heading">Add alt text</h2>
           <button
             part="button dialog-close-button"
             @mousedown=${(e: Event) => e.preventDefault()}
@@ -565,13 +581,9 @@ export class AttachmentEditor extends BaseElement {
           }}
         />
 
-        <label
-          part="alt-text-editor-label"
-          for="alt-text-editor"
-          style="display: flex; justify-content: space-between; align-items: baseline;"
-        >
-          <span> Descriptive alt text </span>
-          <span
+        <label part="alt-text-editor-label" for="alt-text-editor">
+          <span part="alt-text-editor-label-text"> Descriptive alt text </span>
+          <span part="alt-text-editor-label-counter"
             >${this.editorValue?.length || 0} / ${this.altTextMaxLength}</span
           >
         </label>
@@ -613,10 +625,9 @@ export class AttachmentEditor extends BaseElement {
               altTextDialogOpen: this.altTextDialogOpen,
             });
           }}
-          aria-disabled=${this.altText ===
-            this.shadowRoot?.querySelector("textarea")?.value ||
-          (this.editorValue?.length || 0) > this.altTextMaxLength ||
-          (this.editorValue?.length || 0) < this.altTextMinLength}
+          aria-disabled="${(this.editorValue?.length || 0) >
+            this.altTextMaxLength ||
+          (this.editorValue?.length || 0) < this.altTextMinLength}}"
         >
           Save
         </button>
