@@ -5,7 +5,7 @@ export interface PasteOptions {}
 
 // Super simple plugin that dispatches a paste event. This is convenient way to make this hard to override.
 export function Paste() {
-  const handledEvents = new WeakMap()
+  const handledEvents = new WeakMap();
 
   return new Plugin({
     key: new PluginKey("rhino-paste-event"),
@@ -21,10 +21,10 @@ export function Paste() {
 
         if (handledEvents.has(event)) {
           // This event has already processed. This prevents emitting the event twice.
-          return false
+          return false;
         }
 
-        handledEvents.set(event, null)
+        handledEvents.set(event, null);
 
         const rhinoPasteEvent = new RhinoPasteEvent(clipboardData);
         view.dom.dispatchEvent(rhinoPasteEvent);
