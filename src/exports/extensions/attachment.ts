@@ -1088,7 +1088,23 @@ function handleAttachment(
       );
     }
 
-    tr.replaceWith(currSelection.from - 1, currSelection.to, [
+    let from = currSelection.from
+    const prevNode = state.doc.resolve(from - 1);
+    const parentNode = prevNode.parent
+
+    if (parentNode) {
+      const parentNodeName = parentNode.type.name
+
+      if (parentNodeName === "doc") {
+        from -= 1
+      }
+
+      if (parentNodeName === "paragraph" && parentNode.textContent === "") {
+        from -= 1
+      }
+    }
+
+    tr.replaceWith(from, currSelection.to, [
       ...attachmentNodes,
       schema.nodes.paragraph.create(),
     ]);
