@@ -1088,19 +1088,21 @@ function handleAttachment(
       );
     }
 
+    // The following checks fix some "off by 1" issues. I _think_ these are the only nodes we need to check. May need a more robust check if this continues to be an issue.
     let from = currSelection.from;
     const prevNode = state.doc.resolve(from - 1);
     const parentNode = prevNode.parent;
 
-    if (parentNode) {
-      const parentNodeName = parentNode.type.name;
+    if (parentNode && parentNode.type.name === "doc") {
+      from -= 1;
+    } else {
+      const closestParagraph = findParentNodeOfTypeClosestToPos(
+        prevNode,
+        schema.nodes["paragraph"]
+      )
 
-      if (parentNodeName === "doc") {
-        from -= 1;
-      }
-
-      if (parentNodeName === "paragraph" && parentNode.textContent === "") {
-        from -= 1;
+      if (closestParagraph && closestParagraph.node.textContent === "") {
+        from -= 1
       }
     }
 
