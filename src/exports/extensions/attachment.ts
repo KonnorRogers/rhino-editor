@@ -1088,19 +1088,19 @@ function handleAttachment(
       );
     }
 
-    let from = currSelection.from
+    let from = currSelection.from;
     const prevNode = state.doc.resolve(from - 1);
-    const parentNode = prevNode.parent
+    const parentNode = prevNode.parent;
 
     if (parentNode) {
-      const parentNodeName = parentNode.type.name
+      const parentNodeName = parentNode.type.name;
 
       if (parentNodeName === "doc") {
-        from -= 1
+        from -= 1;
       }
 
       if (parentNodeName === "paragraph" && parentNode.textContent === "") {
-        from -= 1
+        from -= 1;
       }
     }
 
