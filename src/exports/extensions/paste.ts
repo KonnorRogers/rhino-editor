@@ -5,20 +5,31 @@ export interface PasteOptions {}
 
 // Super simple plugin that dispatches a paste event. This is convenient way to make this hard to override.
 export function Paste() {
+  const handledEvents = new WeakMap()
+
   return new Plugin({
     key: new PluginKey("rhino-paste-event"),
     props: {
       handlePaste(view, event) {
         const { clipboardData } = event;
 
+        // We always return false to allow other extensions to actually handle the paste via props.
+
         if (event.defaultPrevented) {
-          return true;
+          return false;
         }
+
+        if (handledEvents.has(event)) {
+          // This event has already processed. This prevents emitting the event twice.
+          return false
+        }
+
+        handledEvents.set(event, null)
 
         const rhinoPasteEvent = new RhinoPasteEvent(clipboardData);
         view.dom.dispatchEvent(rhinoPasteEvent);
 
-        return true;
+        return false;
 
         // @TODO: Future enhancements for pasting
         // https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/controllers/level_0_input_controller.js#L39
