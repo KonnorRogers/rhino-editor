@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.16.3
+
+### Patch Changes
+
+- [#256](https://github.com/KonnorRogers/rhino-editor/pull/256) [`7e3e790`](https://github.com/KonnorRogers/rhino-editor/commit/7e3e79055bf73c3c68a67ab2dab303f4815d579c) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix issues with paste extensions
+
+- [#256](https://github.com/KonnorRogers/rhino-editor/pull/256) [`7e3e790`](https://github.com/KonnorRogers/rhino-editor/commit/7e3e79055bf73c3c68a67ab2dab303f4815d579c) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix issues with attachment pasting
+
 ## 0.16.2
 
 ### Patch Changes
