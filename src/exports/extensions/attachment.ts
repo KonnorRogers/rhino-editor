@@ -1098,11 +1098,11 @@ function handleAttachment(
     } else {
       const closestParagraph = findParentNodeOfTypeClosestToPos(
         prevNode,
-        schema.nodes["paragraph"]
-      )
+        schema.nodes["paragraph"],
+      );
 
       if (closestParagraph && closestParagraph.node.textContent === "") {
-        from -= 1
+        from -= 1;
       }
     }
 
