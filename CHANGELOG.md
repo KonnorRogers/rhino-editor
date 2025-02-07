@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.16.4
+
+### Patch Changes
+
+- [#261](https://github.com/KonnorRogers/rhino-editor/pull/261) [`4086b5c`](https://github.com/KonnorRogers/rhino-editor/commit/4086b5cd8160a993a95238c6bb716a2bf892f052) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - fix an issue with double paste
+
 ## 0.16.3
 
 ### Patch Changes
