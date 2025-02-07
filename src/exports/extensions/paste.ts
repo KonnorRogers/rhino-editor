@@ -13,12 +13,6 @@ export function Paste() {
       handlePaste(view, event) {
         const { clipboardData } = event;
 
-        // We always return false to allow other extensions to actually handle the paste via props.
-
-        if (event.defaultPrevented) {
-          return false;
-        }
-
         if (handledEvents.has(event)) {
           // This event has already processed. This prevents emitting the event twice.
           return false;
@@ -26,10 +20,15 @@ export function Paste() {
 
         handledEvents.set(event, null);
 
+        // We always return false to allow other extensions to actually handle the paste via props.
+        if (event.defaultPrevented) {
+          return false;
+        }
+
         const rhinoPasteEvent = new RhinoPasteEvent(clipboardData);
         view.dom.dispatchEvent(rhinoPasteEvent);
 
-        return false;
+        return true;
 
         // @TODO: Future enhancements for pasting
         // https://github.com/basecamp/trix/blob/fda14c5ae88a0821cf8999a53dcb3572b4172cf0/src/trix/controllers/level_0_input_controller.js#L39
