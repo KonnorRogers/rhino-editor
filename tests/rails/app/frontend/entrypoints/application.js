@@ -96,7 +96,7 @@ function handleLightBox (e) {
   dialog.classList.add("lightbox")
   const clonedImage = image.cloneNode(true)
   dialog.append(clonedImage)
-  ;/** @type {HTMLElement} */ (clonedImage).style.setProperty("--aspect-ratio", `${image.naturalWidth} / ${image.naturalHeight}`)
+  clonedImage.style.setProperty("--aspect-ratio", `${image.naturalWidth} / ${image.naturalHeight}`)
   document.body.append(dialog)
   dialog.showModal()
 
