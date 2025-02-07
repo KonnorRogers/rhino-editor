@@ -10,3 +10,28 @@
   <%= button_to "Destroy this post", @post, method: :delete %>
 
 </div>
+
+<style>
+  .trix-content .attachment--preview img:hover {
+    cursor: zoom-in;
+  }
+
+  .lightbox {
+    height: 75vh;
+    max-height: min(75vh, 600px);
+    width: 75vw;
+    max-width: min(75vw, 800px);
+    display: grid;
+    place-content: center;
+  }
+
+  .lightbox img {
+    display: block;
+    height: auto;
+    margin: auto;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: var(--aspect-ratio, 16 / 9);
+  }
+</style>

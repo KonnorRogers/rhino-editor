@@ -74,3 +74,35 @@ ActiveStorage.start()
   }
 })()
 
+function handleLightBox (e) {
+  const target = e.target
+
+  // Dont show light boxes in the editor
+  if (target.closest("rhino-editor")) { return }
+
+  // Dont show light boxes if not inside a trix rendered output
+  if (!target.closest(".trix-content")) { return }
+
+  // action-text-attachment only appears in final output, not in editor, so this is just an extra check.
+  const attachment = target.closest("action-text-attachment")
+  const image = target.closest("img")
+
+  // Check to make sure someone actually clicked the image.
+  if (!image || !attachment) {
+    return
+  }
+
+  const dialog = document.createElement("dialog")
+  dialog.classList.add("lightbox")
+  const clonedImage = image.cloneNode(true)
+  dialog.append(clonedImage)
+  ;/** @type {HTMLElement} */ (clonedImage).style.setProperty("--aspect-ratio", `${image.naturalWidth} / ${image.naturalHeight}`)
+  document.body.append(dialog)
+  dialog.showModal()
+
+  dialog.addEventListener("close", () => {
+    dialog.remove()
+  })
+}
+
+document.addEventListener("click", handleLightBox)
