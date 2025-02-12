@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.16.5
+
+### Patch Changes
+
+- [#268](https://github.com/KonnorRogers/rhino-editor/pull/268) [`608dab9`](https://github.com/KonnorRogers/rhino-editor/commit/608dab97d76a213b522c0f87c420eba85e88852e) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - fixed paste to properly account for if other extensions handled it first
+
+- [#266](https://github.com/KonnorRogers/rhino-editor/pull/266) [`9f94bc1`](https://github.com/KonnorRogers/rhino-editor/commit/9f94bc1bbc699e0ccb37db897fc3f0a4cb1afae7) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - add dialog part to the dialog in the alt text editor
+
 ## 0.16.4
 
 ### Patch Changes
