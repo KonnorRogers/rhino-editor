@@ -717,29 +717,41 @@ export class TipTapEditorBase extends BaseElement {
 
     if (clipboardData == null) return;
 
+    let string: false | string = false
+
     const hasFiles = clipboardData.files?.length > 0;
+    let attachments: AttachmentManager[] = []
 
-    if (!hasFiles && clipboardData.items?.length > 0) {
-      event.preventDefault();
-
+    if (hasFiles) {
+      attachments = await this.handleFiles(clipboardData.files);
+    } else {
       let dataType = "text/plain";
 
       if (clipboardData.types.includes("text/html")) {
         dataType = "text/html";
       }
 
-      const string = clipboardData.getData(dataType);
-
-      this.editor.chain().focus().insertContent(string).run();
-      return;
+      string = clipboardData.getData(dataType);
     }
 
-    const attachments = await this.handleFiles(clipboardData.files);
+    // It looks weird to do all of this work prior to the setTimeout, but the TLDR is you cant access clipboard data in the setTimeout, most likely for some "security" reason.
 
-    if (attachments.length > 0) {
-      event.preventDefault();
-      this.editor?.chain().focus().setAttachment(attachments).run();
-    }
+    // Wrap in a setTimeout for event propagation purposes.
+    setTimeout(async () => {
+      if (event.defaultPrevented || event.originalPasteEvent.defaultPrevented) {
+        return
+      }
+
+      if (string !== false) {
+        this.editor?.chain().focus().insertContent(string).run();
+        return;
+      }
+
+      if (attachments.length > 0) {
+        this.editor?.chain().focus().setAttachment(attachments).run();
+        return
+      }
+    })
   };
 
   transformFilesToAttachments(files?: File[] | FileList | null) {

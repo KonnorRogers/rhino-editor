@@ -4,6 +4,7 @@ import "@rails/actiontext"
 import * as Trix from "trix"
 import "rhino-editor"
 import "rhino-editor/exports/styles/trix.css";
+import Youtube from "@tiptap/extension-youtube"
 import "trix/dist/trix.css";
 import { Application } from "@hotwired/stimulus"
 import EmbedController from "../controllers/embed_controller.js"
@@ -14,6 +15,10 @@ Stimulus.register("embed", EmbedController)
 Stimulus.register("tip-tap-mirror", TipTapMirrorController)
 
 ActiveStorage.start()
+
+document.addEventListener("rhino-initialize", (e) => {
+  e.target.addExtensions(Youtube)
+})
 
 
 // Import all channels.
