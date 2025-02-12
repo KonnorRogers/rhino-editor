@@ -717,10 +717,10 @@ export class TipTapEditorBase extends BaseElement {
 
     if (clipboardData == null) return;
 
-    let string: false | string = false
+    let string: false | string = false;
 
     const hasFiles = clipboardData.files?.length > 0;
-    let attachments: AttachmentManager[] = []
+    let attachments: AttachmentManager[] = [];
 
     if (hasFiles) {
       attachments = await this.handleFiles(clipboardData.files);
@@ -739,7 +739,7 @@ export class TipTapEditorBase extends BaseElement {
     // Wrap in a setTimeout for event propagation purposes.
     setTimeout(async () => {
       if (event.defaultPrevented || event.originalPasteEvent.defaultPrevented) {
-        return
+        return;
       }
 
       if (string !== false) {
@@ -749,9 +749,9 @@ export class TipTapEditorBase extends BaseElement {
 
       if (attachments.length > 0) {
         this.editor?.chain().focus().setAttachment(attachments).run();
-        return
+        return;
       }
-    })
+    });
   };
 
   transformFilesToAttachments(files?: File[] | FileList | null) {
