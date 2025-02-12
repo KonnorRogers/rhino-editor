@@ -24,9 +24,6 @@ function extendRhinoEditor (event) {
 
   if (rhinoEditor == null) return
 
-  // This is only for documentation site, feel free to modify this as needed.
-  if (rhinoEditor.getAttribute("id") !== "syntax-highlight-editor") return
-
   rhinoEditor.starterKitOptions = {
     ...rhinoEditor.starterKitOptions,
     // We disable codeBlock from the starterkit to be able to use CodeBlockLowlight's extension.
@@ -42,19 +39,25 @@ document.addEventListener("rhino-before-initialize", extendRhinoEditor)
 
 // This next part is specifically for storing fully syntax highlighted markup in your database.
 //
-// On form submission, it will rewrite the value of the
+// On form submission, it will rewrite the value of the hidden input field with the appropriate
+// code-highlighting spans from lowlight.
 const highlightCodeblocks = (content) => {
   const doc = new DOMParser().parseFromString(content, 'text/html');
+
   // If it has the "[has-highlighted]" attribute attached, we know it has already been syntax highlighted.
   // This will get stripped from the editor.
-  doc.querySelectorAll('pre > code[has-highlighted]').forEach((el) => {
-    const html = toHtml(lowlight.highlightAuto(el.innerHTML).children)
-    el.setAttribute("has-highlighted", "")
-    el.innerHTML = html
-  });
-  let finalStr = doc.body.innerHTML;
+  doc.querySelectorAll('pre > code:not([has-highlighted])').forEach((el) => {
+    const languageClass = [...el.classList].find(cls => cls.startsWith('language-'));
+    const language = languageClass ? languageClass.replace('language-', '') : null;
+    const html = language ?
+      toHtml(lowlight.highlight(language, el.innerHTML).children) :
+      toHtml(lowlight.highlightAuto(el.innerHTML).children);
 
-  return finalStr
+    el.setAttribute("has-highlighted", "");
+    el.innerHTML = html;
+  });
+
+  return doc.body.innerHTML;
 };
 
 document.addEventListener("submit", (e) => {
@@ -65,4 +68,3 @@ document.addEventListener("submit", (e) => {
     inputElement.value = highlightCodeblocks(inputElement.value)
   })
 })
-
