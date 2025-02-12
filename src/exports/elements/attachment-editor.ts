@@ -547,6 +547,7 @@ export class AttachmentEditor extends BaseElement {
   renderAltTextDialog() {
     return html`
       <dialog
+        part="dialog"
         @close=${(e: Event) => {
           // in case of bubbling.
           if (e.target !== e.currentTarget) {
