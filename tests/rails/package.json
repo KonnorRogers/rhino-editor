@@ -14,6 +14,7 @@
     "@rails/activestorage": "^7.2.200",
     "@tiptap/extension-collaboration": "^2.9.1",
     "@tiptap/extension-collaboration-cursor": "^2.9.1",
+    "@tiptap/extension-youtube": "^2.11.5",
     "@y-rb/actioncable": "^0.2.1",
     "prosemirror-view": "^1.0.0",
     "rhino-editor": "link:../..",

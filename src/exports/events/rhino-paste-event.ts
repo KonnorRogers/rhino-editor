@@ -8,10 +8,12 @@ export class RhinoPasteEvent extends BaseEvent implements ClipboardEvent {
 
   constructor(
     public clipboardData: DataTransfer | null,
+    public originalPasteEvent: Event,
     options?: EventInit | undefined,
   ) {
     super(RhinoPasteEvent.eventName, options);
     this.clipboardData = clipboardData;
+    this.originalPasteEvent = originalPasteEvent;
   }
 }
 
