@@ -34,8 +34,14 @@
     "lit": "^3.2.0",
     "lowlight": "^3.1.0",
     "prism-esm": "1.29.0-fix.6",
+    "prosemirror-view": "~1.28.0",
     "read-cache": "^1.0.0",
     "rhino-editor": "link:..",
     "web-component-lazy-loader": "^1.0.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "prosemirror-view": "$prosemirror-view"
+    }
   }
 }
