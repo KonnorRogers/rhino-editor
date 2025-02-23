@@ -185,12 +185,6 @@ export const toolbarButtonStyles = css`
     box-shadow: 0 0 0 1px
       light-dark(var(--rhino-button-disabled-border-color), transparent);
   }
-
-  svg,
-  ::slotted(svg) {
-    height: var(--rhino-toolbar-icon-size);
-    width: var(--rhino-toolbar-icon-size);
-  }
 `;
 
 export default css`
@@ -319,5 +313,11 @@ export default css`
 
   role-tooltip::part(popover) {
     padding: 0.4em 0.6em;
+  }
+
+  svg,
+  ::slotted(svg) {
+    height: var(--rhino-toolbar-icon-size);
+    width: var(--rhino-toolbar-icon-size);
   }
 `;
