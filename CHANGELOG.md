@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.16.6
+
+### Patch Changes
+
+- [#274](https://github.com/KonnorRogers/rhino-editor/pull/274) [`37dc045`](https://github.com/KonnorRogers/rhino-editor/commit/37dc04515a4f7b6f2d424050738e97ad3b365810) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fixed a bug where the `svg` selector was being applied to the whole page.
+
 ## 0.16.5
 
 ### Patch Changes
