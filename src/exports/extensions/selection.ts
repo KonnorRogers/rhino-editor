@@ -1,5 +1,11 @@
 import { Extension } from "@tiptap/core";
-import { Plugin, PluginKey, Selection, SelectionRange, TextSelection } from "@tiptap/pm/state";
+import {
+  Plugin,
+  PluginKey,
+  Selection,
+  SelectionRange,
+  TextSelection,
+} from "@tiptap/pm/state";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import type { DecorationAttrs } from "@tiptap/pm/view";
 
@@ -15,15 +21,17 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
         return DecorationSet.empty;
       },
       apply(tr, set) {
-        if (!tr.getMeta(plugin)) { return set }
+        if (!tr.getMeta(plugin)) {
+          return set;
+        }
         set = set.map(tr.mapping, tr.doc);
 
         const selections = set.find(undefined, undefined, (deco) => {
-          return deco.rhinoSelection === true
-        })
+          return deco.rhinoSelection === true;
+        });
 
         if (selections?.length >= 1) {
-          set = set.remove(selections)
+          set = set.remove(selections);
         }
 
         const { doc, selection } = tr;
@@ -37,8 +45,8 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
             selection.to,
             options.HTMLAttributes || {},
             {
-              rhinoSelection: true
-            }
+              rhinoSelection: true,
+            },
           );
         }
 
@@ -51,26 +59,26 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
     },
     props: {
       handleDOMEvents: {
-        blur: view => {
-            const { tr } = view.state
+        blur: (view) => {
+          const { tr } = view.state;
 
-            const transaction = tr.setMeta(plugin, {
-                from: tr.selection.from,
-                to: tr.selection.to,
-            })
+          const transaction = tr.setMeta(plugin, {
+            from: tr.selection.from,
+            to: tr.selection.to,
+          });
 
-            view.dispatch(transaction)
+          view.dispatch(transaction);
         },
 
-        focus: view => {
-            const { tr } = view.state
+        focus: (view) => {
+          const { tr } = view.state;
 
-            const transaction = tr.setMeta(plugin, {
-                from: tr.selection.from,
-                to: tr.selection.to,
-            })
+          const transaction = tr.setMeta(plugin, {
+            from: tr.selection.from,
+            to: tr.selection.to,
+          });
 
-            view.dispatch(transaction)
+          view.dispatch(transaction);
         },
       },
       decorations(state) {
@@ -78,7 +86,7 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
       },
     },
   });
-  return plugin
+  return plugin;
 };
 
 /**
