@@ -2,9 +2,6 @@ import { Extension } from "@tiptap/core";
 import {
   Plugin,
   PluginKey,
-  Selection,
-  SelectionRange,
-  TextSelection,
 } from "@tiptap/pm/state";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import type { DecorationAttrs } from "@tiptap/pm/view";
