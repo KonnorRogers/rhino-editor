@@ -1318,9 +1318,12 @@ export class TipTapEditor extends TipTapEditorBase {
     return html`
       <slot name="toolbar">
         <role-toolbar
-          part="toolbar"
+          part="toolbar main__toolbar"
           role="toolbar"
-          exportparts="base:toolbar__base"
+          exportparts="
+            base:toolbar__base,
+            base:main__toolbar__base
+          "
         >
           <slot name="toolbar-start">${this.renderToolbarStart()}</slot>
 
@@ -1612,7 +1615,10 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-toolbar
             part="toolbar bubble-menu__toolbar"
             role="toolbar"
-            exportparts="base:bubble-menu__toolbar__base"
+            exportparts="
+              base:toolbar__base,
+              base:bubble-menu__toolbar__base
+            "
           >
             <slot name="after-bubble-menu-toolbar-items"></slot>
             <slot name="bubble-menu-toolbar-items">
