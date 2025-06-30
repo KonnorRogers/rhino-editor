@@ -32,10 +32,10 @@ function extendRhinoEditor (event) {
 
   rhinoEditor.extensions = [syntaxHighlight]
 
-  rhinoEditor.rebuildEditor()
+  rhinoEditor.rebuildEditor?.()
 }
 
-document.addEventListener("rhino-before-initialize", extendRhinoEditor)
+document.addEventListener("rhino-initialize", extendRhinoEditor)
 
 // This next part is specifically for storing fully syntax highlighted markup in your database.
 //
