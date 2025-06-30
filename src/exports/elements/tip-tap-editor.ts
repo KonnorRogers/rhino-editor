@@ -169,6 +169,7 @@ export class TipTapEditor extends TipTapEditorBase {
         reflect: true,
         attribute: "alt-text-editor",
       },
+      defaultHeadingLevel: { attribute: "default-heading-level", type: Number },
       linkInputRef: { state: true },
       translations: { state: true },
       __invalidLink__: { state: true, type: Boolean },
@@ -179,6 +180,11 @@ export class TipTapEditor extends TipTapEditorBase {
    * Whether or not to enable the alt text editor.
    */
   altTextEditor = false;
+
+  /**
+   * The heading level to use for the heading button
+   */
+  defaultHeadingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 1
 
   /**
    * Translations for various aspects of the editor.
@@ -661,9 +667,11 @@ export class TipTapEditor extends TipTapEditorBase {
 
     if (!headingEnabled) return html``;
 
+    const defaultHeadingLevel = this.defaultHeadingLevel || 1
+
     const isActive = Boolean(this.editor?.isActive("heading"));
     const isDisabled =
-      this.editor == null || !this.editor.can().toggleHeading({ level: 1 });
+      this.editor == null || !this.editor.can().toggleHeading({ level: defaultHeadingLevel });
 
     let tooltip_slot_name = "heading-tooltip";
     let tooltip_id = "heading";
@@ -705,7 +713,7 @@ export class TipTapEditor extends TipTapEditorBase {
             return;
           }
 
-          this.editor?.chain().focus().toggleHeading({ level: 1 }).run();
+          this.editor?.chain().focus().toggleHeading({ level: defaultHeadingLevel }).run();
         }}
       >
         <slot name=${icon_slot_name}>${this.icons.heading}</slot>
@@ -1318,9 +1326,12 @@ export class TipTapEditor extends TipTapEditorBase {
     return html`
       <slot name="toolbar">
         <role-toolbar
-          part="toolbar"
+          part="toolbar main__toolbar"
           role="toolbar"
-          exportparts="base:toolbar__base"
+          exportparts="
+            base:toolbar__base,
+            base:main__toolbar__base
+          "
         >
           <slot name="toolbar-start">${this.renderToolbarStart()}</slot>
 
@@ -1612,7 +1623,10 @@ export class TipTapEditor extends TipTapEditorBase {
           <role-toolbar
             part="toolbar bubble-menu__toolbar"
             role="toolbar"
-            exportparts="base:bubble-menu__toolbar__base"
+            exportparts="
+              base:toolbar__base,
+              base:bubble-menu__toolbar__base
+            "
           >
             <slot name="after-bubble-menu-toolbar-items"></slot>
             <slot name="bubble-menu-toolbar-items">

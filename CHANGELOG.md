@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.16.8
+
+### Patch Changes
+
+- [#283](https://github.com/KonnorRogers/rhino-editor/pull/283) [`4195ef4`](https://github.com/KonnorRogers/rhino-editor/commit/4195ef428f529badcf28d78775438af844c89885) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix a bug in selection tracking causing unexpected behavior
+
+## 0.16.7
+
+### Patch Changes
+
+- [#280](https://github.com/KonnorRogers/rhino-editor/pull/280) [`ab315ef`](https://github.com/KonnorRogers/rhino-editor/commit/ab315ef0f6df07f3a125787dfa06022efd88bf3c) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Set efault list-type for ol to decimal to align with Trix
+
 ## 0.16.6
 
 ### Patch Changes

@@ -8,16 +8,25 @@ export type RhinoSelectionOptions = {
 };
 
 const selectionPlugin = (options: RhinoSelectionOptions) => {
-  return new Plugin({
+  const plugin = new Plugin({
     key: new PluginKey("rhino-selection"),
     state: {
       init() {
         return DecorationSet.empty;
       },
       apply(tr, set) {
+        if (!tr.getMeta(plugin)) {
+          return set;
+        }
         set = set.map(tr.mapping, tr.doc);
 
-        set = set.remove(set.find());
+        const selections = set.find(undefined, undefined, (deco) => {
+          return deco.rhinoSelection === true;
+        });
+
+        if (selections?.length >= 1) {
+          set = set.remove(selections);
+        }
 
         const { doc, selection } = tr;
 
@@ -29,22 +38,49 @@ const selectionPlugin = (options: RhinoSelectionOptions) => {
             selection.from,
             selection.to,
             options.HTMLAttributes || {},
+            {
+              rhinoSelection: true,
+            },
           );
         }
 
         if (deco) {
-          return DecorationSet.create(doc, [deco]);
+          set = set.add(doc, [deco]);
         }
 
-        return DecorationSet.empty;
+        return set;
       },
     },
     props: {
+      handleDOMEvents: {
+        blur: (view) => {
+          const { tr } = view.state;
+
+          const transaction = tr.setMeta(plugin, {
+            from: tr.selection.from,
+            to: tr.selection.to,
+          });
+
+          view.dispatch(transaction);
+        },
+
+        focus: (view) => {
+          const { tr } = view.state;
+
+          const transaction = tr.setMeta(plugin, {
+            from: tr.selection.from,
+            to: tr.selection.to,
+          });
+
+          view.dispatch(transaction);
+        },
+      },
       decorations(state) {
         return this.getState(state);
       },
     },
   });
+  return plugin;
 };
 
 /**

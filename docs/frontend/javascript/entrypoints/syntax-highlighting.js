@@ -38,7 +38,7 @@ function extendRhinoEditor (event) {
 
   rhinoEditor.extensions = [syntaxHighlight]
 
-  rhinoEditor.rebuildEditor()
+  rhinoEditor.rebuildEditor?.()
 }
 
 document.addEventListener("rhino-before-initialize", extendRhinoEditor, { once: true })
@@ -70,7 +70,6 @@ function stripHljsSpans(content) {
 
   return tempDoc.body.innerHTML
 }
-
 
 // This next part is specifically for storing fully syntax highlighted markup in your database.
 //
