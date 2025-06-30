@@ -1,11 +1,13 @@
 import { ref, createRef, Ref } from "lit/directives/ref.js";
 import { toolbarButtonStyles } from "../styles/editor.js";
 import { TipTapEditorBase } from "./tip-tap-editor-base.js";
-import { PropertyDeclarations, PropertyValues } from "lit";
+import { HTMLTemplateResult, PropertyDeclarations, PropertyValues } from "lit";
 
 /** Imports <role-tooltip> and <role-toolbar> */
 import RoleToolbar from "role-components/exports/components/toolbar/toolbar.js";
 import RoleTooltip from "role-components/exports/components/tooltip/tooltip.js";
+import RoleMenu from "role-components/exports/components/menu/menu.js";
+import RoleMenuItem from "role-components/exports/components/menu-item/menu-item.js";
 
 import { isiOS, translations } from "../translations.js";
 
@@ -18,6 +20,8 @@ import { isExactNodeActive } from "../../internal/is-exact-node-active.js";
 import RoleAnchoredRegion from "role-components/exports/components/anchored-region/anchored-region.js";
 import { findNodeViewAnchor } from "../extensions/bubble-menu.js";
 import { Editor, isNodeSelection, posToDOMRect } from "@tiptap/core";
+
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 
 function findElement(editor: Editor) {
   if (!editor) {
@@ -202,7 +206,13 @@ export class TipTapEditor extends TipTapEditorBase {
    */
   registerDependencies() {
     super.registerDependencies();
-    [RoleToolbar, RoleTooltip, RoleAnchoredRegion].forEach((el) => el.define());
+    [
+      RoleToolbar,
+      RoleTooltip,
+      RoleAnchoredRegion,
+      RoleMenu,
+      RoleMenuItem,
+    ].forEach((el) => el.define());
   }
 
   constructor() {
@@ -654,7 +664,134 @@ export class TipTapEditor extends TipTapEditorBase {
     `;
   }
 
-  renderHeadingButton(prefix = "") {
+  renderHeadingMenu(prefix = "") {
+    let tooltip_slot_name = "heading-menu-tooltip";
+
+    let tooltip_id = "heading-menu";
+    let tooltip_parts = "toolbar__tooltip toolbar__tooltip--heading-menu";
+    let icon_slot_name = "heading-menu-icon";
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
+    const menuItems: HTMLTemplateResult[] = []
+
+    const minHeadingLevel = 1 as HeadingLevel
+    const maxHeadingLevel = 6 as HeadingLevel
+
+    for (let i = minHeadingLevel; i <= maxHeadingLevel; i++) {
+      menuItems.push(this.renderHeadingMenuItem({
+        headingLevel: i,
+        prefix
+      }))
+    }
+
+    return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations.heading}
+        </role-tooltip>
+      </slot>
+
+      <role-menu @click=${(e) => {
+        e.stopImmediatePropagation()
+      }}>
+        <button
+          class="toolbar__button rhino-toolbar-button"
+          slot="trigger"
+          type="button"
+          tabindex="-1"
+          part=${stringMap({
+            toolbar__button: true,
+            "toolbar__button--heading": true,
+          })}
+          data-role="toolbar-item"
+          data-role-tooltip=${tooltip_id}
+        >
+          <slot name=${icon_slot_name}>${this.icons.heading}</slot>
+        </button>
+        ${menuItems}
+      </role-menu>
+    `
+  }
+
+  renderHeadingMenuItem(options: Partial<{ headingLevel: HeadingLevel, prefix: string }> = {}) {
+    if (!options) { options = {} }
+    if (!options.headingLevel) { options.headingLevel = 1 }
+    if (!options.prefix) { options.prefix = "" }
+
+    const { prefix, headingLevel } = options
+
+    const headingEnabled =
+      this.starterKitOptions.heading !== false ||
+      Boolean(this.editor?.commands.toggleHeading);
+
+    if (!headingEnabled) return html``;
+
+    const isActive = Boolean(this.editor?.isActive("heading", { level: headingLevel }));
+    const isDisabled =
+      this.editor == null || !this.editor.can().toggleHeading({ level: headingLevel });
+
+    let tooltip_slot_name = `h${options.headingLevel}-tooltip`;
+    let tooltip_id = `h${options.headingLevel}`;
+    let tooltip_parts = `toolbar__tooltip toolbar__tooltip--h${options.headingLevel}`;
+    let icon_slot_name = `${options.headingLevel}-icon`;
+
+    if (prefix) {
+      icon_slot_name = prefix + "__" + icon_slot_name;
+      tooltip_slot_name = prefix + "__" + tooltip_slot_name;
+      tooltip_id = prefix + "__" + tooltip_id;
+    }
+
+    return html`
+      <slot name=${tooltip_slot_name}>
+        <role-tooltip
+          id=${tooltip_id}
+          part=${tooltip_parts}
+          exportparts=${this.__tooltipExportParts}
+        >
+          ${this.translations[`h${headingLevel}` as keyof typeof this.translations]}
+        </role-tooltip>
+      </slot>
+      <role-menu-item
+        class="toolbar__button rhino-toolbar-button"
+        part=${stringMap({
+          toolbar__button: true,
+          "toolbar__button--heading": true,
+          "toolbar__button--active": isActive,
+          "toolbar__button--disabled": isDisabled,
+        })}
+        aria-disabled=${isDisabled}
+        aria-pressed=${isActive}
+        data-role-tooltip=${tooltip_id}
+        @click=${(e: MouseEvent) => {
+          if (elementDisabled(e.currentTarget)) {
+            return;
+          }
+
+          this.editor?.chain().focus().toggleHeading({ level: headingLevel }).run();
+        }}
+      >
+        <slot name=${icon_slot_name}>${this.icons[`h${headingLevel}` as keyof typeof this.icons]}</slot>
+      </role-menu-item>
+    `;
+  }
+
+
+  renderHeadingButton(options: Partial<{ headingLevel: HeadingLevel, prefix: string }> = {}) {
+    if (!options) { options = {} }
+    if (!options.headingLevel) { options.headingLevel = 1 }
+    if (!options.prefix) { options.prefix = "" }
+
+    const { prefix, headingLevel } = options
+
     const headingEnabled =
       this.starterKitOptions.heading !== false ||
       Boolean(this.editor?.commands.toggleHeading);
@@ -663,7 +800,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
     const isActive = Boolean(this.editor?.isActive("heading"));
     const isDisabled =
-      this.editor == null || !this.editor.can().toggleHeading({ level: 1 });
+      this.editor == null || !this.editor.can().toggleHeading({ level: headingLevel });
 
     let tooltip_slot_name = "heading-tooltip";
     let tooltip_id = "heading";
@@ -705,7 +842,7 @@ export class TipTapEditor extends TipTapEditorBase {
             return;
           }
 
-          this.editor?.chain().focus().toggleHeading({ level: 1 }).run();
+          this.editor?.chain().focus().toggleHeading({ level: headingLevel }).run();
         }}
       >
         <slot name=${icon_slot_name}>${this.icons.heading}</slot>
@@ -1356,6 +1493,11 @@ export class TipTapEditor extends TipTapEditorBase {
           <slot name="before-heading-button"></slot>
           <slot name="heading-button">${this.renderHeadingButton()}</slot>
           <slot name="after-heading-button"></slot>
+
+          <!-- Heading Menu -->
+          <slot name="before-heading-menu"></slot>
+          <slot name="heading-menu">${this.renderHeadingMenu()}</slot>
+          <slot name="after-heading-menu"></slot>
 
           <!-- Blockquote -->
           <slot name="before-blockquote-button"></slot>
