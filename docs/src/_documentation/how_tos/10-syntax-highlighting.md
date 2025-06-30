@@ -21,7 +21,7 @@ TipTap provides an official extension using [Lowlight](https://github.com/wooorm
 Assuming you have Rhino installed and working, let's start by installing the additional dependencies we need.
 
 ```bash
-yarn add lowlight @tiptap/extension-code-block-lowlight hast-util-to-html
+yarn add lowlight @tiptap/extension-code-block-lowlight hast-util-to-html he
 ```
 
 ## Adding to RhinoEditor

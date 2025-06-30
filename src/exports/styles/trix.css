@@ -136,6 +136,10 @@
   list-style: disc;
 }
 
+.trix-content ol {
+  list-style-type: decimal;
+}
+
 .trix-content
   figure[data-trix-attachment].has-focus
   figcaption.is-empty::before {
