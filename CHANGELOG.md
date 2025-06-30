@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.0
+
+### Minor Changes
+
+- [#286](https://github.com/KonnorRogers/rhino-editor/pull/286) [`ed38117`](https://github.com/KonnorRogers/rhino-editor/commit/ed3811774a2d580e7fb1aa04b5cfd9156f362b42) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Add `main__toolbar` to the main toolbar to differentiate from the bubble menu
+
 ## 0.16.8
 
 ### Patch Changes
