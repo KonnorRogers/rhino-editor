@@ -32,7 +32,7 @@ forked repository.
 - Docker (Used to run a simulated S3 server)
 - A Docker virtualizer ([Orbstack](https://orbstack.dev/) or
   [Docker Desktop](https://www.docker.com/products/docker-desktop/))
-- Overmind (Preferred, not needed `npm install -g overmind`)
+- Overmind (Preferred, not needed `gem install overmind`)
 
 ### Installation
 
