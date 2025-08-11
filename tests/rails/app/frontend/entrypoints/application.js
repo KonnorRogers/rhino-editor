@@ -17,7 +17,12 @@ Stimulus.register("tip-tap-mirror", TipTapMirrorController)
 ActiveStorage.start()
 
 document.addEventListener("rhino-initialize", (e) => {
-  e.target.addExtensions(Youtube)
+  // e.target.addExtensions(Youtube)
+  e.target.starterKitOptions = {
+    ...e.target.starterKitOptions,
+    // rhinoGallery: false,
+    // rhinoFigcaption: false
+  }
 })
 
 
