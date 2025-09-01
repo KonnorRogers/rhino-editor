@@ -272,11 +272,13 @@ export class TipTapEditorBase extends BaseElement {
     const fragment = contentSlice.content;
 
     // Serialize the fragment to a DOM fragment
-    const domFragment = DOMSerializer.fromSchema(editor.schema).serializeFragment(fragment);
-    tempScript.append(domFragment)
+    const domFragment = DOMSerializer.fromSchema(
+      editor.schema,
+    ).serializeFragment(fragment);
+    tempScript.append(domFragment);
 
-    replaceSpacesWithNbsp(tempScript)
-    return tempScript.innerHTML
+    replaceSpacesWithNbsp(tempScript);
+    return tempScript.innerHTML;
   }
 
   /**
@@ -474,9 +476,9 @@ export class TipTapEditorBase extends BaseElement {
         this.rebuildEditor();
         this.dispatchEvent(new InitializeEvent());
         this.__initializationResolver__?.();
-        await this.__initializationPromise__
+        await this.__initializationPromise__;
         // This prevents syncing issues when the editor loads content.
-        this.updateInputElementValue()
+        this.updateInputElementValue();
       });
     });
   }
@@ -615,19 +617,18 @@ export class TipTapEditorBase extends BaseElement {
       return JSON.stringify(this.editor.getJSON());
     }
 
-
     const editor = this.editor;
-    return serializeWithNbsp(editor.state.doc, editor.schema)
+    return serializeWithNbsp(editor.state.doc, editor.schema);
   }
 
   /**
    * @override
    * Apparently this is a native dom method?
    */
-  getHTML () {
+  getHTML() {
     if (this.editor == null) return "";
     const editor = this.editor;
-    return serializeWithNbsp(editor.state.doc, editor.schema)
+    return serializeWithNbsp(editor.state.doc, editor.schema);
   }
 
   /**
@@ -863,8 +864,7 @@ export class TipTapEditorBase extends BaseElement {
         el.insertAdjacentText("beforeend", " · ");
       });
 
-
-    doc.querySelectorAll("p > br").forEach((el) => el.remove())
+    doc.querySelectorAll("p > br").forEach((el) => el.remove());
 
     const body = doc.querySelector("body");
 
@@ -987,26 +987,28 @@ export class TipTapEditorBase extends BaseElement {
 
 function serializeWithNbsp(node: Node, schema: Schema) {
   // Create a DOM fragment from the ProseMirror document.
-  const fragment = DOMSerializer.fromSchema(schema).serializeFragment(node.content);
-  const tempDiv = document.createElement('div');
+  const fragment = DOMSerializer.fromSchema(schema).serializeFragment(
+    node.content,
+  );
+  const tempDiv = document.createElement("div");
   tempDiv.appendChild(fragment);
 
-  replaceSpacesWithNbsp(tempDiv)
+  replaceSpacesWithNbsp(tempDiv);
 
   return tempDiv.innerHTML;
 }
 
-function replaceSpacesWithNbsp (htmlElement: Element) {
+function replaceSpacesWithNbsp(htmlElement: Element) {
   // Replace spaces with nbsp; to bypass Nokogiri whitespace stripping.
-  const allNodes = htmlElement.querySelectorAll('*'); // I think this a fine??
-  const allPNodes = htmlElement.querySelectorAll("p")
+  const allNodes = htmlElement.querySelectorAll("*"); // I think this a fine??
+  const allPNodes = htmlElement.querySelectorAll("p");
   allPNodes.forEach((node) => {
     if (node.textContent?.trim() === "") {
       // `<br class='rhino-preserve-line'>` gets stripped, so make it a plain `<br>`
-      node.innerHTML = "<br>" + node.innerHTML
+      node.innerHTML = "<br>" + node.innerHTML;
     }
-  })
-  allNodes.forEach(node => {
-    node.innerHTML = node.innerHTML.replace(/ /g, '&nbsp;');
+  });
+  allNodes.forEach((node) => {
+    node.innerHTML = node.innerHTML.replace(/ /g, "&nbsp;");
   });
 }
