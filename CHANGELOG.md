@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.1
+
+### Patch Changes
+
+- [#293](https://github.com/KonnorRogers/rhino-editor/pull/293) [`a69a4a8`](https://github.com/KonnorRogers/rhino-editor/commit/a69a4a800a971f0abf24504f255b1711928c7172) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug fix: empty `<p>` tags and whitespace are now handled equivalent to Trix.
+
+- [#293](https://github.com/KonnorRogers/rhino-editor/pull/293) [`a69a4a8`](https://github.com/KonnorRogers/rhino-editor/commit/a69a4a800a971f0abf24504f255b1711928c7172) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug Fix: Fixed a bug in the `getHTMLContentFromRange()` method on `<rhino-editor>`
+
 ## 0.17.0
 
 ### Minor Changes
