@@ -864,7 +864,8 @@ export class TipTapEditorBase extends BaseElement {
         el.insertAdjacentText("beforeend", " · ");
       });
 
-    doc.querySelectorAll("p > br").forEach((el) => el.remove());
+    // Be a little more cautious with this. Only remove `<br>` not injected by ProseMirror.
+    doc.querySelectorAll("p > br:not(.ProseMirror-trailingBreak)").forEach((el) => el.remove());
 
     const body = doc.querySelector("body");
 
@@ -1000,15 +1001,14 @@ function serializeWithNbsp(node: Node, schema: Schema) {
 
 function replaceSpacesWithNbsp(htmlElement: Element) {
   // Replace spaces with nbsp; to bypass Nokogiri whitespace stripping.
-  const allNodes = htmlElement.querySelectorAll("*"); // I think this a fine??
-  const allPNodes = htmlElement.querySelectorAll("p");
-  allPNodes.forEach((node) => {
+  // Only do this for `<p>` tags. Many other elements will break, most notably `<img>`
+  const paragraphTags = htmlElement.querySelectorAll("p");
+
+  paragraphTags.forEach((node) => {
     if (node.textContent?.trim() === "") {
       // `<br class='rhino-preserve-line'>` gets stripped, so make it a plain `<br>`
       node.innerHTML = "<br>" + node.innerHTML;
     }
-  });
-  allNodes.forEach((node) => {
     node.innerHTML = node.innerHTML.replace(/ /g, "&nbsp;");
   });
 }
