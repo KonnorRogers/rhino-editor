@@ -1,6 +1,6 @@
 {
   "name": "rhino-editor",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "description": "A custom element wrapped rich text editor",
   "type": "module",
   "main": "exports/index.js",

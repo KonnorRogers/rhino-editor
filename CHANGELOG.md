@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.2
+
+### Patch Changes
+
+- [#296](https://github.com/KonnorRogers/rhino-editor/pull/296) [`b68ecf8`](https://github.com/KonnorRogers/rhino-editor/commit/b68ecf8c94e44538fb89c49df97ed122abfa84a5) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug Fix: Fixed a bug with preserving spaces causing images to get cleared and tables to break.
+
 ## 0.17.1
 
 ### Patch Changes
