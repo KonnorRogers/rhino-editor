@@ -865,7 +865,9 @@ export class TipTapEditorBase extends BaseElement {
       });
 
     // Be a little more cautious with this. Only remove `<br>` not injected by ProseMirror.
-    doc.querySelectorAll("p > br:not(.ProseMirror-trailingBreak)").forEach((el) => el.remove());
+    doc
+      .querySelectorAll("p > br:not(.ProseMirror-trailingBreak)")
+      .forEach((el) => el.remove());
 
     const body = doc.querySelector("body");
 
