@@ -51,7 +51,7 @@ export type RhinoEditorStarterKitOptions = StarterKitOptions &
     decreaseIndentation: boolean;
   };
 
-const NON_BREAKING_SPACE = "\u00A0"
+const NON_BREAKING_SPACE = "\u00A0";
 
 export class TipTapEditorBase extends BaseElement {
   // Static
@@ -141,9 +141,7 @@ export class TipTapEditorBase extends BaseElement {
   /**
    * This will be concatenated onto RhinoStarterKit and StarterKit extensions.
    */
-  extensions: EditorOptions["extensions"] = [
-
-  ];
+  extensions: EditorOptions["extensions"] = [];
 
   /**
    * When the `defer-initialize` attribute is present, it will wait to start the TipTap editor until the attribute has been removed.
@@ -283,15 +281,15 @@ export class TipTapEditorBase extends BaseElement {
     tempScript.append(domFragment);
 
     tempScript.querySelectorAll(":scope > p").forEach((p) => {
-      preserveSignificantWhiteSpaceForElement(p)
-    })
+      preserveSignificantWhiteSpaceForElement(p);
+    });
 
     // const element = document.createElement("div")
     // const tempEditor = new Editor({...this.allOptions(element), content: tempScript.innerHTML});
     // const html = tempEditor.getHTML()
     // tempEditor.destroy()
     // return html
-    return this.editor?.getHTML()
+    return this.editor?.getHTML();
   }
 
   /**
@@ -639,8 +637,10 @@ export class TipTapEditorBase extends BaseElement {
    * Apparently this is a native dom method?
    */
   getHTML() {
-    const editor = this.editor
-    if (!editor) { return "" }
+    const editor = this.editor;
+    if (!editor) {
+      return "";
+    }
     return this.getHTMLAndPreserveSignificantWhiteSpace();
   }
 
@@ -652,9 +652,10 @@ export class TipTapEditorBase extends BaseElement {
 
     const rootNode = (this.getRootNode() || document) as Element;
 
-
-    const el = rootNode.querySelector(`#${this.input}`) as Maybe<HTMLInputElement>;
-    return el
+    const el = rootNode.querySelector(
+      `#${this.input}`,
+    ) as Maybe<HTMLInputElement>;
+    return el;
   }
 
   async handleFiles(files: File[] | FileList): Promise<AttachmentManager[]> {
@@ -1002,90 +1003,98 @@ export class TipTapEditorBase extends BaseElement {
     return editor;
   }
 
-  getHTMLAndPreserveSignificantWhiteSpace () {
-    const editor = this.editor
-    if (!editor) { return "" }
+  getHTMLAndPreserveSignificantWhiteSpace() {
+    const editor = this.editor;
+    if (!editor) {
+      return "";
+    }
 
     const tempScript = document.createElement("div");
     // We want plain text so we don't parse.
     // tempScript.type = "text/plain";
 
     const doc = editor.view.state.doc;
-    const schema = editor.schema
+    const schema = editor.schema;
 
     // Serialize the fragment to a DOM fragment
-    const domFragment = DOMSerializer.fromSchema(
-      schema
-    ).serializeFragment(doc.content);
+    const domFragment = DOMSerializer.fromSchema(schema).serializeFragment(
+      doc.content,
+    );
 
     tempScript.append(domFragment);
 
     tempScript.querySelectorAll(":scope > p").forEach((p) => {
-      preserveSignificantWhiteSpaceForElement(p)
-    })
+      preserveSignificantWhiteSpaceForElement(p);
+    });
 
-    const element = document.createElement("div")
-    const tempEditor = new Editor({...this.allOptions(element), content: tempScript.innerHTML});
-    const html = tempEditor.getHTML()
-    tempEditor.destroy()
-    return html
+    const element = document.createElement("div");
+    const tempEditor = new Editor({
+      ...this.allOptions(element),
+      content: tempScript.innerHTML,
+    });
+    const html = tempEditor.getHTML();
+    tempEditor.destroy();
+    return html;
   }
 }
 
 // Recreation of:
 // https://github.com/basecamp/trix/blob/main/src/trix/views/piece_view.js#L127-L142
-function replaceSignificantWhitespace(text: string, isFirst?: boolean, isLast?: boolean) {
+function replaceSignificantWhitespace(
+  text: string,
+  isFirst?: boolean,
+  isLast?: boolean,
+) {
   if (isLast) {
     // Different strategies for different whitespace patterns
-    text = text.replace(/\ $/, NON_BREAKING_SPACE)
+    text = text.replace(/\ $/, NON_BREAKING_SPACE);
   }
 
   text = text
     .replace(/(\S)\ {3}(\S)/g, "$1 " + NON_BREAKING_SPACE + " $2")
     .replace(/\ {2}/g, NON_BREAKING_SPACE + " ")
-    .replace(/\ {2}/g, " " + NON_BREAKING_SPACE)
+    .replace(/\ {2}/g, " " + NON_BREAKING_SPACE);
 
   if (isFirst) {
-    text = text.replace(/^\ /, NON_BREAKING_SPACE)
+    text = text.replace(/^\ /, NON_BREAKING_SPACE);
   }
 
-  return text
+  return text;
 }
 
-function preserveSignificantWhiteSpaceForElement (node: Element) {
+function preserveSignificantWhiteSpaceForElement(node: Element) {
   // Replace spaces with nbsp; to bypass Nokogiri whitespace stripping.
   // Only do this for `<p>` tags. Many other elements will break, most notably `<img>`
   if (node.textContent?.trim() === "" && !node.querySelector("br")) {
     // `<br class='rhino-preserve-line'>` gets stripped, so make it a plain `<br>`
     node.innerHTML = "<br>" + node.innerHTML;
-    return
+    return;
   }
 
-  const textNodes = getAllTextNodes(node)
+  const textNodes = getAllTextNodes(node);
 
   textNodes.forEach((textNode, index) => {
-    const isFirst = index === 0
-    const isLast = index === textNodes.length - 1
+    const isFirst = index === 0;
+    const isLast = index === textNodes.length - 1;
     if (textNode.textContent) {
-      const text = replaceSignificantWhitespace(textNode.textContent, isFirst, isLast)
-      textNode.textContent = text
+      const text = replaceSignificantWhitespace(
+        textNode.textContent,
+        isFirst,
+        isLast,
+      );
+      textNode.textContent = text;
     }
-  })
+  });
 }
 
 function getAllTextNodes(element: Element) {
-    const textNodes = [];
-    const walker = document.createTreeWalker(
-        element,
-        NodeFilter.SHOW_TEXT,
-        null,
-    );
+  const textNodes = [];
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null);
 
-    let node;
-    while (node = walker.nextNode()) {
-        textNodes.push(node);
-    }
+  let node;
+  while ((node = walker.nextNode())) {
+    textNodes.push(node);
+  }
 
-    return textNodes;
+  return textNodes;
 }
-

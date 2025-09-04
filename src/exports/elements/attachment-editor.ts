@@ -47,13 +47,13 @@ export class AttachmentEditor extends BaseElement {
   altTextMinLength: number;
 
   // Internal property to fix a bug with Firefox and pointerdown.
-  waitForDialogOpen: boolean
+  waitForDialogOpen: boolean;
 
   constructor() {
     super();
     this.loadingState = "not-started";
     this.fileUploadErrorMessage = fileUploadErrorMessage;
-    this.waitForDialogOpen = false
+    this.waitForDialogOpen = false;
 
     this.altTextMaxLength = 2000;
     this.altTextMinLength = 1;
@@ -121,7 +121,7 @@ export class AttachmentEditor extends BaseElement {
     }
 
     if (this.waitForDialogOpen) {
-      return
+      return;
     }
 
     const dialog = this.shadowRoot?.querySelector("dialog");
@@ -542,13 +542,13 @@ export class AttachmentEditor extends BaseElement {
         part="button alt-text-button"
         type="button"
         @pointerdown=${(e: Event) => {
-          e.preventDefault()
+          e.preventDefault();
           this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen });
           this.altTextDialogOpen = true;
-          this.waitForDialogOpen = true
+          this.waitForDialogOpen = true;
           setTimeout(() => {
-            this.waitForDialogOpen = false // after 200ms, allow outside clicks to close.
-          }, 200)
+            this.waitForDialogOpen = false; // after 200ms, allow outside clicks to close.
+          }, 200);
         }}
       >
         ${this.altText ? html`` : this.warningIcon()}
