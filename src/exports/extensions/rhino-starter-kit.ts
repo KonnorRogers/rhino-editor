@@ -78,6 +78,11 @@ export interface RhinoStarterKitOptions {
    */
   rhinoSelection: Partial<RhinoSelectionOptions> | false;
 }
+import Paragraph from "@tiptap/extension-paragraph"
+
+export const CustomParagraph = Paragraph.extend({
+  whitespace: "full"
+})
 
 export type TipTapPlugin = Node | Extension | Mark;
 

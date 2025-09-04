@@ -1097,7 +1097,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
   renderUndoButton(prefix = "") {
     const undoEnabled =
-      this.starterKitOptions.history !== false ||
+      this.starterKitOptions.undoRedo !== false ||
       Boolean(this.editor?.commands.undo);
 
     if (!undoEnabled) return html``;
@@ -1265,7 +1265,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
   renderRedoButton(prefix = "") {
     const redoEnabled =
-      this.starterKitOptions.history !== false ||
+      this.starterKitOptions.undoRedo !== false ||
       Boolean(this.editor?.commands.redo);
 
     if (!redoEnabled) return html``;

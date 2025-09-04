@@ -707,13 +707,18 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           const { tr } = view.state;
 
-          const captionNode = view.state.doc.nodeAt(getPos() + 1);
+          const pos = getPos()
+          if (pos == null) {
+            return
+          }
+
+          const captionNode = view.state.doc.nodeAt(pos + 1);
           captionNode?.nodeSize;
 
           tr.setSelection(
             TextSelection.create(
               view.state.doc,
-              getPos() + 1 + (captionNode?.nodeSize || 0),
+              pos + 1 + (captionNode?.nodeSize || 0),
             ),
           );
 
@@ -755,10 +760,12 @@ export const Attachment = Node.create<AttachmentOptions>({
 
       const handleMouseMove = (_e: MouseEvent) => {
         if (mouseIsDown && typeof getPos === "function") {
+          const pos = getPos()
+          if (pos == null) { return }
           const { view } = editor;
           view.dispatch(
             view.state.tr.setSelection(
-              NodeSelection.create(view.state.doc, getPos()),
+              NodeSelection.create(view.state.doc, pos),
             ),
           );
         }
@@ -776,6 +783,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           const { tr } = view.state;
 
           const pos = getPos();
+          if (pos == null) { return }
           tr.setNodeMarkup(pos, null, {
             ...node.attrs,
             ...attrs,
@@ -791,6 +799,7 @@ export const Attachment = Node.create<AttachmentOptions>({
           const { tr } = view.state;
 
           const pos = getPos();
+          if (pos == null) { return }
           tr.delete(pos, pos + 1);
           view.dispatch(tr);
         }
