@@ -282,7 +282,7 @@ export class TipTapEditorBase extends BaseElement {
       preserveSignificantWhiteSpaceForElement(p);
     });
 
-    return tempScript.innerHTML
+    return tempScript.innerHTML;
   }
 
   /**
@@ -1018,7 +1018,7 @@ export class TipTapEditorBase extends BaseElement {
       preserveSignificantWhiteSpaceForElement(p);
     });
 
-    return tempScript.innerHTML
+    return tempScript.innerHTML;
   }
 }
 
