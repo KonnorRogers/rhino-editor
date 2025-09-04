@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.3
+
+### Patch Changes
+
+- [#299](https://github.com/KonnorRogers/rhino-editor/pull/299) [`8ed419e`](https://github.com/KonnorRogers/rhino-editor/commit/8ed419ec9501463bdd8c39e39c0384c76ce89d65) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug Fix: More bug fixes with nbsp and `<br>`, should align close to Trix.
+
+- [#299](https://github.com/KonnorRogers/rhino-editor/pull/299) [`8ed419e`](https://github.com/KonnorRogers/rhino-editor/commit/8ed419ec9501463bdd8c39e39c0384c76ce89d65) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug fix: Fix a bug with alt text editor on firefox
+
 ## 0.17.2
 
 ### Patch Changes
