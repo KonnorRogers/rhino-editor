@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class AttachmentGalleriesTest < ApplicationSystemTestCase
   def attach_files(files)
+    page.locator("rhino-editor [role='textbox']").first.click
     rhino_editor = page.expect_file_chooser do
       page.locator("rhino-editor slot[name='toolbar'] [part~='toolbar__button--attach-files']").first.click
     end
@@ -9,6 +10,7 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
     files = files.map { |file| file_fixture(file).to_s }
 
     rhino_editor.set_files(files)
+    page.locator("rhino-editor [role='textbox']").first.click
   end
 
   def setup
@@ -88,8 +90,9 @@ class AttachmentGalleriesTest < ApplicationSystemTestCase
         "addresses.csv"
       ]
 
-      page.locator("rhino-editor").nth(0).click
+      page.locator("rhino-editor [role='textbox']").nth(0).click
       attach_files(files)
+      wait_for_network_idle
       page.wait_for_selector(".attachment-gallery .attachment[sgid]", state: "visible")
       page.wait_for_selector(":not(.attachment-gallery) .attachment[sgid]", state: "visible")
 

@@ -266,9 +266,7 @@ export class TipTapEditorBase extends BaseElement {
       return "";
     }
 
-    const tempScript = document.createElement("script");
-    // We want plain text so we don't parse.
-    tempScript.type = "text/plain";
+    const tempScript = document.createElement("div");
 
     const contentSlice = editor.view.state.doc.slice(from, to);
     const fragment = contentSlice.content;
@@ -284,12 +282,7 @@ export class TipTapEditorBase extends BaseElement {
       preserveSignificantWhiteSpaceForElement(p);
     });
 
-    // const element = document.createElement("div")
-    // const tempEditor = new Editor({...this.allOptions(element), content: tempScript.innerHTML});
-    // const html = tempEditor.getHTML()
-    // tempEditor.destroy()
-    // return html
-    return this.editor?.getHTML();
+    return tempScript.innerHTML
   }
 
   /**
@@ -1010,8 +1003,6 @@ export class TipTapEditorBase extends BaseElement {
     }
 
     const tempScript = document.createElement("div");
-    // We want plain text so we don't parse.
-    // tempScript.type = "text/plain";
 
     const doc = editor.view.state.doc;
     const schema = editor.schema;
@@ -1027,14 +1018,7 @@ export class TipTapEditorBase extends BaseElement {
       preserveSignificantWhiteSpaceForElement(p);
     });
 
-    const element = document.createElement("div");
-    const tempEditor = new Editor({
-      ...this.allOptions(element),
-      content: tempScript.innerHTML,
-    });
-    const html = tempEditor.getHTML();
-    tempEditor.destroy();
-    return html;
+    return tempScript.innerHTML
   }
 }
 

@@ -486,6 +486,8 @@ export const Attachment = Node.create<AttachmentOptions>({
       }),
     ] as const;
 
+    console.log(figure)
+
     const figcaption = [
       "figcaption",
       mergeAttributes(

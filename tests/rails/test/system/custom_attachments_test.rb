@@ -10,10 +10,13 @@ class CustomAttachmentsTest < ApplicationSystemTestCase
   test "Should properly insert a custom attachment" do
     page.get_by_role('link', name: /New Post/i).click
 
-    page.locator("rhino-editor").get_by_role("button", name: /Embed/i).click
+    rhino_editor = page.locator("rhino-editor").nth(0)
+    rhino_editor.get_by_role("textbox").click
+    rhino_editor.get_by_role("button", name: /Embed/i).click
 
     def check
-      assert page.locator("rhino-editor figure.attachment").nth(0).wait_for(state: 'visible')
+      rhino_editor = page.locator("rhino-editor").nth(0)
+      assert rhino_editor.locator("figure.attachment").nth(0).wait_for(state: 'visible')
     end
 
     check
