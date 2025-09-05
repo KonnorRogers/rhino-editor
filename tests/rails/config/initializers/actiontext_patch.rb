@@ -1,5 +1,11 @@
 # config/initializers/actiontext_patch.rb
-Rails.application.config.after_initialize do
-    ActionText::TrixAttachment::ATTRIBUTES << "alt"
-    ActionText::Attachment::ATTRIBUTES << "alt"
+ActiveSupport.on_load(:after_initialize) do
+    # if !ActionText::ContentHelper.allowed_tags
+    #   ActionText::ContentHelper.allowed_tags = ["iframe"]
+    # else
+    #   ActionText::ContentHelper.allowed_tags << "iframe"
+    # end
+
+  ActionText::TrixAttachment::ATTRIBUTES << "alt"
+  ActionText::Attachment::ATTRIBUTES << "alt"
 end
