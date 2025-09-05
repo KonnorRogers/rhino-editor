@@ -1,5 +1,12 @@
 import { BaseElement } from "../../internal/elements/base-element.js";
-import { AnyExtension, Content, Editor, EditorOptions, generateHTML, generateJSON } from "@tiptap/core";
+import {
+  AnyExtension,
+  Content,
+  Editor,
+  EditorOptions,
+  generateHTML,
+  generateJSON,
+} from "@tiptap/core";
 import { tipTapCoreStyles } from "../styles/tip-tap-core-styles.js";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
 import StarterKit, { StarterKitOptions } from "@tiptap/starter-kit";
@@ -282,8 +289,11 @@ export class TipTapEditorBase extends BaseElement {
       preserveSignificantWhiteSpaceForElement(p);
     });
 
-    const json = generateJSON(tempScript.innerHTML, editor.extensionManager.extensions)
-    const html = generateHTML(json, editor.extensionManager.extensions)
+    const json = generateJSON(
+      tempScript.innerHTML,
+      editor.extensionManager.extensions,
+    );
+    const html = generateHTML(json, editor.extensionManager.extensions);
 
     return html;
   }
@@ -1021,8 +1031,11 @@ export class TipTapEditorBase extends BaseElement {
       preserveSignificantWhiteSpaceForElement(p);
     });
 
-    const json = generateJSON(tempScript.innerHTML, editor.extensionManager.extensions)
-    const html = generateHTML(json, editor.extensionManager.extensions)
+    const json = generateJSON(
+      tempScript.innerHTML,
+      editor.extensionManager.extensions,
+    );
+    const html = generateHTML(json, editor.extensionManager.extensions);
 
     return html;
   }
