@@ -51,7 +51,7 @@ export type RhinoEditorStarterKitOptions = StarterKitOptions &
     decreaseIndentation: boolean;
   };
 
-const NON_BREAKING_SPACE = "\u00A0"
+const NON_BREAKING_SPACE = "\u00A0";
 
 export class TipTapEditorBase extends BaseElement {
   // Static
@@ -268,9 +268,7 @@ export class TipTapEditorBase extends BaseElement {
       return "";
     }
 
-    const tempScript = document.createElement("script");
-    // We want plain text so we don't parse.
-    tempScript.type = "text/plain";
+    const tempScript = document.createElement("div");
 
     const contentSlice = editor.view.state.doc.slice(from, to);
     const fragment = contentSlice.content;
@@ -283,8 +281,8 @@ export class TipTapEditorBase extends BaseElement {
     tempScript.append(domFragment);
 
     tempScript.querySelectorAll(":scope > p").forEach((p) => {
-      preserveSignificantWhiteSpaceForElement(p)
-    })
+      preserveSignificantWhiteSpaceForElement(p);
+    });
 
     return tempScript.innerHTML;
   }
@@ -634,7 +632,11 @@ export class TipTapEditorBase extends BaseElement {
    * Apparently this is a native dom method?
    */
   getHTML() {
-    return this.getHTMLAndPreserveSignificantWhiteSpace()
+    const editor = this.editor;
+    if (!editor) {
+      return "";
+    }
+    return this.getHTMLAndPreserveSignificantWhiteSpace();
   }
 
   /**
@@ -645,7 +647,10 @@ export class TipTapEditorBase extends BaseElement {
 
     const rootNode = (this.getRootNode() || document) as Element;
 
-    return rootNode.querySelector(`#${this.input}`) as Maybe<HTMLInputElement>;
+    const el = rootNode.querySelector(
+      `#${this.input}`,
+    ) as Maybe<HTMLInputElement>;
+    return el;
   }
 
   async handleFiles(files: File[] | FileList): Promise<AttachmentManager[]> {
@@ -993,60 +998,89 @@ export class TipTapEditorBase extends BaseElement {
     return editor;
   }
 
-  getHTMLAndPreserveSignificantWhiteSpace () {
-    const editor = this.editor
-    if (!editor) { return "" }
+  getHTMLAndPreserveSignificantWhiteSpace() {
+    const editor = this.editor;
+    if (!editor) {
+      return "";
+    }
 
-    const tempScript = document.createElement("script");
-    // We want plain text so we don't parse.
-    tempScript.type = "text/plain";
+    const tempScript = document.createElement("div");
 
     const doc = editor.view.state.doc;
-    const schema = editor.schema
+    const schema = editor.schema;
 
     // Serialize the fragment to a DOM fragment
-    const domFragment = DOMSerializer.fromSchema(
-      schema
-    ).serializeFragment(doc.content);
+    const domFragment = DOMSerializer.fromSchema(schema).serializeFragment(
+      doc.content,
+    );
 
     tempScript.append(domFragment);
 
-    tempScript.querySelectorAll("p").forEach((p) => {
-      preserveSignificantWhiteSpaceForElement(p)
-    })
+    tempScript.querySelectorAll(":scope > p").forEach((p) => {
+      preserveSignificantWhiteSpaceForElement(p);
+    });
 
     return tempScript.innerHTML;
   }
 }
 
-function replaceSignificantWhitespace(textNode: Node) {
-  const currentText = textNode.textContent;
-  let newText = currentText
+// Recreation of:
+// https://github.com/basecamp/trix/blob/main/src/trix/views/piece_view.js#L127-L142
+function replaceSignificantWhitespace(
+  text: string,
+  isFirst?: boolean,
+  isLast?: boolean,
+) {
+  if (isLast) {
+    // Different strategies for different whitespace patterns
+    text = text.replace(/\ $/, NON_BREAKING_SPACE);
+  }
 
-  if (!newText) { return }
-
-  // Different strategies for different whitespace patterns
-  newText = newText.replace(/\ $/, NON_BREAKING_SPACE)
-
-  newText = newText
+  text = text
     .replace(/(\S)\ {3}(\S)/g, "$1 " + NON_BREAKING_SPACE + " $2")
     .replace(/\ {2}/g, NON_BREAKING_SPACE + " ")
-    .replace(/\ {2}/g, " " + NON_BREAKING_SPACE)
+    .replace(/\ {2}/g, " " + NON_BREAKING_SPACE);
 
-  newText = newText.replace(/^\ /, NON_BREAKING_SPACE)
-
-  if (newText !== currentText) {
-    textNode.textContent = newText;
+  if (isFirst) {
+    text = text.replace(/^\ /, NON_BREAKING_SPACE);
   }
+
+  return text;
 }
 
-function preserveSignificantWhiteSpaceForElement (node: Element) {
+function preserveSignificantWhiteSpaceForElement(node: Element) {
   // Replace spaces with nbsp; to bypass Nokogiri whitespace stripping.
   // Only do this for `<p>` tags. Many other elements will break, most notably `<img>`
-  if (node.textContent?.trim() === "") {
+  if (node.textContent?.trim() === "" && !node.querySelector("br")) {
     // `<br class='rhino-preserve-line'>` gets stripped, so make it a plain `<br>`
     node.innerHTML = "<br>" + node.innerHTML;
+    return;
   }
 
-  replaceSignificantWhitespace(node)
+  const textNodes = getAllTextNodes(node);
+
+  textNodes.forEach((textNode, index) => {
+    const isFirst = index === 0;
+    const isLast = index === textNodes.length - 1;
+    if (textNode.textContent) {
+      const text = replaceSignificantWhitespace(
+        textNode.textContent,
+        isFirst,
+        isLast,
+      );
+      textNode.textContent = text;
+    }
+  });
+}
+
+function getAllTextNodes(element: Element) {
+  const textNodes = [];
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null);
+
+  let node;
+  while ((node = walker.nextNode())) {
+    textNodes.push(node);
+  }
+
+  return textNodes;
 }

@@ -46,10 +46,14 @@ export class AttachmentEditor extends BaseElement {
   altTextMaxLength: number;
   altTextMinLength: number;
 
+  // Internal property to fix a bug with Firefox and pointerdown.
+  waitForDialogOpen: boolean;
+
   constructor() {
     super();
     this.loadingState = "not-started";
     this.fileUploadErrorMessage = fileUploadErrorMessage;
+    this.waitForDialogOpen = false;
 
     this.altTextMaxLength = 2000;
     this.altTextMinLength = 1;
@@ -103,15 +107,20 @@ export class AttachmentEditor extends BaseElement {
     const altTextButton = this.shadowRoot?.querySelector(
       "[part~='alt-text-button']",
     );
+
     if (altTextButton && composedPath.includes(altTextButton)) {
-      this.altTextDialogOpen = true;
-      this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen });
       e.preventDefault();
+      this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen });
+      this.altTextDialogOpen = true;
       return;
     }
 
     // No need to check unless the dialog is open.
     if (!this.altTextDialogOpen) {
+      return;
+    }
+
+    if (this.waitForDialogOpen) {
       return;
     }
 
@@ -532,10 +541,14 @@ export class AttachmentEditor extends BaseElement {
       <button
         part="button alt-text-button"
         type="button"
-        @pointerdown=${(_e: Event) => {
-          // this needs to be done on pointerdown, "click" is too late because ProseMirror replaces the element.
-          this.altTextDialogOpen = true;
+        @pointerdown=${(e: Event) => {
+          e.preventDefault();
           this.setNodeAttributes({ altTextDialogOpen: this.altTextDialogOpen });
+          this.altTextDialogOpen = true;
+          this.waitForDialogOpen = true;
+          setTimeout(() => {
+            this.waitForDialogOpen = false; // after 200ms, allow outside clicks to close.
+          }, 200);
         }}
       >
         ${this.altText ? html`` : this.warningIcon()}
