@@ -27,13 +27,13 @@ importers:
         specifier: ^3.4.1
         version: 3.4.1(@tiptap/pm@3.4.1)
       '@tiptap/extension-collaboration':
-        specifier: ^3.4.1
-        version: 3.4.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))(@tiptap/pm@3.4.1)(@tiptap/y-tiptap@3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20))(yjs@13.6.20)
+        specifier: ^3.4.0
+        version: 3.4.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))(@tiptap/pm@3.4.1)(@tiptap/y-tiptap@3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27))(yjs@13.6.27)
       '@tiptap/extension-collaboration-cursor':
         specifier: ^2.26.1
-        version: 2.26.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))(y-prosemirror@1.2.12(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20))
+        version: 2.26.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))(y-prosemirror@1.3.7(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27))
       '@tiptap/extension-youtube':
-        specifier: ^3.4.1
+        specifier: ^3.4.0
         version: 3.4.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))
       '@tiptap/pm':
         specifier: ^3.4.1
@@ -42,7 +42,7 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
       prosemirror-view:
-        specifier: ^1.41.0
+        specifier: ^1.40.1
         version: 1.41.0
       rhino-editor:
         specifier: link:../..
@@ -51,24 +51,24 @@ importers:
         specifier: 2.1.15
         version: 2.1.15
       y-prosemirror:
-        specifier: ^1.2.12
-        version: 1.2.12(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20)
+        specifier: ^1.3.7
+        version: 1.3.7(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27)
       y-protocols:
         specifier: ^1.0.6
-        version: 1.0.6(yjs@13.6.20)
+        version: 1.0.6(yjs@13.6.27)
       y-websocket:
         specifier: ^2.0.4
-        version: 2.0.4(yjs@13.6.20)
+        version: 2.0.4(yjs@13.6.27)
       yjs:
-        specifier: 13.6.20
-        version: 13.6.20
+        specifier: 13.6.27
+        version: 13.6.27
     devDependencies:
       '@playwright/test':
-        specifier: ~1.47.0
-        version: 1.47.2
+        specifier: ~1.55.0
+        version: 1.55.0
       playwright:
-        specifier: ~1.47.0
-        version: 1.47.2
+        specifier: ~1.55.0
+        version: 1.55.0
       vite:
         specifier: ^5.4.10
         version: 5.4.10(@types/node@22.8.6)
@@ -235,8 +235,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@playwright/test@1.47.2':
-    resolution: {integrity: sha512-jTXRsoSPONAs8Za9QEQdyjFn+0ZQFjCiIztAIF6bi1HqhBzG9Ma7g1WotyiGqFSBRZjIEqMdT8RUlbk1QVhzCQ==}
+  '@playwright/test@1.55.0':
+    resolution: {integrity: sha512-04IXzPwHrW69XusN/SIdDdKZBzMfOT9UNT/YiJit/xpy2VuAoB8NHc8Aplb96zsWDddLnbkPL3TsmrS04ZU2xQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -614,13 +614,13 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
-  playwright-core@1.47.2:
-    resolution: {integrity: sha512-3JvMfF+9LJfe16l7AbSmU555PaTl2tPyQsVInqm3id16pdDfvZ8TTZ/pyzmkbDrZTQefyzU7AIHlZqQnxpqHVQ==}
+  playwright-core@1.55.0:
+    resolution: {integrity: sha512-GvZs4vU3U5ro2nZpeiwyb0zuFaqb9sUiAJuyrWpcGouD8y9/HLgGbNRjIph7zU9D3hnPaisMl9zG9CgFi/biIg==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.47.2:
-    resolution: {integrity: sha512-nx1cLMmQWqmA3UsnjaaokyoUpdVaaDhJhMoxX2qj3McpjnsqFHs516QAKYhqHAgOP+oCFTEOCOAaD1RgD/RQfA==}
+  playwright@1.55.0:
+    resolution: {integrity: sha512-sdCWStblvV1YU909Xqx0DhOjPZE4/5lJsIS84IfN9dAZfcl/CIZ5O8l3o0j7hPMjDvqoTF8ZUcc+i/GL5erstA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -803,8 +803,8 @@ packages:
     peerDependencies:
       yjs: ^13.0.0
 
-  y-prosemirror@1.2.12:
-    resolution: {integrity: sha512-UMnUIR5ppVn30n2kzeeBQEaesWGe4fsbnlch1HnNa3/snJMoOn7M7dieuS+o1OQwKs1dqx2eT3gFfGF2aOaQdw==}
+  y-prosemirror@1.3.7:
+    resolution: {integrity: sha512-NpM99WSdD4Fx4if5xOMDpPtU3oAmTSjlzh5U4353ABbRHl1HtAFUx6HlebLZfyFxXN9jzKMDkVbcRjqOZVkYQg==}
     engines: {node: '>=16.0.0', npm: '>=8.0.0'}
     peerDependencies:
       prosemirror-model: ^1.7.1
@@ -826,8 +826,8 @@ packages:
     peerDependencies:
       yjs: ^13.5.6
 
-  yjs@13.6.20:
-    resolution: {integrity: sha512-Z2YZI+SYqK7XdWlloI3lhMiKnCdFCVC4PchpdO+mCYwtiTwncjUbnRK9R1JmkNfdmHyDXuWN3ibJAt0wsqTbLQ==}
+  yjs@13.6.27:
+    resolution: {integrity: sha512-OIDwaflOaq4wC6YlPBy2L6ceKeKuF7DeTxx+jPzv1FHn9tCZ0ZwSRnUBxD05E3yed46fv/FWJbvR+Ud7x0L7zw==}
     engines: {node: '>=16.0.0', npm: '>=8.0.0'}
 
 snapshots:
@@ -917,9 +917,9 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@playwright/test@1.47.2':
+  '@playwright/test@1.55.0':
     dependencies:
-      playwright: 1.47.2
+      playwright: 1.55.0
 
   '@rails/actioncable@8.0.201': {}
 
@@ -992,17 +992,17 @@ snapshots:
     dependencies:
       '@tiptap/pm': 3.4.1
 
-  '@tiptap/extension-collaboration-cursor@2.26.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))(y-prosemirror@1.2.12(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20))':
+  '@tiptap/extension-collaboration-cursor@2.26.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))(y-prosemirror@1.3.7(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27))':
     dependencies:
       '@tiptap/core': 3.4.1(@tiptap/pm@3.4.1)
-      y-prosemirror: 1.2.12(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20)
+      y-prosemirror: 1.3.7(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27)
 
-  '@tiptap/extension-collaboration@3.4.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))(@tiptap/pm@3.4.1)(@tiptap/y-tiptap@3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20))(yjs@13.6.20)':
+  '@tiptap/extension-collaboration@3.4.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))(@tiptap/pm@3.4.1)(@tiptap/y-tiptap@3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27))(yjs@13.6.27)':
     dependencies:
       '@tiptap/core': 3.4.1(@tiptap/pm@3.4.1)
       '@tiptap/pm': 3.4.1
-      '@tiptap/y-tiptap': 3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20)
-      yjs: 13.6.20
+      '@tiptap/y-tiptap': 3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27)
+      yjs: 13.6.27
 
   '@tiptap/extension-youtube@3.4.1(@tiptap/core@3.4.1(@tiptap/pm@3.4.1))':
     dependencies:
@@ -1029,14 +1029,14 @@ snapshots:
       prosemirror-transform: 1.10.4
       prosemirror-view: 1.41.0
 
-  '@tiptap/y-tiptap@3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20)':
+  '@tiptap/y-tiptap@3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27)':
     dependencies:
       lib0: 0.2.114
       prosemirror-model: 1.25.3
       prosemirror-state: 1.4.3
       prosemirror-view: 1.41.0
-      y-protocols: 1.0.6(yjs@13.6.20)
-      yjs: 13.6.20
+      y-protocols: 1.0.6(yjs@13.6.27)
+      yjs: 13.6.27
 
   '@types/estree@1.0.6': {}
 
@@ -1060,8 +1060,8 @@ snapshots:
   '@y-rb/actioncable@0.2.1':
     dependencies:
       lib0: 0.2.98
-      y-protocols: 1.0.6(yjs@13.6.20)
-      yjs: 13.6.20
+      y-protocols: 1.0.6(yjs@13.6.27)
+      yjs: 13.6.27
 
   abstract-leveldown@6.2.3:
     dependencies:
@@ -1316,11 +1316,11 @@ snapshots:
 
   picomatch@2.3.1: {}
 
-  playwright-core@1.47.2: {}
+  playwright-core@1.55.0: {}
 
-  playwright@1.47.2:
+  playwright@1.55.0:
     dependencies:
-      playwright-core: 1.47.2
+      playwright-core: 1.55.0
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -1534,40 +1534,40 @@ snapshots:
   xtend@4.0.2:
     optional: true
 
-  y-leveldb@0.1.2(yjs@13.6.20):
+  y-leveldb@0.1.2(yjs@13.6.27):
     dependencies:
       level: 6.0.1
       lib0: 0.2.98
-      yjs: 13.6.20
+      yjs: 13.6.27
     optional: true
 
-  y-prosemirror@1.2.12(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.20))(yjs@13.6.20):
+  y-prosemirror@1.3.7(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.41.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27):
     dependencies:
-      lib0: 0.2.98
+      lib0: 0.2.114
       prosemirror-model: 1.25.3
       prosemirror-state: 1.4.3
       prosemirror-view: 1.41.0
-      y-protocols: 1.0.6(yjs@13.6.20)
-      yjs: 13.6.20
+      y-protocols: 1.0.6(yjs@13.6.27)
+      yjs: 13.6.27
 
-  y-protocols@1.0.6(yjs@13.6.20):
+  y-protocols@1.0.6(yjs@13.6.27):
     dependencies:
       lib0: 0.2.98
-      yjs: 13.6.20
+      yjs: 13.6.27
 
-  y-websocket@2.0.4(yjs@13.6.20):
+  y-websocket@2.0.4(yjs@13.6.27):
     dependencies:
       lib0: 0.2.98
       lodash.debounce: 4.0.8
-      y-protocols: 1.0.6(yjs@13.6.20)
-      yjs: 13.6.20
+      y-protocols: 1.0.6(yjs@13.6.27)
+      yjs: 13.6.27
     optionalDependencies:
       ws: 6.2.3
-      y-leveldb: 0.1.2(yjs@13.6.20)
+      y-leveldb: 0.1.2(yjs@13.6.27)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  yjs@13.6.20:
+  yjs@13.6.27:
     dependencies:
-      lib0: 0.2.98
+      lib0: 0.2.114

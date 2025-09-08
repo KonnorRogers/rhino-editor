@@ -1,7 +1,9 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem "rails", "~> 7.1"
+gem "rails", "~> 8"
+# gem "rails", "8.1.0.beta1"
+gem "nokogiri", "~> 1.18"
 
 gem "aws-sdk-s3", "~> 1.114"
 gem "bootsnap", require: false
@@ -31,4 +33,6 @@ group :collaboration do
   gem "y-rb_actioncable", "~> 0.1.5"
 end
 
-gem "sqlite3", "~> 1.4"
+gem "sqlite3", "~> 2"
+
+gem "ruby-vips", "~> 2.2"
