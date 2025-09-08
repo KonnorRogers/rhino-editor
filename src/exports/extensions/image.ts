@@ -1,5 +1,8 @@
-import { Node, mergeAttributes } from "@tiptap/core";
-import { findAttribute } from "./find-attribute.js";
+import {
+  Node,
+  // mergeAttributes
+} from "@tiptap/core";
+// import { findAttribute } from "./find-attribute.js";
 
 export interface ImageOptions {
   HTMLAttributes: Record<string, any>;
@@ -11,44 +14,44 @@ export const Image = Node.create({
   draggable: false,
   group: "block",
 
-  addOptions() {
-    return {
-      HTMLAttributes: {},
-    };
-  },
+  // addOptions() {
+  //   return {
+  //     HTMLAttributes: {},
+  //   };
+  // },
 
-  addAttributes() {
-    return {
-      src: {
-        default: "",
-        parseHTML: (element) => findAttribute(element, "url"),
-      },
-      height: {
-        default: "",
-        parseHTML: (element) => findAttribute(element, "height"),
-      },
-      width: {
-        default: "",
-        parseHTML: (element) => findAttribute(element, "width"),
-      },
-      attachmentId: {
-        default: null,
-      },
-    };
-  },
+  // addAttributes() {
+  //   return {
+  //     src: {
+  //       default: "",
+  //       parseHTML: (element) => findAttribute(element, "url"),
+  //     },
+  //     height: {
+  //       default: "",
+  //       parseHTML: (element) => findAttribute(element, "height"),
+  //     },
+  //     width: {
+  //       default: "",
+  //       parseHTML: (element) => findAttribute(element, "width"),
+  //     },
+  //     attachmentId: {
+  //       default: null,
+  //     },
+  //   };
+  // },
 
-  parseHTML() {
-    return [
-      {
-        tag: "figure[data-trix-attachment] img[src]",
-      },
-    ];
-  },
+  // parseHTML() {
+  //   return [
+  //     {
+  //       tag: "figure[data-trix-attachment] img[src]",
+  //     },
+  //   ];
+  // },
 
-  renderHTML({ HTMLAttributes }) {
-    return [
-      "img",
-      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-    ];
-  },
+  // renderHTML({ HTMLAttributes }) {
+  //   return [
+  //     "img",
+  //     mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+  //   ];
+  // },
 });

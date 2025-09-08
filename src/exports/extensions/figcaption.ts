@@ -1,4 +1,7 @@
-import { Node, mergeAttributes } from "@tiptap/core";
+import {
+  Node,
+  // mergeAttributes
+} from "@tiptap/core";
 
 export interface FigcaptionOptions {
   HTMLAttributes: Record<string, any>;
@@ -13,25 +16,25 @@ export const Figcaption = Node.create({
   defining: true,
   isolating: true,
 
-  addOptions() {
-    return {
-      HTMLAttributes: { class: "attachment__caption attachment--edited" },
-    };
-  },
+  // addOptions() {
+  //   return {
+  //     HTMLAttributes: { class: "attachment__caption attachment--edited" },
+  //   };
+  // },
 
-  parseHTML() {
-    return [
-      {
-        tag: `figure.attachment figcaption`,
-      },
-    ];
-  },
+  // parseHTML() {
+  //   return [
+  //     {
+  //       tag: `figure.attachment figcaption`,
+  //     },
+  //   ];
+  // },
 
-  renderHTML({ HTMLAttributes }) {
-    return [
-      "figcaption",
-      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
-      0,
-    ];
-  },
+  // renderHTML({ HTMLAttributes }) {
+  //   return [
+  //     "figcaption",
+  //     mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+  //     0,
+  //   ];
+  // },
 });
