@@ -222,6 +222,7 @@ export class TipTapEditor extends TipTapEditorBase {
         fileUploadErrorMessage: this.translations.fileUploadErrorMessage,
         captionPlaceholder: this.translations.captionPlaceholder,
       },
+      rhinoGallery: false
     }) as typeof this.starterKitOptions;
 
     this.addEventListener("keydown", this.handleKeyboardDialogToggle);

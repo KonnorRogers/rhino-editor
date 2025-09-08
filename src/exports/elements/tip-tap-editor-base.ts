@@ -625,7 +625,33 @@ export class TipTapEditorBase extends BaseElement {
       return JSON.stringify(editor.getJSON());
     }
 
-    return this.getHTMLAndPreserveSignificantWhiteSpace();
+    // return this.getHTMLAndPreserveSignificantWhiteSpace();
+    return editor.getHTML()
+  }
+
+  compareAttributes (el1: Element, el2: Element) {
+    function toObject (el: Element) {
+      const obj = {} as Record<string, any>;
+      ;[...el.attributes].forEach((attr) => {
+        let val = attr.value
+        let name = attr.name
+
+
+        if (val.startsWith("{")) {
+          try {
+            val = JSON.parse(val)
+          } catch (_e) {}
+        }
+
+        obj[name] = val
+      })
+      return obj
+    }
+
+    const obj1 = toObject(el1)
+    const obj2 = toObject(el2)
+
+    console.log({ obj1, obj2 })
   }
 
   /**
