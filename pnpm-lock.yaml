@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  prosemirror-view: ^1.0.0
+  prosemirror-view: ^1.40.1
 
 importers:
 
@@ -32,9 +32,6 @@ importers:
       '@tiptap/extension-link':
         specifier: ^3.4.0
         version: 3.4.0(@tiptap/core@3.4.0(@tiptap/pm@3.4.0))(@tiptap/pm@3.4.0)
-      '@tiptap/extension-paragraph':
-        specifier: ^2.9.1
-        version: 3.4.0(@tiptap/core@3.4.0(@tiptap/pm@3.4.0))
       '@tiptap/extension-placeholder':
         specifier: ^3.4.0
         version: 3.4.0(@tiptap/extensions@3.4.0(@tiptap/core@3.4.0(@tiptap/pm@3.4.0))(@tiptap/pm@3.4.0))
@@ -2851,7 +2848,7 @@ packages:
       prosemirror-inputrules: ^1.2.0
       prosemirror-model: ^1.18.1
       prosemirror-state: ^1.4.1
-      prosemirror-view: ^1.0.0
+      prosemirror-view: ^1.40.1
 
   prosemirror-collab@1.3.1:
     resolution: {integrity: sha512-4SnynYR9TTYaQVXd/ieUvsVV4PDMBzrq2xPUWutHivDuOshZXqQ5rGbZM84HEaXKbLdItse7weMGOUdDVcLKEQ==}
@@ -2900,7 +2897,7 @@ packages:
     peerDependencies:
       prosemirror-model: ^1.22.1
       prosemirror-state: ^1.4.2
-      prosemirror-view: ^1.0.0
+      prosemirror-view: ^1.40.1
 
   prosemirror-transform@1.10.4:
     resolution: {integrity: sha512-pwDy22nAnGqNR1feOQKHxoFkkUtepoFAd3r2hbEDsnf4wp57kKA36hXsB3njA9FtONBEwSDnDeCiJe+ItD+ykw==}
