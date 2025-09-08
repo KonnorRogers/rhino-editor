@@ -1,13 +1,13 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem "rails", "~> 7.0.2", ">= 7.0.2.3"
+gem "rails", "~> 7.1"
 
 gem "aws-sdk-s3", "~> 1.114"
 gem "bootsnap", require: false
 gem "jbuilder"
 gem "image_processing", "~> 1.2"
-gem "puma", "~> 5.0"
+gem "puma", "~> 6"
 gem "turbo-rails"
 gem "redis", "~> 4.0"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
