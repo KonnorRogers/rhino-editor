@@ -419,7 +419,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         },
       },
       {
-        tag: "action-text-attachment[content]",
+        tag: "action-text-attachment",
         getAttrs: (node) => {
           const isValid = canParseAttachment(node, this.options.previewable);
 
