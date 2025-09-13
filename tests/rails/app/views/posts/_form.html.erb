@@ -46,7 +46,18 @@
       <div>
         <h3>Trix Editor</h3>
         <button type="button" data-controller="embed">Embed</button>
-        <%= form.rich_text_area :trix_body %>
+        <%= tag.input type: :hidden,
+          id: "trix_body",
+          name: "post[trix_body]",
+          value: params[:raw] ? post.trix_body : (post.trix_body.try(:to_trix_html) || post.trix_body),
+          autocomplete: "off"
+        %>
+        <trix-editor
+          role="textbox"
+          input="trix_body"
+          data-blob-url-template="<%= rails_service_blob_url(":signed_id", ":filename") %>"
+          data-direct-upload-url="<%= rails_direct_uploads_url %>"
+        ></trix-editor>
       </div>
       <div>
         <h3>Trix -> TipTap Mirror</h3>

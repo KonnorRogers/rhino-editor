@@ -133,6 +133,7 @@ export class TipTapEditorBase extends BaseElement {
   starterKitOptions: Partial<RhinoEditorStarterKitOptions> = {
     // We don't use the native strike since it requires configuring ActionText.
     strike: false,
+    link: false,
     rhinoLink: {
       openOnClick: false,
     },
@@ -239,7 +240,7 @@ export class TipTapEditorBase extends BaseElement {
    *    const rhinoEditor = document.querySelector("rhino-editor")
    *    let html = rhinoEditor.getHTMLContentFromRange()
    *    if (!html) {
-   *       html = rhinoEditor.editor.getHTML()
+   *       html = rhinoEditor.getHTML()
    *    }
    */
   getHTMLContentFromRange(from?: number, to?: number) {
@@ -624,6 +625,30 @@ export class TipTapEditorBase extends BaseElement {
 
     return this.getHTMLAndPreserveSignificantWhiteSpace();
   }
+
+  // compareAttributes (el1: Element, el2: Element) {
+  //   function toObject (el: Element) {
+  //     const obj = {} as Record<string, any>;
+  //     ;[...el.attributes].forEach((attr) => {
+  //       let val = attr.value
+  //       let name = attr.name
+
+  //       if (val.startsWith("{")) {
+  //         try {
+  //           val = JSON.parse(val)
+  //         } catch (_e) {}
+  //       }
+
+  //       obj[name] = val
+  //     })
+  //     return obj
+  //   }
+
+  //   const obj1 = toObject(el1)
+  //   const obj2 = toObject(el2)
+
+  //   console.log({ obj1, obj2 })
+  // }
 
   /**
    * @override
