@@ -45,7 +45,7 @@ export default class EmbedController extends Controller {
     }
 
     if (isRhino) {
-    	let attachment = new AttachmentManager({...attrs})
+    	let attachment = new AttachmentManager({...attrs })
     	const tiptap = document.querySelector("rhino-editor")
     	tiptap.editor.chain().focus().setAttachment(attachment).run();
     }
