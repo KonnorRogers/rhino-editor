@@ -335,7 +335,7 @@ DEPENDENCIES
   minitest-reporters (~> 1.5)
   minitest-reporters-pride_reporter (~> 0.0.2)
   nokogiri (~> 1.18)
-  playwright-ruby-client (~> 1.47)
+  playwright-ruby-client (~> 1.55.0)
   puma (~> 6)
   rails (~> 8)
   redis (~> 4.0)
