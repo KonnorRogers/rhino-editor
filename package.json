@@ -48,7 +48,7 @@
     "@custom-elements-manifest/analyzer": "^0.10.5",
     "@esm-bundle/chai": "4.3.4-fix.0",
     "@open-wc/testing": "^3.2.2",
-    "@playwright/test": "^1.48.2",
+    "@playwright/test": "^1.55.0",
     "@types/mocha": "^10.0.9",
     "@types/rails__activestorage": "^8.0.1",
     "@typescript-eslint/parser": "^6.21.0",
