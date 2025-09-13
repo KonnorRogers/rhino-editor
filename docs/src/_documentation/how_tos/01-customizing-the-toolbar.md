@@ -148,12 +148,6 @@ Here are all the options available:
   /** Enables attachments */
   rhinoAttachment: Partial<AttachmentOptions> | false;
 
-  /** Enables captions in attachments */
-  rhinoFigcaption: Partial<FigcaptionOptions> | false;
-
-  /** Enables images in attachments */
-  rhinoImage: Partial<ImageOptions> | false;
-
   /**
    * Replaces the default strike from TipTap's StarterKit and replaces it with `<del>` instead of `<s>`
    */
