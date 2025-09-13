@@ -4,7 +4,7 @@ ActiveSupport.on_load(:after_initialize) do
     # Issue here: https://github.com/rails/rails/issues/55667
     #   https://github.com/rails/rails/issues/54478#issuecomment-3287272036
     # with Rails 8.x (possibly 7.1.x?)
-    ActionText::ContentHelper.allowed_tags = ["action-text-attachment", "img", "figure", "figcaption"]
+    ActionText::ContentHelper.allowed_tags = ["div", "span", "action-text-attachment", "img", "figure", "figcaption"]
   end
 
   ActionText::ContentHelper.allowed_tags << "iframe"
