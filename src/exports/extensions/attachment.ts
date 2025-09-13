@@ -466,29 +466,23 @@ export const Attachment = Node.create<AttachmentOptions>({
       alt,
     };
 
-    for (const [k,v] of Object.entries(attachmentAttrs)) {
-      if (v === "" || v == null) {
-        delete attachmentAttrs[k as keyof typeof attachmentAttrs]
-      }
-    }
-
-    const trixAttributes = {
-      ...(caption ? { caption } : {}),
-      ...(canPreview(previewable, contentType)
-        ? { presentation: "gallery" }
-        : {}),
-    }
-
     const figure = [
       "figure",
       mergeAttributes(this.options.HTMLAttributes, {
         class:
-          [this.options.HTMLAttributes.class,
-           toType(content, canPreview(previewable, contentType)),
-          toExtension(fileName)].join(" "),
+          this.options.HTMLAttributes.class +
+          " " +
+          toType(content, canPreview(previewable, contentType)) +
+          " " +
+          toExtension(fileName),
         "data-trix-content-type": contentType,
         "data-trix-attachment": JSON.stringify(attachmentAttrs),
-        ...(Object.keys(trixAttributes).length ? { "data-trix-attributes": trixAttributes } : {}),
+        "data-trix-attributes": JSON.stringify({
+          caption,
+          ...(canPreview(previewable, contentType)
+            ? { presentation: "gallery" }
+            : {}),
+        }),
       }),
     ] as const;
 
@@ -527,7 +521,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       attachmentId: { default: null },
       altTextDialogOpen: { default: false },
       caption: {
-        default: null,
+        default: "",
         parseHTML: (element) => {
           return (
             element.querySelector("figcaption")?.innerHTML ||
@@ -563,39 +557,39 @@ export const Attachment = Node.create<AttachmentOptions>({
         },
       },
       sgid: {
-        default: null,
+        default: "",
         parseHTML: (element) => findAttribute(element, "sgid"),
       },
       src: {
-        // default: null,
+        default: "",
         parseHTML: (element) => findAttribute(element, "src"),
       },
       height: {
-        // default: null,
+        default: "",
         parseHTML: (element) => findAttribute(element, "height"),
       },
       width: {
-        // default: null,
+        default: "",
         parseHTML: (element) => {
           return findAttribute(element, "width");
         },
       },
       contentType: {
-        // default: null,
+        default: "",
         parseHTML: (element) => {
           return parseContentTypeFromElement(element);
         },
       },
       fileName: {
-        default: null,
+        default: "",
         parseHTML: (element) => findAttribute(element, "filename"),
       },
       fileSize: {
-        default: null,
+        default: "",
         parseHTML: (element) => findAttribute(element, "filesize"),
       },
       content: {
-        default: null,
+        default: "",
         parseHTML: (element) => {
           const attachment = element.closest("action-text-attachment");
 
@@ -624,7 +618,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         },
       },
       url: {
-        default: null,
+        default: "",
         parseHTML: (element) => {
           return findAttribute(element, "url");
         },
@@ -665,7 +659,8 @@ export const Attachment = Node.create<AttachmentOptions>({
         alt,
         altTextDialogOpen,
       } = node.attrs as AttachmentAttrs;
-      const attachmentAttrs = {
+
+      const trixAttachment = JSON.stringify({
         contentType,
         content,
         filename: fileName,
@@ -676,28 +671,20 @@ export const Attachment = Node.create<AttachmentOptions>({
         sgid,
         url,
         caption,
-      }
-
-      Object.entries(attachmentAttrs).forEach(([k, v]) => {
-        if (v === "" || v == null) {
-          // @ts-expect-error
-          delete attachmentAttrs[k]
-        }
-      })
-
-      const trixAttachment = JSON.stringify(attachmentAttrs);
+      });
 
       const isPreviewable = canPreview(previewable, contentType);
 
       const trixAttributes = JSON.stringify({
         ...(isPreviewable ? { presentation: "gallery" } : {}),
-        ...(caption ? { caption } : {}),
+        caption,
       });
 
-      const figureClasses = [this.options.HTMLAttributes.class,
-        toType(content, canPreview(previewable, contentType)),
-        toExtension(fileName)
-      ].filter(Boolean).join(" ")
+      const figureClasses = `
+        ${this.options.HTMLAttributes.class}
+        ${toType(content, canPreview(previewable, contentType))}
+        ${toExtension(fileName)}
+      `;
 
       function handleFigureClick(e: Event) {
         const target = e.currentTarget as HTMLElement;
@@ -827,8 +814,11 @@ export const Attachment = Node.create<AttachmentOptions>({
       const template = html`
         <figure
           class=${figureClasses}
+          attachment-type=${this.name}
+          sgid=${ifDefined(sgid ? sgid : undefined)}
           data-trix-content-type=${contentType}
           data-trix-attachment=${trixAttachment}
+          data-trix-attributes=${trixAttributes}
           @click=${handleFigureClick}
           @mousedown=${handleMouseDown}
           @mouseup=${handleMouseUp}
