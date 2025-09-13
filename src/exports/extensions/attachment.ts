@@ -707,9 +707,9 @@ export const Attachment = Node.create<AttachmentOptions>({
 
           const { tr } = view.state;
 
-          const pos = getPos()
+          const pos = getPos();
           if (pos == null) {
-            return
+            return;
           }
 
           const captionNode = view.state.doc.nodeAt(pos + 1);
@@ -760,8 +760,10 @@ export const Attachment = Node.create<AttachmentOptions>({
 
       const handleMouseMove = (_e: MouseEvent) => {
         if (mouseIsDown && typeof getPos === "function") {
-          const pos = getPos()
-          if (pos == null) { return }
+          const pos = getPos();
+          if (pos == null) {
+            return;
+          }
           const { view } = editor;
           view.dispatch(
             view.state.tr.setSelection(
@@ -783,7 +785,9 @@ export const Attachment = Node.create<AttachmentOptions>({
           const { tr } = view.state;
 
           const pos = getPos();
-          if (pos == null) { return }
+          if (pos == null) {
+            return;
+          }
           tr.setNodeMarkup(pos, null, {
             ...node.attrs,
             ...attrs,
@@ -799,7 +803,9 @@ export const Attachment = Node.create<AttachmentOptions>({
           const { tr } = view.state;
 
           const pos = getPos();
-          if (pos == null) { return }
+          if (pos == null) {
+            return;
+          }
           tr.delete(pos, pos + 1);
           view.dispatch(tr);
         }

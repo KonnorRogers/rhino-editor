@@ -9,7 +9,7 @@ import Strike from "@tiptap/extension-strike";
  */
 export const CustomStrike = Strike.extend({
   name: "rhino-strike",
-  renderHTML({ HTMLAttributes }: {HTMLAttributes: Record<string, string>}) {
+  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, string> }) {
     return [
       "del",
       mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),

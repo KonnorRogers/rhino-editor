@@ -142,9 +142,7 @@ export class TipTapEditorBase extends BaseElement {
   /**
    * This will be concatenated onto RhinoStarterKit and StarterKit extensions.
    */
-  extensions: EditorOptions["extensions"] = [
-
-  ];
+  extensions: EditorOptions["extensions"] = [];
 
   /**
    * When the `defer-initialize` attribute is present, it will wait to start the TipTap editor until the attribute has been removed.
@@ -634,7 +632,6 @@ export class TipTapEditorBase extends BaseElement {
   //     ;[...el.attributes].forEach((attr) => {
   //       let val = attr.value
   //       let name = attr.name
-
 
   //       if (val.startsWith("{")) {
   //         try {

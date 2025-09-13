@@ -145,7 +145,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
 
   directUploadDidComplete(
     error: Error | null,
-    blob?: Blob & { attachable_sgid?: string } | undefined,
+    blob?: (Blob & { attachable_sgid?: string }) | undefined,
   ) {
     if (error) {
       this.handleError(error);
@@ -153,7 +153,7 @@ export class AttachmentUpload implements DirectUploadDelegate {
     }
 
     if (!blob) {
-      return
+      return;
     }
 
     if (blob.attachable_sgid) {
