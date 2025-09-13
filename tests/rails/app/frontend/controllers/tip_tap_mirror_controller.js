@@ -18,6 +18,7 @@ export default class TipTapMirrorController extends Controller {
   handleChange = () => {
     const editor = this.element
     const value = this.trixInput.value
+    if (editor?.editor == null) { return }
     editor.editor.commands.setContent(value)
   }
 }
