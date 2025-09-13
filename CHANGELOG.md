@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.18.0
+
+### Minor Changes
+
+- [#300](https://github.com/KonnorRogers/rhino-editor/pull/300) [`08de93c`](https://github.com/KonnorRogers/rhino-editor/commit/08de93cc3158318cc5570aae7da390f4dc914a99) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Dependencies: Upgrade TipTap to v3.4 from v2.7
+
+- [#300](https://github.com/KonnorRogers/rhino-editor/pull/300) [`08de93c`](https://github.com/KonnorRogers/rhino-editor/commit/08de93cc3158318cc5570aae7da390f4dc914a99) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - BREAKING_CHANGE: "rhinoImage" and "rhinoAttachment" extensions have been removed due to changes in TipTap 3
+
+- [#300](https://github.com/KonnorRogers/rhino-editor/pull/300) [`08de93c`](https://github.com/KonnorRogers/rhino-editor/commit/08de93cc3158318cc5570aae7da390f4dc914a99) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - BREAKING_CHANGE: `history` renamed to `undoRedo` because of TipTap upgrade
+
+### Patch Changes
+
+- [#300](https://github.com/KonnorRogers/rhino-editor/pull/300) [`08de93c`](https://github.com/KonnorRogers/rhino-editor/commit/08de93cc3158318cc5570aae7da390f4dc914a99) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Dependencies: Upgrade `@rails/activestorage` to 8.0
+
 ## 0.17.3
 
 ### Patch Changes
