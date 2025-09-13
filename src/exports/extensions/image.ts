@@ -1,7 +1,9 @@
 import {
+    mergeAttributes,
   Node,
   // mergeAttributes
 } from "@tiptap/core";
+import { findAttribute } from "./find-attribute";
 // import { findAttribute } from "./find-attribute.js";
 
 export interface ImageOptions {
@@ -43,7 +45,7 @@ export const Image = Node.create({
   // parseHTML() {
   //   return [
   //     {
-  //       tag: "figure[data-trix-attachment] img[src]",
+  //       tag: ":not(:is([data-trix-attachment], figure)) img[src]",
   //     },
   //   ];
   // },

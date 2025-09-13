@@ -406,7 +406,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       },
       // When it's .attachment, its coming from <action-text-attachment><figure></figure></action-text-attachment> its the raw HTML.
       {
-        tag: "action-text-attachment > figure.attachment",
+        tag: "action-text-attachment:not([content]) > figure.attachment",
         contentElement: "figcaption",
         getAttrs: (node) => {
           const isValid = canParseAttachment(node, this.options.previewable);
@@ -419,7 +419,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         },
       },
       {
-        tag: "action-text-attachment",
+        tag: "action-text-attachment[content]",
         getAttrs: (node) => {
           const isValid = canParseAttachment(node, this.options.previewable);
 
@@ -521,7 +521,7 @@ export const Attachment = Node.create<AttachmentOptions>({
       attachmentId: { default: null },
       altTextDialogOpen: { default: false },
       caption: {
-        default: "",
+        default: null,
         parseHTML: (element) => {
           return (
             element.querySelector("figcaption")?.innerHTML ||
@@ -557,39 +557,39 @@ export const Attachment = Node.create<AttachmentOptions>({
         },
       },
       sgid: {
-        default: "",
+        default: null,
         parseHTML: (element) => findAttribute(element, "sgid"),
       },
       src: {
-        default: "",
+        default: null,
         parseHTML: (element) => findAttribute(element, "src"),
       },
       height: {
-        default: "",
+        default: null,
         parseHTML: (element) => findAttribute(element, "height"),
       },
       width: {
-        default: "",
+        default: null,
         parseHTML: (element) => {
           return findAttribute(element, "width");
         },
       },
       contentType: {
-        default: "",
+        default: null,
         parseHTML: (element) => {
           return parseContentTypeFromElement(element);
         },
       },
       fileName: {
-        default: "",
+        default: null,
         parseHTML: (element) => findAttribute(element, "filename"),
       },
       fileSize: {
-        default: "",
+        default: null,
         parseHTML: (element) => findAttribute(element, "filesize"),
       },
       content: {
-        default: "",
+        default: null,
         parseHTML: (element) => {
           const attachment = element.closest("action-text-attachment");
 
@@ -618,7 +618,7 @@ export const Attachment = Node.create<AttachmentOptions>({
         },
       },
       url: {
-        default: "",
+        default: null,
         parseHTML: (element) => {
           return findAttribute(element, "url");
         },
