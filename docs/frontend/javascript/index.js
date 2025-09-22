@@ -37,7 +37,7 @@ Object.entries(controllers).forEach(([filename, controller]) => {
   }
 
   function preserveScroll() {
-    document.querySelectorAll('[data-preserve-scroll').forEach(element => {
+    document.querySelectorAll('[data-preserve-scroll]').forEach(element => {
       scrollPositions[element.id] = element.scrollTop;
     });
   }
@@ -49,7 +49,7 @@ Object.entries(controllers).forEach(([filename, controller]) => {
       });
     }
 
-    document.querySelectorAll('[data-preserve-scroll').forEach(element => {
+    document.querySelectorAll('[data-preserve-scroll]').forEach(element => {
       element.scrollTop = scrollPositions[element.id];
     });
 
@@ -87,10 +87,13 @@ function handleAttachment (event) {
   const attachment = event.attachment
   attachment.setUploadProgress(progress)
 
+  console.log({attachment})
+
   function simulateProgress () {
     if (progress >= 100) {
       progress = 100
       attachment.setUploadProgress(progress)
+      attachment.setNodeMarkup({ url: attachment.src, sgid: "sgid-" + crypto.randomUUID() })
       return
     }
 
