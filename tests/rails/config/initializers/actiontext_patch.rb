@@ -1,8 +1,14 @@
 # config/initializers/actiontext_patch.rb
+ActiveSupport.on_load(:after_initialize) do
+  if !ActionText::ContentHelper.allowed_tags
+    # Issue here: https://github.com/rails/rails/issues/55667
+    #   https://github.com/rails/rails/issues/54478#issuecomment-3287272036
+    # with Rails 8.x (possibly 7.1.x?)
+    ActionText::ContentHelper.allowed_tags = ["div", "span", "action-text-attachment", "img", "figure", "figcaption"]
+  end
 
-# For some reason, "alt_text", "altText", and "alt-text" all get stripped. So we just use "alt"
-attributes = ActionText::TrixAttachment::ATTRIBUTES + ["alt"]
-ActionText::TrixAttachment.const_set("ATTRIBUTES", attributes)
+  ActionText::ContentHelper.allowed_tags << "iframe"
 
-attributes = ActionText::Attachment::ATTRIBUTES + ["alt"]
-ActionText::Attachment.const_set("ATTRIBUTES", attributes)
+  ActionText::TrixAttachment::ATTRIBUTES << "alt"
+  ActionText::Attachment::ATTRIBUTES << "alt"
+end

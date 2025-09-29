@@ -23,6 +23,11 @@ document.addEventListener("rhino-initialize", (e) => {
     // rhinoGallery: false,
     // rhinoFigcaption: false
   }
+  e.target.addExtensions(Youtube)
+  // e.target.starterKitOptions = {
+  //   ...e.target.starterKitOptions,
+  //   // rhinoGallery: false
+  // }
 })
 
 

@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.18.0
+
+### Minor Changes
+
+- [#300](https://github.com/KonnorRogers/rhino-editor/pull/300) [`08de93c`](https://github.com/KonnorRogers/rhino-editor/commit/08de93cc3158318cc5570aae7da390f4dc914a99) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Dependencies: Upgrade TipTap to v3.4 from v2.7
+
+- [#300](https://github.com/KonnorRogers/rhino-editor/pull/300) [`08de93c`](https://github.com/KonnorRogers/rhino-editor/commit/08de93cc3158318cc5570aae7da390f4dc914a99) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - BREAKING_CHANGE: "rhinoImage" and "rhinoAttachment" extensions have been removed due to changes in TipTap 3
+
+- [#300](https://github.com/KonnorRogers/rhino-editor/pull/300) [`08de93c`](https://github.com/KonnorRogers/rhino-editor/commit/08de93cc3158318cc5570aae7da390f4dc914a99) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - BREAKING_CHANGE: `history` renamed to `undoRedo` because of TipTap upgrade
+
+### Patch Changes
+
+- [#300](https://github.com/KonnorRogers/rhino-editor/pull/300) [`08de93c`](https://github.com/KonnorRogers/rhino-editor/commit/08de93cc3158318cc5570aae7da390f4dc914a99) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Dependencies: Upgrade `@rails/activestorage` to 8.0
+
+## 0.17.3
+
+### Patch Changes
+
+- [#299](https://github.com/KonnorRogers/rhino-editor/pull/299) [`8ed419e`](https://github.com/KonnorRogers/rhino-editor/commit/8ed419ec9501463bdd8c39e39c0384c76ce89d65) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug Fix: More bug fixes with nbsp and `<br>`, should align close to Trix.
+
+- [#299](https://github.com/KonnorRogers/rhino-editor/pull/299) [`8ed419e`](https://github.com/KonnorRogers/rhino-editor/commit/8ed419ec9501463bdd8c39e39c0384c76ce89d65) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug fix: Fix a bug with alt text editor on firefox
+
+## 0.17.2
+
+### Patch Changes
+
+- [#296](https://github.com/KonnorRogers/rhino-editor/pull/296) [`b68ecf8`](https://github.com/KonnorRogers/rhino-editor/commit/b68ecf8c94e44538fb89c49df97ed122abfa84a5) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug Fix: Fixed a bug with preserving spaces causing images to get cleared and tables to break.
+
+## 0.17.1
+
+### Patch Changes
+
+- [#293](https://github.com/KonnorRogers/rhino-editor/pull/293) [`a69a4a8`](https://github.com/KonnorRogers/rhino-editor/commit/a69a4a800a971f0abf24504f255b1711928c7172) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug fix: empty `<p>` tags and whitespace are now handled equivalent to Trix.
+
+- [#293](https://github.com/KonnorRogers/rhino-editor/pull/293) [`a69a4a8`](https://github.com/KonnorRogers/rhino-editor/commit/a69a4a800a971f0abf24504f255b1711928c7172) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Bug Fix: Fixed a bug in the `getHTMLContentFromRange()` method on `<rhino-editor>`
+
 ## 0.17.0
 
 ### Minor Changes

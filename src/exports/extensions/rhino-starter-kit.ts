@@ -9,9 +9,7 @@ import {
   AttachmentOptions,
   PreviewableAttachment,
 } from "./attachment.js";
-import { Image, ImageOptions } from "./image.js";
 import { Gallery, GalleryOptions } from "./gallery.js";
-import { Figcaption, FigcaptionOptions } from "./figcaption.js";
 // import { Plugin } from "@tiptap/pm";
 import { CustomStrike } from "./strike.js";
 import Placeholder, { PlaceholderOptions } from "@tiptap/extension-placeholder";
@@ -33,12 +31,6 @@ export interface RhinoStarterKitOptions {
 
   /** Enables attachments */
   rhinoAttachment: Partial<AttachmentOptions> | false;
-
-  /** Enables captions in attachments */
-  rhinoFigcaption: Partial<FigcaptionOptions> | false;
-
-  /** Enables images in attachments */
-  rhinoImage: Partial<ImageOptions> | false;
 
   /**
    * Replaces the default strike from TipTap's StarterKit and replaces it with `<del>` instead of `<s>`
@@ -110,8 +102,6 @@ export const RhinoStarterKit = Extension.create<RhinoStarterKitOptions>({
     const extensions: [keyof RhinoStarterKitOptions, TipTapPlugin][] = [
       ["rhinoGallery", Gallery],
       ["rhinoAttachment", Attachment],
-      ["rhinoImage", Image],
-      ["rhinoFigcaption", Figcaption],
       ["rhinoStrike", CustomStrike],
       ["rhinoLink", Link],
       ["rhinoFocus", Focus],

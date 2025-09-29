@@ -51,6 +51,8 @@ export type RhinoEditorStarterKitOptions = StarterKitOptions &
     decreaseIndentation: boolean;
   };
 
+const NON_BREAKING_SPACE = "\u00A0";
+
 export class TipTapEditorBase extends BaseElement {
   // Static
 
@@ -131,6 +133,7 @@ export class TipTapEditorBase extends BaseElement {
   starterKitOptions: Partial<RhinoEditorStarterKitOptions> = {
     // We don't use the native strike since it requires configuring ActionText.
     strike: false,
+    link: false,
     rhinoLink: {
       openOnClick: false,
     },
@@ -237,7 +240,7 @@ export class TipTapEditorBase extends BaseElement {
    *    const rhinoEditor = document.querySelector("rhino-editor")
    *    let html = rhinoEditor.getHTMLContentFromRange()
    *    if (!html) {
-   *       html = rhinoEditor.editor.getHTML()
+   *       html = rhinoEditor.getHTML()
    *    }
    */
   getHTMLContentFromRange(from?: number, to?: number) {
@@ -264,25 +267,23 @@ export class TipTapEditorBase extends BaseElement {
       return "";
     }
 
-    const { state } = editor;
-    const htmlArray: string[] = [];
+    const tempScript = document.createElement("div");
 
-    const tempScript = document.createElement("script");
-    // We want plain text so we don't parse.
-    tempScript.type = "text/plain";
+    const contentSlice = editor.view.state.doc.slice(from, to);
+    const fragment = contentSlice.content;
 
-    state.doc.nodesBetween(from, to, (node, _pos, parent) => {
-      if (parent === state.doc) {
-        tempScript.innerHTML = "";
-        const serializer = DOMSerializer.fromSchema(editor.schema);
-        const dom = serializer.serializeNode(node);
-        tempScript.appendChild(dom);
-        htmlArray.push(tempScript.innerHTML);
-        tempScript.innerHTML = "";
-      }
+    // Serialize the fragment to a DOM fragment
+    const domFragment = DOMSerializer.fromSchema(
+      editor.schema,
+    ).serializeFragment(fragment);
+
+    tempScript.append(domFragment);
+
+    tempScript.querySelectorAll(":scope > p").forEach((p) => {
+      preserveSignificantWhiteSpaceForElement(p);
     });
 
-    return htmlArray.join("");
+    return tempScript.innerHTML;
   }
 
   /**
@@ -480,6 +481,9 @@ export class TipTapEditorBase extends BaseElement {
         this.rebuildEditor();
         this.dispatchEvent(new InitializeEvent());
         this.__initializationResolver__?.();
+        await this.__initializationPromise__;
+        // This prevents syncing issues when the editor loads content.
+        this.updateInputElementValue();
       });
     });
   }
@@ -612,13 +616,50 @@ export class TipTapEditorBase extends BaseElement {
    * Function called when grabbing the content of the editor. Currently supports JSON or HTML.
    */
   serialize() {
-    if (this.editor == null) return "";
+    const editor = this.editor;
+    if (editor == null) return "";
 
     if (this.serializer?.toLowerCase() === "json") {
-      return JSON.stringify(this.editor.getJSON());
+      return JSON.stringify(editor.getJSON());
     }
 
-    return this.editor.getHTML();
+    return this.getHTMLAndPreserveSignificantWhiteSpace();
+  }
+
+  // compareAttributes (el1: Element, el2: Element) {
+  //   function toObject (el: Element) {
+  //     const obj = {} as Record<string, any>;
+  //     ;[...el.attributes].forEach((attr) => {
+  //       let val = attr.value
+  //       let name = attr.name
+
+  //       if (val.startsWith("{")) {
+  //         try {
+  //           val = JSON.parse(val)
+  //         } catch (_e) {}
+  //       }
+
+  //       obj[name] = val
+  //     })
+  //     return obj
+  //   }
+
+  //   const obj1 = toObject(el1)
+  //   const obj2 = toObject(el2)
+
+  //   console.log({ obj1, obj2 })
+  // }
+
+  /**
+   * @override
+   * Apparently this is a native dom method?
+   */
+  getHTML() {
+    const editor = this.editor;
+    if (!editor) {
+      return "";
+    }
+    return this.getHTMLAndPreserveSignificantWhiteSpace();
   }
 
   /**
@@ -629,7 +670,10 @@ export class TipTapEditorBase extends BaseElement {
 
     const rootNode = (this.getRootNode() || document) as Element;
 
-    return rootNode.querySelector(`#${this.input}`) as Maybe<HTMLInputElement>;
+    const el = rootNode.querySelector(
+      `#${this.input}`,
+    ) as Maybe<HTMLInputElement>;
+    return el;
   }
 
   async handleFiles(files: File[] | FileList): Promise<AttachmentManager[]> {
@@ -801,7 +845,7 @@ export class TipTapEditorBase extends BaseElement {
     `;
   }
 
-  allOptions(element: Element) {
+  allOptions(element: Element): Partial<EditorOptions> {
     return {
       ...this.__defaultOptions(element),
       ...this.editorOptions(element),
@@ -853,6 +897,11 @@ export class TipTapEditorBase extends BaseElement {
 
         el.insertAdjacentText("beforeend", " · ");
       });
+
+    // Be a little more cautious with this. Only remove `<br>` not injected by ProseMirror.
+    doc
+      .querySelectorAll(":scope > p > br:not(.ProseMirror-trailingBreak)")
+      .forEach((el) => el.remove());
 
     const body = doc.querySelector("body");
 
@@ -971,4 +1020,90 @@ export class TipTapEditorBase extends BaseElement {
 
     return editor;
   }
+
+  getHTMLAndPreserveSignificantWhiteSpace() {
+    const editor = this.editor;
+    if (!editor) {
+      return "";
+    }
+
+    const tempScript = document.createElement("div");
+
+    const doc = editor.view.state.doc;
+    const schema = editor.schema;
+
+    // Serialize the fragment to a DOM fragment
+    const domFragment = DOMSerializer.fromSchema(schema).serializeFragment(
+      doc.content,
+    );
+
+    tempScript.append(domFragment);
+
+    tempScript.querySelectorAll(":scope > p").forEach((p) => {
+      preserveSignificantWhiteSpaceForElement(p);
+    });
+
+    return tempScript.innerHTML;
+  }
+}
+
+// Recreation of:
+// https://github.com/basecamp/trix/blob/main/src/trix/views/piece_view.js#L127-L142
+function replaceSignificantWhitespace(
+  text: string,
+  isFirst?: boolean,
+  isLast?: boolean,
+) {
+  if (isLast) {
+    // Different strategies for different whitespace patterns
+    text = text.replace(/\ $/, NON_BREAKING_SPACE);
+  }
+
+  text = text
+    .replace(/(\S)\ {3}(\S)/g, "$1 " + NON_BREAKING_SPACE + " $2")
+    .replace(/\ {2}/g, NON_BREAKING_SPACE + " ")
+    .replace(/\ {2}/g, " " + NON_BREAKING_SPACE);
+
+  if (isFirst) {
+    text = text.replace(/^\ /, NON_BREAKING_SPACE);
+  }
+
+  return text;
+}
+
+function preserveSignificantWhiteSpaceForElement(node: Element) {
+  // Replace spaces with nbsp; to bypass Nokogiri whitespace stripping.
+  // Only do this for `<p>` tags. Many other elements will break, most notably `<img>`
+  if (node.textContent?.trim() === "" && !node.querySelector("br")) {
+    // `<br class='rhino-preserve-line'>` gets stripped, so make it a plain `<br>`
+    node.innerHTML = "<br>" + node.innerHTML;
+    return;
+  }
+
+  const textNodes = getAllTextNodes(node);
+
+  textNodes.forEach((textNode, index) => {
+    const isFirst = index === 0;
+    const isLast = index === textNodes.length - 1;
+    if (textNode.textContent) {
+      const text = replaceSignificantWhitespace(
+        textNode.textContent,
+        isFirst,
+        isLast,
+      );
+      textNode.textContent = text;
+    }
+  });
+}
+
+function getAllTextNodes(element: Element) {
+  const textNodes = [];
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null);
+
+  let node;
+  while ((node = walker.nextNode())) {
+    textNodes.push(node);
+  }
+
+  return textNodes;
 }

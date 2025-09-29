@@ -184,7 +184,7 @@ export class TipTapEditor extends TipTapEditorBase {
   /**
    * The heading level to use for the heading button
    */
-  defaultHeadingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 1
+  defaultHeadingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 1;
 
   /**
    * Translations for various aspects of the editor.
@@ -667,11 +667,12 @@ export class TipTapEditor extends TipTapEditorBase {
 
     if (!headingEnabled) return html``;
 
-    const defaultHeadingLevel = this.defaultHeadingLevel || 1
+    const defaultHeadingLevel = this.defaultHeadingLevel || 1;
 
     const isActive = Boolean(this.editor?.isActive("heading"));
     const isDisabled =
-      this.editor == null || !this.editor.can().toggleHeading({ level: defaultHeadingLevel });
+      this.editor == null ||
+      !this.editor.can().toggleHeading({ level: defaultHeadingLevel });
 
     let tooltip_slot_name = "heading-tooltip";
     let tooltip_id = "heading";
@@ -713,7 +714,11 @@ export class TipTapEditor extends TipTapEditorBase {
             return;
           }
 
-          this.editor?.chain().focus().toggleHeading({ level: defaultHeadingLevel }).run();
+          this.editor
+            ?.chain()
+            .focus()
+            .toggleHeading({ level: defaultHeadingLevel })
+            .run();
         }}
       >
         <slot name=${icon_slot_name}>${this.icons.heading}</slot>
@@ -1092,7 +1097,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
   renderUndoButton(prefix = "") {
     const undoEnabled =
-      this.starterKitOptions.history !== false ||
+      this.starterKitOptions.undoRedo !== false ||
       Boolean(this.editor?.commands.undo);
 
     if (!undoEnabled) return html``;
@@ -1260,7 +1265,7 @@ export class TipTapEditor extends TipTapEditorBase {
 
   renderRedoButton(prefix = "") {
     const redoEnabled =
-      this.starterKitOptions.history !== false ||
+      this.starterKitOptions.undoRedo !== false ||
       Boolean(this.editor?.commands.redo);
 
     if (!redoEnabled) return html``;
