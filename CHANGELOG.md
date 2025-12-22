@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.18.1
+
+### Patch Changes
+
+- [#311](https://github.com/KonnorRogers/rhino-editor/pull/311) [`3310333`](https://github.com/KonnorRogers/rhino-editor/commit/3310333fb078bba120c656eb0f466c0cf92ffd8f) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix exportparts missing commas, and fixed a slot name that was repeated twice
+
 ## 0.18.0
 
 ### Minor Changes
@@ -385,7 +391,6 @@
 
 - a83e08d: Added trix compatibility events
 - 1a34f1d: - BREAKING_CHANGE: `editor.extensions()` has changed from a function to a variable via `editor.extensions`
-
   - BREAKING_CHANGE: `editor.extensions` no longer contains the `RhinoStarterKit` and `StarterKit`. They have been moved into a private array that will be concatenated. It is recommend to instead set everything to false if you wish to disable everything.
   - BREAKING_CHANGE: `editor.starterKit` has been renamed to `editor.starterKitOptions`
   - BREAKING_CHANGE: `editor.rhinoStarterKit` has been removed. All starter kit options now live inside of `editor.starterKitOptions`. All `rhinoStarterKit` options have been renamed to include a `rhino*` prefix. Example: `gallery` has been renamed to `rhinoGallery.`
