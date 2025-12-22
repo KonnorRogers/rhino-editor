@@ -1476,10 +1476,10 @@ export class TipTapEditor extends TipTapEditorBase {
           popover-base:link-bubble-menu__popover-base,
           hover-bridge:link-bubble-menu__hover-bridge,
           hover-bridge--visible:link-bubble-menu__hover-bridge--visible,
-          popover:link-bubble-menu__popover
+          popover:link-bubble-menu__popover,
           popover--active:link-bubble-menu__popover--active,
           popover--fixed:link-bubble-menu__popover--fixed,
-          popover--has-arrow:link-bubble-menu__popover--has-arrow
+          popover--has-arrow:link-bubble-menu__popover--has-arrow,
           arrow:link-bubble-menu__arrow
         "
         anchored-popover-type="manual"
@@ -1591,10 +1591,10 @@ export class TipTapEditor extends TipTapEditorBase {
           popover-base:bubble-menu__popover-base,
           hover-bridge:bubble-menu__hover-bridge,
           hover-bridge--visible:bubble-menu__hover-bridge--visible,
-          popover:bubble-menu__popover
+          popover:bubble-menu__popover,
           popover--active:bubble-menu__popover--active,
           popover--fixed:bubble-menu__popover--fixed,
-          popover--has-arrow:bubble-menu__popover--has-arrow
+          popover--has-arrow:bubble-menu__popover--has-arrow,
           arrow:bubble-menu__arrow
         "
         @rhino-bubble-menu-show=${(
@@ -1633,7 +1633,7 @@ export class TipTapEditor extends TipTapEditorBase {
               base:bubble-menu__toolbar__base
             "
           >
-            <slot name="after-bubble-menu-toolbar-items"></slot>
+            <slot name="before-bubble-menu-toolbar-items"></slot>
             <slot name="bubble-menu-toolbar-items">
               ${this.renderBoldButton("bubble-menu")}
               ${this.renderItalicButton("bubble-menu")}
