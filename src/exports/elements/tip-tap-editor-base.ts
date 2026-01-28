@@ -279,7 +279,7 @@ export class TipTapEditorBase extends BaseElement {
 
     tempScript.append(domFragment);
 
-    tempScript.querySelectorAll(":scope > p").forEach((p) => {
+    tempScript.querySelectorAll(":scope p").forEach((p) => {
       preserveSignificantWhiteSpaceForElement(p);
     });
 
@@ -1039,7 +1039,7 @@ export class TipTapEditorBase extends BaseElement {
 
     tempScript.append(domFragment);
 
-    tempScript.querySelectorAll(":scope > p").forEach((p) => {
+    tempScript.querySelectorAll(":scope p").forEach((p) => {
       preserveSignificantWhiteSpaceForElement(p);
     });
 
