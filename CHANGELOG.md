@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.18.2
+
+### Patch Changes
+
+- [`c9d1de2`](https://github.com/KonnorRogers/rhino-editor/commit/c9d1de203d327840d2bce173db05c458d17a1b44) Thanks [@KonnorRogers](https://github.com/KonnorRogers)! - Fix tooltips for keyboard shortcuts being out of sync with TipTap
+
+- [#317](https://github.com/KonnorRogers/rhino-editor/pull/317) [`1c68e69`](https://github.com/KonnorRogers/rhino-editor/commit/1c68e698bb3080551c09d556530f780df8a78a8e) Thanks [@mlettini](https://github.com/mlettini)! - Allow `preserveSignificantWhiteSpaceForElement` to apply to all `p` tags, not just top level p tags.
+
 ## 0.18.1
 
 ### Patch Changes
