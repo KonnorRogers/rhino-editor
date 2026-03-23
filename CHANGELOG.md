@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.18.3
+
+### Patch Changes
+
+- [#321](https://github.com/KonnorRogers/rhino-editor/pull/321) [`a9a9717`](https://github.com/KonnorRogers/rhino-editor/commit/a9a9717e3e0a2a5f194d8deb27b7cf8964bebe0c) Thanks [@williamjaackson](https://github.com/williamjaackson)! - Fix single line empty paragraphs doubling on save/reload (#320)
+
 ## 0.18.2
 
 ### Patch Changes
