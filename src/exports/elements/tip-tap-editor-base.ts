@@ -898,10 +898,15 @@ export class TipTapEditorBase extends BaseElement {
         el.insertAdjacentText("beforeend", " · ");
       });
 
-    // Be a little more cautious with this. Only remove `<br>` not injected by ProseMirror.
-    doc
-      .querySelectorAll(":scope > p > br:not(.ProseMirror-trailingBreak)")
-      .forEach((el) => el.remove());
+    // Remove <br> from empty paragraphs in saved HTML. These are added by
+    // preserveSignificantWhiteSpaceForElement() to prevent Nokogiri from
+    // stripping empty paragraphs, but TipTap's HardBreak extension would
+    // interpret them as real line breaks, growing spacing on each reload.
+    doc.querySelectorAll("p").forEach((p) => {
+      if (p.textContent?.trim() === "" && p.querySelector("br")) {
+        p.querySelectorAll("br").forEach((br) => br.remove());
+      }
+    });
 
     const body = doc.querySelector("body");
 
