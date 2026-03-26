@@ -44,12 +44,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: upgrade NPM for oidc
+        run: npm install -g npm@latest
+
       - name: Publish to NPM
         id: changesets
         uses: changesets/action@v1
         with:
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          publish: pnpm release
+          publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: "" # Workaround for OIDC trusted publishing. See https://github.com/changesets/changesets/issues/1152
