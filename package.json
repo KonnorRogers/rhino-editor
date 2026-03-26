@@ -19,7 +19,7 @@
     "start": "pnpm build -- --watch",
     "start:docs": "cd docs && overmind start -f Procfile.dev",
     "start:rails": "cd tests/rails && overmind start -f Procfile.dev",
-    "release": "pnpm run build && changeset version && npm publish && git push --follow-tags",
+    "release": "pnpm run build && changeset version && npm publish --provenance && git push --follow-tags",
     "changeset": "changeset"
   },
   "files": [
@@ -97,7 +97,10 @@
       "prosemirror-view": "$prosemirror-view"
     }
   },
-  "repository": "git@github.com:KonnorRogers/rhino-editor.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/KonnorRogers/rhino-editor.git"
+  },
   "bugs": {
     "url": "https://github.com/KonnorRogers/rhino-editor/issues"
   },

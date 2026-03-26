@@ -56,6 +56,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: "" # Workaround for OIDC trusted publishing. See https://github.com/changesets/changesets/issues/1152
-          NPM_CONFIG_PROVENANCE: false
 
 
