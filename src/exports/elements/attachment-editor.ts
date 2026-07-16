@@ -572,6 +572,7 @@ export class AttachmentEditor extends BaseElement {
           <h2 part="dialog-heading">Add alt text</h2>
           <button
             part="button dialog-close-button"
+            aria-label="Close dialog"
             @mousedown=${(e: Event) => e.preventDefault()}
             @click=${(e: Event) => {
               e.preventDefault();
@@ -641,7 +642,7 @@ export class AttachmentEditor extends BaseElement {
           }}
           aria-disabled="${(this.editorValue?.length || 0) >
             this.altTextMaxLength ||
-          (this.editorValue?.length || 0) < this.altTextMinLength}}"
+          (this.editorValue?.length || 0) < this.altTextMinLength}"
         >
           Save
         </button>
