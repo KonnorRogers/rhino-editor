@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.18.4
+
+### Patch Changes
+
+- [#324](https://github.com/KonnorRogers/rhino-editor/pull/324) [`03af654`](https://github.com/KonnorRogers/rhino-editor/commit/03af654bbc7c63f41cd57b8ed6ac7c520b630a88) Thanks [@ajaynomics](https://github.com/ajaynomics)! - Fix the accessible label and disabled state in the image alt text dialog (#316)
+
 ## 0.18.3
 
 ### Patch Changes
