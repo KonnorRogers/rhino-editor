@@ -90,12 +90,10 @@
     "role-components": "^3.1.0",
     "tslib": "^2.8.1"
   },
-  "pnpm": {
-    "overrides": {
-      "@tiptap/pm": "$@tiptap/pm",
-      "@tiptap/core": "$@tiptap/core",
-      "prosemirror-view": "$prosemirror-view"
-    }
+  "overrides": {
+    "@tiptap/pm": "$@tiptap/pm",
+    "@tiptap/core": "$@tiptap/core",
+    "prosemirror-view": "$prosemirror-view"
   },
   "repository": {
     "type": "git",

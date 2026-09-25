@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@tiptap/pm': ^3.4.0
-  '@tiptap/core': ^3.4.0
-  prosemirror-view: ~1.28.1
-
 importers:
 
   .:
@@ -54,10 +49,10 @@ importers:
         version: 3.3.1
       prosemirror-codemark:
         specifier: ^0.4.2
-        version: 0.4.2(prosemirror-inputrules@1.5.0)(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.28.3)
+        version: 0.4.2(prosemirror-inputrules@1.5.0)(prosemirror-model@1.25.12)(prosemirror-state@1.4.3)(prosemirror-view@1.28.3)
       prosemirror-utils:
         specifier: ^1.2.2
-        version: 1.2.2(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)
+        version: 1.2.2(prosemirror-model@1.25.12)(prosemirror-state@1.4.3)
       prosemirror-view:
         specifier: ~1.28.1
         version: 1.28.3
@@ -82,7 +77,7 @@ importers:
         version: 4.3.4-fix.0
       '@open-wc/testing':
         specifier: ^3.2.2
-        version: 3.2.2
+        version: 3.2.2(supports-color@8.1.1)
       '@playwright/test':
         specifier: ^1.55.0
         version: 1.55.0
@@ -94,22 +89,22 @@ importers:
         version: 8.0.1
       '@typescript-eslint/parser':
         specifier: ^6.21.0
-        version: 6.21.0(eslint@8.57.1)(typescript@5.9.2)
+        version: 6.21.0(eslint@8.57.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.9.2)
       '@web/dev-server':
         specifier: ^0.3.7
-        version: 0.3.7
+        version: 0.3.7(supports-color@8.1.1)
       '@web/dev-server-esbuild':
         specifier: ^0.4.4
-        version: 0.4.4
+        version: 0.4.4(supports-color@8.1.1)
       '@web/test-runner':
         specifier: ^0.19.0
-        version: 0.19.0
+        version: 0.19.0(supports-color@8.1.1)
       '@web/test-runner-commands':
         specifier: ^0.9.0
-        version: 0.9.0
+        version: 0.9.0(supports-color@8.1.1)
       '@web/test-runner-playwright':
         specifier: ^0.11.0
-        version: 0.11.1
+        version: 0.11.1(supports-color@8.1.1)
       chalk:
         specifier: ^5.3.0
         version: 5.6.2
@@ -121,7 +116,7 @@ importers:
         version: 0.24.2
       eslint:
         specifier: ^8.57.1
-        version: 8.57.1
+        version: 8.57.1(supports-color@8.1.1)
       glob:
         specifier: ^10.4.5
         version: 10.4.5
@@ -704,56 +699,67 @@ packages:
     resolution: {integrity: sha512-aL6hRwu0k7MTUESgkg7QHY6CoqPgr6gdQXRJI1/VbFlUMwsSzPGSR7sG5d+MCbYnJmJwThc2ol3nixj1fvI/zQ==}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.52.0':
     resolution: {integrity: sha512-BTs0M5s1EJejgIBJhCeiFo7GZZ2IXWkFGcyZhxX4+8usnIo5Mti57108vjXFIQmmJaRyDwmV59Tw64Ap1dkwMw==}
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.52.0':
     resolution: {integrity: sha512-uj672IVOU9m08DBGvoPKPi/J8jlVgjh12C9GmjjBxCTQc3XtVmRkRKyeHSmIKQpvJ7fIm1EJieBUcnGSzDVFyw==}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.52.0':
     resolution: {integrity: sha512-/+IVbeDMDCtB/HP/wiWsSzduD10SEGzIZX2945KSgZRNi4TSkjHqRJtNTVtVb8IRwhJ65ssI56krlLik+zFWkw==}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-loong64-gnu@4.52.0':
     resolution: {integrity: sha512-U1vVzvSWtSMWKKrGoROPBXMh3Vwn93TA9V35PldokHGqiUbF6erSzox/5qrSMKp6SzakvyjcPiVF8yB1xKr9Pg==}
     cpu: [loong64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-ppc64-gnu@4.52.0':
     resolution: {integrity: sha512-X/4WfuBAdQRH8cK3DYl8zC00XEE6aM472W+QCycpQJeLWVnHfkv7RyBFVaTqNUMsTgIX8ihMjCvFF9OUgeABzw==}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.52.0':
     resolution: {integrity: sha512-xIRYc58HfWDBZoLmWfWXg2Sq8VCa2iJ32B7mqfWnkx5mekekl0tMe7FHpY8I72RXEcUkaWawRvl3qA55og+cwQ==}
     cpu: [riscv64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-musl@4.52.0':
     resolution: {integrity: sha512-mbsoUey05WJIOz8U1WzNdf+6UMYGwE3fZZnQqsM22FZ3wh1N887HT6jAOjXs6CNEK3Ntu2OBsyQDXfIjouI4dw==}
     cpu: [riscv64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-s390x-gnu@4.52.0':
     resolution: {integrity: sha512-qP6aP970bucEi5KKKR4AuPFd8aTx9EF6BvutvYxmZuWLJHmnq4LvBfp0U+yFDMGwJ+AIJEH5sIP+SNypauMWzg==}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.52.0':
     resolution: {integrity: sha512-nmSVN+F2i1yKZ7rJNKO3G7ZzmxJgoQBQZ/6c4MuS553Grmr7WqR7LLDcYG53Z2m9409z3JLt4sCOhLdbKQ3HmA==}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.52.0':
     resolution: {integrity: sha512-2d0qRo33G6TfQVjaMR71P+yJVGODrt5V6+T0BDYH4EMfGgdC/2HWDVjSSFw888GSzAZUwuska3+zxNUCDco6rQ==}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-openharmony-arm64@4.52.0':
     resolution: {integrity: sha512-A1JalX4MOaFAAyGgpO7XP5khquv/7xKzLIyLmhNrbiCxWpMlnsTYr8dnsWM7sEeotNmxvSOEL7F65j0HXFcFsw==}
@@ -794,21 +800,24 @@ packages:
 
   '@sinonjs/text-encoding@0.7.3':
     resolution: {integrity: sha512-DE427ROAphMQzU4ENbliGYrBSYPXF+TtLg9S8vzeA+OF4ZKzoDdzfL8sxuMUGS/lgRhM6j1URSk9ghf7Xo1tyA==}
+    deprecated: |-
+      Deprecated: no longer maintained and no longer used by Sinon packages. See
+        https://github.com/sinonjs/nise/issues/243 for replacement details.
 
   '@tiptap/core@3.4.4':
     resolution: {integrity: sha512-lZb/mD1edPbny90X6ejnj6rS7KGa9WHrbhOL1O4OBbV0pRdM+/YtSi1XBqtViT2jUZUWnJCBQmmlgY/GFsRnoA==}
     peerDependencies:
-      '@tiptap/pm': ^3.4.0
+      '@tiptap/pm': ^3.4.4
 
   '@tiptap/extension-blockquote@3.4.4':
     resolution: {integrity: sha512-GU/5tOInnc7RMaBkPd1IHf+m+VvrltfVc4foqHEUdeR2RHm5CMBHi0NpNQ9RVVBEfY6dCTjVZwx3sGpLHeWI7Q==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-bold@3.4.4':
     resolution: {integrity: sha512-JGrpnPhml1KeqMLymB1TgUByJQqwdAhIC8YsjkhyZG3AkXnBEjycK9/7uNQ5WqXAjF1DBfgPbxIZO7p746B/Tw==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-bullet-list@3.4.4':
     resolution: {integrity: sha512-hozczMzYXjL3ercJoy7Mj0Quj6n3njz064scHO2QeUY0NpZgFxZgu3NxXtp3MBAtUEmyu04G7Y+Ws32uumXnDw==}
@@ -818,18 +827,18 @@ packages:
   '@tiptap/extension-code-block@3.4.4':
     resolution: {integrity: sha512-ZG1ZPDTeuyHA/g6HPO5eGXo3utohuzB/W3Rns6v6meF9NjSlC0uZi57fxSGLHyPf5auTXe9YyxOlFxYmncMWfg==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
-      '@tiptap/pm': ^3.4.0
+      '@tiptap/core': ^3.4.4
+      '@tiptap/pm': ^3.4.4
 
   '@tiptap/extension-code@3.4.4':
     resolution: {integrity: sha512-dmD0gitHscrbdyeQaooH7r3kkVXU/quetFHlkR7X5VukYBEr8yzaiynreac0AHzcCpevxQh9LOviu/enKSHCxw==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-document@3.4.4':
     resolution: {integrity: sha512-SAzsdxSgzxYxlBJVJ91NKi8qZ+BxmYhTccWnMGa7k1EVxBRPGtwx+/E2dHP2dLV1HbaAGBcY+KpF6htUCKI0ZQ==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-dropcursor@3.4.4':
     resolution: {integrity: sha512-ZQtstzxOYCcUIBj1USShwqq96T3BaczNhavy/SRvQwMvO4bhC1oTIXKCxje5od2FIli2o9+EcpaVfgvuwNQI+A==}
@@ -849,34 +858,34 @@ packages:
   '@tiptap/extension-hard-break@3.4.4':
     resolution: {integrity: sha512-f2/HADk+UtI7g8uMvFNHn2VPUoi5hsfNHzWaIaUMEG9XSiD+ZuGxqfoHBxuWOSsQjHAfr6MH+8q4OquCa+zJag==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-heading@3.4.4':
     resolution: {integrity: sha512-U1jTIVCMFHbt00Pcb+/VDQI1cZkOqEfh5WOOXANXexFp4/YUX5oT1lXEofzQe1+5x5rr8E4cjOWCfPlixRvq1g==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-horizontal-rule@3.4.4':
     resolution: {integrity: sha512-4yB2qn9lnpQegkjAkvcElKMvMCppJdZCnflahhqdCE7wjab559SqUwxzPCk3iwZ42wWMB+ufZh70HidsBXEs5g==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
-      '@tiptap/pm': ^3.4.0
+      '@tiptap/core': ^3.4.4
+      '@tiptap/pm': ^3.4.4
 
   '@tiptap/extension-image@3.4.4':
     resolution: {integrity: sha512-3OjqzbnrpJfcYb+5xfSnTUxnsyxYudp8ICfX+ENlSy/RkBdiCtZ1g7AI3eu+m95UZF9/p7smacDpYwKkiyNidw==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-italic@3.4.4':
     resolution: {integrity: sha512-zuZE55vW+xBfhOQ12kdvbGmrQ6NtghF96EQwE3mvt7agIIlWyhIsEv+RoAF2ZuPmdN3VmTVzYJfHzHtrzXsuug==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-link@3.4.4':
     resolution: {integrity: sha512-swWOkUeSsO6Xp83ik1mzOuDq8xyDZDbZk9NNHHIDWWlHSBp0/Rm+adHlfbr2tyahi69wwuH5gHxUiAua7X/w+Q==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
-      '@tiptap/pm': ^3.4.0
+      '@tiptap/core': ^3.4.4
+      '@tiptap/pm': ^3.4.4
 
   '@tiptap/extension-list-item@3.4.4':
     resolution: {integrity: sha512-x6X2TfPlyUxYzJpavggpisgRpg1j8R/XRu+sDKuulQMDyHxD7tzf8kDN6sMhlZ2eH6+fGJZBNrL2TUIBcgcD+Q==}
@@ -891,8 +900,8 @@ packages:
   '@tiptap/extension-list@3.4.4':
     resolution: {integrity: sha512-O7k3FxyRocVgFNP7rIKvpPMjnme8sf8lx8lYyKQIzo0xEZ1b8KGBzY7Z8wT59BhSrIil6de2E2FsEhgKcVvvKA==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
-      '@tiptap/pm': ^3.4.0
+      '@tiptap/core': ^3.4.4
+      '@tiptap/pm': ^3.4.4
 
   '@tiptap/extension-ordered-list@3.4.4':
     resolution: {integrity: sha512-uM8a9m1bu2OAfTewSgBlLo203R4ijZ/vkM3uqcoJrY4WLysLuveKqJ+SRryUUFhagZXnoMleNdPxsDJs8v2yKg==}
@@ -902,7 +911,7 @@ packages:
   '@tiptap/extension-paragraph@3.4.4':
     resolution: {integrity: sha512-gIArnTGQsBcIWoam+/JszUWBq8ZHcn+XM9LA8e3pyAfz0JKGEcGohqdW6gvWL8lXkRux45lVC07QfURbPYB9Yg==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-placeholder@3.4.4':
     resolution: {integrity: sha512-3QoNbDbZ8A2+hug94SVgA1ITSPF+i+9TamLLTHuwOQT8CIF/evjAKpuqt7Jd2Upot26UgyO2VlHG3qO4bKV/PQ==}
@@ -912,23 +921,23 @@ packages:
   '@tiptap/extension-strike@3.4.4':
     resolution: {integrity: sha512-TDixCHLmE6QXGm86d2LwU8osCVP8m6w4baveEeqJrykVtZk5xecy9/Fo1QGkyKkvvvsz14zajEcMTYS9+7Vu/w==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-text@3.4.4':
     resolution: {integrity: sha512-0tj3dQ2WWeecL/lJirQPpF423dNTDC8anXaVMUd6gk6vjCpRS4Rz+YSpJhvCPA9UycwVGIcpC7r83FdWHL2BLA==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extension-underline@3.4.4':
     resolution: {integrity: sha512-+9lJLt2ijDL9XCZmD5PuU38tuaGRREcQpaMLSjKvFQxVz7SqnRndVmNqNPgk4h9T2C0t1A5wnci6gqGE9XLMDw==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
+      '@tiptap/core': ^3.4.4
 
   '@tiptap/extensions@3.4.4':
     resolution: {integrity: sha512-J/6WCas1OkIVnGVc50YuUrS94E8jqbDPS3tdhYJ6GTCNSALea/ycPle/5i0ZxDOd1zGoRxcENl3CUP4z/K/+sg==}
     peerDependencies:
-      '@tiptap/core': ^3.4.0
-      '@tiptap/pm': ^3.4.0
+      '@tiptap/core': ^3.4.4
+      '@tiptap/pm': ^3.4.4
 
   '@tiptap/pm@3.4.4':
     resolution: {integrity: sha512-D3jj8yBoDvdpcyG9kLPISQJMwNv9Ip9mz3a9oHo9XbR6hhr7x0t4s9WhiXZ1W5ToYM3BRl522hxsmJafJTpaWg==}
@@ -1113,6 +1122,7 @@ packages:
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
+    deprecated: Potential CWE-502 - Update to 1.3.1 or higher
 
   '@web/browser-logs@0.4.1':
     resolution: {integrity: sha512-ypmMG+72ERm+LvP+loj9A64MTXvWMXHUOu773cPO4L1SV/VWg6xA9Pv7vkvkXQX+ItJtCJt+KQ+U6ui2HhSFUw==}
@@ -1400,6 +1410,7 @@ packages:
   basic-ftp@5.0.5:
     resolution: {integrity: sha512-4Bcg1P8xhUuqcii/S0Z9wiHIrQVPMermM1any+MX5GeGD7faD3/msQUDGLol9wOcz4/jbg/WJnGqoJF6LiBdtg==}
     engines: {node: '>=10.0.0'}
+    deprecated: Security vulnerability fixed in 5.2.1, please upgrade
 
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
@@ -1593,10 +1604,12 @@ packages:
   conventional-changelog-atom@2.0.8:
     resolution: {integrity: sha512-xo6v46icsFTK3bb7dY/8m2qvc8sZemRgdqLb/bjpBsH2UyOS8rKNTgcb5025Hri6IpANPApbXMg15QLb1LJpBw==}
     engines: {node: '>=10'}
+    deprecated: This preset is deprecated. Please use conventional-changelog-conventionalcommits or conventional-changelog-angular instead.
 
   conventional-changelog-codemirror@2.0.8:
     resolution: {integrity: sha512-z5DAsn3uj1Vfp7po3gpt2Boc+Bdwmw2++ZHa5Ak9k0UKsYAO5mH1UBTN0qSCuJZREIhX6WU4E1p3IW2oRCNzQw==}
     engines: {node: '>=10'}
+    deprecated: This preset is deprecated. Please use conventional-changelog-conventionalcommits or conventional-changelog-angular instead.
 
   conventional-changelog-config-spec@2.1.0:
     resolution: {integrity: sha512-IpVePh16EbbB02V+UA+HQnnPIohgXvJRxHcS5+Uwk4AT5LjzCZJm5sp/yqs5C6KZJ1jMsV4paEV13BN1pvDuxQ==}
@@ -1608,26 +1621,32 @@ packages:
   conventional-changelog-core@4.2.4:
     resolution: {integrity: sha512-gDVS+zVJHE2v4SLc6B0sLsPiloR0ygU7HaDW14aNJE1v4SlqJPILPl/aJC7YdtRE4CybBf8gDwObBvKha8Xlyg==}
     engines: {node: '>=10'}
+    deprecated: Deprecated and no longer maintained. Please use conventional-changelog instead.
 
   conventional-changelog-ember@2.0.9:
     resolution: {integrity: sha512-ulzIReoZEvZCBDhcNYfDIsLTHzYHc7awh+eI44ZtV5cx6LVxLlVtEmcO+2/kGIHGtw+qVabJYjdI5cJOQgXh1A==}
     engines: {node: '>=10'}
+    deprecated: This preset is deprecated. Please use conventional-changelog-conventionalcommits or conventional-changelog-angular instead.
 
   conventional-changelog-eslint@3.0.9:
     resolution: {integrity: sha512-6NpUCMgU8qmWmyAMSZO5NrRd7rTgErjrm4VASam2u5jrZS0n38V7Y9CzTtLT2qwz5xEChDR4BduoWIr8TfwvXA==}
     engines: {node: '>=10'}
+    deprecated: This preset is deprecated. Please use conventional-changelog-conventionalcommits or conventional-changelog-angular instead.
 
   conventional-changelog-express@2.0.6:
     resolution: {integrity: sha512-SDez2f3iVJw6V563O3pRtNwXtQaSmEfTCaTBPCqn0oG0mfkq0rX4hHBq5P7De2MncoRixrALj3u3oQsNK+Q0pQ==}
     engines: {node: '>=10'}
+    deprecated: This preset is deprecated. Please use conventional-changelog-conventionalcommits or conventional-changelog-angular instead.
 
   conventional-changelog-jquery@3.0.11:
     resolution: {integrity: sha512-x8AWz5/Td55F7+o/9LQ6cQIPwrCjfJQ5Zmfqi8thwUEKHstEn4kTIofXub7plf1xvFA2TqhZlq7fy5OmV6BOMw==}
     engines: {node: '>=10'}
+    deprecated: This preset is deprecated. Please use conventional-changelog-conventionalcommits or conventional-changelog-angular instead.
 
   conventional-changelog-jshint@2.0.9:
     resolution: {integrity: sha512-wMLdaIzq6TNnMHMy31hql02OEQ8nCQfExw1SE0hYL5KvU+JCTuPaDO+7JiogGT2gJAxiUGATdtYYfh+nT+6riA==}
     engines: {node: '>=10'}
+    deprecated: This preset is deprecated. Please use conventional-changelog-conventionalcommits or conventional-changelog-angular instead.
 
   conventional-changelog-preset-loader@2.3.4:
     resolution: {integrity: sha512-GEKRWkrSAZeTq5+YjUZOYxdHq+ci4dNwHvpaBC3+ENalzFWuCWa9EZXSuZBpkr72sMdKB+1fyDV4takK1Lf58g==}
@@ -2082,6 +2101,7 @@ packages:
   git-raw-commits@2.0.11:
     resolution: {integrity: sha512-VnctFhw+xfj8Va1xtfEqCUD2XDrbAPSJx+hSrE5K7fGdjZruW7XV+QOrN7LF/RJyvspRiD2I0asWsxFp0ya26A==}
     engines: {node: '>=10'}
+    deprecated: Deprecated and no longer maintained. Use @conventional-changelog/git-client instead.
     hasBin: true
 
   git-remote-origin-url@2.0.0:
@@ -2091,6 +2111,7 @@ packages:
   git-semver-tags@4.1.1:
     resolution: {integrity: sha512-OWyMt5zBe7xFs8vglMmhM9lRQzCWL3WjHtxNNfJTMngGym7pC1kh8sP6jevfydJ6LP3ZvGxfb6ABYgPUM0mtsA==}
     engines: {node: '>=10'}
+    deprecated: Deprecated and no longer maintained. Use @conventional-changelog/git-client instead.
     hasBin: true
 
   gitconfiglocal@1.0.0:
@@ -2106,16 +2127,17 @@ packages:
 
   glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@13.24.0:
     resolution: {integrity: sha512-AhO5QUcj8llrbG09iWhPU2B204J1xnPeL8kQmVorSsy+Sjj1sk8gIyh6cUocGmH4L0UuhAJy+hJMRA4mgA4mFQ==}
@@ -2932,7 +2954,7 @@ packages:
       prosemirror-inputrules: ^1.2.0
       prosemirror-model: ^1.18.1
       prosemirror-state: ^1.4.1
-      prosemirror-view: ~1.28.1
+      prosemirror-view: ^1.26.2
 
   prosemirror-collab@1.3.1:
     resolution: {integrity: sha512-4SnynYR9TTYaQVXd/ieUvsVV4PDMBzrq2xPUWutHivDuOshZXqQ5rGbZM84HEaXKbLdItse7weMGOUdDVcLKEQ==}
@@ -2961,6 +2983,9 @@ packages:
   prosemirror-menu@1.2.5:
     resolution: {integrity: sha512-qwXzynnpBIeg1D7BAtjOusR+81xCp53j7iWu/IargiRZqRjGIlQuu1f3jFi+ehrHhWMLoyOQTSRx/IWZJqOYtQ==}
 
+  prosemirror-model@1.25.12:
+    resolution: {integrity: sha512-Ue2gTmXMa7EhpLNhC7J+h4+ykD8ha12K6rrZFFKKJHBForfIStw5gJ6Zrf1mqqAa9NmpmEB4wp9bKmA4eUVjWg==}
+
   prosemirror-model@1.25.3:
     resolution: {integrity: sha512-dY2HdaNXlARknJbrManZ1WyUtos+AP97AmvqdOQtWtrrC5g4mohVX5DTi9rXNFSk09eczLq9GuNTtq3EfMeMGA==}
 
@@ -2981,7 +3006,7 @@ packages:
     peerDependencies:
       prosemirror-model: ^1.22.1
       prosemirror-state: ^1.4.2
-      prosemirror-view: ~1.28.1
+      prosemirror-view: ^1.33.8
 
   prosemirror-transform@1.10.4:
     resolution: {integrity: sha512-pwDy22nAnGqNR1feOQKHxoFkkUtepoFAd3r2hbEDsnf4wp57kKA36hXsB3njA9FtONBEwSDnDeCiJe+ItD+ykw==}
@@ -2994,6 +3019,9 @@ packages:
 
   prosemirror-view@1.28.3:
     resolution: {integrity: sha512-YnJxLRzIaCNEt3VKiy+PBxtpwsCbjrfiBKIgHJeqbKhdeP8bU2qL4ngdGmxp9K4+06cZG5bE9vipuhP+KUl+BQ==}
+
+  prosemirror-view@1.42.5:
+    resolution: {integrity: sha512-7qcRaCWM48NC4utNQnx5Obvvs48/jMHXXvOXHH6WlBojmiK15eyxoHYlv5aJARHJHiFccSuWZ7ULW2SPrFAS/g==}
 
   proxy-agent@6.5.0:
     resolution: {integrity: sha512-TmatMXdr2KlRiA2CyDu8GqR8EjahTG3aY3nXjdzFyoZbmB8hrBsTyMezhULIXKnC0jpfjlmiZ3+EaCzoInSu/A==}
@@ -3983,14 +4011,14 @@ snapshots:
   '@esbuild/win32-x64@0.24.2':
     optional: true
 
-  '@eslint-community/eslint-utils@4.9.0(eslint@8.57.1)':
+  '@eslint-community/eslint-utils@4.9.0(eslint@8.57.1(supports-color@8.1.1))':
     dependencies:
-      eslint: 8.57.1
+      eslint: 8.57.1(supports-color@8.1.1)
       eslint-visitor-keys: 3.4.3
 
   '@eslint-community/regexpp@4.12.1': {}
 
-  '@eslint/eslintrc@2.1.4':
+  '@eslint/eslintrc@2.1.4(supports-color@8.1.1)':
     dependencies:
       ajv: 6.12.6
       debug: 4.4.3(supports-color@8.1.1)
@@ -4025,7 +4053,7 @@ snapshots:
 
   '@hapi/bourne@3.0.0': {}
 
-  '@humanwhocodes/config-array@0.13.0':
+  '@humanwhocodes/config-array@0.13.0(supports-color@8.1.1)':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
       debug: 4.4.3(supports-color@8.1.1)
@@ -4111,10 +4139,10 @@ snapshots:
       '@lit/reactive-element': 2.1.1
       '@open-wc/dedupe-mixin': 1.4.0
 
-  '@open-wc/semantic-dom-diff@0.20.1':
+  '@open-wc/semantic-dom-diff@0.20.1(supports-color@8.1.1)':
     dependencies:
       '@types/chai': 4.3.20
-      '@web/test-runner-commands': 0.9.0
+      '@web/test-runner-commands': 0.9.0(supports-color@8.1.1)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -4126,10 +4154,10 @@ snapshots:
       lit: 3.3.1
       lit-html: 3.3.1
 
-  '@open-wc/testing@3.2.2':
+  '@open-wc/testing@3.2.2(supports-color@8.1.1)':
     dependencies:
       '@esm-bundle/chai': 4.3.4-fix.0
-      '@open-wc/semantic-dom-diff': 0.20.1
+      '@open-wc/semantic-dom-diff': 0.20.1(supports-color@8.1.1)
       '@open-wc/testing-helpers': 2.3.2
       '@types/chai-dom': 1.11.3
       '@types/sinon-chai': 3.2.12
@@ -4146,12 +4174,12 @@ snapshots:
     dependencies:
       playwright: 1.55.0
 
-  '@puppeteer/browsers@2.6.1':
+  '@puppeteer/browsers@2.6.1(supports-color@8.1.1)':
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
-      extract-zip: 2.0.1
+      extract-zip: 2.0.1(supports-color@8.1.1)
       progress: 2.0.3
-      proxy-agent: 6.5.0
+      proxy-agent: 6.5.0(supports-color@8.1.1)
       semver: 7.7.2
       tar-fs: 3.1.1
       unbzip2-stream: 1.4.3
@@ -4415,9 +4443,9 @@ snapshots:
       prosemirror-schema-list: 1.5.1
       prosemirror-state: 1.4.3
       prosemirror-tables: 1.8.1
-      prosemirror-trailing-node: 3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.28.3)
+      prosemirror-trailing-node: 3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.42.5)
       prosemirror-transform: 1.10.4
-      prosemirror-view: 1.28.3
+      prosemirror-view: 1.42.5
 
   '@tiptap/starter-kit@3.4.4':
     dependencies:
@@ -4607,14 +4635,14 @@ snapshots:
       '@types/node': 24.5.2
     optional: true
 
-  '@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.9.2)':
+  '@typescript-eslint/parser@6.21.0(eslint@8.57.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.9.2)':
     dependencies:
       '@typescript-eslint/scope-manager': 6.21.0
       '@typescript-eslint/types': 6.21.0
-      '@typescript-eslint/typescript-estree': 6.21.0(typescript@5.9.2)
+      '@typescript-eslint/typescript-estree': 6.21.0(supports-color@8.1.1)(typescript@5.9.2)
       '@typescript-eslint/visitor-keys': 6.21.0
       debug: 4.4.3(supports-color@8.1.1)
-      eslint: 8.57.1
+      eslint: 8.57.1(supports-color@8.1.1)
     optionalDependencies:
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -4627,7 +4655,7 @@ snapshots:
 
   '@typescript-eslint/types@6.21.0': {}
 
-  '@typescript-eslint/typescript-estree@6.21.0(typescript@5.9.2)':
+  '@typescript-eslint/typescript-estree@6.21.0(supports-color@8.1.1)(typescript@5.9.2)':
     dependencies:
       '@typescript-eslint/types': 6.21.0
       '@typescript-eslint/visitor-keys': 6.21.0
@@ -4663,7 +4691,7 @@ snapshots:
 
   '@web/config-loader@0.3.3': {}
 
-  '@web/dev-server-core@0.6.3':
+  '@web/dev-server-core@0.6.3(supports-color@8.1.1)':
     dependencies:
       '@types/koa': 2.15.0
       '@types/ws': 7.4.7
@@ -4674,10 +4702,10 @@ snapshots:
       get-stream: 6.0.1
       is-stream: 2.0.1
       isbinaryfile: 5.0.6
-      koa: 2.16.2
+      koa: 2.16.2(supports-color@8.1.1)
       koa-etag: 4.0.0
-      koa-send: 5.0.1
-      koa-static: 5.0.0
+      koa-send: 5.0.1(supports-color@8.1.1)
+      koa-static: 5.0.0(supports-color@8.1.1)
       lru-cache: 8.0.5
       mime-types: 2.1.35
       parse5: 6.0.1
@@ -4688,7 +4716,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@web/dev-server-core@0.7.5':
+  '@web/dev-server-core@0.7.5(supports-color@8.1.1)':
     dependencies:
       '@types/koa': 2.15.0
       '@types/ws': 7.4.7
@@ -4699,10 +4727,10 @@ snapshots:
       get-stream: 6.0.1
       is-stream: 2.0.1
       isbinaryfile: 5.0.6
-      koa: 2.16.2
+      koa: 2.16.2(supports-color@8.1.1)
       koa-etag: 4.0.0
-      koa-send: 5.0.1
-      koa-static: 5.0.0
+      koa-send: 5.0.1(supports-color@8.1.1)
+      koa-static: 5.0.0(supports-color@8.1.1)
       lru-cache: 8.0.5
       mime-types: 2.1.35
       parse5: 6.0.1
@@ -4713,10 +4741,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@web/dev-server-esbuild@0.4.4':
+  '@web/dev-server-esbuild@0.4.4(supports-color@8.1.1)':
     dependencies:
       '@mdn/browser-compat-data': 4.2.1
-      '@web/dev-server-core': 0.6.3
+      '@web/dev-server-core': 0.6.3(supports-color@8.1.1)
       esbuild: 0.17.19
       parse5: 6.0.1
       ua-parser-js: 1.0.41
@@ -4725,10 +4753,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@web/dev-server-rollup@0.5.4':
+  '@web/dev-server-rollup@0.5.4(supports-color@8.1.1)':
     dependencies:
       '@rollup/plugin-node-resolve': 15.3.1(rollup@3.29.5)
-      '@web/dev-server-core': 0.6.3
+      '@web/dev-server-core': 0.6.3(supports-color@8.1.1)
       nanocolors: 0.2.13
       parse5: 6.0.1
       rollup: 3.29.5
@@ -4738,10 +4766,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@web/dev-server-rollup@0.6.4':
+  '@web/dev-server-rollup@0.6.4(supports-color@8.1.1)':
     dependencies:
       '@rollup/plugin-node-resolve': 15.3.1(rollup@4.52.0)
-      '@web/dev-server-core': 0.7.5
+      '@web/dev-server-core': 0.7.5(supports-color@8.1.1)
       nanocolors: 0.2.13
       parse5: 6.0.1
       rollup: 4.52.0
@@ -4751,13 +4779,13 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@web/dev-server@0.3.7':
+  '@web/dev-server@0.3.7(supports-color@8.1.1)':
     dependencies:
       '@babel/code-frame': 7.27.1
       '@types/command-line-args': 5.2.3
       '@web/config-loader': 0.2.2
-      '@web/dev-server-core': 0.6.3
-      '@web/dev-server-rollup': 0.5.4
+      '@web/dev-server-core': 0.6.3(supports-color@8.1.1)
+      '@web/dev-server-rollup': 0.5.4(supports-color@8.1.1)
       camelcase: 6.3.0
       command-line-args: 5.2.1
       command-line-usage: 7.0.3
@@ -4766,19 +4794,19 @@ snapshots:
       ip: 1.1.9
       nanocolors: 0.2.13
       open: 8.4.2
-      portfinder: 1.0.38
+      portfinder: 1.0.38(supports-color@8.1.1)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
       - utf-8-validate
 
-  '@web/dev-server@0.4.6':
+  '@web/dev-server@0.4.6(supports-color@8.1.1)':
     dependencies:
       '@babel/code-frame': 7.27.1
       '@types/command-line-args': 5.2.3
       '@web/config-loader': 0.3.3
-      '@web/dev-server-core': 0.7.5
-      '@web/dev-server-rollup': 0.6.4
+      '@web/dev-server-core': 0.7.5(supports-color@8.1.1)
+      '@web/dev-server-rollup': 0.6.4(supports-color@8.1.1)
       camelcase: 6.3.0
       command-line-args: 5.2.1
       command-line-usage: 7.0.3
@@ -4787,7 +4815,7 @@ snapshots:
       internal-ip: 6.2.0
       nanocolors: 0.2.13
       open: 8.4.2
-      portfinder: 1.0.38
+      portfinder: 1.0.38(supports-color@8.1.1)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -4798,13 +4826,13 @@ snapshots:
       '@types/parse5': 6.0.3
       parse5: 6.0.1
 
-  '@web/test-runner-chrome@0.17.0':
+  '@web/test-runner-chrome@0.17.0(supports-color@8.1.1)':
     dependencies:
-      '@web/test-runner-core': 0.13.4
-      '@web/test-runner-coverage-v8': 0.8.0
+      '@web/test-runner-core': 0.13.4(supports-color@8.1.1)
+      '@web/test-runner-coverage-v8': 0.8.0(supports-color@8.1.1)
       async-mutex: 0.4.0
-      chrome-launcher: 0.15.2
-      puppeteer-core: 23.11.1
+      chrome-launcher: 0.15.2(supports-color@8.1.1)
+      puppeteer-core: 23.11.1(supports-color@8.1.1)
     transitivePeerDependencies:
       - bare-buffer
       - bufferutil
@@ -4812,16 +4840,16 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@web/test-runner-commands@0.9.0':
+  '@web/test-runner-commands@0.9.0(supports-color@8.1.1)':
     dependencies:
-      '@web/test-runner-core': 0.13.4
+      '@web/test-runner-core': 0.13.4(supports-color@8.1.1)
       mkdirp: 1.0.4
     transitivePeerDependencies:
       - bufferutil
       - supports-color
       - utf-8-validate
 
-  '@web/test-runner-core@0.13.4':
+  '@web/test-runner-core@0.13.4(supports-color@8.1.1)':
     dependencies:
       '@babel/code-frame': 7.27.1
       '@types/babel__code-frame': 7.0.6
@@ -4831,7 +4859,7 @@ snapshots:
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
       '@web/browser-logs': 0.4.1
-      '@web/dev-server-core': 0.7.5
+      '@web/dev-server-core': 0.7.5(supports-color@8.1.1)
       chokidar: 4.0.3
       cli-cursor: 3.1.0
       co-body: 6.2.0
@@ -4854,9 +4882,9 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@web/test-runner-coverage-v8@0.8.0':
+  '@web/test-runner-coverage-v8@0.8.0(supports-color@8.1.1)':
     dependencies:
-      '@web/test-runner-core': 0.13.4
+      '@web/test-runner-core': 0.13.4(supports-color@8.1.1)
       istanbul-lib-coverage: 3.2.2
       lru-cache: 8.0.5
       picomatch: 2.3.1
@@ -4866,33 +4894,33 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@web/test-runner-mocha@0.9.0':
+  '@web/test-runner-mocha@0.9.0(supports-color@8.1.1)':
     dependencies:
-      '@web/test-runner-core': 0.13.4
+      '@web/test-runner-core': 0.13.4(supports-color@8.1.1)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
       - utf-8-validate
 
-  '@web/test-runner-playwright@0.11.1':
+  '@web/test-runner-playwright@0.11.1(supports-color@8.1.1)':
     dependencies:
-      '@web/test-runner-core': 0.13.4
-      '@web/test-runner-coverage-v8': 0.8.0
+      '@web/test-runner-core': 0.13.4(supports-color@8.1.1)
+      '@web/test-runner-coverage-v8': 0.8.0(supports-color@8.1.1)
       playwright: 1.55.0
     transitivePeerDependencies:
       - bufferutil
       - supports-color
       - utf-8-validate
 
-  '@web/test-runner@0.19.0':
+  '@web/test-runner@0.19.0(supports-color@8.1.1)':
     dependencies:
       '@web/browser-logs': 0.4.1
       '@web/config-loader': 0.3.3
-      '@web/dev-server': 0.4.6
-      '@web/test-runner-chrome': 0.17.0
-      '@web/test-runner-commands': 0.9.0
-      '@web/test-runner-core': 0.13.4
-      '@web/test-runner-mocha': 0.9.0
+      '@web/dev-server': 0.4.6(supports-color@8.1.1)
+      '@web/test-runner-chrome': 0.17.0(supports-color@8.1.1)
+      '@web/test-runner-commands': 0.9.0(supports-color@8.1.1)
+      '@web/test-runner-core': 0.13.4(supports-color@8.1.1)
+      '@web/test-runner-mocha': 0.9.0(supports-color@8.1.1)
       camelcase: 6.3.0
       command-line-args: 5.2.1
       command-line-usage: 7.0.3
@@ -4900,7 +4928,7 @@ snapshots:
       diff: 5.2.0
       globby: 11.1.0
       nanocolors: 0.2.13
-      portfinder: 1.0.38
+      portfinder: 1.0.38(supports-color@8.1.1)
       source-map: 0.7.6
     transitivePeerDependencies:
       - bare-buffer
@@ -5172,12 +5200,12 @@ snapshots:
     dependencies:
       readdirp: 4.1.2
 
-  chrome-launcher@0.15.2:
+  chrome-launcher@0.15.2(supports-color@8.1.1):
     dependencies:
       '@types/node': 24.5.2
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
-      lighthouse-logger: 1.4.2
+      lighthouse-logger: 1.4.2(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -5429,13 +5457,17 @@ snapshots:
 
   debounce@1.2.1: {}
 
-  debug@2.6.9:
+  debug@2.6.9(supports-color@8.1.1):
     dependencies:
       ms: 2.0.0
+    optionalDependencies:
+      supports-color: 8.1.1
 
-  debug@3.2.7:
+  debug@3.2.7(supports-color@8.1.1):
     dependencies:
       ms: 2.1.3
+    optionalDependencies:
+      supports-color: 8.1.1
 
   debug@4.4.3(supports-color@8.1.1):
     dependencies:
@@ -5626,13 +5658,13 @@ snapshots:
 
   eslint-visitor-keys@3.4.3: {}
 
-  eslint@8.57.1:
+  eslint@8.57.1(supports-color@8.1.1):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.0(eslint@8.57.1)
+      '@eslint-community/eslint-utils': 4.9.0(eslint@8.57.1(supports-color@8.1.1))
       '@eslint-community/regexpp': 4.12.1
-      '@eslint/eslintrc': 2.1.4
+      '@eslint/eslintrc': 2.1.4(supports-color@8.1.1)
       '@eslint/js': 8.57.1
-      '@humanwhocodes/config-array': 0.13.0
+      '@humanwhocodes/config-array': 0.13.0(supports-color@8.1.1)
       '@humanwhocodes/module-importer': 1.0.1
       '@nodelib/fs.walk': 1.2.8
       '@ungap/structured-clone': 1.3.0
@@ -5707,7 +5739,7 @@ snapshots:
 
   extendable-error@0.1.7: {}
 
-  extract-zip@2.0.1:
+  extract-zip@2.0.1(supports-color@8.1.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       get-stream: 5.2.0
@@ -5849,7 +5881,7 @@ snapshots:
 
   get-stream@6.0.1: {}
 
-  get-uri@6.0.5:
+  get-uri@6.0.5(supports-color@8.1.1):
     dependencies:
       basic-ftp: 5.0.5
       data-uri-to-buffer: 6.0.2
@@ -6004,14 +6036,14 @@ snapshots:
       statuses: 2.0.1
       toidentifier: 1.0.1
 
-  http-proxy-agent@7.0.2:
+  http-proxy-agent@7.0.2(supports-color@8.1.1):
     dependencies:
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  https-proxy-agent@7.0.6:
+  https-proxy-agent@7.0.6(supports-color@8.1.1):
     dependencies:
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@8.1.1)
@@ -6216,7 +6248,7 @@ snapshots:
     dependencies:
       etag: 1.8.1
 
-  koa-send@5.0.1:
+  koa-send@5.0.1(supports-color@8.1.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       http-errors: 1.8.1
@@ -6224,14 +6256,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  koa-static@5.0.0:
+  koa-static@5.0.0(supports-color@8.1.1):
     dependencies:
-      debug: 3.2.7
-      koa-send: 5.0.1
+      debug: 3.2.7(supports-color@8.1.1)
+      koa-send: 5.0.1(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  koa@2.16.2:
+  koa@2.16.2(supports-color@8.1.1):
     dependencies:
       accepts: 1.3.8
       cache-content-type: 1.0.1
@@ -6264,9 +6296,9 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  lighthouse-logger@1.4.2:
+  lighthouse-logger@1.4.2(supports-color@8.1.1):
     dependencies:
-      debug: 2.6.9
+      debug: 2.6.9(supports-color@8.1.1)
       marky: 1.3.0
     transitivePeerDependencies:
       - supports-color
@@ -6598,16 +6630,16 @@ snapshots:
 
   p-try@2.2.0: {}
 
-  pac-proxy-agent@7.2.0:
+  pac-proxy-agent@7.2.0(supports-color@8.1.1):
     dependencies:
       '@tootallnate/quickjs-emscripten': 0.23.0
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@8.1.1)
-      get-uri: 6.0.5
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      get-uri: 6.0.5(supports-color@8.1.1)
+      http-proxy-agent: 7.0.2(supports-color@8.1.1)
+      https-proxy-agent: 7.0.6(supports-color@8.1.1)
       pac-resolver: 7.0.1
-      socks-proxy-agent: 8.0.5
+      socks-proxy-agent: 8.0.5(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -6687,7 +6719,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  portfinder@1.0.38:
+  portfinder@1.0.38(supports-color@8.1.1):
     dependencies:
       async: 3.2.6
       debug: 4.4.3(supports-color@8.1.1)
@@ -6708,10 +6740,10 @@ snapshots:
     dependencies:
       prosemirror-transform: 1.10.4
 
-  prosemirror-codemark@0.4.2(prosemirror-inputrules@1.5.0)(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.28.3):
+  prosemirror-codemark@0.4.2(prosemirror-inputrules@1.5.0)(prosemirror-model@1.25.12)(prosemirror-state@1.4.3)(prosemirror-view@1.28.3):
     dependencies:
       prosemirror-inputrules: 1.5.0
-      prosemirror-model: 1.25.3
+      prosemirror-model: 1.25.12
       prosemirror-state: 1.4.3
       prosemirror-view: 1.28.3
 
@@ -6742,7 +6774,7 @@ snapshots:
     dependencies:
       prosemirror-state: 1.4.3
       prosemirror-transform: 1.10.4
-      prosemirror-view: 1.28.3
+      prosemirror-view: 1.42.5
       rope-sequence: 1.3.4
 
   prosemirror-inputrules@1.5.0:
@@ -6767,6 +6799,10 @@ snapshots:
       prosemirror-commands: 1.7.1
       prosemirror-history: 1.4.1
       prosemirror-state: 1.4.3
+
+  prosemirror-model@1.25.12:
+    dependencies:
+      orderedmap: 2.1.1
 
   prosemirror-model@1.25.3:
     dependencies:
@@ -6794,23 +6830,23 @@ snapshots:
       prosemirror-model: 1.25.3
       prosemirror-state: 1.4.3
       prosemirror-transform: 1.10.4
-      prosemirror-view: 1.28.3
+      prosemirror-view: 1.42.5
 
-  prosemirror-trailing-node@3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.28.3):
+  prosemirror-trailing-node@3.0.0(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-view@1.42.5):
     dependencies:
       '@remirror/core-constants': 3.0.0
       escape-string-regexp: 4.0.0
       prosemirror-model: 1.25.3
       prosemirror-state: 1.4.3
-      prosemirror-view: 1.28.3
+      prosemirror-view: 1.42.5
 
   prosemirror-transform@1.10.4:
     dependencies:
       prosemirror-model: 1.25.3
 
-  prosemirror-utils@1.2.2(prosemirror-model@1.25.3)(prosemirror-state@1.4.3):
+  prosemirror-utils@1.2.2(prosemirror-model@1.25.12)(prosemirror-state@1.4.3):
     dependencies:
-      prosemirror-model: 1.25.3
+      prosemirror-model: 1.25.12
       prosemirror-state: 1.4.3
 
   prosemirror-view@1.28.3:
@@ -6819,16 +6855,22 @@ snapshots:
       prosemirror-state: 1.4.3
       prosemirror-transform: 1.10.4
 
-  proxy-agent@6.5.0:
+  prosemirror-view@1.42.5:
+    dependencies:
+      prosemirror-model: 1.25.12
+      prosemirror-state: 1.4.3
+      prosemirror-transform: 1.10.4
+
+  proxy-agent@6.5.0(supports-color@8.1.1):
     dependencies:
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@8.1.1)
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      http-proxy-agent: 7.0.2(supports-color@8.1.1)
+      https-proxy-agent: 7.0.6(supports-color@8.1.1)
       lru-cache: 7.18.3
-      pac-proxy-agent: 7.2.0
+      pac-proxy-agent: 7.2.0(supports-color@8.1.1)
       proxy-from-env: 1.1.0
-      socks-proxy-agent: 8.0.5
+      socks-proxy-agent: 8.0.5(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -6843,9 +6885,9 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  puppeteer-core@23.11.1:
+  puppeteer-core@23.11.1(supports-color@8.1.1):
     dependencies:
-      '@puppeteer/browsers': 2.6.1
+      '@puppeteer/browsers': 2.6.1(supports-color@8.1.1)
       chromium-bidi: 0.11.0(devtools-protocol@0.0.1367902)
       debug: 4.4.3(supports-color@8.1.1)
       devtools-protocol: 0.0.1367902
@@ -7113,7 +7155,7 @@ snapshots:
 
   smart-buffer@4.2.0: {}
 
-  socks-proxy-agent@8.0.5:
+  socks-proxy-agent@8.0.5(supports-color@8.1.1):
     dependencies:
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@8.1.1)
