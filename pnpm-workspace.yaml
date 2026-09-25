@@ -1,3 +1,9 @@
 allowBuilds:
   esbuild: true
   rs-module-lexer: true
+
+overrides:
+  "@tiptap/pm": "^3.4.0"
+  "@tiptap/core": "^3.4.0"
+  "prosemirror-view": "~1.28.1"
+  "prosemirror-model": "^1.25.0"
