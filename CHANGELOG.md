@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.18.5
+
+### Patch Changes
+
+- [#327](https://github.com/KonnorRogers/rhino-editor/pull/327) [`a800eb5`](https://github.com/KonnorRogers/rhino-editor/commit/a800eb58be76c526332216f2a58e75b733d5b1d0) Thanks [@bjhess](https://github.com/bjhess)! - Clear `rhino.editor` when the element disconnects. Previously, an update queued before removal (for example by the blur fired during a Turbo navigation) could render the toolbar against the destroyed editor, which throws `Cannot read properties of null (reading 'commands')` on `@tiptap/core` 3.24+ when `rhinoLink` is `false`. Code that reads `rhino.editor` after the element is removed now gets `null` instead of a destroyed editor.
+
 ## 0.18.4
 
 ### Patch Changes
