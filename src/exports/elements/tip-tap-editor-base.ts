@@ -492,6 +492,7 @@ export class TipTapEditorBase extends BaseElement {
     super.disconnectedCallback();
 
     this.editor?.destroy();
+    this.editor = null;
     this.hasInitialized = false;
     this.__initializationPromise__ = null;
     this.__initializationResolver__ = null;
