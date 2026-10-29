@@ -9,11 +9,13 @@ import {
   mergeAttributes,
   Node,
   NodeViewRenderer,
+  NodeViewRendererProps,
 } from "@tiptap/core";
 import { selectionToInsertionEnd } from "../../internal/selection-to-insertion-end.js";
 import { Maybe } from "../../types";
 import { findAttribute } from "./find-attribute.js";
 import { toDefaultCaption } from "../../internal/to-default-caption.js";
+import { getInertDocument } from "../../internal/inert-document.js";
 import { fileUploadErrorMessage, captionPlaceholder } from "../translations.js";
 import {
   findChildrenByType,
@@ -169,9 +171,12 @@ function handleCaptions(
   if (figureTypes.includes(node.type.name) === false) return modified;
 
   // @see https://discuss.prosemirror.net/t/saving-content-containing-dom-generated-by-nodeview/2594/5
-  let scratch = document.createElement("div");
+  const inertDocument = getInertDocument();
+  let scratch = inertDocument.createElement("div");
   scratch.appendChild(
-    DOMSerializer.fromSchema(newState.schema).serializeNode(node),
+    DOMSerializer.fromSchema(newState.schema).serializeNode(node, {
+      document: inertDocument,
+    }),
   );
 
   const figcaption = scratch.querySelector("figcaption");
@@ -641,7 +646,14 @@ export const Attachment = Node.create<AttachmentOptions>({
   },
 
   addNodeView() {
-    return (({ node, getPos, editor }) => {
+    const nodeView = (
+      {
+        node,
+        getPos,
+        editor,
+      }: Pick<NodeViewRendererProps, "node" | "getPos" | "editor">,
+      scratch = document.createElement("div"),
+    ) => {
       const {
         content,
         contentType,
@@ -889,8 +901,6 @@ export const Attachment = Node.create<AttachmentOptions>({
         </figure>
       `;
 
-      // Scratch element to render into.
-      const scratch = document.createElement("div");
       render(template, scratch);
 
       const dom = scratch.firstElementChild;
@@ -898,14 +908,31 @@ export const Attachment = Node.create<AttachmentOptions>({
 
       let srcRevoked = false;
       const shouldStopEvent = this.options.shouldStopEvent;
+      const nodeType = node.type;
 
       return {
         dom,
         contentDOM,
-        stopEvent(event) {
+        stopEvent(event: Event) {
           return shouldStopEvent(event);
         },
-        update(node) {
+        ignoreMutation(mutation: MutationRecord) {
+          return (
+            Boolean(sgid) &&
+            mutation.type === "childList" &&
+            mutation.target === dom &&
+            [...mutation.addedNodes, ...mutation.removedNodes].every(
+              (child) => child instanceof Text && !child.data.trim(),
+            )
+          );
+        },
+        update(node: ProseMirrorNode) {
+          // Reusing the view for a different node duplicates it on drag (ProseMirror/prosemirror#1208).
+          if (node.type === nodeType && sgid && node.attrs.sgid === sgid) {
+            nodeView({ node, getPos, editor }, scratch);
+            return true;
+          }
+
           if (node.type.name !== "attachment") return false;
 
           if (!srcRevoked && node.attrs.url) {
@@ -922,7 +949,9 @@ export const Attachment = Node.create<AttachmentOptions>({
           return false;
         },
       };
-    }) as NodeViewRenderer;
+    };
+
+    return nodeView as NodeViewRenderer;
   },
 
   addCommands() {

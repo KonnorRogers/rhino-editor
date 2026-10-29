@@ -1,4 +1,5 @@
 import { BaseElement } from "../../internal/elements/base-element.js";
+import { getInertDocument } from "../../internal/inert-document.js";
 import { AnyExtension, Content, Editor, EditorOptions } from "@tiptap/core";
 import { tipTapCoreStyles } from "../styles/tip-tap-core-styles.js";
 // https://tiptap.dev/api/extensions/starter-kit#included-extensions
@@ -1033,7 +1034,8 @@ export class TipTapEditorBase extends BaseElement {
       return "";
     }
 
-    const tempScript = document.createElement("div");
+    const inertDocument = getInertDocument();
+    const tempScript = inertDocument.createElement("div");
 
     const doc = editor.view.state.doc;
     const schema = editor.schema;
@@ -1041,6 +1043,7 @@ export class TipTapEditorBase extends BaseElement {
     // Serialize the fragment to a DOM fragment
     const domFragment = DOMSerializer.fromSchema(schema).serializeFragment(
       doc.content,
+      { document: inertDocument },
     );
 
     tempScript.append(domFragment);
