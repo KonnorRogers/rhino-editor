@@ -37,6 +37,7 @@ import {
   Transaction,
 } from "@tiptap/pm/state";
 import {
+    DOMOutputSpec,
   DOMSerializer,
   Node as ProseMirrorNode,
   ResolvedPos,
@@ -514,11 +515,17 @@ export const Attachment = Node.create<AttachmentOptions>({
       ),
     ];
 
+    let renderArray: [string, ...any[]] = [...figure]
+
     if (!content && canPreview(previewable, contentType)) {
-      return [...figure, image, figcaption];
+      renderArray.push(image)
     }
 
-    return [...figure, figcaption];
+    if (this.editor?.schema.nodes["attachment-figcaption"]) {
+      renderArray.push(figcaption)
+    }
+
+    return renderArray
   },
 
   addAttributes() {
@@ -890,14 +897,16 @@ export const Attachment = Node.create<AttachmentOptions>({
             () => html``,
           )}
 
-          <figcaption
-            style="${Boolean(content) ? "display: none;" : ""}"
-            class=${`attachment__caption ${
-              caption ? "attachment__caption--edited" : "is-empty"
-            }`}
-            data-placeholder=${this.options.captionPlaceholder}
-            data-default-caption=${toDefaultCaption({ fileName, fileSize })}
-          ></figcaption>
+          ${editor.schema.nodes["attachment-figcaption"] ?
+            html`<figcaption
+              style="${Boolean(content) ? "display: none;" : ""}"
+              class=${`attachment__caption ${
+                caption ? "attachment__caption--edited" : "is-empty"
+              }`}
+              data-placeholder=${this.options.captionPlaceholder}
+              data-default-caption=${toDefaultCaption({ fileName, fileSize })}
+            ></figcaption>` : null
+          }
         </figure>
       `;
 
