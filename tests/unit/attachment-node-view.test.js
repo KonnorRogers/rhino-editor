@@ -290,6 +290,38 @@ test("Replacing a selected image with text renders a paragraph", async () => {
   assertLayout(editor, ["paragraph", "paragraph", "paragraph"])
 })
 
+/** @type {Record<string, { content: string, select: (editor: import("@tiptap/core").Editor) => void, expected: Array<string | string[]> }>} */
+const selectionsAtTheStart = {
+  "the whole document": {
+    content: "<p>Before</p><p>After</p>",
+    select: (editor) => editor.commands.selectAll(),
+    expected: [["uploaded"], "paragraph"],
+  },
+  "an opening divider": {
+    content: "<hr><p>After</p>",
+    select: (editor) => editor.commands.setNodeSelection(0),
+    expected: [["uploaded"], "paragraph", "paragraph"],
+  },
+}
+
+for (const [selection, { content, select, expected }] of Object.entries(selectionsAtTheStart)) {
+  test(`Adding an image while ${selection} is selected replaces the selection`, async () => {
+    const editor = await createEditorWithContent(content)
+    select(editor)
+    assert.equal(editor.state.selection.from, 0)
+
+    const attachment = new AttachmentManager({
+      sgid: "uploaded",
+      url: "/tests/fixtures/screenshot-1.png",
+      contentType: "image/png",
+      fileName: "screenshot-1.png",
+    }, editor.view)
+
+    assert.isTrue(editor.commands.setAttachment(attachment))
+    assertLayout(editor, expected)
+  })
+}
+
 /** @type {Record<string, (editor: import("@tiptap/core").Editor) => Promise<void>>} */
 const interactions = {
   "typing in its caption": async (editor) => {

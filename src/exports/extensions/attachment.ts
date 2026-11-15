@@ -1134,20 +1134,23 @@ function handleAttachment(
 
     // The following checks fix some "off by 1" issues. I _think_ these are the only nodes we need to check. May need a more robust check if this continues to be an issue.
     // https://github.com/KonnorRogers/rhino-editor/issues/254
+    // A selection that starts the document (select all, a selected first node) has nothing before it to adjust for.
     let from = currSelection.from;
-    const prevNode = state.doc.resolve(from - 1);
-    const parentNode = prevNode.parent;
+    if (from > 0) {
+      const prevNode = state.doc.resolve(from - 1);
+      const parentNode = prevNode.parent;
 
-    if (parentNode && parentNode.type.name === "doc") {
-      from -= 1;
-    } else {
-      const closestParagraph = findParentNodeOfTypeClosestToPos(
-        prevNode,
-        schema.nodes["paragraph"],
-      );
-
-      if (closestParagraph && closestParagraph.node.textContent === "") {
+      if (parentNode && parentNode.type.name === "doc") {
         from -= 1;
+      } else {
+        const closestParagraph = findParentNodeOfTypeClosestToPos(
+          prevNode,
+          schema.nodes["paragraph"],
+        );
+
+        if (closestParagraph && closestParagraph.node.textContent === "") {
+          from -= 1;
+        }
       }
     }
 
